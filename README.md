@@ -1,4 +1,4 @@
-# SWE402 Course Repo
+# Game Dev (SWE402) Course Repo
 
 SWE402 is a hands-on software engineering course focused on building game
 systems, shipping features, and learning to collaborate under real deadlines.
