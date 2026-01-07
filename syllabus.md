@@ -21,9 +21,9 @@ Introduction to games and interactive media; core game programming principles; m
 
 ## Course Learning Outcomes
 1. Explain key modern game development paradigms, including interactive media trends, advanced graphics, physics simulation, artificial intelligence, and emerging immersive technologies.
-- Apply state-of-the-art programming techniques and engine-agnostic development practices to design, implement, optimize, and rigorously test interactive applications across diverse game genres.
-- Integrate networking and multiplayer architectures to develop scalable, synchronized, and engaging online interactive experiences.
-- Embrace collaborative, iterative project development and ethical industry practices, leveraging agile methodologies and performance optimization to enhance user experience and innovation in game design.
+2. Apply state-of-the-art programming techniques and engine-agnostic development practices to design, implement, optimize, and rigorously test interactive applications across diverse game genres.
+3. Integrate networking and multiplayer architectures to develop scalable, synchronized, and engaging online interactive experiences.
+4. Embrace collaborative, iterative project development and ethical industry practices, leveraging agile methodologies and performance optimization to enhance user experience and innovation in game design.
 
 ## Topics and Contact Hours
 Total contact hours: 45
