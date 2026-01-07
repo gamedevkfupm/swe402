@@ -3,6 +3,9 @@
 ## Course Overview
 This course introduces modern game development principles and interactive media trends. It covers advanced real-time graphics, physics simulation, artificial intelligence, networking, and performance optimization. The course integrates theory, practical programming, and project-based learning to prepare students for real-world game development careers.
 
+## Teaching Method
+Prep before lecture (watch videos or read material), then build and iterate during lecture time.
+
 ## Prerequisites
 - ICS 108: Object-Oriented Programming
 
@@ -39,9 +42,15 @@ Total contact hours: 45
 
 ## Assessment Criteria
 - Quizzes: 10%
-- Assignments: 40%
+- Assignments: 40% (4 indie games, increasing in complexity)
 - Project: 20%
 - Final Exam: 30%
+
+## Project
+One group project: build a larger game in teams of 3, culminating in a game jam at the end of the semester.
+
+## Communication
+Discord: https://discord.gg/T8zN36C6
 
 ## Learning Resources
 Textbook:
@@ -50,5 +59,4 @@ Textbook:
 Additional resources:
 - Unity from Zero to Proficiency (Beginner): A Step-By-Step Guide to Coding Your First Game (2019)
 - Unity Game Development Cookbook: Essentials for Every Game (2019)
-
 

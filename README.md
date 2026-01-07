@@ -17,3 +17,7 @@ This repo is the staging ground for the semester and will evolve as we level up.
 
 If you are new here, start with `syllabus.md`. Links and folders will be added
 over time as the course progresses.
+
+## Communication
+
+Discord: https://discord.gg/T8zN36C6
