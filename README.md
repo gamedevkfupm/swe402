@@ -21,3 +21,8 @@ over time as the course progresses.
 ## Communication
 
 Discord: https://discord.gg/T8zN36C6
+
+## Lectures Videos 
+
+1. [Introduction to the course](https://www.loom.com/share/00d9b81b81e74fb498d4d951fc73a931)
+
