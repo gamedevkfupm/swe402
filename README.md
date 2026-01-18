@@ -24,5 +24,5 @@ Discord: https://discord.gg/T8zN36C6
 
 ## Lectures Videos 
 
-1. [Introduction to the course](https://www.loom.com/share/00d9b81b81e74fb498d4d951fc73a931)
+1. [Historty of Game Development](https://www.loom.com/share/179615ad214d4732946c67024a64b8e2) 
 
