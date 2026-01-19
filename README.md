@@ -20,7 +20,7 @@ over time as the course progresses.
 
 ## Communication
 
-Discord: https://discord.gg/T8zN36C6
+Discord: https://discord.gg/jSyF3RJS
 
 ## Lectures Videos 
 
