@@ -24,5 +24,7 @@ Discord: https://discord.gg/jSyF3RJS
 
 ## Lectures Videos 
 
-1. [Historty of Game Development](https://www.loom.com/share/179615ad214d4732946c67024a64b8e2) 
+1. Introduction to the course [No video available]
+2. [Historty of Game Development](https://www.loom.com/share/179615ad214d4732946c67024a64b8e2)
+3. [Technology of Game Development](https://www.loom.com/share/13cdbf1cdbf649559b05940698fd5e51)
 
