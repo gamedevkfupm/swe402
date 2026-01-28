@@ -42,7 +42,8 @@ Total contact hours: 45
 
 ## Assessment Criteria
 - Quizzes: 10%
-- Assignments: 40% (4 indie games, increasing in complexity)
+- Assignments: 30% (3 indie games, increasing in complexity)
+- In-Lab Exercises 10%
 - Project: 20%
 - Final Exam: 30%
 
