@@ -27,4 +27,5 @@ Discord: https://discord.gg/jSyF3RJS
 1. Introduction to the course [No video available]
 2. [Historty of Game Development](https://www.loom.com/share/179615ad214d4732946c67024a64b8e2)
 3. [Technology of Game Development](https://www.loom.com/share/13cdbf1cdbf649559b05940698fd5e51)
+4. [Game Dev Software](https://www.loom.com/share/ec2df74b9c904bb0a57a2df6cc104e1c)
 
