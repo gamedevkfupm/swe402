@@ -44,7 +44,7 @@ Deliverables (tentative):
 - Base UI and first-pass audio feedback.
 - Playtest report with findings and planned fixes.
 
-### Phase 3: Visual-Audio Production and Optimization (Week 11, Advanced Graphics Checkpoint)
+### Phase 3: Visual-Audio Production and Optimization (Week 15, Advanced Graphics Checkpoint)
 Deliverables (tentative):
 - Art pass with lighting, materials/shaders, VFX, animation, and camera polish.
 - Audio pass with balanced mix and event-driven sound design.
@@ -65,8 +65,6 @@ All submissions must be done through GitHub plus the course submission channel.
 Repository requirements:
 - One GitHub repository per team.
 - Clear `README.md` with setup, controls, build steps, and team roles.
-- Mandatory folders: `/docs`, `/builds`, `/media` (or equivalent documented structure).
-- Milestone tags for each phase (`v0.1-proposal`, `v0.2-mechanics`, `v0.3-graphics`, `v1.0-final`).
 
 Workflow requirements:
 - Use feature branches; do not commit directly to `main`.
