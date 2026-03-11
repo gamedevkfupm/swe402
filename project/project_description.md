@@ -36,7 +36,7 @@ Deliverables (tentative):
 - Production Plan: milestone backlog in GitHub Projects with task ownership.
 - Repo Setup: initialized repository, branching policy, PR template, and contribution rules.
 
-### Phase 2: Systems Vertical Slice (Week 11, Advanced Mechanics Checkpoint)
+### Phase 2: Systems Vertical Slice (Week 12, Advanced Mechanics Checkpoint)
 Deliverables (tentative):
 - Playable graybox/blockout from start to end.
 - Core mechanics implemented and testable.
@@ -44,14 +44,14 @@ Deliverables (tentative):
 - Base UI and first-pass audio feedback.
 - Playtest report with findings and planned fixes.
 
-### Phase 3: Visual-Audio Production and Optimization (Week 15, Advanced Graphics Checkpoint)
+### Phase 3: Visual-Audio Production and Optimization (Week 16, Advanced Graphics Checkpoint)
 Deliverables (tentative):
 - Art pass with lighting, materials/shaders, VFX, animation, and camera polish.
 - Audio pass with balanced mix and event-driven sound design.
 - Performance report with profiling screenshots/metrics and optimizations applied.
 - Bug triage log and stability improvements.
 
-### Phase 4: Final Build and Presentation (Week 15)
+### Phase 4: Final Build and Presentation (Week 16)
 Deliverables (tentative):
 - Final playable build (release candidate).
 - Technical documentation and final repository cleanup.
