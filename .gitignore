@@ -3,3 +3,4 @@ resources/hands-on-unity.pdf
 ~$swe402_course_schedule.xlsx
 .gitignore
 instructor_notes/
+.DS_Store

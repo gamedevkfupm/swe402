@@ -11,16 +11,15 @@ This repo is the staging ground for the semester and will evolve as we level up.
 - `group project/`: Team project brief and deliverables.
 - `individual assignments/`: Homework and individual submissions.
 - `lab challenges/`: Weekly lab tasks.
-- `resources/`: Links, references, and supplemental materials.
 
 ## Getting Started
 
 If you are new here, start with `syllabus.md`. Links and folders will be added
 over time as the course progresses.
 
-## Communication
+## Demos Reference Videos
 
-Discord: https://discord.gg/jSyF3RJS
+- [Unity Learn Pathways](https://learn.unity.com/pathways)
 
 ## Lectures Videos 
 
@@ -28,4 +27,3 @@ Discord: https://discord.gg/jSyF3RJS
 2. [Historty of Game Development](https://www.loom.com/share/179615ad214d4732946c67024a64b8e2)
 3. [Technology of Game Development](https://www.loom.com/share/13cdbf1cdbf649559b05940698fd5e51)
 4. [Game Dev Software](https://www.loom.com/share/ec2df74b9c904bb0a57a2df6cc104e1c)
-
