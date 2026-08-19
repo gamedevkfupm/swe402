@@ -51,7 +51,7 @@ Total contact hours: 45
 One group project: build a larger game in teams of 3, culminating in a game jam at the end of the semester.
 
 ## Communication
-Discord: https://discord.gg/T8zN36C6
+Through MS teams and Email 
 
 ## Learning Resources
 Textbook:
