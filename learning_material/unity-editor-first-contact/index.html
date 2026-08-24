@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Technical reference for installing Unity 6.3, using the core Editor windows, navigating Scene view, modifying GameObjects, and completing the mural exercise."
+    />
+    <title>Unity Editor Fundamentals — Technical Reference</title>
+    <link rel="icon" href="data:," />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("unity-editor-reference-theme");
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f1eed8;
+        --paper-deep: #ddd7b8;
+        --surface: #fbf7e5;
+        --ink: #172016;
+        --muted: #4e5b4b;
+        --faint: #788373;
+        --line: #a7ad92;
+        --green: #236c2d;
+        --green-soft: #d4e4c6;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #858b72;
+        --grid: rgba(23, 32, 22, 0.055);
+        --code-ink: #382f11;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #10150e;
+        --paper-deep: #1a2317;
+        --surface: #151c13;
+        --ink: #e3edd8;
+        --muted: #afbea5;
+        --faint: #7c8c74;
+        --line: #40503a;
+        --green: #82ca5b;
+        --green-soft: #20321d;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #050704;
+        --grid: rgba(213, 235, 198, 0.04);
+        --code-ink: #201b08;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--green);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--green) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--green);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--green);
+      }
+
+      .hero::after {
+        content: "01";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--green);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--green);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: uppercase;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--green);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: steps;
+      }
+
+      .steps li {
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+        counter-increment: steps;
+      }
+
+      .steps li::before {
+        content: counter(steps, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.45rem;
+        color: var(--orange);
+        font: 900 1rem/1 var(--pixel);
+      }
+
+      .steps li strong {
+        font-family: var(--sans);
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure img {
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #171b18;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--green);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--green);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--green);
+        background: var(--green-soft);
+      }
+
+      .practice::before {
+        content: "PRACTICE";
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--green);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--green);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--green); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--green);
+        color: var(--green);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--green);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--green);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--green);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--green);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table th:nth-child(3),
+        .window-table td:nth-child(3) {
+          display: none;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          width: 38%;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box {
+          break-inside: avoid;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+    <header class="site-header">
+      <a class="site-mark" href="#top">SWE 402 // UNITY_EDITOR_REFERENCE</a>
+      <div class="site-actions">
+        <button class="quiet-button" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-swatch" aria-hidden="true"></span>
+          <span id="themeLabel">LIGHT</span>
+        </button>
+        <button class="quiet-button" id="resetProgress" type="button">RESET TASKS</button>
+        <button class="quiet-button" type="button" onclick="window.print()">PRINT</button>
+      </div>
+    </header>
+
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div class="kicker">SWE 402 · UNITY 6.3 · TECHNICAL REFERENCE</div>
+        <h1>Unity Editor<em>Fundamentals</em></h1>
+        <p class="dek">
+          Reference for installing Unity 6.3, identifying Editor windows, modifying GameObjects, navigating Scene view, and completing the mural exercise.
+        </p>
+        <div class="article-meta">
+          <span>Unity 6.3</span>
+          <span>Entry level</span>
+          <span>Concepts + procedures</span>
+          <span>Progress stored locally</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-grid">
+      <aside class="toc" aria-label="Table of contents">
+        <p class="toc-title">IN THIS LECTURE</p>
+        <ol>
+          <li><a href="#install"><span>01</span>Install Unity</a></li>
+          <li><a href="#project"><span>02</span>Open the project</a></li>
+          <li><a href="#interface"><span>03</span>Read the interface</a></li>
+          <li><a href="#objects"><span>04</span>Modify GameObjects</a></li>
+          <li><a href="#navigation"><span>05</span>Navigate 3D space</a></li>
+          <li><a href="#hunt"><span>06</span>Scavenger hunt</a></li>
+          <li><a href="#mural"><span>07</span>Manipulate mural pieces</a></li>
+          <li><a href="#review"><span>08</span>Completion criteria</a></li>
+        </ol>
+      </aside>
+
+      <article>
+        <section class="lead-box" aria-labelledby="goal-title">
+          <div class="eyebrow">Learning outcomes</div>
+          <h2 id="goal-title">Build a reliable model of the Unity Editor.</h2>
+          <p>
+            After completing this reference, you should be able to locate the primary Editor windows, identify their data scope, modify Transform values, navigate Scene view, test in Play mode, and save a scene. Memorizing every control is not required.
+          </p>
+          <ul class="outcomes">
+            <li>Differentiate Unity Hub from Unity Editor.</li>
+            <li>Open the required project and scene.</li>
+            <li>Locate assets, GameObjects, and components.</li>
+            <li>Run and stop Play mode safely.</li>
+            <li>Frame, fly, orbit, pan, and zoom in Scene view.</li>
+            <li>Translate and rotate mural pieces.</li>
+          </ul>
+          <div class="note">
+            <span class="note-title">Instructor demonstration</span>
+            Observe the running robot. Identify the transition from Scene view to Game view when Play mode starts.
+          </div>
+        </section>
+
+        <section class="article-section" id="install">
+          <div class="section-kicker">01 · SETUP</div>
+          <h2>Install Unity and identify its two applications</h2>
+          <p class="drop-cap">
+            Unity uses two desktop applications with separate responsibilities. Instructions that say “open Unity” may refer to either application.
+          </p>
+
+          <div class="comparison">
+            <div>
+              <strong>UNITY HUB</strong>
+              <p>Installation and project manager. It installs Editor versions, manages licenses, and creates or opens projects.</p>
+            </div>
+            <div>
+              <strong>UNITY EDITOR</strong>
+              <p>Authoring application. It edits scenes and GameObjects, runs Play mode, and builds executables.</p>
+            </div>
+          </div>
+
+          <p>
+            Unity Personal is the normal free starting plan for individuals. Eligible students can also enroll in the
+            <a href="https://unity.com/products/unity-student" target="_blank" rel="noreferrer">Unity Student plan</a>
+            for education-focused benefits. Plan terms can change, so use Unity’s current page as the source of truth.
+          </p>
+
+          <ol class="steps">
+            <li>Download and install <strong>Unity Hub</strong>, then sign in with your Unity account.</li>
+            <li>In the Hub, open <strong>Installs</strong> and choose <strong>Install Editor</strong>.</li>
+            <li>Select the Unity 6 version used in class. If asked, choose the module for a compatible code editor.</li>
+            <li>Wait for the installation to finish. The Editor is large, so this can take time.</li>
+          </ol>
+
+          <figure class="source-figure">
+            <img src="./assets/install-unity-6.png" alt="Unity Hub showing the Unity 6 Editor installation screen" />
+            <figcaption><strong>What to look for:</strong> Unity 6 appears inside the Hub’s installation flow. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Installation verification</span>
+            Confirm that Unity Hub opens, your account is signed in, and a Unity 6 Editor appears under <strong>Installs</strong>.
+            <br />
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/unity-essentials-install-unity?version=6.3" target="_blank" rel="noreferrer">Open the complete Unity Learn installation guide ↗</a>
+          </div>
+        </section>
+
+        <section class="article-section" id="project">
+          <div class="section-kicker">02 · PROJECT</div>
+          <h2>Open the Unity Essentials project</h2>
+          <p>
+            The course uses Unity’s Essentials Pathway template. It already contains the robot, playground, scenes, shortcuts, and mural pieces used in this lecture.
+          </p>
+
+          <ol class="steps">
+            <li>Open <strong>Unity Hub</strong> and select <strong>New project</strong>.</li>
+            <li>At the top, choose <strong>Unity 6.0 or newer</strong>.</li>
+            <li>Select the <strong>Essentials Pathway</strong> template.</li>
+            <li>Name the project, choose a safe location, and select <strong>Create project</strong>.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/project-open.png" alt="Unity Essentials guided project open in the Unity Editor" />
+            <figcaption><strong>Instruction modes:</strong> use the Unity Learn website, or select Start Mission 1 to display the tutorial inside the Editor. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <div class="pull-quote">
+            Use one instruction source at a time. Both the website and embedded tutorial modify the same project.
+            <small>Use a second display if one is available.</small>
+          </div>
+
+          <p>
+            If you follow this article or the Unity Learn website, switch the top-right <strong>Layout</strong> menu to <strong>Default</strong>. You can restore Unity’s tutorial panel later through <strong>Tutorials → Show Tutorials</strong>.
+          </p>
+
+          <figure class="source-figure">
+            <img src="./assets/default-layout.png" alt="Unity Layout menu with Default highlighted" />
+            <figcaption>The Default layout makes your screen match the interface descriptions below. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/open-the-unity-essentials-project?version=6.3" target="_blank" rel="noreferrer">Open the Unity Essentials project ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="interface">
+          <div class="section-kicker">03 · INTERFACE</div>
+          <h2>Understand the Editor window model</h2>
+          <p>
+            The Default layout displays multiple windows simultaneously. Each window exposes a different scope of project data or a different view of the active scene.
+          </p>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/editor-overview.png" alt="Unity Editor default layout with Hierarchy, Scene, Inspector, and Project areas outlined" />
+            <figcaption><strong>The default layout:</strong> Hierarchy on the left, Scene and Game in the center, Inspector on the right, and Project at the bottom. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <table class="window-table">
+            <thead>
+              <tr><th>Area</th><th>Data scope</th><th>Primary function</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Project</td><td>Files and reusable assets stored in the project</td><td>Access reusable source assets.</td></tr>
+              <tr><td>Hierarchy</td><td>GameObjects instantiated in the active scene</td><td>Access the current scene graph.</td></tr>
+              <tr><td>Scene</td><td>Editable spatial view of the scene</td><td>Position and inspect GameObjects.</td></tr>
+              <tr><td>Game</td><td>Output from the active Camera</td><td>Preview camera output during Play mode.</td></tr>
+              <tr><td>Inspector</td><td>Components and serialized values on the selection</td><td>Inspect and modify object data.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="note">
+            <span class="note-title">Data scope</span>
+            The <strong>Project</strong> window lists assets stored on disk. The <strong>Hierarchy</strong> lists instantiated GameObjects in the active scene.
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Open the starter scene</span>
+            In the Project window, open <strong>Assets → _Unity Essentials → Scenes</strong>, then double-click <strong>-1_Starter_Scene</strong>. The robot and its environment should appear.
+          </div>
+
+          <h3>Hierarchy means parent and child</h3>
+          <p>
+            GameObjects can be organized as a tree. A parent contains child GameObjects. Expand the triangle beside <strong>Boxes</strong> in the Hierarchy to see this structure.
+          </p>
+
+          <p>
+            Double-clicking any GameObject in the Hierarchy frames it in the Scene view. If you get lost, double-click <strong>Ground</strong> to return to a wide view of the environment.
+          </p>
+        </section>
+
+        <section class="article-section" id="objects">
+          <div class="section-kicker">04 · OBJECTS + PLAY</div>
+          <h2>Modify GameObjects and verify behavior in Play mode</h2>
+
+          <div class="comparison">
+            <div>
+              <strong>SCENE VIEW · AUTHORING VIEWPORT</strong>
+              <p>Manipulate scene contents from an editor-controlled camera.</p>
+            </div>
+            <div>
+              <strong>GAME VIEW · CAMERA OUTPUT</strong>
+              <p>Display the output of the active Camera during Play mode.</p>
+            </div>
+          </div>
+
+          <p>
+            Select the Play button at the top center of the Editor. Unity enters <strong>Play mode</strong> and shows the Game view. In the starter scene, use the arrow keys or <kbd>WASD</kbd> to move, <kbd>Space</kbd> to jump, the mouse to look, and <kbd>Shift</kbd> to run.
+          </p>
+
+          <div class="warning">
+            <span class="note-title">Play mode state is temporary</span>
+            Changes made while Play mode is active are normally discarded when Play mode stops. Exit Play mode before making changes that must persist.
+          </div>
+
+          <h3>Inspect components and Transform data</h3>
+          <p>
+            Select a GameObject in the Scene or Hierarchy. Its components appear in the Inspector. Components provide properties and behavior: the Transform stores position, rotation, and scale; other components can make the object visible, interactive, physical, or scripted.
+          </p>
+
+          <div class="axis-line" aria-label="Unity coordinate axes">
+            <span class="x">X · red · left/right</span>
+            <span class="y">Y · green · up/down</span>
+            <span class="z">Z · blue · forward/back</span>
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Transform exercise</span>
+            <ol>
+              <li>Exit Play mode and select the <strong>Star</strong> GameObject.</li>
+              <li>Find Position at the top of the Inspector.</li>
+              <li>Reduce X by 1–2 units and Y by 1–2 units.</li>
+              <li>Enter Play mode and try to collect the star. Stop when finished.</li>
+            </ol>
+            If you make a mistake, use <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>Z</kbd>.
+          </div>
+
+          <h3>Persist changes by saving the scene</h3>
+          <p>
+            Unity does not automatically save your scene. An asterisk beside the scene name means there are unsaved changes. Press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>S</kbd>; the asterisk should disappear.
+          </p>
+
+          <h3>Targeted video references</h3>
+          <p>Use a video when a specific control cannot be located from the written procedure.</p>
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240510/videos/7c06c85f-5679-4134-99a2-f0bd47d20b64_1.1.2_-_The_Project_Window_-_VIDEO_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Project window</strong><small>Find and open assets</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240510/videos/70a470e3-b7da-47e9-b4e6-27c2df46696c_1.1.3_-_The_Hierarchy_window_-_VIDEO_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Hierarchy</strong><small>Explore GameObjects</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240927/videos/188d4b37-cad2-4f9c-9584-7b96adb9bd27_1.1.6_-_Enter_Play_mode_in_Game_view_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Play mode</strong><small>Test through Game view</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240510/videos/2a6242a3-3496-4904-860a-abef371e1fa9_1.1.7_-_Edit_the_GameObjects__properties_in_the_Inspector_-_VIDEO_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Inspector</strong><small>Edit a GameObject</small></span></a>
+          </div>
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/explore-the-editor-interface-1-1?version=6.3" target="_blank" rel="noreferrer">Explore the Editor Interface ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="navigation">
+          <div class="section-kicker">05 · 3D NAVIGATION</div>
+          <h2>Use the Scene view navigation controls</h2>
+          <div class="pull-quote">
+            Navigation is a prerequisite for object placement: first control the Scene camera, then edit the scene.
+            <small>Unity Learn compares this to learning how to hold a pencil before drawing.</small>
+          </div>
+
+          <p>
+            Open <strong>_Unity Essentials → Scenes → 1_Playground_Navigation_Scene</strong>. Move slowly at first. Tap a key, observe the result, and reset your view often. Speed comes after control.
+          </p>
+
+          <table class="shortcut-table">
+            <thead><tr><th>Action</th><th>Control</th><th>Effect</th></tr></thead>
+            <tbody>
+              <tr><td>Frame</td><td><kbd>F</kbd> or double-click a GameObject</td><td>Center and scale the view around the selection.</td></tr>
+              <tr><td>Look</td><td>Right-click + drag</td><td>Rotate the Scene camera in place.</td></tr>
+              <tr><td>Fly</td><td>Hold right-click + <kbd>WASD</kbd>; <kbd>Q</kbd>/<kbd>E</kbd> down/up</td><td>Translate and rotate the Scene camera concurrently.</td></tr>
+              <tr><td>Orbit</td><td><kbd>Alt</kbd>/<kbd>Option</kbd> + left-drag</td><td>Rotate the Scene camera around the selected pivot.</td></tr>
+              <tr><td>Zoom</td><td>Mouse wheel or two-finger trackpad scroll</td><td>Move the Scene camera toward or away from the pivot.</td></tr>
+              <tr><td>Pan</td><td>Select the Hand/View tool, then left-drag</td><td>Translate the Scene camera parallel to the view plane.</td></tr>
+            </tbody>
+          </table>
+
+          <p>
+            The top-row tool shortcuts form a memorable sequence: <kbd>Q</kbd> View, <kbd>W</kbd> Move, <kbd>E</kbd> Rotate, <kbd>R</kbd> Scale, <kbd>T</kbd> Rect, and <kbd>Y</kbd> Transform.
+          </p>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/shortcut-reference.png" alt="Unity Editor with the shortcuts cheat sheet selected and visible in the Inspector" />
+            <figcaption><strong>Keep this open while practicing:</strong> select _Shortcuts-Cheat_Sheet in the Project window and read it in the Inspector. Screenshot: Unity Learn.</figcaption>
+          </figure>
+        </section>
+
+        <section class="article-section" id="hunt">
+          <div class="section-kicker">06 · NAVIGATION EXERCISE</div>
+          <h2>Complete the playground scavenger hunt</h2>
+          <p>
+            Four numbers are hidden in the playground. Each location forces you to use a different navigation skill. Write each digit in order, then test the combined code in Play mode. This page intentionally does not reveal the answer.
+          </p>
+
+          <div class="hunt" aria-label="Scavenger hunt checklist">
+            <label class="hunt-row">
+              <input type="checkbox" data-task="swingset" />
+              <span class="hunt-index">01</span>
+              <strong>SWINGSET</strong>
+              <span>Use Flythrough mode to inspect the back of the top bar.</span>
+              <kbd>RMB + WASD</kbd>
+            </label>
+            <label class="hunt-row">
+              <input type="checkbox" data-task="grill" />
+              <span class="hunt-index">02</span>
+              <strong>GRILL</strong>
+              <span>Select it, frame it, and zoom inside.</span>
+              <kbd>F + Wheel</kbd>
+            </label>
+            <label class="hunt-row">
+              <input type="checkbox" data-task="structure" />
+              <span class="hunt-index">03</span>
+              <strong>PLAY STRUCTURE</strong>
+              <span>Frame it, then orbit underneath.</span>
+              <kbd>Alt + drag</kbd>
+            </label>
+            <label class="hunt-row">
+              <input type="checkbox" data-task="firepit" />
+              <span class="hunt-index">04</span>
+              <strong>FIREPIT</strong>
+              <span>Use a side view and disable Perspective.</span>
+              <kbd>Gizmo</kbd>
+            </label>
+          </div>
+
+          <div class="code-box">
+            <div>
+              <strong>YOUR FOUR-DIGIT CODE</strong>
+              <small>Enter the code in Play mode. Fireworks confirm that the code is accepted.</small>
+            </div>
+            <div class="code-inputs" aria-label="Four digit code">
+              <input inputmode="numeric" maxlength="1" aria-label="First digit" data-code-digit />
+              <input inputmode="numeric" maxlength="1" aria-label="Second digit" data-code-digit />
+              <input inputmode="numeric" maxlength="1" aria-label="Third digit" data-code-digit />
+              <input inputmode="numeric" maxlength="1" aria-label="Fourth digit" data-code-digit />
+            </div>
+          </div>
+
+          <h3>Perspective vs Isometric</h3>
+          <p>
+            The Scene gizmo is the cube and colored cones in the upper-right of the Scene view. Click a cone to align to a side or top view. Right-click the gizmo and disable <strong>Perspective</strong> to enter Isometric mode. Isometric view removes perspective distortion, which can reveal shapes hidden by depth.
+          </p>
+
+          <figure class="source-figure">
+            <img src="./assets/scene-gizmo.png" alt="Unity Scene view orientation gizmo highlighted in the upper-right" />
+            <figcaption>The Scene gizmo controls viewing direction and Perspective/Isometric projection. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/master-3d-scene-navigation?version=6.3" target="_blank" rel="noreferrer">Master 3D scene navigation ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="mural">
+          <div class="section-kicker">07 · OBJECT MANIPULATION</div>
+          <h2>Design a mural in Scene view</h2>
+          <p>
+            The mural exercise applies Move, Rotate, coordinate-space, and projection controls to tangram pieces. Use the supplied reference or define another valid arrangement.
+          </p>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/mural-overview.png" alt="Colorful tangram pieces in Unity ready for the mural activity" />
+            <figcaption>Start with the large pieces, then fit the smaller pieces around them. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <h3>Global and Local coordinates</h3>
+          <div class="comparison">
+            <div>
+              <strong>GLOBAL</strong>
+              <p>The axes stay fixed like north, south, east, and west. This is useful when every piece should move in the same world directions.</p>
+            </div>
+            <div>
+              <strong>LOCAL</strong>
+              <p>The axes rotate with the object—its own forward, up, and side. This is useful when movement should follow the object’s orientation.</p>
+            </div>
+          </div>
+
+          <div class="axis-line" aria-label="Mural movement axes">
+            <span class="x">Move across X · red</span>
+            <span class="z">Move across Z · blue</span>
+            <span class="y">Rotate around Y · green</span>
+          </div>
+
+          <ol class="steps">
+            <li>Select the <strong>Mural</strong> GameObject, enable it in the Inspector, and double-click it to frame the pieces and reference.</li>
+            <li>Use the Scene gizmo for a top view. Choose <strong>Global</strong> coordinates.</li>
+            <li>Press <kbd>W</kbd> for Move. Start with a large triangle and position it using the red X and blue Z arrows.</li>
+            <li>Press <kbd>E</kbd> for Rotate. Drag the green Y ring with a straight mouse motion until the piece fits.</li>
+            <li>In Isometric view, drag the small square between the X and Z arrows to slide a piece across both axes at once.</li>
+            <li>Complete the design, disable <strong>Tangram_Reference</strong>, restore Perspective, orbit to inspect the result, and save.</li>
+          </ol>
+
+          <div class="practice">
+            <span class="practice-title">Efficient workflow</span>
+            Position first. Rotate second. Switch between <kbd>W</kbd> and <kbd>E</kbd>. Save after every meaningful improvement.
+          </div>
+
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/design-a-mural-in-scene-view?version=6.3" target="_blank" rel="noreferrer">Design a mural in the Scene view ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="review">
+          <div class="section-kicker">08 · VERIFICATION</div>
+          <h2>Completion criteria</h2>
+          <p>
+            The lecture is complete when you can perform each operation without step-by-step prompting.
+          </p>
+
+          <div class="checklist" aria-label="End of lecture checklist">
+            <label><input type="checkbox" data-task="review-hub" /><span>I can explain the difference between Unity Hub and Unity Editor.</span></label>
+            <label><input type="checkbox" data-task="review-project" /><span>I can open the Essentials project and -1_Starter_Scene.</span></label>
+            <label><input type="checkbox" data-task="review-ui" /><span>I can explain Project vs Hierarchy and Scene vs Game.</span></label>
+            <label><input type="checkbox" data-task="review-play" /><span>I can enter and exit Play mode without losing changes.</span></label>
+            <label><input type="checkbox" data-task="review-inspector" /><span>I can use the Inspector to change a Transform value.</span></label>
+            <label><input type="checkbox" data-task="review-nav" /><span>I can frame, fly, orbit, pan, and zoom in the Scene view.</span></label>
+            <label><input type="checkbox" data-task="review-mural" /><span>I can move, rotate, inspect, and save mural pieces.</span></label>
+          </div>
+
+          <h3>Unity Learn sources</h3>
+          <ul class="source-list">
+            <li><span>01</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/unity-essentials-install-unity?version=6.3" target="_blank" rel="noreferrer">Unity Essentials: Install Unity</a></li>
+            <li><span>02</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/open-the-unity-essentials-project?version=6.3" target="_blank" rel="noreferrer">Open the Unity Essentials project</a></li>
+            <li><span>03</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/explore-the-editor-interface-1-1?version=6.3" target="_blank" rel="noreferrer">Explore the Editor Interface</a></li>
+            <li><span>04</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/master-3d-scene-navigation?version=6.3" target="_blank" rel="noreferrer">Master 3D scene navigation</a></li>
+            <li><span>05</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/design-a-mural-in-scene-view?version=6.3" target="_blank" rel="noreferrer">Design a mural in the Scene view</a></li>
+          </ul>
+
+          <div class="next-module">END OF CURRENT MATERIAL // APPEND FUTURE SECTIONS BELOW</div>
+        </section>
+      </article>
+    </div>
+
+    <footer class="page-footer">
+      SWE 402 technical reference. Source screenshots and tutorial procedures: Unity Learn.
+    </footer>
+
+    <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme.toUpperCase();
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const codeInputs = [...document.querySelectorAll("[data-code-digit]")];
+      const storageKey = "unity-editor-first-contact-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+        const code = codeInputs.map((input) => input.value).join("");
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks, code }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+      codeInputs.forEach((input, index) => {
+        input.value = (saved.code || "")[index] || "";
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, "").slice(0, 1);
+          saveProgress();
+          if (input.value && codeInputs[index + 1]) codeInputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && codeInputs[index - 1]) {
+            codeInputs[index - 1].focus();
+          }
+        });
+      });
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        codeInputs.forEach((input) => { input.value = ""; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    </script>
+  </body>
+</html>
