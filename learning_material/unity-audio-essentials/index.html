@@ -1,0 +1,1704 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Unity 6.3 audio reference for Audio Listeners, Audio Sources, 2D and 3D sound, background music, randomized effects, mixing, and reverb."
+    />
+    <title>Unity Audio Essentials — Technical Reference</title>
+    <link rel="icon" href="data:," />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("unity-editor-reference-theme");
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f1eed8;
+        --paper-deep: #ddd7b8;
+        --surface: #fbf7e5;
+        --ink: #172016;
+        --muted: #4e5b4b;
+        --faint: #788373;
+        --line: #a7ad92;
+        --green: #236c2d;
+        --green-soft: #d4e4c6;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #858b72;
+        --grid: rgba(23, 32, 22, 0.055);
+        --code-ink: #382f11;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #10150e;
+        --paper-deep: #1a2317;
+        --surface: #151c13;
+        --ink: #e3edd8;
+        --muted: #afbea5;
+        --faint: #7c8c74;
+        --line: #40503a;
+        --green: #82ca5b;
+        --green-soft: #20321d;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #050704;
+        --grid: rgba(213, 235, 198, 0.04);
+        --code-ink: #201b08;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--green);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--green) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--green);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--green);
+      }
+
+      .hero::after {
+        content: "01";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--green);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--green);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: uppercase;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--green);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: steps;
+      }
+
+      .steps li {
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+        counter-increment: steps;
+      }
+
+      .steps li::before {
+        content: counter(steps, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.45rem;
+        color: var(--orange);
+        font: 900 1rem/1 var(--pixel);
+      }
+
+      .steps li strong {
+        font-family: var(--sans);
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure.compact {
+        width: min(100%, 520px);
+        margin-inline: auto;
+      }
+
+      .source-figure img {
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #171b18;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--green);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--green);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--green);
+        background: var(--green-soft);
+      }
+
+      .practice::before {
+        content: "PRACTICE";
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--green);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--green);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--green); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--green);
+        color: var(--green);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--green);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--green);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--green);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--green);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table,
+        .shortcut-table {
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .window-table thead,
+        .shortcut-table thead {
+          display: none;
+        }
+
+        .window-table tbody,
+        .shortcut-table tbody {
+          display: grid;
+          gap: 0.85rem;
+        }
+
+        .window-table tr,
+        .shortcut-table tr {
+          display: block;
+          border: 2px solid var(--ink);
+          background: var(--surface);
+          box-shadow: 4px 4px 0 var(--shadow);
+        }
+
+        .window-table td,
+        .shortcut-table td,
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          display: grid;
+          grid-template-columns: minmax(6.3rem, 34%) 1fr;
+          gap: 0.65rem;
+          width: auto;
+          padding: 0.65rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          font-weight: 400;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          color: var(--green);
+          font-weight: 800;
+        }
+
+        .window-table td::before,
+        .shortcut-table td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font: 800 0.62rem/1.4 var(--pixel);
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+          break-after: avoid;
+        }
+
+        #applied-task,
+        #optional-extension,
+        #review {
+          break-before: page;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box {
+          break-inside: avoid;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+    <header class="site-header">
+      <a class="site-mark" href="#top">SWE 402 // UNITY_AUDIO_REFERENCE</a>
+      <div class="site-actions">
+        <button class="quiet-button" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-swatch" aria-hidden="true"></span>
+          <span id="themeLabel">LIGHT</span>
+        </button>
+        <button class="quiet-button" id="resetProgress" type="button">RESET TASKS</button>
+        <button class="quiet-button" type="button" onclick="window.print()">PRINT</button>
+      </div>
+    </header>
+
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div class="kicker">SWE 402 · UNITY 6.3 · TECHNICAL REFERENCE</div>
+        <h1>Unity Audio<em>Essentials</em></h1>
+        <p class="dek">
+          Reference for building a layered soundscape with Audio Listeners, Audio Sources, 2D music, localized 3D effects, randomized playback, and controlled listening tests.
+        </p>
+        <div class="article-meta">
+          <span>Unity 6.3</span>
+          <span>Lecture 03</span>
+          <span>Concepts + procedures</span>
+          <span>Progress stored locally</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-grid">
+      <aside class="toc" aria-label="Table of contents">
+        <p class="toc-title">IN THIS LECTURE</p>
+        <ol>
+          <li><a href="#model"><span>01</span>Model the audio system</a></li>
+          <li><a href="#source"><span>02</span>Create a sound source</a></li>
+          <li><a href="#spatial"><span>03</span>Compare 2D and 3D</a></li>
+          <li><a href="#music"><span>04</span>Layer background music</a></li>
+          <li><a href="#random"><span>05</span>Place random effects</a></li>
+          <li><a href="#mix"><span>06</span>Balance and diagnose</a></li>
+          <li><a href="#applied-task"><span>07</span>Applied task</a></li>
+          <li><a href="#optional-extension"><span>08</span>Optional extension</a></li>
+          <li><a href="#review"><span>09</span>Completion criteria</a></li>
+        </ol>
+      </aside>
+
+      <article>
+        <section class="lead-box" aria-labelledby="goal-title">
+          <div class="eyebrow">Learning outcomes</div>
+          <h2 id="goal-title">Build a soundscape whose behavior can be explained and tested.</h2>
+          <p>
+            The finished kitchen combines a stable music layer with continuous and intermittent environmental sounds. Each audible result should trace back to an asset, a component, a setting, or the listener’s position.
+          </p>
+          <ul class="outcomes">
+            <li>Distinguish an Audio Clip, Audio Source, and Audio Listener.</li>
+            <li>Configure continuous and triggered playback behavior.</li>
+            <li>Choose 2D or 3D audio from the sound’s role in the scene.</li>
+            <li>Verify distance and direction with controlled listener movement.</li>
+            <li>Layer and balance music, appliance sound, and exterior ambience.</li>
+            <li>Diagnose common silent, constant-volume, and mistimed results.</li>
+          </ul>
+          <div class="note">
+            <span class="note-title">Opening demonstration</span>
+            Run a finished kitchen once. First stand still and identify each layer. Then walk toward the pot, rotate left and right, and cross the room. Ask which sounds changed, which stayed constant, and which component explains each result.
+          </div>
+        </section>
+
+        <section class="article-section" id="model">
+          <div class="section-kicker">01 · SOURCE → LISTENER MODEL</div>
+          <h2>Start from silence and map the audio system</h2>
+          <p class="drop-cap">
+            Unity separates audio data from playback behavior. An Audio Clip stores sound data; an Audio Source plays an assigned generator from a GameObject; one active Audio Listener receives the scene’s audible sources.
+          </p>
+
+          <ol class="steps">
+            <li>In the Project window, open <strong>_Unity Essentials → Scenes → 3_Kitchen_Audio_Scene</strong>.</li>
+            <li>Enter Play mode and explore the silent kitchen with <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> and the mouse.</li>
+            <li>Exit Play mode. In the Hierarchy window, select <strong>Main Camera</strong>.</li>
+            <li>In the Inspector window, locate its <strong>Audio Listener</strong> component.</li>
+            <li>Confirm that the scene has exactly one active Audio Listener.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/kitchen-baseline.png" alt="Unity Scene view showing the silent kitchen scene before audio sources are added" />
+            <figcaption><strong>Baseline:</strong> test the silent scene before changing it so every later audible result has a known cause. Screenshot from the Unity Learn kitchen-scene video.</figcaption>
+          </figure>
+
+          <table class="window-table">
+            <thead>
+              <tr><th>Element</th><th>Where it lives</th><th>Responsibility</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Element">Audio Clip</td><td data-label="Location">Project window</td><td data-label="Responsibility">Stores imported sound data as a reusable asset.</td></tr>
+              <tr><td data-label="Element">Audio Generator</td><td data-label="Location">Audio Source Inspector</td><td data-label="Responsibility">References the Audio Clip or Audio Random Container to play.</td></tr>
+              <tr><td data-label="Element">Audio Source</td><td data-label="Location">GameObject component</td><td data-label="Responsibility">Controls playback, volume, looping, and spatial behavior.</td></tr>
+              <tr><td data-label="Element">Audio Listener</td><td data-label="Location">Usually Main Camera</td><td data-label="Responsibility">Receives audible sources from the player’s position and orientation.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="warning">
+            <span class="note-title">One listener</span>
+            Keep one active Audio Listener in the scene. Two listeners do not represent left and right ears; multiple active listeners produce an Editor warning and an ambiguous mix.
+          </div>
+
+          <p>
+            Sources:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/create-an-immersive-soundscape?version=6.3" target="_blank" rel="noreferrer">Create an immersive soundscape ↗</a>
+            ·
+            <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/class-AudioListener.html" target="_blank" rel="noreferrer">Unity 6.3 Audio Listener reference ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="source">
+          <div class="section-kicker">02 · CONTINUOUS ENVIRONMENTAL SOUND</div>
+          <h2>Attach a looping source to the boiling pot</h2>
+          <p>
+            A sound that belongs to a visible object should originate from that object. Add the pot first, then place the Audio Source component on the same GameObject so its Transform defines the sound’s world position.
+          </p>
+
+          <ol class="steps">
+            <li>From <strong>_Unity Essentials → Prefabs → Kitchen</strong>, drag <strong>Boiling_Pot</strong> onto a stove burner.</li>
+            <li>Select <strong>Boiling_Pot</strong>, choose <strong>Add Component</strong>, and add <strong>Audio Source</strong>.</li>
+            <li>In the Audio Source component, use the object picker for <strong>Audio Generator</strong>.</li>
+            <li>Assign <strong>Bubbling_Water</strong>.</li>
+            <li>Enable <strong>Loop</strong> so the continuous appliance sound restarts at the end of the clip.</li>
+            <li>Leave <strong>Spatial Blend</strong> at <strong>0</strong> temporarily, then enter Play mode.</li>
+            <li>Walk near and far from the pot. The clip should play, but its presence should remain constant for this first test.</li>
+          </ol>
+
+          <figure class="source-figure compact">
+            <img src="./assets/audio-source-inspector.png" alt="Unity 6.3 Inspector showing the Audio Source component and its Audio Generator, Loop, Volume, and Spatial Blend properties" />
+            <figcaption><strong>Unity 6.3:</strong> Audio Generator is the field that receives an Audio Clip or Audio Random Container. Image: Unity 6.3 Manual.</figcaption>
+          </figure>
+
+          <div class="note">
+            <span class="note-title">Version label</span>
+            Unity 6.3 names the assignment field <strong>Audio Generator</strong>. Some embedded Unity Learn videos were recorded in earlier Unity 6 builds and display <strong>Audio Resource</strong> or <strong>AudioClip</strong> in the same position. Follow the current 6.3 label.
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Controlled observation</span>
+            With Spatial Blend still at 0, compare the pot from beside the stove and across the room. Record the unexpected result: the object moved relative to the listener, but the sound did not. This establishes the failure that 3D audio will correct.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240719/videos/9555dbdc-0f15-44f2-b57d-d7c1561cb41d_3.1.4_-_Add_a_Boiling_Sound_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Add the boiling source</strong><small>Locate the component and assign the clip</small></span></a>
+          </div>
+
+          <p>
+            Sources:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/create-an-immersive-soundscape?version=6.3" target="_blank" rel="noreferrer">Create an immersive soundscape ↗</a>
+            ·
+            <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/AudioSource-reference.html" target="_blank" rel="noreferrer">Unity 6.3 Audio Source reference ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="spatial">
+          <div class="section-kicker">03 · 2D VERSUS 3D AUDIO</div>
+          <h2>Make position and orientation audible</h2>
+          <p>
+            Spatial Blend controls how strongly Unity’s 3D audio calculations affect a source. At 0, playback ignores world position. At 1, distance and direction between the source and listener affect the result.
+          </p>
+
+          <div class="comparison">
+            <div>
+              <strong>2D · SPATIAL BLEND 0</strong>
+              <p>Position-independent. Use it for nondiegetic music or interface audio that should remain stable as the listener moves.</p>
+            </div>
+            <div>
+              <strong>3D · SPATIAL BLEND 1</strong>
+              <p>Position-dependent. Use it for visible or local environmental sources such as a pot, refrigerator, or bird.</p>
+            </div>
+          </div>
+
+          <ol class="steps">
+            <li>Select <strong>Boiling_Pot</strong> and set its Audio Source <strong>Spatial Blend</strong> to <strong>1</strong>.</li>
+            <li>Enter Play mode and stop across the room from the pot.</li>
+            <li>Walk directly toward the stove. The boiling should become more present as distance decreases.</li>
+            <li>Stand beside the pot and rotate left, right, and away. Listen for the source direction to change with listener orientation.</li>
+            <li>Exit Play mode before adjusting settings.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/spatial-blend.png" alt="Unity Inspector showing the boiling pot Audio Source while Spatial Blend is moved toward fully 3D" />
+            <figcaption><strong>Spatial control:</strong> move Spatial Blend from the 2D endpoint to the 3D endpoint. This embedded tutorial capture uses an older label for the assignment field; Unity 6.3 uses Audio Generator. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <table class="shortcut-table">
+            <thead><tr><th>Property</th><th>What it controls</th><th>Test</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Property">Spatial Blend</td><td data-label="Control">How much 3D processing affects the source</td><td data-label="Test">Compare position-independent 0 with fully 3D 1.</td></tr>
+              <tr><td data-label="Property">Min Distance</td><td data-label="Control">Inner region where volume remains at its maximum</td><td data-label="Test">Walk just inside and outside the boundary.</td></tr>
+              <tr><td data-label="Property">Max Distance</td><td data-label="Control">Outer distance behavior, dependent on rolloff mode</td><td data-label="Test">Do not assume silence; inspect Volume Rolloff.</td></tr>
+              <tr><td data-label="Property">Volume Rolloff</td><td data-label="Control">How volume changes as distance increases</td><td data-label="Test">Compare the same route after changing only this mode.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="practice">
+            <span class="practice-title">A/B spatial test</span>
+            Test the same near–far–rotate route at Spatial Blend 0 and 1. Change only Spatial Blend. The second run should add distance and directional evidence without changing the clip or Transform.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/5782d4fe-04c9-4a72-be49-47f310de03d4_3.1.5_-_Make_it_a_3D_audio_source_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Make the source 3D</strong><small>Hear the result while moving and turning</small></span></a>
+          </div>
+
+          <p>
+            Sources:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/create-an-immersive-soundscape?version=6.3" target="_blank" rel="noreferrer">Create an immersive soundscape ↗</a>
+            ·
+            <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/AudioSource-reference.html" target="_blank" rel="noreferrer">Unity 6.3 Audio Source reference ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="music">
+          <div class="section-kicker">04 · POSITION-INDEPENDENT LAYER</div>
+          <h2>Add background music without placing it in the room</h2>
+          <p>
+            The boiling pot is diegetic: it has a visible source inside the world. Background music is nondiegetic in this scene: it supports the overall atmosphere and should not become louder near one wall or quieter near another.
+          </p>
+
+          <ol class="steps">
+            <li>Right-click empty space in the Hierarchy window and choose <strong>Audio → Audio Source</strong>.</li>
+            <li>Rename the new GameObject <strong>Background Music</strong>.</li>
+            <li>In the Project window, open <strong>_Unity Essentials → Audio → Music</strong>.</li>
+            <li>Select candidate clips and use the <strong>Preview</strong> panel at the bottom of the Inspector window.</li>
+            <li>Assign one clip to the Background Music Audio Source’s <strong>Audio Generator</strong>.</li>
+            <li>Enable <strong>Loop</strong>, set <strong>Volume</strong> between approximately <strong>0.1 and 0.5</strong>, and keep <strong>Spatial Blend</strong> at <strong>0</strong>.</li>
+            <li>Enter Play mode, walk through the kitchen, and balance the music against the boiling pot.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/background-music.png" alt="Unity Editor showing the Background Music Audio Source with looping enabled, reduced volume, and Spatial Blend set to 2D" />
+            <figcaption><strong>Music layer:</strong> looping is enabled, volume is reduced, and Spatial Blend remains at 0 so the track is consistent across the kitchen. The tutorial video shows Unity 6’s earlier Audio Resource label. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Mix check</span>
+            Stand at the doorway, center, and stove. The music should remain present at all three positions, while the pot should change. Reduce music Volume if it masks the quieter far-distance pot test.
+          </div>
+
+          <div class="warning">
+            <span class="note-title">Save outside Play mode</span>
+            Exit Play mode before making final changes, then save with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>S</kbd>. Changes made during Play mode are temporary.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240719/videos/4bd78f69-194a-4d8d-92c1-f59f8f68d239_3.1.6_-_Add_Background_Music_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Add background music</strong><small>Preview, assign, loop, and balance a track</small></span></a>
+          </div>
+
+          <p>
+            Source:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/create-an-immersive-soundscape?version=6.3" target="_blank" rel="noreferrer">Create an immersive soundscape ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="random">
+          <div class="section-kicker">05 · INTERMITTENT EXTERIOR SOUND</div>
+          <h2>Trigger localized bird calls at varied intervals</h2>
+          <p>
+            A continuous loop would make birds sound mechanical. Place separate 3D sources outside, disable automatic startup, and let the provided interval component trigger each source at different times.
+          </p>
+
+          <table class="window-table">
+            <thead><tr><th>Control</th><th>Behavior</th><th>Use here</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Control">Play On Awake</td><td data-label="Behavior">Starts playback when the component becomes active</td><td data-label="Use here">Disable for birds.</td></tr>
+              <tr><td data-label="Control">Loop</td><td data-label="Behavior">Restarts the same clip at its end</td><td data-label="Use here">Leave disabled for individual chirps.</td></tr>
+              <tr><td data-label="Control">Play Sound at Random Intervals</td><td data-label="Behavior">Triggers playback between minimum and maximum delays</td><td data-label="Use here">Add to every bird source.</td></tr>
+            </tbody>
+          </table>
+
+          <ol class="steps">
+            <li>Create another <strong>Audio Source</strong> and move it outside a window or near an implied tree.</li>
+            <li>Rename it <strong>Bird_1</strong> and assign <strong>SFX_Bird_1</strong> to <strong>Audio Generator</strong>.</li>
+            <li>Set <strong>Spatial Blend</strong> to <strong>1</strong>.</li>
+            <li>Disable <strong>Play On Awake</strong>.</li>
+            <li>Choose <strong>Add Component</strong> and add <strong>Play Sound at Random Intervals</strong>.</li>
+            <li>Duplicate the source as <strong>Bird_2</strong> and <strong>Bird_3</strong>. Give them different clips and exterior positions.</li>
+            <li>Enter Play mode and listen long enough to hear more than one interval from more than one position.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/random-birds.png" alt="Unity Editor showing Bird_1 outside the kitchen with a 3D Audio Source and Play Sound at Random Intervals component" />
+            <figcaption><strong>Intermittent source:</strong> Bird_1 is outside, Spatial Blend is 1, Play On Awake is off, and the interval component exposes minimum and maximum seconds. The video shows Unity 6’s earlier Audio Resource label. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Timing and location test</span>
+            Start Play mode and wait without moving. The birds should not all fire at scene load. Then face each exterior source and turn away; calls should arrive at varied times and from distinct directions.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240719/videos/a4673823-b774-4b53-bf55-3d5ef74a0f43_3.1.7_-_Add_Random_Bird_Sounds_Outside_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Add random bird sounds</strong><small>Place, trigger, duplicate, and vary exterior sources</small></span></a>
+          </div>
+
+          <p>
+            Source:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/create-an-immersive-soundscape?version=6.3" target="_blank" rel="noreferrer">Create an immersive soundscape ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="mix">
+          <div class="section-kicker">06 · MIXING + FAILURE DIAGNOSIS</div>
+          <h2>Change one layer at a time and diagnose the result</h2>
+          <p>
+            A layered mix is easier to reason about when each source is tested independently before the full scene. Mute or disable one layer, repeat the same listener route, and change one property between runs.
+          </p>
+
+          <ol class="steps">
+            <li>Test the pot alone at far, middle, and near positions.</li>
+            <li>Add music and repeat the route. Reduce music Volume until the pot’s distance change remains audible.</li>
+            <li>Add birds and wait through several trigger intervals.</li>
+            <li>Inspect the Hierarchy: source names should reveal their roles without selecting them.</li>
+            <li>Exit Play mode, apply the final values, and save the scene.</li>
+          </ol>
+
+          <table class="shortcut-table">
+            <thead><tr><th>Observed result</th><th>Likely cause</th><th>Inspect</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Observed result">A source is silent</td><td data-label="Likely cause">No generator, muted/disabled source, or no trigger</td><td data-label="Inspect">Audio Generator, Mute, Play On Awake, interval component</td></tr>
+              <tr><td data-label="Observed result">Pot never changes with movement</td><td data-label="Likely cause">Spatial Blend is still 0</td><td data-label="Inspect">Boiling_Pot Audio Source</td></tr>
+              <tr><td data-label="Observed result">Music changes near walls</td><td data-label="Likely cause">Music was spatialized</td><td data-label="Inspect">Background Music Spatial Blend</td></tr>
+              <tr><td data-label="Observed result">Bird plays at scene start</td><td data-label="Likely cause">Play On Awake is enabled</td><td data-label="Inspect">Bird Audio Source</td></tr>
+              <tr><td data-label="Observed result">Bird never repeats</td><td data-label="Likely cause">Interval component is absent or disabled</td><td data-label="Inspect">Play Sound at Random Intervals</td></tr>
+              <tr><td data-label="Observed result">Editor reports listener conflict</td><td data-label="Likely cause">More than one active Audio Listener</td><td data-label="Inspect">Camera and player GameObjects</td></tr>
+            </tbody>
+          </table>
+
+          <div class="practice">
+            <span class="practice-title">Evidence before adjustment</span>
+            When a result is wrong, state what you heard, the one setting you predict is responsible, and the next controlled test. Change the setting only after making the prediction.
+          </div>
+        </section>
+
+        <section class="article-section" id="applied-task">
+          <div class="section-kicker">07 · CORE APPLICATION TASK · REQUIRED</div>
+          <h2>Build and prove a three-layer kitchen soundscape</h2>
+          <p>
+            Produce one saved scene that combines the lecture’s central systems. This is the required lecture task.
+          </p>
+
+          <table class="window-table">
+            <thead><tr><th>Layer</th><th>Required configuration</th><th>Observable evidence</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Layer">Boiling pot</td><td data-label="Configuration">Looping Bubbling_Water; Spatial Blend 1</td><td data-label="Evidence">Louder near the stove and direction changes when turning.</td></tr>
+              <tr><td data-label="Layer">Background music</td><td data-label="Configuration">Looping music; reduced Volume; Spatial Blend 0</td><td data-label="Evidence">Presence stays consistent at three listener positions.</td></tr>
+              <tr><td data-label="Layer">Exterior birds</td><td data-label="Configuration">At least two 3D sources; Play On Awake off; interval component</td><td data-label="Evidence">Calls occur at varied times and from distinct locations.</td></tr>
+            </tbody>
+          </table>
+
+          <ol class="steps">
+            <li>Confirm exactly one active Audio Listener on the Main Camera.</li>
+            <li>Start at the doorway and listen for at least ten seconds without moving.</li>
+            <li>Walk to the stove and rotate left, right, and away from the pot.</li>
+            <li>Cross the kitchen and verify that music remains stable while the pot changes.</li>
+            <li>Wait for at least two bird calls and identify their different directions.</li>
+            <li>Exit Play mode, save the scene, and capture either one Hierarchy/Inspector screenshot or a short written test log.</li>
+          </ol>
+
+          <div class="practice">
+            <span class="practice-title">Completion evidence</span>
+            The task is complete when one saved scene demonstrates all three behaviors and your screenshot or test log identifies the setting responsible for each behavior. A scene that merely contains the clips is not yet complete.
+          </div>
+
+          <div class="checklist" aria-label="Required applied task completion">
+            <label><input type="checkbox" data-task="task-required-soundscape" data-task-kind="required" /><span>I built, tested, documented, and saved the required three-layer soundscape.</span></label>
+          </div>
+        </section>
+
+        <section class="article-section" id="optional-extension">
+          <div class="section-kicker">08 · OPTIONAL EXTENSION TASK</div>
+          <h2>Optional: design an acoustic boundary with reverb</h2>
+          <p>
+            This task is optional and does not affect lecture completion. It extends source–listener distance into room acoustics: the listener’s position inside a zone changes how audible sources reverberate.
+          </p>
+
+          <ol class="steps">
+            <li>Right-click the Hierarchy window and choose <strong>Audio → Audio Reverb Zone</strong>.</li>
+            <li>Use the Move tool to place the zone at the center of the kitchen.</li>
+            <li>Inspect the inner <strong>Min Distance</strong> and outer <strong>Max Distance</strong> gizmos.</li>
+            <li>Enter Play mode and compare <strong>Room</strong> with one exaggerated preset such as <strong>Cave</strong> or <strong>Underwater</strong>.</li>
+            <li>Walk from outside the zone through its boundary and into the center.</li>
+            <li>Choose a final preset that fits the kitchen, exit Play mode, and save it.</li>
+            <li>Write one sentence explaining where the effect begins, where it becomes strongest, and why the final preset fits.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/reverb-zone.png" alt="Unity Editor showing an Audio Reverb Zone centered on the kitchen with the Reverb Preset menu open" />
+            <figcaption><strong>Acoustic zone:</strong> compare a realistic Room preset with an exaggerated preset, then walk across the boundary to hear the transition. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Extension evidence</span>
+            Your comparison should name both presets and describe a position-dependent change. “It sounded different” is insufficient; identify where the transition began and which preset you kept.
+          </div>
+
+          <div class="checklist" aria-label="Optional extension task completion">
+            <label><input type="checkbox" data-task="task-optional-reverb" data-task-kind="optional" /><span>I completed the optional reverb comparison and justified the final preset.</span></label>
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/db0c5bf8-34a3-47df-97e6-9de290119fa4_3.C.4_-_Expert_-_Experiment_with_Reverb_Zones.mp4" target="_blank" rel="noreferrer"><span><strong>Experiment with Reverb Zones</strong><small>Create a zone and compare presets while moving</small></span></a>
+          </div>
+
+          <p>
+            Sources:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/audio-essentials-more-things-to-try?version=6.3" target="_blank" rel="noreferrer">Audio Essentials: More things to try ↗</a>
+            ·
+            <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/class-AudioReverbZone.html" target="_blank" rel="noreferrer">Unity 6.3 Reverb Zones reference ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="review">
+          <div class="section-kicker">09 · VERIFICATION</div>
+          <h2>Completion criteria</h2>
+          <p>
+            Lecture completion requires the core soundscape, the controlled listening evidence, and the explanations below. The reverb extension remains optional.
+          </p>
+
+          <div class="checklist" aria-label="End of lecture checklist">
+            <label><input type="checkbox" data-task="review-listener" /><span>I can explain why the scene uses one active Audio Listener and where it is attached.</span></label>
+            <label><input type="checkbox" data-task="review-source" /><span>I can distinguish an Audio Clip, Audio Generator field, and Audio Source component.</span></label>
+            <label><input type="checkbox" data-task="review-spatial" /><span>The pot changes with listener distance and orientation because Spatial Blend is 1.</span></label>
+            <label><input type="checkbox" data-task="review-music" /><span>The music remains position-independent because Spatial Blend is 0.</span></label>
+            <label><input type="checkbox" data-task="review-random" /><span>At least two birds play at varied intervals from different exterior positions.</span></label>
+            <label><input type="checkbox" data-task="review-balance" /><span>The music does not mask the environmental tests.</span></label>
+            <label><input type="checkbox" data-task="review-save" /><span>I exited Play mode, saved the scene, and retained evidence for the required task.</span></label>
+          </div>
+
+          <h3>Diagnostic questions</h3>
+          <ol class="steps">
+            <li>Why is an Audio Listener normally attached to the Main Camera rather than a stationary prop?</li>
+            <li>Where can you preview a selected Audio Clip before assigning it?</li>
+            <li>Why should background music use Spatial Blend 0 in this scene?</li>
+            <li>If Bird_1 chirps immediately and never repeats, which two controls should you inspect?</li>
+          </ol>
+
+          <h3>Official Unity sources</h3>
+          <ul class="source-list">
+            <li><span>01</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials?version=6.3" target="_blank" rel="noreferrer">Audio Essentials mission</a></li>
+            <li><span>02</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/create-an-immersive-soundscape?version=6.3" target="_blank" rel="noreferrer">Create an immersive soundscape</a></li>
+            <li><span>03</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/tutorial/audio-essentials-more-things-to-try?version=6.3" target="_blank" rel="noreferrer">Audio Essentials: More things to try</a></li>
+            <li><span>04</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/audio-essentials/quiz/ess-mission-3-quiz?version=6.3" target="_blank" rel="noreferrer">Audio Essentials quiz</a></li>
+            <li><span>05</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/AudioSource-reference.html" target="_blank" rel="noreferrer">Unity 6.3 Audio Source component reference</a></li>
+            <li><span>06</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/class-AudioListener.html" target="_blank" rel="noreferrer">Unity 6.3 Audio Listener reference</a></li>
+            <li><span>07</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/class-AudioReverbZone.html" target="_blank" rel="noreferrer">Unity 6.3 Reverb Zones reference</a></li>
+          </ul>
+
+          <div class="next-module">END OF CURRENT MATERIAL // APPEND FUTURE SECTIONS BELOW</div>
+        </section>
+      </article>
+    </div>
+
+    <footer class="page-footer">
+      SWE 402 technical reference. Source screenshots and tutorial procedures: Unity Learn and Unity 6.3 Manual.
+    </footer>
+
+    <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme.toUpperCase();
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const storageKey = "unity-audio-essentials-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    </script>
+  </body>
+</html>
