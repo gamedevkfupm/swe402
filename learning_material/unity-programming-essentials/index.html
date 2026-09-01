@@ -1,0 +1,2003 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Unity 6.3 programming reference for C# scripts as components, Input System movement, Rigidbody control, rotating collectibles, trigger events, VFX feedback, tags, and a complete collection loop."
+    />
+    <title>Unity Programming Essentials — Technical Reference</title>
+    <link rel="icon" href="data:," />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("unity-editor-reference-theme");
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f1eed8;
+        --paper-deep: #ddd7b8;
+        --surface: #fbf7e5;
+        --ink: #172016;
+        --muted: #4e5b4b;
+        --faint: #788373;
+        --line: #a7ad92;
+        --green: #236c2d;
+        --green-soft: #d4e4c6;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #858b72;
+        --grid: rgba(23, 32, 22, 0.055);
+        --code-ink: #382f11;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #10150e;
+        --paper-deep: #1a2317;
+        --surface: #151c13;
+        --ink: #e3edd8;
+        --muted: #afbea5;
+        --faint: #7c8c74;
+        --line: #40503a;
+        --green: #82ca5b;
+        --green-soft: #20321d;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #050704;
+        --grid: rgba(213, 235, 198, 0.04);
+        --code-ink: #201b08;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--green);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--green) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--green);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--green);
+      }
+
+      .hero::after {
+        content: "04";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--green);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--green);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: uppercase;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--green);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: steps;
+      }
+
+      .steps li {
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+        counter-increment: steps;
+      }
+
+      .steps li::before {
+        content: counter(steps, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.45rem;
+        color: var(--orange);
+        font: 900 1rem/1 var(--pixel);
+      }
+
+      .steps li strong {
+        font-family: var(--sans);
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure img {
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #171b18;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--green);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--green);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--green);
+        background: var(--green-soft);
+      }
+
+      .practice::before {
+        content: "PRACTICE";
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--green);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--green);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      :not(pre) > code {
+        padding: 0.1em 0.28em;
+        border: 1px solid var(--line);
+        background: var(--paper-deep);
+        color: var(--ink);
+        font: 0.88em/1.45 var(--pixel);
+      }
+
+      .code-sample {
+        margin: 2rem 0;
+        overflow: hidden;
+        border: 3px solid var(--ink);
+        background: #151a15;
+        color: #edf6e8;
+        box-shadow: 6px 6px 0 var(--shadow);
+      }
+
+      .code-sample figcaption {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0;
+        padding: 0.65rem 0.85rem;
+        border-bottom: 1px solid #52604d;
+        background: #20291e;
+        color: #c7d5c0;
+        font: 800 0.68rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .code-sample pre {
+        margin: 0;
+        padding: 1.1rem;
+        overflow-x: auto;
+        tab-size: 4;
+        font: 0.82rem/1.65 var(--pixel);
+      }
+
+      .code-sample code {
+        color: inherit;
+        font: inherit;
+        white-space: pre;
+      }
+
+      .code-sample .code-note {
+        color: #9eb294;
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--green); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--green);
+        color: var(--green);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--green);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--green);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--green);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--green);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table,
+        .shortcut-table {
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .window-table thead,
+        .shortcut-table thead {
+          display: none;
+        }
+
+        .window-table tbody,
+        .shortcut-table tbody {
+          display: grid;
+          gap: 0.85rem;
+        }
+
+        .window-table tr,
+        .shortcut-table tr {
+          display: block;
+          border: 2px solid var(--ink);
+          background: var(--surface);
+          box-shadow: 4px 4px 0 var(--shadow);
+        }
+
+        .window-table td,
+        .shortcut-table td,
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          display: grid;
+          grid-template-columns: minmax(6.3rem, 34%) 1fr;
+          gap: 0.65rem;
+          width: auto;
+          padding: 0.65rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          font-weight: 400;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          color: var(--green);
+          font-weight: 800;
+        }
+
+        .window-table td::before,
+        .shortcut-table td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font: 800 0.62rem/1.4 var(--pixel);
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box,
+        .code-sample {
+          break-inside: avoid;
+        }
+
+        .code-sample {
+          box-shadow: none;
+        }
+
+        #applied-task,
+        #optional-extension,
+        #review {
+          break-before: page;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+    <header class="site-header">
+      <a class="site-mark" href="#top">SWE 402 // UNITY_PROGRAMMING_REFERENCE</a>
+      <div class="site-actions">
+        <button class="quiet-button" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-swatch" aria-hidden="true"></span>
+          <span id="themeLabel">LIGHT</span>
+        </button>
+        <button class="quiet-button" id="resetProgress" type="button">RESET TASKS</button>
+        <button class="quiet-button" type="button" onclick="window.print()">PRINT</button>
+      </div>
+    </header>
+
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div class="kicker">SWE 402 · UNITY 6.3 · TECHNICAL REFERENCE</div>
+        <h1>Unity Programming<em>Essentials</em></h1>
+        <p class="dek">
+          Reference for turning scripts into GameObject components, moving a Rigidbody-controlled player, rotating collectibles, processing trigger events, and proving a complete collection loop.
+        </p>
+        <div class="article-meta">
+          <span>Unity 6.3</span>
+          <span>Lecture 04</span>
+          <span>C# + interaction</span>
+          <span>Progress stored locally</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-grid">
+      <aside class="toc" aria-label="Table of contents">
+        <p class="toc-title">IN THIS LECTURE</p>
+        <ol>
+          <li><a href="#setup"><span>01</span>Set up the interaction</a></li>
+          <li><a href="#movement"><span>02</span>Build player movement</a></li>
+          <li><a href="#camera-test"><span>03</span>Follow, tune, diagnose</a></li>
+          <li><a href="#rotation"><span>04</span>Rotate a collectible</a></li>
+          <li><a href="#trigger"><span>05</span>Detect collection</a></li>
+          <li><a href="#feedback"><span>06</span>Filter and add feedback</a></li>
+          <li><a href="#route"><span>07</span>Build the route</a></li>
+          <li><a href="#applied-task"><span>08</span>Applied task</a></li>
+          <li><a href="#optional-extension"><span>09</span>Optional extension</a></li>
+          <li><a href="#review"><span>10</span>Completion criteria</a></li>
+        </ol>
+      </aside>
+
+      <article>
+        <section class="lead-box" aria-labelledby="goal-title">
+          <div class="eyebrow">Learning outcomes</div>
+          <h2 id="goal-title">Build an interaction whose visible result can be traced to components and code.</h2>
+          <p>
+            The finished living room has one controllable player, a following camera, and a readable route of collectibles. Each pickup rotates, detects only the Player, disappears, and creates visual feedback.
+          </p>
+          <ul class="outcomes">
+            <li>Explain why a C# script becomes a component on a GameObject.</li>
+            <li>Configure the Input System and a Rigidbody-based movement loop.</li>
+            <li>Distinguish <code>Start</code>, <code>Update</code>, and <code>FixedUpdate</code>.</li>
+            <li>Expose editable fields and test them without losing final values.</li>
+            <li>Connect trigger overlap to tag filtering, VFX, and destruction.</li>
+            <li>Diagnose a failure from its visible symptom and likely responsibility.</li>
+          </ul>
+          <div class="note">
+            <span class="note-title">Opening demonstration</span>
+            Run the completed scene once without opening any code. Move and turn the player, collect three objects, then stop. Ask students to identify the GameObject, component, field, or event responsible for movement, camera following, rotation, overlap detection, object removal, and the particle effect.
+          </div>
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240524/videos/04a0a4c6-cc5e-4ca6-a5f3-e0afa7fcbfa7_Essentials_Pathway_M4_Programming.mp4" target="_blank" rel="noreferrer"><span><strong>Programming Essentials overview</strong><small>Preview the complete movement-to-collection loop · 1:04</small></span></a>
+          </div>
+        </section>
+
+        <section class="article-section" id="setup">
+          <div class="section-kicker">01 · PROJECT → PLAYER → COMPONENTS</div>
+          <h2>Set up the scene before diagnosing code</h2>
+          <p class="drop-cap">
+            Programming does not replace the component model you already know. A script supplies behavior, but the scene still depends on the right GameObject, Rigidbody, Collider, camera relationship, and project input setting.
+          </p>
+
+          <table class="window-table">
+            <thead><tr><th>Element</th><th>Responsibility</th><th>Where to verify it</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Element">Input System</td><td data-label="Responsibility">Reports keyboard state to the movement component.</td><td data-label="Verify">Project Settings → Player → Active Input Handling</td></tr>
+              <tr><td data-label="Element">Player</td><td data-label="Responsibility">Owns the character visuals, Rigidbody, Collider, and PlayerController.</td><td data-label="Verify">Hierarchy window and Inspector window</td></tr>
+              <tr><td data-label="Element">PlayerController</td><td data-label="Responsibility">Converts input into Rigidbody position and rotation changes.</td><td data-label="Verify">Player Inspector and script editor</td></tr>
+              <tr><td data-label="Element">Main Camera</td><td data-label="Responsibility">Follows because it is a child of Player.</td><td data-label="Verify">Indented beneath Player in the Hierarchy</td></tr>
+              <tr><td data-label="Element">Collectible</td><td data-label="Responsibility">Owns rotation, trigger detection, tag filtering, and pickup feedback.</td><td data-label="Verify">Collectible Inspector and Collectible script</td></tr>
+            </tbody>
+          </table>
+
+          <ol class="steps">
+            <li>Open <strong>Edit → Project Settings</strong>, select <strong>Player</strong>, expand <strong>Other Settings</strong>, and locate <strong>Active Input Handling</strong>.</li>
+            <li>Select <strong>Input System Package (New)</strong>, then select <strong>Apply</strong>. Let the Unity Editor restart before continuing.</li>
+            <li>In the Project window, open <strong>_Unity Essentials → Scenes → 4_LivingRoom_Programming_Scene</strong>.</li>
+            <li>From <strong>_Unity Essentials → Prefabs → Characters</strong>, drag one character near the main door on the left. Do not double-click the prefab.</li>
+            <li>Rotate it around Y if needed so it faces the room, then rename the instance <strong>Player</strong>.</li>
+          </ol>
+
+          <div class="warning">
+            <span class="note-title">Editor restart and source-version note</span>
+            Save other open work before changing Active Input Handling because the Editor restarts. The current written Unity 6.3 instructions name <strong>4_LivingRoom_Programming_Scene</strong>; some older official video frames show <strong>3_Programming_Scene</strong>. Follow the written scene name available in the current project.
+          </div>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/living-room-scene.png" alt="Unity Scene view showing the empty green living room used for the Programming Essentials mission" />
+            <figcaption><strong>Programming baseline:</strong> open the living room before adding the player and behavior scripts. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Baseline test</span>
+            Enter Play mode before attaching a movement script. Press <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> and the arrow keys, then exit Play mode. The expected result is no scripted movement; this confirms the behavior has not been added yet.
+          </div>
+
+          <div class="video-list">
+            <a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/32368c5c-7d88-40a0-b927-283619155fad/versions%5B_key==%22hZGUzJc5TfSRjIpWBBBWIW%22%5D.sections%5B_key==%227895c55c94a0%22%5D.body%5B_key==%22efb9a5ee6be1%22%5D.overviewVideo/3.1%20Configure%20project%20settings%20for%20the%20Input%20System_20260612_203500.mp4" target="_blank" rel="noreferrer"><span><strong>Configure Active Input Handling</strong><small>Locate the Unity 6.3 setting and apply the restart</small></span></a>
+          </div>
+
+          <p>Source: <a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/add-a-movement-script?version=6.3" target="_blank" rel="noreferrer">Add a movement script ↗</a></p>
+        </section>
+
+        <section class="article-section" id="movement">
+          <div class="section-kicker">02 · INPUT → RIGIDBODY MOTION</div>
+          <h2>Create a movement script and attach it as a component</h2>
+          <p>
+            A <code>MonoBehaviour</code> script becomes an attachable component. The PlayerController below reads the new Input System, caches the Player’s Rigidbody once, and moves that Rigidbody during Unity’s fixed physics update.
+          </p>
+
+          <ol class="steps">
+            <li>Open <strong>_Unity Essentials → Scripts</strong>. Right-click empty space and select <strong>Create → MonoBehaviour Script</strong>.</li>
+            <li>Name the new file <strong>PlayerController</strong> immediately. The file name and class name must match exactly.</li>
+            <li>Drag <strong>PlayerController</strong> from the Project window onto Player in the Scene view.</li>
+            <li>Select Player in the Hierarchy and verify <strong>Player Controller (Script)</strong> at the bottom of the Inspector.</li>
+            <li>Double-click the script to open the configured script editor, replace the template with the supplied code, and save the file.</li>
+            <li>Return to the Unity Editor, wait for compilation to finish, enter Play mode, and test both <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> and the arrow keys.</li>
+          </ol>
+
+          <figure class="code-sample">
+            <figcaption><span>PlayerController.cs · Unity Learn 6.3</span><span class="code-note">Rigidbody movement in FixedUpdate</span></figcaption>
+            <pre><code>using UnityEngine;
+using UnityEngine.InputSystem;
+
+/// &lt;summary&gt;
+/// Moves forward/backward and rotates with WASD/Arrow keys.
+/// &lt;/summary&gt;
+public class PlayerController : MonoBehaviour
+{
+    [Tooltip("Forward/back speed (units/sec).")]
+    public float speed = 5.0f;
+
+    [Tooltip("Turn speed (degrees/sec).")]
+    public float rotationSpeed = 120.0f;
+
+    private Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent&lt;Rigidbody&gt;();
+        if (rb == null) Debug.LogWarning("PlayerController needs a Rigidbody.");
+    }
+
+    private void FixedUpdate()
+    {
+        Vector2 moveInput = Vector2.zero;
+
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)   moveInput.y = 1f;
+        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) moveInput.y = -1f;
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) moveInput.x = -1f;
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) moveInput.x = 1f;
+
+        Vector3 movement = transform.forward * moveInput.y * speed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + movement);
+
+        float turnDirection = moveInput.x;
+        if (moveInput.y &lt; 0) turnDirection = -turnDirection;
+
+        float turn = turnDirection * rotationSpeed * Time.fixedDeltaTime;
+        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
+        rb.MoveRotation(rb.rotation * turnRotation);
+    }
+}</code></pre>
+          </figure>
+
+          <table class="shortcut-table">
+            <thead><tr><th>Code region</th><th>Responsibility</th><th>Visible or testable result</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Code region"><code>using</code></td><td data-label="Responsibility">Makes UnityEngine and Input System types available.</td><td data-label="Result"><code>Keyboard</code>, <code>Rigidbody</code>, and <code>Vector3</code> resolve.</td></tr>
+              <tr><td data-label="Code region">Public fields</td><td data-label="Responsibility">Store speed values and serialize them for the Inspector.</td><td data-label="Result">Speed and Rotation Speed appear on Player.</td></tr>
+              <tr><td data-label="Code region"><code>Start</code></td><td data-label="Responsibility">Gets the Rigidbody component once and warns if it is absent.</td><td data-label="Result">The movement code has a physics body to control.</td></tr>
+              <tr><td data-label="Code region"><code>FixedUpdate</code></td><td data-label="Responsibility">Reads held keys and performs fixed-step physics motion.</td><td data-label="Result">Movement remains proportional to units or degrees per second.</td></tr>
+              <tr><td data-label="Code region"><code>MovePosition</code></td><td data-label="Responsibility">Moves along the Player’s forward direction.</td><td data-label="Result">W/Up moves forward; S/Down reverses.</td></tr>
+              <tr><td data-label="Code region"><code>MoveRotation</code></td><td data-label="Responsibility">Rotates around the Y-axis.</td><td data-label="Result">A/Left and D/Right turn the Player.</td></tr>
+            </tbody>
+          </table>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/player-controller-inspector.jpg" alt="Unity Game view with the Player selected and Rigidbody plus Player Controller Speed fields visible in the Inspector" />
+            <figcaption><strong>Script as component:</strong> PlayerController appears beside the built-in Rigidbody, with editable Speed and Rotation Speed fields. Frame from the Unity Learn Play-mode tuning video.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Movement proof</span>
+            Run a four-part test: forward, reverse, turn while moving forward, then turn while reversing. Record which visible behavior would fail if the Input System, Rigidbody, or saved script were missing.
+          </div>
+        </section>
+
+        <section class="article-section" id="camera-test">
+          <div class="section-kicker">03 · HIERARCHY + CONTROLLED TUNING</div>
+          <h2>Make the camera follow, then tune one field at a time</h2>
+          <p>
+            Parenting transfers motion through the Transform hierarchy. When Main Camera is a child of Player, its position and rotation are local to Player, so the camera follows without a second movement script.
+          </p>
+
+          <ol class="steps">
+            <li>Drag <strong>Main Camera</strong> onto Player in the Hierarchy. Confirm that it becomes indented beneath Player.</li>
+            <li>Open the Main Camera Transform component’s <strong>More (⋮)</strong> menu and select <strong>Reset</strong>.</li>
+            <li>Move the camera slightly above and behind Player. Use the camera Preview panel to frame the character.</li>
+            <li>Enter Play mode, select Player, and change only <strong>Speed</strong>. Test the same route twice.</li>
+            <li>Restore Speed, change only <strong>Rotation Speed</strong>, and repeat the turn test.</li>
+            <li>Write down the preferred values, exit Play mode, apply those values again outside Play mode, and save the scene.</li>
+          </ol>
+
+          <div class="comparison">
+            <div>
+              <strong>PLAY MODE EXPERIMENT</strong>
+              <p>Immediate feedback is useful for comparison, but Inspector changes revert when Play mode ends.</p>
+            </div>
+            <div>
+              <strong>EDIT MODE COMMIT</strong>
+              <p>Reapply the chosen values after exiting Play mode, then save the scene so the configuration persists.</p>
+            </div>
+          </div>
+
+          <div class="warning">
+            <span class="note-title">Temporary state</span>
+            The blue Play control means you are testing runtime state. Do not assume a tuned value is saved. If movement stops after clicking the Inspector, click the Game view once to return keyboard focus.
+          </div>
+
+          <table class="shortcut-table">
+            <thead><tr><th>Observed result</th><th>Likely cause</th><th>Inspect next</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Observed result">No movement and compile errors</td><td data-label="Likely cause">Unsaved, incomplete, or misnamed script</td><td data-label="Inspect next">Console, file/class name, script editor save state</td></tr>
+              <tr><td data-label="Observed result">Rigidbody warning</td><td data-label="Likely cause">PlayerController cannot find a Rigidbody</td><td data-label="Inspect next">Player Inspector</td></tr>
+              <tr><td data-label="Observed result">Keys do nothing without compile errors</td><td data-label="Likely cause">Wrong Active Input Handling or Game view lacks focus</td><td data-label="Inspect next">Project Settings and Game view focus</td></tr>
+              <tr><td data-label="Observed result">Player moves but camera stays behind</td><td data-label="Likely cause">Main Camera is not a child of Player</td><td data-label="Inspect next">Hierarchy indentation</td></tr>
+              <tr><td data-label="Observed result">Good values disappear</td><td data-label="Likely cause">They were changed only in Play mode</td><td data-label="Inspect next">Reapply in Edit mode and save</td></tr>
+            </tbody>
+          </table>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240521/videos/35f66c78-dd80-47c4-a4d2-7f1ae1ae084b_4.1.8_-_Set_the_camera_as_a_child_of_the_Player_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Parent Main Camera to Player</strong><small>Reset local Transform values and frame the character</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240521/videos/741c163f-bbd0-4f07-8d3f-1dc00efac992_4.1.9_-_Edit_Player_properties_in_Play_mode_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Tune movement fields</strong><small>Compare temporary values, then save the selected result</small></span></a>
+          </div>
+        </section>
+
+        <section class="article-section" id="rotation">
+          <div class="section-kicker">04 · MONOBEHAVIOUR + UPDATE</div>
+          <h2>Write a small component that rotates a collectible</h2>
+          <p>
+            The Collectible script is the first behavior written line by line. Its structure separates the component definition from event functions and editable data; <code>Update</code> is the event used for continuous per-frame visual motion.
+          </p>
+
+          <ol class="steps">
+            <li>From <strong>_Unity Essentials → Prefabs → Collectibles</strong>, place one collectible directly in front of Player.</li>
+            <li>Create a <strong>Collectible</strong> MonoBehaviour script in the Scripts folder and drag it into the collectible’s Inspector.</li>
+            <li>Open the script and locate <code>using UnityEngine;</code>, the class declaration, <code>Start</code>, and <code>Update</code>.</li>
+            <li>Switch the Scene view handle orientation to <strong>Local</strong>. Scrub Transform → Rotation → Y to preview the intended axis.</li>
+            <li>Inside <code>Update</code>, add <code>transform.Rotate(0, 1, 0);</code>, save, and test the fast rotation.</li>
+            <li>Change the Y value to <code>0.5f</code>, save, and compare the slower rotation.</li>
+            <li>Declare <code>public float rotationSpeed;</code> above the event functions, then replace the literal with <code>rotationSpeed</code>.</li>
+            <li>Save, return to Unity, set <strong>Rotation Speed</strong> in the Inspector, and test again.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/collectible-script-structure.png" alt="Annotated C sharp script showing using statements, the Collectible MonoBehaviour class, Start, and Update" />
+            <figcaption><strong>Script anatomy:</strong> imports make types available, the class defines the component, Start runs once before the first update, and Update runs every rendered frame. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <table class="window-table">
+            <thead><tr><th>Structure</th><th>Meaning in this component</th><th>Common confusion</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Structure"><code>using UnityEngine;</code></td><td data-label="Meaning">Makes Unity types and APIs available.</td><td data-label="Confusion">It does not attach the script to a GameObject.</td></tr>
+              <tr><td data-label="Structure"><code>class Collectible</code></td><td data-label="Meaning">Names the custom component type.</td><td data-label="Confusion">The class name must match Collectible.cs.</td></tr>
+              <tr><td data-label="Structure"><code>: MonoBehaviour</code></td><td data-label="Meaning">Makes the class an attachable Unity component with event functions.</td><td data-label="Confusion">A GameObject itself does not need a MonoBehaviour.</td></tr>
+              <tr><td data-label="Structure"><code>Start</code></td><td data-label="Meaning">Runs once before the first Update while enabled.</td><td data-label="Confusion">It is not the place for continuous rotation.</td></tr>
+              <tr><td data-label="Structure"><code>Update</code></td><td data-label="Meaning">Runs once per rendered frame while enabled.</td><td data-label="Confusion">Its frequency varies with frame rate.</td></tr>
+              <tr><td data-label="Structure">Public float field</td><td data-label="Meaning">Stores a decimal value and appears as Rotation Speed in the Inspector.</td><td data-label="Confusion"><code>0.5</code> is a double literal; <code>0.5f</code> is a float literal.</td></tr>
+            </tbody>
+          </table>
+
+          <figure class="code-sample">
+            <figcaption><span>Collectible.cs · rotation stage</span><span class="code-note">Source-match version: degrees per rendered frame</span></figcaption>
+            <pre><code>using UnityEngine;
+
+public class Collectible : MonoBehaviour
+{
+    public float rotationSpeed;
+
+    private void Update()
+    {
+        transform.Rotate(0, rotationSpeed, 0);
+    }
+}</code></pre>
+          </figure>
+
+          <div class="comparison">
+            <div>
+              <strong>TUTORIAL BEHAVIOR</strong>
+              <p><code>rotationSpeed</code> is degrees per rendered frame. This matches the supplied tutorial and makes 0.5 a useful test value.</p>
+            </div>
+            <div>
+              <strong>TIME-BASED BEHAVIOR</strong>
+              <p><code>rotationSpeed * Time.deltaTime</code> interprets the field as degrees per second and is stable across different frame rates.</p>
+            </div>
+          </div>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/rotation-speed-inspector.jpg" alt="Unity Inspector showing the Collectible script with a public Rotation Speed field set to its default value of zero" />
+            <figcaption><strong>Serialized field:</strong> a newly declared public float appears as Rotation Speed and starts at 0, so the object will not rotate until a value is assigned. Frame from the Unity Learn variable video.</figcaption>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Three-value test</span>
+            Test Rotation Speed at 0, 0.25, and 1 without changing any other field. Describe the observable difference, then keep a value that is readable while the player approaches.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240515/videos/389538f2-c50a-4dd7-a892-637a700c24cc_4.2.6_-_Add_your_first_line_of_code_to_rotate_the_collectible_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Rotate the collectible from Update</strong><small>Connect the code line to continuous visible motion</small></span></a>
+          </div>
+
+          <p>Source: <a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/create-a-rotating-collectible?version=6.3" target="_blank" rel="noreferrer">Create a rotating collectible ↗</a></p>
+        </section>
+
+        <section class="article-section" id="trigger">
+          <div class="section-kicker">05 · COLLIDER → TRIGGER EVENT</div>
+          <h2>Detect overlap without creating a physical barrier</h2>
+          <p>
+            A physical collider blocks or deflects the Player. A trigger collider keeps the overlap volume but removes the solid response, allowing <code>OnTriggerEnter</code> to report that the Player entered it.
+          </p>
+
+          <ol class="steps">
+            <li>Place the collectible directly in Player’s path, enter Play mode, and collide with it while its Collider is still physical.</li>
+            <li>Exit Play mode, select the collectible, locate its Collider component, and enable <strong>Is Trigger</strong>.</li>
+            <li>Test again. Player should pass through without resistance, but the collectible should remain visible.</li>
+            <li>Open Collectible.cs and add <code>OnTriggerEnter(Collider other)</code> after <code>Update</code> but before the class’s final brace.</li>
+            <li>Plan the behavior with the comment <code>// Destroy the collectible</code>.</li>
+            <li>Add <code>Destroy(gameObject);</code>, save, and retest. The collectible should disappear from both the Scene and Hierarchy when entered.</li>
+          </ol>
+
+          <div class="comparison">
+            <div>
+              <strong>PHYSICAL COLLIDER</strong>
+              <p>Produces contact response. The Player bumps into the collectible, which is wrong for a pickup.</p>
+            </div>
+            <div>
+              <strong>TRIGGER COLLIDER</strong>
+              <p>Reports overlap without blocking. It supplies the event needed for a pickup.</p>
+            </div>
+          </div>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/collectible-trigger-inspector.jpg" alt="Unity Inspector showing the collectible Box Collider with Is Trigger enabled" />
+            <figcaption><strong>Trigger conversion:</strong> Is Trigger removes the solid collision response while preserving overlap detection. Frame from the Unity Learn trigger-collider video.</figcaption>
+          </figure>
+
+          <figure class="code-sample">
+            <figcaption><span>Collectible.cs · first pickup event</span><span class="code-note">Any valid entering Rigidbody can trigger this stage</span></figcaption>
+            <pre><code>private void OnTriggerEnter(Collider other)
+{
+    // Destroy the collectible
+    Destroy(gameObject);
+}</code></pre>
+          </figure>
+
+          <div class="note">
+            <span class="note-title">Physics requirement</span>
+            Trigger interaction requires Colliders on the participating objects and at least one Rigidbody or ArticulationBody in the interaction. The supplied Player prefab already has a Rigidbody.
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Controlled before / after</span>
+            Preserve two observations: before Is Trigger, Player is blocked; after Is Trigger but before <code>Destroy</code>, Player passes through and the collectible remains. This separates physics configuration from scripted response.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240515/videos/64ecc544-f55a-4cfc-a657-0eaf06030399_4.3.2_-_Allow_the_player_to_go_through_the_collectible_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Change a Collider into a trigger</strong><small>Compare blocking contact with non-blocking overlap</small></span></a>
+          </div>
+        </section>
+
+        <section class="article-section" id="feedback">
+          <div class="section-kicker">06 · EVENT → CONDITION → FEEDBACK</div>
+          <h2>Spawn feedback and restrict collection to Player</h2>
+          <p>
+            The initial trigger destroys the collectible for any qualifying physics object. The completed event adds two responsibilities: instantiate a VFX prefab at the pickup position, and run the pickup actions only when the entering Collider carries the Player tag.
+          </p>
+
+          <ol class="steps">
+            <li>In <strong>_Unity Essentials → Prefabs → VFX</strong>, preview the non-2D particle prefabs and choose one. Exit Prefab editing mode with the Hierarchy back arrow.</li>
+            <li>Declare <code>public GameObject onCollectEffect;</code> below <code>rotationSpeed</code>, save, and return to Unity.</li>
+            <li>Drag the selected VFX prefab onto <strong>On Collect Effect</strong> in the collectible’s Inspector.</li>
+            <li>Inside <code>OnTriggerEnter</code>, add <code>Instantiate(onCollectEffect, transform.position, transform.rotation);</code>.</li>
+            <li>Select Player and choose <strong>Player</strong> from the Inspector’s <strong>Tag</strong> dropdown.</li>
+            <li>Add <code>if (other.CompareTag("Player"))</code> and move both pickup actions inside its braces.</li>
+            <li>Save, test a Player pickup, then test a collectible overlapping a chair or couch. Furniture must not collect it.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/vfx-field-assigned.jpg" alt="Unity Inspector showing VFX Splatter assigned to the Collectible component On Collect Effect field" />
+            <figcaption><strong>Prefab reference:</strong> the public GameObject field links the Collectible component to the VFX_Splatter prefab before runtime. Frame from the Unity Learn particle-instantiation video.</figcaption>
+          </figure>
+
+          <figure class="code-sample">
+            <figcaption><span>Collectible.cs · completed source-derived component</span><span class="code-note">Rotation + Player-only pickup + VFX</span></figcaption>
+            <pre><code>using UnityEngine;
+
+public class Collectible : MonoBehaviour
+{
+    public float rotationSpeed;
+    public GameObject onCollectEffect;
+
+    private void Update()
+    {
+        transform.Rotate(0, rotationSpeed, 0);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+            Instantiate(onCollectEffect, transform.position, transform.rotation);
+        }
+    }
+}</code></pre>
+          </figure>
+
+          <table class="window-table">
+            <thead><tr><th>Stage</th><th>Question answered</th><th>Observable result</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Stage">Trigger overlap</td><td data-label="Question">Did a physics object enter this volume?</td><td data-label="Result"><code>OnTriggerEnter</code> receives the other Collider.</td></tr>
+              <tr><td data-label="Stage">Tag condition</td><td data-label="Question">Is that other object the Player?</td><td data-label="Result">Furniture is ignored; Player continues.</td></tr>
+              <tr><td data-label="Stage">Instantiate</td><td data-label="Question">What feedback appears, and where?</td><td data-label="Result">A VFX prefab is copied at the collectible Transform.</td></tr>
+              <tr><td data-label="Stage">Destroy</td><td data-label="Question">What object leaves the scene?</td><td data-label="Result">The collectible is removed after the current update loop.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="note">
+            <span class="note-title">Why the final two lines work</span>
+            <code>Destroy(gameObject)</code> schedules destruction after the current update loop; it does not erase the Transform in the middle of this method. The following <code>Instantiate</code> call can still read the collectible’s position and rotation.
+          </div>
+
+          <div class="warning">
+            <span class="note-title">Required references and exact labels</span>
+            Assign On Collect Effect before testing, and use the exact tag <strong>Player</strong>. A missing prefab reference or a tag/capitalization mismatch prevents the intended result and should produce a Console error or a failed condition.
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Positive and negative evidence</span>
+            Prove both branches: Player collects one item and creates VFX; a chair or couch overlapping a second item does not collect it. A positive pickup alone does not prove the tag filter.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240515/videos/c63fbc1d-9630-498c-9e45-7098c4c7b86a_4.3.8_-_Instantiate_the_particle_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Instantiate pickup VFX</strong><small>Assign the prefab reference and spawn it at the collectible</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240515/videos/46d67bd2-e2ac-4022-b7ba-a4e55b9fac62_4.3.10_-_Restrict_collisions_to_the_Player_only_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Restrict collection to Player</strong><small>Add the tag and move pickup actions inside the condition</small></span></a>
+          </div>
+
+          <p>Source: <a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/collect-the-collectible?version=6.3" target="_blank" rel="noreferrer">Collect the collectible ↗</a></p>
+        </section>
+
+        <section class="article-section" id="route">
+          <div class="section-kicker">07 · DUPLICATE → SNAP → ORGANIZE</div>
+          <h2>Turn one working pickup into a readable route</h2>
+          <p>
+            Configure and test one correct collectible before duplicating it. The duplicates inherit the attached script and serialized field values; placement and hierarchy organization then become scene-design responsibilities.
+          </p>
+
+          <ol class="steps">
+            <li>Switch the Scene view handle orientation to <strong>Global</strong>, frame <strong>03_Living_Room</strong>, and use the Scene gizmo to select <strong>Top</strong> view.</li>
+            <li>Select the Move tool and the working collectible.</li>
+            <li>Press <kbd>Ctrl</kbd>+<kbd>D</kbd> (macOS: <kbd>Cmd</kbd>+<kbd>D</kbd>) to duplicate it.</li>
+            <li>Move the duplicate along one world axis while holding <kbd>Ctrl</kbd> (macOS: <kbd>Cmd</kbd>) to snap at fixed increments.</li>
+            <li>Repeat duplicate-then-move to create a route that takes Player through more than one part of the room.</li>
+            <li>Shift-select the collectible instances in the Hierarchy, right-click, and select <strong>Create Empty Parent</strong>.</li>
+            <li>Rename the new parent <strong>Collectibles</strong>. Use <kbd>F2</kbd> (macOS: <kbd>Return</kbd>) for quick renaming.</li>
+          </ol>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/collectible-path.jpg" alt="Unity Game view showing a long path of small dirt collectibles and many ungrouped Dirt objects in the Hierarchy" />
+            <figcaption><strong>Before organization:</strong> duplication creates a playable route but also many top-level siblings in the Hierarchy. Frame from the Unity Learn path-building video.</figcaption>
+          </figure>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/organized-collectibles.png" alt="Unity top Scene view showing an evenly spaced route and one collapsed Collectibles parent in the Hierarchy" />
+            <figcaption><strong>After organization:</strong> a single Collectibles parent keeps the Hierarchy scannable while the instances remain positioned across the room. Frame from the Unity Learn hierarchy-organization video.</figcaption>
+          </figure>
+
+          <div class="comparison">
+            <div>
+              <strong>LOCAL FOR ROTATION</strong>
+              <p>Use Local orientation to reason about the collectible’s own Y-axis while planning its spin.</p>
+            </div>
+            <div>
+              <strong>GLOBAL FOR PLACEMENT</strong>
+              <p>Use Global orientation to align duplicates along world axes regardless of each object’s rotation.</p>
+            </div>
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Route quality test</span>
+            Start at the entrance and collect the route without reversing into walls or losing sight of the next item. If the next target is unclear, reposition only the route; do not change movement code to compensate for poor placement.
+          </div>
+
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240515/videos/b1aedee7-0263-4eb9-ae55-601a27cff9f6_4.3.9_-_Create_an_interesting_path_of_collectibles_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Duplicate and snap a route</strong><small>Use Top view, world axes, and fixed placement increments</small></span></a>
+          </div>
+        </section>
+
+        <section class="article-section" id="applied-task">
+          <div class="section-kicker">08 · CORE APPLICATION TASK · REQUIRED</div>
+          <h2>Build and prove a playable collection loop</h2>
+          <p>
+            Produce one saved <strong>4_LivingRoom_Programming_Scene</strong> that combines movement, camera following, tunable collectible rotation, Player-only trigger collection, VFX feedback, and an organized route. This is the required lecture task.
+          </p>
+
+          <table class="window-table">
+            <thead><tr><th>Requirement</th><th>Minimum configuration</th><th>Observable evidence</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Requirement">Player control</td><td data-label="Configuration">PlayerController + Rigidbody + Input System</td><td data-label="Evidence">WASD and arrows move forward/reverse and turn without Console errors.</td></tr>
+              <tr><td data-label="Requirement">Camera</td><td data-label="Configuration">Main Camera is a positioned child of Player</td><td data-label="Evidence">The camera follows position and rotation through the route.</td></tr>
+              <tr><td data-label="Requirement">Route</td><td data-label="Configuration">At least eight reachable rotating collectibles</td><td data-label="Evidence">The next item remains readable and the route crosses more than one room area.</td></tr>
+              <tr><td data-label="Requirement">Pickup</td><td data-label="Configuration">Is Trigger + OnTriggerEnter + VFX reference</td><td data-label="Evidence">Player passes through, VFX appears, and the collectible leaves the Hierarchy.</td></tr>
+              <tr><td data-label="Requirement">Filter</td><td data-label="Configuration">Player tag + CompareTag condition</td><td data-label="Evidence">Furniture cannot collect an overlapped item.</td></tr>
+              <tr><td data-label="Requirement">Persistence</td><td data-label="Configuration">Final fields applied outside Play mode; scene saved</td><td data-label="Evidence">Reloading the scene preserves chosen speed and rotation values.</td></tr>
+            </tbody>
+          </table>
+
+          <ol class="steps">
+            <li>Make one Player and one collectible correct before duplicating anything.</li>
+            <li>Run the positive pickup test and the furniture negative test.</li>
+            <li>Duplicate the verified collectible into a route of at least eight items.</li>
+            <li>Group the instances beneath <strong>Collectibles</strong>.</li>
+            <li>Complete the route from the entrance while observing camera framing and VFX.</li>
+            <li>Exit Play mode, reapply any selected values, save, close and reopen the scene, then run the route again.</li>
+            <li>Capture one Inspector/Hierarchy screenshot and a short test log naming the positive test, negative test, and persisted values.</li>
+          </ol>
+
+          <div class="practice">
+            <span class="practice-title">Completion evidence</span>
+            Submit the saved scene plus evidence that identifies why each visible behavior occurs. “The scene works” is insufficient; name the responsible component, field, or event for movement, following, rotation, overlap, filtering, feedback, and removal.
+          </div>
+
+          <div class="checklist" aria-label="Required applied task completion">
+            <label><input type="checkbox" data-task="task-required-playable-loop" data-task-kind="required" /><span>I built, saved, and replayed the complete required collection loop.</span></label>
+            <label><input type="checkbox" data-task="task-required-test-evidence" data-task-kind="required" /><span>I retained a screenshot and test log with positive, negative, and persistence evidence.</span></label>
+          </div>
+        </section>
+
+        <section class="article-section" id="optional-extension">
+          <div class="section-kicker">09 · OPTIONAL EXTENSION LADDER</div>
+          <h2>Optional: extend one responsibility and prove the new behavior</h2>
+          <p>
+            These source-provided challenges are optional and do not affect lecture completion. Choose one level, preserve the required collection loop, and provide the listed observable evidence.
+          </p>
+
+          <table class="window-table">
+            <thead><tr><th>Choice</th><th>New responsibility</th><th>Observable evidence</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Choice">Easy · Jump</td><td data-label="Responsibility">Detect one Spacebar press and apply upward velocity.</td><td data-label="Evidence">One press produces one jump; Jump Force changes height.</td></tr>
+              <tr><td data-label="Choice">Medium · Day/night</td><td data-label="Responsibility">Rotate Directional Light over a configurable day duration.</td><td data-label="Evidence">A shortened test day changes the lighting and completes visibly.</td></tr>
+              <tr><td data-label="Choice">Expert · Door</td><td data-label="Responsibility">Use a Player-only trigger to set an Animator parameter.</td><td data-label="Evidence">Player opens the door; another object does not.</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Easy — add a jump ability</h3>
+          <p>Add <code>public float jumpForce = 5.0f;</code> beside the movement fields, then add this rendered-frame input check below <code>Start</code>:</p>
+
+          <figure class="code-sample">
+            <figcaption><span>PlayerController.cs · optional jump</span><span class="code-note">One action per Spacebar press</span></figcaption>
+            <pre><code>private void Update()
+{
+    if (Keyboard.current.spaceKey.wasPressedThisFrame)
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+    }
+}</code></pre>
+          </figure>
+
+          <p>Save, press <kbd>Space</kbd> once per jump, compare at least two Jump Force values, then apply the selected value outside Play mode.</p>
+
+          <h3>Medium — generate and verify a day/night component</h3>
+          <ol class="steps">
+            <li>Ask an AI coding tool for a Unity C# component that rotates a Directional Light and exposes the seconds per full day in the Inspector.</li>
+            <li>Read the generated class declaration and create the script file with the exact same name.</li>
+            <li>Attach it to <strong>Directional Light</strong>, verify the duration field, and set a short value for testing.</li>
+            <li>Run one complete test day, inspect Console errors, and explain which line converts elapsed time into rotation.</li>
+          </ol>
+
+          <div class="warning">
+            <span class="note-title">Generated code is a draft</span>
+            The class and file names must match exactly. Confirm the generated API calls against Unity 6.3 documentation and test the result; do not treat successful compilation as proof of correct behavior.
+          </div>
+
+          <h3>Expert — open the door with a Player trigger</h3>
+          <ol class="steps">
+            <li>Create <strong>DoorOpener.cs</strong> in the Scripts folder.</li>
+            <li>Select the parent <strong>Door</strong> GameObject—not DoorPanel or DoorHandle—and verify its Animator component.</li>
+            <li>Attach DoorOpener, add a Box Collider, enable <strong>Is Trigger</strong>, and use <strong>Edit Collider</strong> to size the approach zone.</li>
+            <li>Use the script below, save, and test entry with Player and a non-Player object.</li>
+          </ol>
+
+          <figure class="code-sample">
+            <figcaption><span>DoorOpener.cs · optional trigger extension</span><span class="code-note">Targets the Door_Open Animator trigger parameter</span></figcaption>
+            <pre><code>using UnityEngine;
+
+public class DoorOpener : MonoBehaviour
+{
+    private Animator doorAnimator;
+
+    private void Start()
+    {
+        doorAnimator = GetComponent&lt;Animator&gt;();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") &amp;&amp; doorAnimator != null)
+        {
+            doorAnimator.SetTrigger("Door_Open");
+        }
+    }
+}</code></pre>
+          </figure>
+
+          <div class="practice">
+            <span class="practice-title">Extension evidence</span>
+            State which extension you chose, the new field/API/component it introduced, the controlled comparison you ran, and the final value or configuration you retained.
+          </div>
+
+          <div class="checklist" aria-label="Optional extension completion">
+            <label><input type="checkbox" data-task="task-optional-jump" data-task-kind="optional" /><span>I completed and documented the optional jump extension.</span></label>
+            <label><input type="checkbox" data-task="task-optional-day-night" data-task-kind="optional" /><span>I completed and verified the optional day/night extension.</span></label>
+            <label><input type="checkbox" data-task="task-optional-door" data-task-kind="optional" /><span>I completed positive and negative tests for the optional door extension.</span></label>
+          </div>
+
+          <div class="video-list">
+            <a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/99e147d9-c97a-4ad5-ad2e-2d3eae02d1f2/versions%5B_key==%22d254fde5987f%22%5D.sections%5B_key==%224efpH3AVCNp2JmxqIPc2ow%22%5D.body%5B_key==%224efpH3AVCNp2JmxqIPc2pV%22%5D.overviewVideo/4.C.2%20-%20Easy%20-%20Add%20a%20jump%20ability%20V2_20260303_211632.mp4" target="_blank" rel="noreferrer"><span><strong>Add the optional jump</strong><small>Place the field and per-press input code in PlayerController</small></span></a>
+          </div>
+
+          <p>Source: <a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/programming-essentials-more-things-to-try?version=6.3" target="_blank" rel="noreferrer">Programming Essentials: More things to try ↗</a></p>
+        </section>
+
+        <section class="article-section" id="review">
+          <div class="section-kicker">10 · VERIFICATION</div>
+          <h2>Completion criteria</h2>
+          <p>
+            Lecture completion requires the saved collection loop, its positive and negative tests, and the explanations below. Jump, day/night, and door work remain optional.
+          </p>
+
+          <div class="checklist" aria-label="End of lecture checklist">
+            <label><input type="checkbox" data-task="review-script-component" /><span>I can explain how a MonoBehaviour script becomes a component on a GameObject.</span></label>
+            <label><input type="checkbox" data-task="review-movement" /><span>Player moves and turns through Rigidbody methods with the new Input System.</span></label>
+            <label><input type="checkbox" data-task="review-camera" /><span>Main Camera follows as a positioned child of Player.</span></label>
+            <label><input type="checkbox" data-task="review-rotation" /><span>Collectibles rotate from an Inspector-editable float field.</span></label>
+            <label><input type="checkbox" data-task="review-trigger" /><span>Player passes through trigger colliders without physical resistance.</span></label>
+            <label><input type="checkbox" data-task="review-filter" /><span>Player collects items with VFX; furniture cannot collect them.</span></label>
+            <label><input type="checkbox" data-task="review-organization" /><span>At least eight items form a readable route beneath a Collectibles parent.</span></label>
+            <label><input type="checkbox" data-task="review-save" /><span>I exited Play mode, reapplied final fields, saved, reopened, and retested the scene.</span></label>
+          </div>
+
+          <h3>Diagnostic questions</h3>
+          <ol class="steps">
+            <li>Why does PlayerController use <code>FixedUpdate</code> and <code>Time.fixedDeltaTime</code> for Rigidbody movement?</li>
+            <li>Why does Main Camera follow without its own movement code?</li>
+            <li>What is the visible difference between a physical Collider and a trigger Collider?</li>
+            <li>Which physics components are required before <code>OnTriggerEnter</code> can run?</li>
+            <li>Why is a Player pickup not enough to prove that <code>CompareTag</code> is correct?</li>
+            <li>Why can <code>Instantiate</code> still read the Transform after <code>Destroy(gameObject)</code> is called?</li>
+          </ol>
+
+          <h3>Official sources</h3>
+          <ul class="source-list">
+            <li><span>01</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials?version=6.3" target="_blank" rel="noreferrer">Programming Essentials mission</a></li>
+            <li><span>02</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/add-a-movement-script?version=6.3" target="_blank" rel="noreferrer">Add a movement script</a></li>
+            <li><span>03</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/create-a-rotating-collectible?version=6.3" target="_blank" rel="noreferrer">Create a rotating collectible</a></li>
+            <li><span>04</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/collect-the-collectible?version=6.3" target="_blank" rel="noreferrer">Collect the collectible</a></li>
+            <li><span>05</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/programming-essentials/tutorial/programming-essentials-more-things-to-try?version=6.3" target="_blank" rel="noreferrer">Programming Essentials: More things to try</a></li>
+            <li><span>06</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/com.unity.inputsystem.html" target="_blank" rel="noreferrer">Unity 6.3 Input System package</a></li>
+            <li><span>07</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/creating-scripts.html" target="_blank" rel="noreferrer">Create and use scripts</a></li>
+            <li><span>08</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/MonoBehaviour.html" target="_blank" rel="noreferrer">MonoBehaviour scripting API</a></li>
+            <li><span>09</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Rigidbody.MovePosition.html" target="_blank" rel="noreferrer">Rigidbody.MovePosition</a></li>
+            <li><span>10</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Transform.Rotate.html" target="_blank" rel="noreferrer">Transform.Rotate</a></li>
+            <li><span>11</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/collider-interactions-create-trigger.html" target="_blank" rel="noreferrer">Create and configure a trigger collider</a></li>
+            <li><span>12</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/MonoBehaviour.OnTriggerEnter.html" target="_blank" rel="noreferrer">MonoBehaviour.OnTriggerEnter</a></li>
+            <li><span>13</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Object.Instantiate.html" target="_blank" rel="noreferrer">Object.Instantiate</a></li>
+            <li><span>14</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Object.Destroy.html" target="_blank" rel="noreferrer">Object.Destroy</a></li>
+            <li><span>15</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Component.CompareTag.html" target="_blank" rel="noreferrer">Component.CompareTag</a></li>
+            <li><span>16</span><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types" target="_blank" rel="noreferrer">C# floating-point numeric types</a></li>
+          </ul>
+
+          <div class="next-module">END OF CURRENT MATERIAL // APPEND FUTURE SECTIONS BELOW</div>
+        </section>
+      </article>
+    </div>
+
+    <footer class="page-footer">
+      SWE 402 technical reference. Source procedures and media: Unity Learn, Unity 6.3 documentation, and the Microsoft C# reference.
+    </footer>
+
+    <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme.toUpperCase();
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const storageKey = "unity-programming-essentials-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    </script>
+  </body>
+</html>
