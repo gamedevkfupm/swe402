@@ -1,0 +1,1429 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Lecture 06: connect Unity scenes, build for Web, publish to Unity Play, record a walkthrough, and verify a playable portfolio."
+    />
+    <title>Unity Publishing Essentials — Lecture 06</title>
+    <link rel="icon" href="data:," />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("unity-editor-reference-theme");
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f1eed8;
+        --paper-deep: #ddd7b8;
+        --surface: #fbf7e5;
+        --ink: #172016;
+        --muted: #4e5b4b;
+        --faint: #788373;
+        --line: #a7ad92;
+        --green: #236c2d;
+        --green-soft: #d4e4c6;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #858b72;
+        --grid: rgba(23, 32, 22, 0.055);
+        --code-ink: #382f11;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #10150e;
+        --paper-deep: #1a2317;
+        --surface: #151c13;
+        --ink: #e3edd8;
+        --muted: #afbea5;
+        --faint: #7c8c74;
+        --line: #40503a;
+        --green: #82ca5b;
+        --green-soft: #20321d;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #050704;
+        --grid: rgba(213, 235, 198, 0.04);
+        --code-ink: #201b08;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--green);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--green) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--green);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--green);
+      }
+
+      .hero::after {
+        content: "06";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--green);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--green);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: uppercase;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--green);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: steps;
+      }
+
+      .steps li {
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+        counter-increment: steps;
+      }
+
+      .steps li::before {
+        content: counter(steps, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.45rem;
+        color: var(--orange);
+        font: 900 1rem/1 var(--pixel);
+      }
+
+      .steps li strong {
+        font-family: var(--sans);
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure img {
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #171b18;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--green);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--green);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--green);
+        background: var(--green-soft);
+      }
+
+      .practice::before {
+        content: "PRACTICE";
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--green);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--green);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--green); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--green);
+        color: var(--green);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--green);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--green);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--green);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--green);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table,
+        .shortcut-table {
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .window-table thead,
+        .shortcut-table thead {
+          display: none;
+        }
+
+        .window-table tbody,
+        .shortcut-table tbody {
+          display: grid;
+          gap: 0.85rem;
+        }
+
+        .window-table tr,
+        .shortcut-table tr {
+          display: block;
+          border: 2px solid var(--ink);
+          background: var(--surface);
+          box-shadow: 4px 4px 0 var(--shadow);
+        }
+
+        .window-table td,
+        .shortcut-table td,
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          display: grid;
+          grid-template-columns: minmax(6.3rem, 34%) 1fr;
+          gap: 0.65rem;
+          width: auto;
+          padding: 0.65rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          font-weight: 400;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          color: var(--green);
+          font-weight: 800;
+        }
+
+        .window-table td::before,
+        .shortcut-table td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font: 800 0.62rem/1.4 var(--pixel);
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        :root, :root[data-theme="dark"] {
+          color-scheme: light;
+          --paper: #fff; --paper-deep: #eee; --surface: #fff;
+          --ink: #172016; --muted: #3b4938; --faint: #53634d;
+          --line: #a7ad92; --green: #236c2d; --green-soft: #eef4e8;
+          --orange: #ad3c1b; --yellow: #efca4a; --red: #ad342c;
+          --blue: #2c6091; --warning-bg: #fff0e7; --shadow: #bbb;
+          background: #fff;
+        }
+        html, body { color: #172016; background: #fff; }
+        .hero::before { display: none; }
+        .window-table { width: 100%; table-layout: fixed; }
+        .window-table td, .window-table th { overflow-wrap: anywhere; }
+        .lead-box h2 { font-size: 22pt; }
+
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box {
+          break-inside: avoid;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      .cell-content { min-width: 0; overflow-wrap: anywhere; }
+      .source-note { color: var(--muted); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body><div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+<header class="site-header"><a class="site-mark" href="#top">SWE 402 // UNITY_PUBLISHING_REFERENCE</a><div class="site-actions"><button class="quiet-button" id="themeToggle" type="button" aria-pressed="false"><span class="theme-swatch" aria-hidden="true"></span><span id="themeLabel">LIGHT</span></button><button class="quiet-button" id="resetProgress" type="button">RESET TASKS</button><button class="quiet-button" type="button" onclick="window.print()">PRINT</button></div></header>
+<header class="hero" id="top"><div class="hero-inner"><div class="kicker">SWE 402 · UNITY 6.3 · TECHNICAL REFERENCE</div><h1>Unity Publishing<em>Essentials</em></h1><p class="dek">Connect your scenes, build for the browser, and share a tested portfolio with clear evidence.</p>
+<div class="article-meta"><span>Unity 6.3</span><span>Lecture 06</span><span>Build + publish + verify</span><span>Progress stored locally</span></div></div></header><div class="page-grid"><aside class="toc" aria-label="Table of contents"><p class="toc-title">IN THIS LECTURE</p>
+<ol><li><a href="#publishing-model"><span>01</span>Publishing model</a></li>
+<li><a href="#menu"><span>02</span>Main menu</a></li>
+<li><a href="#scene-list"><span>03</span>Scene list and indexes</a></li>
+<li><a href="#player-settings"><span>04</span>Application settings</a></li>
+<li><a href="#web-build"><span>05</span>Create a Web build</a></li>
+<li><a href="#publish"><span>06</span>Publish and retest</a></li>
+<li><a href="#recording"><span>07</span>Record a walkthrough</a></li>
+<li><a href="#sharing"><span>08</span>Sharing evidence</a></li>
+<li><a href="#applied-task"><span>09</span>Applied task</a></li>
+<li><a href="#optional-extension"><span>10</span>Optional bonus scene</a></li>
+<li><a href="#review"><span>11</span>Completion and diagnosis</a></li>
+</ol></aside><article><section class="lead-box" aria-labelledby="goal-title"><div class="eyebrow">Learning outcomes</div>
+<h2 id="goal-title">Turn separate scenes into a playable portfolio.</h2>
+
+<p>Continue with the same Essentials project used in <a href="../unity-2d-essentials/index.html">Lecture 05</a>. This lecture connects your earlier work, creates a browser build, and prepares evidence that someone else can inspect.</p>
+
+<ul class="outcomes"><li>Explain project, scene, build, and hosted release.</li>
+<li>Connect menu buttons to the correct scene indexes.</li>
+<li>Configure application identity and the Web target.</li>
+<li>Build, host, test, and update a playable release.</li>
+<li>Record a walkthrough and prepare a clear submission.</li>
+<li>Diagnose failures at the correct stage of publishing.</li>
+</ul>
+<div class="note"><span class="note-title">Opening demonstration</span>Start at the menu in a desktop browser. Open the physics room, return to the menu, and open the 2D puzzle. Then show the same project in the Editor. Ask students which changes require a new build and which require only an updated description.</div></section>
+<section class="article-section" id="publishing-model"><div class="section-kicker">01 · PROJECT → BUILD → HOST</div><h2>Understand what you are shipping</h2>
+<p>A Unity project is your editable source material. A build is the playable output produced for a target platform. Publishing makes that output available to an audience. A screen recording shows one run of the application; it cannot establish that every route works.</p>
+<table class="window-table"><thead><tr><th scope="col">Artifact</th><th scope="col">Purpose</th><th scope="col">Useful evidence</th></tr>
+</thead><tbody><tr><td data-label="Artifact"><span class="cell-content">Project and scene assets</span></td><td data-label="Purpose"><span class="cell-content">Store the editable GameObjects, components, assets, and settings</span></td><td data-label="Useful evidence"><span class="cell-content">Reopen a saved scene and inspect a component</span></td></tr>
+<tr><td data-label="Artifact"><span class="cell-content">Web build folder</span></td><td data-label="Purpose"><span class="cell-content">Contains the runtime code and data a browser needs</span></td><td data-label="Useful evidence"><span class="cell-content">Launch the generated application through a web server</span></td></tr>
+<tr><td data-label="Artifact"><span class="cell-content">Hosted project page</span></td><td data-label="Purpose"><span class="cell-content">Provides the playable release, title, description, and access settings</span></td><td data-label="Useful evidence"><span class="cell-content">Open the shared URL in another browser session</span></td></tr>
+<tr><td data-label="Artifact"><span class="cell-content">Walkthrough video</span></td><td data-label="Purpose"><span class="cell-content">Shows selected behavior in a fixed sequence</span></td><td data-label="Useful evidence"><span class="cell-content">Play the saved movie and inspect its picture and audio</span></td></tr>
+</tbody></table><p>Use a release loop: <strong>save → build → test → upload → test the shared URL</strong>. A successful build only establishes that Unity generated output. Your release checks establish whether the player can actually use it.</p>
+<div class="note"><span class="note-title">Before class</span>Have the completed scenes from Lectures 01–05 in the same Essentials project, a Unity account for Unity Play, and space for a build folder and recording. Begin platform-module installation early if it is missing. Keep generated builds in a dedicated folder outside Assets.</div><div class="practice"><h3>Test the result</h3><p>For a change to a collectible’s position, identify the artifacts that become out of date. Then repeat for a correction to the hosted description. Explain why rebuilding a project does not automatically replace an uploaded ZIP.</p>
+</div></section>
+<section class="article-section" id="menu"><div class="section-kicker">02 · SCENE + UI</div><h2>Make the menu readable and identifiable</h2>
+<p>The starter menu supplies navigation behavior. Your first job is to make the entry point clear: who made this project, what can be opened, and where the controls are. Canvas contains the menu UI; the TextMeshPro component controls the displayed label. UI text, background decoration, and scene loading are separate responsibilities.</p>
+<ol class="steps"><li>Open <strong>_Unity Essentials &gt; Scenes &gt; 0_MainMenu_Scene</strong>. Turn off the Scene view <strong>2D</strong> button after the previous lecture. If icons obstruct editing, reduce <strong>Gizmos &gt; 3D Icons</strong>.</li>
+<li>Select <strong>Canvas &gt; Panel_Name &gt; Name_Text</strong>. In <strong>TextMeshPro - Text (UI)</strong>, replace the placeholder with your chosen display name.</li>
+<li>Dock Game view beside Scene view. Outside Play mode, add a room from <strong>Prefabs &gt; Rooms</strong> and arrange decoration around the panels. Use the camera’s view to judge readability.</li>
+<li>Save with <kbd>Ctrl</kbd> + <kbd>S</kbd> (macOS: <kbd>Cmd</kbd> + <kbd>S</kbd>). Test a menu button and inspect the Console if its target is unavailable.</li>
+</ol><figure class="source-figure"><a href="assets/menu-name.jpg" target="_blank" aria-label="Open full-size screenshot: Name_Text selected in the menu Hierarchy with TextMeshPro Text Input in the Inspector"><img src="assets/menu-name.jpg" alt="Name_Text selected in the menu Hierarchy with TextMeshPro Text Input in the Inspector" loading="lazy"></a><figcaption>Select Name_Text in the menu Canvas and edit the TextMeshPro Text Input. The official tutorial uses John Lemon as its example name. The source frame shows an earlier sample scene named 0_Menu_Scene_Demo; use the current supplied project scene 0_MainMenu_Scene in the lecture. Source: <a href="https://connect-mediagw.unity.com/h1/20240515/videos/c9e12c44-2d34-472b-a6df-2a9654c7001b_6.1.3_-_Add_your_name_-_VIDEO.mp4" target="_blank" rel="noreferrer">Unity Learn: Add your name</a> · frame at 11s. Select the image to inspect it at full size.</figcaption></figure><div class="note"><span class="note-title">A label does not change the destination</span>Renaming a button’s visible text does not change the scene it loads. Keep decoration away from labels and verify navigation separately in the next section.</div><div class="practice"><h3>Test the result</h3><p>Read the name and each scene label at normal Game view size. Compare the same menu before and after one background change. Keep the version with clearer text and unobstructed controls.</p>
+</div><div class="video-list"><a href="https://connect-mediagw.unity.com/h1/20240515/videos/7ad72f85-25e1-4873-90bb-dfc9f43393c7_6.1.4_-_Design_the_menu_scene_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Design the menu scene</strong><small>Official Unity demonstration · tutorial interface</small></span></a></div></section>
+<section class="article-section" id="scene-list"><div class="section-kicker">03 · INCLUSION + ORDER</div><h2>Connect every button to a scene</h2>
+<p>The supplied menu loads scenes by build index. Its first scene button requests index 1; index 0 is the menu. The number in an asset’s filename is a helpful convention, but the enabled build list determines its index. A saved scene can exist in the project and still be absent from a build.</p>
+<ol class="steps"><li>Open <strong>File &gt; Build Profiles</strong> (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>; macOS: <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>). In the tutorial workflow, choose <strong>Scene List</strong> in the Platforms panel.</li>
+<li>Remove unwanted entries from the list; this does not delete their scene assets. Drag your completed scenes from the Project window into the list. Exclude the Starter scene and duplicate alternatives.</li>
+<li>Enable the six intended scenes and arrange them in the order below. If you used a renamed copy, put that version in its intended position.</li>
+<li>Start Play mode from the menu. Open every scene and use <kbd>Esc</kbd> to return. Record the requested index and actual destination for any mismatch.</li>
+</ol><table class="window-table"><thead><tr><th scope="col">Index</th><th scope="col">Scene asset</th><th scope="col">Role</th></tr>
+</thead><tbody><tr><td data-label="Index"><span class="cell-content">0</span></td><td data-label="Scene asset"><span class="cell-content"><code>0_MainMenu_Scene</code></span></td><td data-label="Role"><span class="cell-content">Entry point and return destination</span></td></tr>
+<tr><td data-label="Index"><span class="cell-content">1</span></td><td data-label="Scene asset"><span class="cell-content"><code>1_Playground_Navigation_Scene</code></span></td><td data-label="Role"><span class="cell-content">Navigation and mural</span></td></tr>
+<tr><td data-label="Index"><span class="cell-content">2</span></td><td data-label="Scene asset"><span class="cell-content"><code>2_KidsRoom_3D_Scene</code></span></td><td data-label="Role"><span class="cell-content">3D objects and physics</span></td></tr>
+<tr><td data-label="Index"><span class="cell-content">3</span></td><td data-label="Scene asset"><span class="cell-content"><code>3_Kitchen_Audio_Scene</code></span></td><td data-label="Role"><span class="cell-content">Audio environment</span></td></tr>
+<tr><td data-label="Index"><span class="cell-content">4</span></td><td data-label="Scene asset"><span class="cell-content"><code>4_LivingRoom_Programming_Scene</code></span></td><td data-label="Role"><span class="cell-content">Scripted interaction</span></td></tr>
+<tr><td data-label="Index"><span class="cell-content">5</span></td><td data-label="Scene asset"><span class="cell-content"><code>5_TopDown_2D_Scene</code></span></td><td data-label="Role"><span class="cell-content">2D collection room</span></td></tr>
+</tbody></table><figure class="source-figure"><a href="assets/build-scene-list.jpg" target="_blank" aria-label="Open full-size screenshot: Build Profiles showing six enabled scenes in order with indexes zero through five"><img src="assets/build-scene-list.jpg" alt="Build Profiles showing six enabled scenes in order with indexes zero through five" loading="lazy"></a><figcaption>The tutorial’s Build Profiles Scene List contains the menu at index 0, followed by the five learning scenes at indices 1–5. Official Unity 6 tutorial recording (July 2024), retaining its platform/Scene List interface. Source: <a href="https://connect-mediagw.unity.com/h1/20240719/videos/7aff47c7-9259-4a4d-85a0-60c317b90b7c_6.1.5_-_Configure_the_Scenes_in_Build_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer">Unity Learn: Configure the scenes in the build</a> · frame at 12s. Select the image to inspect it at full size.</figcaption></figure><div class="note"><span class="note-title">Current Unity 6.3 profiles</span>Platform profiles show a Scene List. A custom build profile inherits the global list until you add its own through <strong>Add Settings &gt; Scene List</strong>. Check the list used by the active profile. Some tutorial footage shows an older Build Profiles layout. <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/build-profile-scene-list.html" target="_blank" rel="noreferrer">Current Scene List reference</a>.</div><div class="practice"><h3>Test the result</h3><p>Predict what happens if the enabled scenes at indexes 2 and 3 are swapped. In the list, swap them, test the two buttons, and restore the intended order. Do not rename the assets. Explain why the destinations changed.</p>
+</div><div class="video-list"><a href="https://connect-mediagw.unity.com/h1/20240719/videos/7aff47c7-9259-4a4d-85a0-60c317b90b7c_6.1.5_-_Configure_the_Scenes_in_Build_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Configure the scenes in the build</strong><small>Official Unity demonstration · tutorial interface</small></span></a></div></section>
+<section class="article-section" id="player-settings"><div class="section-kicker">04 · PRODUCT + PRESENTATION</div><h2>Set identity and interpret platform settings</h2>
+<p>Player Settings configure the generated application. They do not replace the text on your menu or the description on a hosting page. Treat those three places as separate content that should agree.</p>
+<ol class="steps"><li>In Build Profiles, open <strong>Player Settings</strong>. Set <strong>Company Name</strong> and <strong>Product Name</strong>. Choose a square project image for <strong>Default Icon</strong>.</li>
+<li>For a desktop target, inspect <strong>Resolution and Presentation</strong>: the tutorial uses <strong>Windowed</strong> with a 16:9 size such as 1280 × 720 or 1920 × 1080.</li>
+<li>When targeting Web, use the Web platform’s settings and test the browser canvas. A desktop window-size setting is not evidence that the hosted page displays correctly.</li>
+</ol><figure class="source-figure"><a href="assets/player-identity.jpg" target="_blank" aria-label="Open full-size screenshot: Player Settings identity fields and desktop Windowed resolution settings"><img src="assets/player-identity.jpg" alt="Player Settings identity fields and desktop Windowed resolution settings" loading="lazy"></a><figcaption>Player settings define application identity separately from the menu’s visible text. The example also shows desktop Windowed presentation. The screenshot’s Windows/Mac/Linux presentation settings are desktop settings, not Web page sizing. Source: <a href="https://connect-mediagw.unity.com/h1/20240719/videos/50b2bda3-bdc9-4944-8940-dfaadac1d4a7_6.1.6_-_Configure_the_Player_Settings_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer">Unity Learn: Configure the Player Settings</a> · frame at 21s. Select the image to inspect it at full size.</figcaption></figure><table class="window-table"><thead><tr><th scope="col">Setting location</th><th scope="col">What it controls</th><th scope="col">Verify it here</th></tr>
+</thead><tbody><tr><td data-label="Setting location"><span class="cell-content">Menu’s TextMeshPro component</span></td><td data-label="What it controls"><span class="cell-content">Text shown inside the scene</span></td><td data-label="Verify it here"><span class="cell-content">Game view and the built menu</span></td></tr>
+<tr><td data-label="Setting location"><span class="cell-content">Player Settings</span></td><td data-label="What it controls"><span class="cell-content">Application identity and platform configuration</span></td><td data-label="Verify it here"><span class="cell-content">Selected target and generated player</span></td></tr>
+<tr><td data-label="Setting location"><span class="cell-content">Unity Play project details</span></td><td data-label="What it controls"><span class="cell-content">Title, description, and visibility on the host</span></td><td data-label="Verify it here"><span class="cell-content">The published project page</span></td></tr>
+</tbody></table><div class="practice"><h3>Test the result</h3><p>Write the intended product name in your release notes. Compare it with the menu and hosted title. Explain where you would edit each one. Check the actual browser size before concluding that the UI is ready.</p>
+</div><p class="source-note">Reference: <a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/build-your-portfolio-project?version=6.3" target="_blank" rel="noreferrer">Build your portfolio project</a>.</p>
+</section>
+<section class="article-section" id="web-build"><div class="section-kicker">05 · TARGET + OUTPUT</div><h2>Build and run outside the Editor</h2>
+<p>Changing the active platform prepares the project for that target; it does not upload anything. Unity may need time to process assets after a switch. Build only after the target has become active and the Console has no blocking errors.</p>
+<ol class="steps"><li>In <strong>File &gt; Build Profiles</strong>, select <strong>Platforms &gt; Web</strong>, then <strong>Switch Platform</strong>. If support is missing, use <strong>Install with Unity Hub</strong> to add <strong>WebGL Build Support</strong> for this Editor installation.</li>
+<li>If Web is unavailable in the list, open <strong>Add Build Profile</strong> and choose Web. In the custom-profile workflow, name the profile, add it, then select <strong>Switch Profile</strong>; confirm its <strong>Active</strong> badge.</li>
+<li>Recheck the active scene list and save your scenes. Select <strong>Build and Run</strong> for a local browser test. Choose a dedicated output folder such as <code>Web Builds/Portfolio-v1</code>. <strong>Build</strong> creates output without launching it.</li>
+<li>Test the menu, every destination, return navigation, audio, and the 2D objective in the browser. Keep this output folder together for publishing.</li>
+</ol><figure class="source-figure"><a href="assets/web-platform.png" target="_blank" aria-label="Open full-size screenshot: Web selected in the tutorial Build Profiles window with Switch Platform highlighted"><img src="assets/web-platform.png" alt="Web selected in the tutorial Build Profiles window with Switch Platform highlighted" loading="lazy"></a><figcaption>Select Web in Build Profiles and use Switch Platform. The shared Scene List remains visible beneath the platform selection. Direct Unity Learn screenshot uploaded September 2025. Current Unity 6.3 documentation may instead expose Add Build Profile / Switch Profile workflows; identify this as tutorial interface. Source: <a href="https://unity-connect-prd.storage.googleapis.com/20250904/learn/images/2c4432a5-dd85-4d6f-ba50-22a6e3aefd71_6.2.2._Switch-platform.png" target="_blank" rel="noreferrer">Unity Learn: Switch to the Web platform</a>. Select the image to inspect it at full size.</figcaption></figure><div class="note"><span class="note-title">WebGL and Web</span>The Unity Learn tutorial is titled “Publish to WebGL”; the current Build Profiles target is labeled <strong>Web</strong>. The Hub module retains the name <strong>WebGL Build Support</strong>.</div><table class="window-table"><thead><tr><th scope="col">Generated item</th><th scope="col">Role</th><th scope="col">Handling rule</th></tr>
+</thead><tbody><tr><td data-label="Generated item"><span class="cell-content"><code>index.html</code></span></td><td data-label="Role"><span class="cell-content">Entry page for the browser application</span></td><td data-label="Handling rule"><span class="cell-content">Keep it with the generated folders</span></td></tr>
+<tr><td data-label="Generated item"><span class="cell-content"><code>Build/</code></span></td><td data-label="Role"><span class="cell-content">Loader JavaScript, runtime, WebAssembly, and project data</span></td><td data-label="Handling rule"><span class="cell-content">Upload the complete output, not a single runtime file</span></td></tr>
+<tr><td data-label="Generated item"><span class="cell-content"><code>TemplateData/</code>, when generated</span></td><td data-label="Role"><span class="cell-content">Page styling and template resources</span></td><td data-label="Handling rule"><span class="cell-content">Preserve its path relative to the entry page</span></td></tr>
+</tbody></table><div class="warning"><span class="note-title">Local browser testing</span>Browser security restricts loading build resources through <code>file://</code>. Double-clicking <code>index.html</code> is not a reliable test. Use <strong>Build and Run</strong> or a correctly configured web server. <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/webgl-gettingstarted.html" target="_blank" rel="noreferrer">Unity Web testing guidance</a>.</div><div class="practice"><h3>Test the result</h3><p>Close the running preview, then reopen it through the local test server or Build and Run. Confirm that the application starts at the menu without relying on whichever scene was last open in the Editor.</p>
+</div><p class="source-note">Reference: <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/create-build-profile.html" target="_blank" rel="noreferrer">Create and manage build profiles</a>.</p>
+<p class="source-note">Reference: <a href="https://docs.unity3d.com/6000.3/Documentation/Manual/webgl-building.html" target="_blank" rel="noreferrer">Web Build folder</a>.</p>
+</section>
+<section class="article-section" id="publish"><div class="section-kicker">06 · ZIP → HOST → PLAYTEST</div><h2>Verify the release a visitor receives</h2>
+<p>A hosting page adds a delivery layer: the ZIP must contain the right build, the page must expose it to the intended audience, and the browser must load it successfully. Test the shared URL after uploading, even if your local browser test passed.</p>
+<ol class="steps"><li>Compress the complete build output folder into a ZIP. Include its entry page and supporting directories; do not upload the Unity source project.</li>
+<li>Sign in and open <a href="https://play.unity.com/en/upload" target="_blank" rel="noreferrer">Unity Play upload</a>. Drop the ZIP into the upload area and wait for processing.</li>
+<li>Set <strong>Title</strong>, <strong>Description</strong>, and <strong>Visibility</strong>. Include controls and a concise description of what the visitor can try. Select <strong>Save</strong>.</li>
+<li>Open the resulting project URL in a desktop browser. Test it in a fresh session or ask a classmate to open the link. Fix issues in the project, rebuild, and update the existing Unity Play project with the replacement build.</li>
+</ol><figure class="source-figure"><a href="assets/unity-play-upload.png" target="_blank" aria-label="Open full-size screenshot: Unity Play upload area, uploaded ZIP, visibility choice, and Save button"><img src="assets/unity-play-upload.png" alt="Unity Play upload area, uploaded ZIP, visibility choice, and Save button" loading="lazy"></a><figcaption>Unity Play accepts the compressed Web build. The source image shows the build ZIP, project details, visibility choice, and Save control. Unity Play interface captured by the official tutorial in September 2025; hosting UI can change. Source: <a href="https://unity-connect-prd.storage.googleapis.com/20250904/learn/images/97f679b9-0bec-4587-b4eb-bc3703c85cdb_6.2.4_-_Publish_to_Unity_Play.png" target="_blank" rel="noreferrer">Unity Learn: Publish to Unity Play</a>. Select the image to inspect it at full size.</figcaption></figure><table class="window-table"><thead><tr><th scope="col">Check</th><th scope="col">Action</th><th scope="col">Pass condition</th></tr>
+</thead><tbody><tr><td data-label="Check"><span class="cell-content">Entry point</span></td><td data-label="Action"><span class="cell-content">Open the shared URL from a fresh session</span></td><td data-label="Pass condition"><span class="cell-content">The menu appears and identifies the project</span></td></tr>
+<tr><td data-label="Check"><span class="cell-content">Navigation</span></td><td data-label="Action"><span class="cell-content">Visit each of the five scenes and return</span></td><td data-label="Pass condition"><span class="cell-content">Every label opens the correct destination</span></td></tr>
+<tr><td data-label="Check"><span class="cell-content">Interaction</span></td><td data-label="Action"><span class="cell-content">Move, trigger an effect, and collect an item</span></td><td data-label="Pass condition"><span class="cell-content">Input and feedback behave as expected</span></td></tr>
+<tr><td data-label="Check"><span class="cell-content">Presentation</span></td><td data-label="Action"><span class="cell-content">Resize the view; inspect UI and listen after interacting</span></td><td data-label="Pass condition"><span class="cell-content">No essential label is clipped; intended audio is audible</span></td></tr>
+<tr><td data-label="Check"><span class="cell-content">Access and version</span></td><td data-label="Action"><span class="cell-content">Open the link as a visitor; inspect one recent change</span></td><td data-label="Pass condition"><span class="cell-content">The intended audience can play the updated build</span></td></tr>
+</tbody></table><div class="note"><span class="note-title">Updating the same release</span>Editing a scene affects future builds. It does not change the hosted copy. Replace the build on the existing Unity Play project to retain that project’s link; creating a separate project produces a separate release page.</div><div class="practice"><h3>Test the result</h3><p>After the first upload, make one small, visible menu change and rebuild. Update the same hosted project, reopen its URL, and verify the change. Log one issue, the fix, and the browser result.</p>
+</div><p class="source-note">Reference: <a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/publish-to-webgl-1?version=6.3" target="_blank" rel="noreferrer">Publish to WebGL</a>.</p>
+</section>
+<section class="article-section" id="recording"><div class="section-kicker">07 · PACKAGE + MOVIE</div><h2>Capture evidence that can be reviewed</h2>
+<p>Choose a short route that demonstrates the application’s behavior. A useful recording shows the menu, the transition into a scene, one interaction, and a return. Record deliberate actions slowly enough to make cause and effect visible.</p>
+<ol class="steps"><li>Open <strong>Window &gt; Package Management &gt; Package Manager</strong>. Select <strong>Unity Registry</strong>, search for <strong>Recorder</strong>, and install it.</li>
+<li>Open <strong>Window &gt; General &gt; Recorder &gt; Recorder Window</strong>. Choose <strong>Add Recorder &gt; Movie</strong>.</li>
+<li>Use <strong>Source = Game View</strong> to capture the player’s view and UI. Select HD or FHD, a 16:9 aspect ratio, and a movie format such as H.264 MP4. Check the output <strong>Path</strong>; enable <strong>Output Format &gt; Include Audio</strong> for the sound demonstration.</li>
+<li>Select <strong>Start Recording</strong>; Recorder enters Play mode. Perform the planned route, then select <strong>Stop Recording</strong>. Open the output location from the Path area and play the saved file.</li>
+</ol><figure class="source-figure"><a href="assets/recorder-movie-settings.jpg" target="_blank" aria-label="Open full-size screenshot: Movie Recorder with Game View source, HD resolution, H.264 MP4, Include audio, and output Path"><img src="assets/recorder-movie-settings.jpg" alt="Movie Recorder with Game View source, HD resolution, H.264 MP4, Include audio, and output Path" loading="lazy"></a><figcaption>The Movie Recorder captures Game View to H.264 MP4. The source example uses 720p, 30 FPS, audio enabled, and a Recordings folder in the project. Official tutorial recording from May 2024; Recorder labels/defaults can differ by installed package version. Source: <a href="https://connect-mediagw.unity.com/h1/20240516/videos/35bd01c8-65f8-48b3-bcd8-134a7d3dc461_6.3.3_-_Record_the_action_-_VIDEO.mp4" target="_blank" rel="noreferrer">Unity Learn: Record the action</a> · frame at 9s. Select the image to inspect it at full size.</figcaption></figure><div class="note"><span class="note-title">Recorder audio</span>For Recorder 5.1 audio capture, set <strong>Project Settings &gt; Audio &gt; Default Speaker Mode</strong> to Mono or Stereo. While recording, audio can be routed to the Recorder instead of the speakers. Judge the saved movie before treating silence during capture as an error.</div><table class="window-table"><thead><tr><th scope="col">Choice</th><th scope="col">Reason</th><th scope="col">Check in the saved movie</th></tr>
+</thead><tbody><tr><td data-label="Choice"><span class="cell-content">Game View</span></td><td data-label="Reason"><span class="cell-content">Follows the visible gameplay and UI across scenes</span></td><td data-label="Check in the saved movie"><span class="cell-content">Menu, counters, and transitions are present</span></td></tr>
+<tr><td data-label="Choice"><span class="cell-content">HD/FHD and 16:9</span></td><td data-label="Reason"><span class="cell-content">Provides a consistent recording frame</span></td><td data-label="Check in the saved movie"><span class="cell-content">Text is readable and important objects remain visible</span></td></tr>
+<tr><td data-label="Choice"><span class="cell-content">Audio capture</span></td><td data-label="Reason"><span class="cell-content">Preserves the sound demonstration</span></td><td data-label="Check in the saved movie"><span class="cell-content">The intended sounds are present at a usable volume</span></td></tr>
+<tr><td data-label="Choice"><span class="cell-content">Explicit output path</span></td><td data-label="Reason"><span class="cell-content">Makes the final file easy to locate</span></td><td data-label="Check in the saved movie"><span class="cell-content">The movie opens outside Unity</span></td></tr>
+</tbody></table><div class="note"><span class="note-title">Capture fallback</span>If Recorder is unavailable, use an external screen recorder. The Unity tutorial links to Windows Snipping Tool and macOS QuickTime guidance. A recording of the hosted browser build also documents that release. State which environment you recorded.</div><div class="practice"><h3>Test the result</h3><p>Record a 10-second sample before the full walkthrough. Watch the file, check UI framing and sound, then correct the settings. A recording that looks good inside Unity may still have the wrong output resolution or missing audio.</p>
+</div><figure class="source-figure"><a href="assets/recording-file.jpg" target="_blank" aria-label="Open full-size screenshot: Finder showing the generated Movie_001.mp4 in the Recordings folder"><img src="assets/recording-file.jpg" alt="Finder showing the generated Movie_001.mp4 in the Recordings folder" loading="lazy"></a><figcaption>After stopping the capture, open the output folder and play the generated Movie_001.mp4 to check the recording. The Finder window and filename are the tutorial’s macOS example; local filenames follow Recorder output settings. Source: <a href="https://connect-mediagw.unity.com/h1/20240516/videos/35bd01c8-65f8-48b3-bcd8-134a7d3dc461_6.3.3_-_Record_the_action_-_VIDEO.mp4" target="_blank" rel="noreferrer">Unity Learn: Record the action</a> · frame at 20.5s. Select the image to inspect it at full size.</figcaption></figure><div class="video-list"><a href="https://connect-mediagw.unity.com/h1/20240516/videos/35bd01c8-65f8-48b3-bcd8-134a7d3dc461_6.3.3_-_Record_the_action_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Record the action</strong><small>Official Unity demonstration · tutorial interface</small></span></a></div><p class="source-note">Reference: <a href="https://docs.unity3d.com/Packages/com.unity.recorder@5.1/manual/RecorderMovie.html" target="_blank" rel="noreferrer">Movie Recorder properties</a>.</p>
+</section>
+<section class="article-section" id="sharing"><div class="section-kicker">08 · CONTEXT + ARTIFACTS</div><h2>Prepare a submission someone can evaluate</h2>
+<p>Give the reviewer enough context to repeat your demonstration. A title and a screenshot identify the work; controls and a playable link make it testable. Describe your contributions precisely, especially when the scene contains supplied assets or scripts.</p>
+<table class="window-table"><thead><tr><th scope="col">Submission item</th><th scope="col">Include</th><th scope="col">Reviewer can verify</th></tr>
+</thead><tbody><tr><td data-label="Submission item"><span class="cell-content">Title and description</span></td><td data-label="Include"><span class="cell-content">Project name, controls, objective, and your changes</span></td><td data-label="Reviewer can verify"><span class="cell-content">What to try and what you implemented</span></td></tr>
+<tr><td data-label="Submission item"><span class="cell-content">Screenshots</span></td><td data-label="Include"><span class="cell-content">Menu and enabled Scene List; add a representative gameplay image if useful</span></td><td data-label="Reviewer can verify"><span class="cell-content">Identity and the intended scene configuration</span></td></tr>
+<tr><td data-label="Submission item"><span class="cell-content">Walkthrough video</span></td><td data-label="Include"><span class="cell-content">A planned sequence with legible UI</span></td><td data-label="Reviewer can verify"><span class="cell-content">Navigation and selected interactions</span></td></tr>
+<tr><td data-label="Submission item"><span class="cell-content">Playable URL</span></td><td data-label="Include"><span class="cell-content">The tested Unity Play project link</span></td><td data-label="Reviewer can verify"><span class="cell-content">Behavior beyond the recorded sequence</span></td></tr>
+<tr><td data-label="Submission item"><span class="cell-content">Test note</span></td><td data-label="Include"><span class="cell-content">Browser tested, one issue fixed, and a remaining limitation if any</span></td><td data-label="Reviewer can verify"><span class="cell-content">The scope of your verification</span></td></tr>
+</tbody></table><p>For the Unity Learn pathway submission, open <a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/share-your-project?version=6.3" target="_blank" rel="noreferrer">Share your project</a>. Add a title, description, and screenshots or recording; include the Web link in the description. Select the intended <strong>Public</strong> or <strong>Private</strong> visibility, choose <strong>Save and preview submission</strong>, inspect the preview, then complete the CAPTCHA and select <strong>Submit and continue</strong>. Unity Learn’s submission is separate from the Unity Play hosting page.</p>
+<div class="practice"><h3>Test the result</h3><p>Give a classmate only your description and link. Observe whether they can launch a scene, perform its intended action, and return to the menu without verbal help. Revise the instructions where they hesitate.</p>
+</div></section>
+<section class="article-section" id="applied-task"><div class="section-kicker">09 · REQUIRED</div><h2>Applied task — release your Essentials portfolio</h2>
+<p><strong>Deliverable:</strong> a tested Unity Play portfolio containing the menu and five completed scenes, plus screenshots, a walkthrough, and a short test note. The evidence quantities below are course exercise constraints.</p>
+<ol class="steps"><li>Personalize and save the menu. Include the intended scenes at indexes 0–5; keep the unused Bonus button inactive. Verify all destinations and returns.</li>
+<li>Configure product identity, activate Web, and create a complete build. Pass the local browser checks before packaging the output.</li>
+<li>Publish on Unity Play and test the shared URL. Document one issue you found, the correction, and the result after rebuilding and updating.</li>
+<li>Record a 60–90 second walkthrough showing the menu, at least one 3D interaction, the 2D collection feedback, and a return to the menu. Capture two screenshots: the menu and the scene list.</li>
+<li>Prepare a submission with the link, controls, your main contributions, screenshots, recording, and browser test note. If completing the Unity Learn pathway, submit it through the source exercise too.</li>
+</ol><div class="checklist" aria-label="Required applied task"><label><input type="checkbox" data-task="applied-scenes"><span>All five scene buttons open the intended destinations and return to the menu.</span></label><label><input type="checkbox" data-task="applied-build"><span>A fresh browser launch starts at the menu; controls, UI, audio, and the 2D objective were tested.</span></label><label><input type="checkbox" data-task="applied-published"><span>The shared Unity Play URL works for the intended audience and shows the latest build.</span></label><label><input type="checkbox" data-task="applied-fix"><span>One issue and its verified correction are documented.</span></label><label><input type="checkbox" data-task="applied-evidence"><span>The walkthrough, two screenshots, controls, contribution summary, and test note are ready.</span></label></div><div class="practice"><h3>Test the result</h3><p>Use the submitted URL and instructions for the final check. A reviewer should be able to reproduce the behaviors in your video using the playable release. Resolve any mismatch before calling the required task complete.</p>
+</div></section>
+<section class="article-section" id="optional-extension"><div class="section-kicker">10 · OPTIONAL</div><h2>Optional extension — integrate one bonus scene</h2>
+<p><strong>Deliverable:</strong> one additional playable scene connected to the existing menu and included in an updated release. Choose one of Unity’s three directions below. This extension is not required for lecture completion.</p>
+<ol class="steps"><li>Open <strong>0_MainMenu_Scene</strong>. Select <strong>Canvas &gt; Panels_SceneSelect &gt; Panel_SceneList &gt; Bonus_Button</strong> and activate the GameObject.</li>
+<li>Add <strong>6_Bonus_Custom_Scene</strong> at the bottom of the enabled Scene List, at index 6. Build one focused experience using a direction below.</li>
+<li>Verify that the Bonus button opens it and that a return path works. Rebuild, update the existing hosted project, and retest all earlier menu routes.</li>
+</ol><table class="window-table"><thead><tr><th scope="col">Direction</th><th scope="col">Implementation focus</th><th scope="col">Completion evidence</th></tr>
+</thead><tbody><tr><td data-label="Direction"><span class="cell-content">Connected 3D rooms</span></td><td data-label="Implementation focus"><span class="cell-content">Select room contents, use <strong>Create Empty Parent</strong>, and save the group in <strong>My Prefabs</strong>. Instantiate your room prefabs in the bonus scene and align their doors.</span></td><td data-label="Completion evidence"><span class="cell-content">A continuous route through physics, audio, and interaction spaces</span></td></tr>
+<tr><td data-label="Direction"><span class="cell-content">Personal art gallery</span></td><td data-label="Implementation focus"><span class="cell-content">Start with <strong>Prefabs &gt; Rooms &gt; 04_Gallery</strong>. Place images or models with descriptions and deliberate viewing positions.</span></td><td data-label="Completion evidence"><span class="cell-content">A readable exhibit sequence shown from the player camera</span></td></tr>
+<tr><td data-label="Direction"><span class="cell-content">Third-person adventure</span></td><td data-label="Implementation focus"><span class="cell-content">Start with <strong>Source Files &gt; SpaceRobotKyle &gt; Prefabs &gt; Player</strong>, which includes a controller and camera. Define a goal, then add compatible collectibles and feedback.</span></td><td data-label="Completion evidence"><span class="cell-content">A short playable route with an observable success condition</span></td></tr>
+</tbody></table><div class="note"><span class="note-title">When combining rooms</span>Audit imported cameras, Audio Listeners, players, and lights. Retain the intended player/view arrangement and avoid duplicate active Audio Listeners. Unity can use multiple cameras deliberately; the tutorial’s advice to keep one camera is a simplification for its single-player room setup. Also keep 2D and 3D collectible scripts compatible with the UI you reuse.</div><figure class="source-figure"><a href="assets/bonus-menu.jpg" target="_blank" aria-label="Open full-size screenshot: Bonus_Button selected and enabled in the Main Menu Hierarchy"><img src="assets/bonus-menu.jpg" alt="Bonus_Button selected and enabled in the Main Menu Hierarchy" loading="lazy"></a><figcaption>Enable Bonus_Button in the menu’s scene list to expose the Bonus - Custom Scene entry, then include the bonus scene in the build. Official Unity 6 tutorial recording (July 2024). This frame shows the menu button enabled; the scene inclusion is a separate step. Source: <a href="https://connect-mediagw.unity.com/h1/20240719/videos/4db8fec7-e658-4074-af46-b5bceab2fff9_6.C.2_-_Set_up_the_bonus_scene_U6_V2.mp4" target="_blank" rel="noreferrer">Unity Learn: Set up the bonus scene</a> · frame at 7s. Select the image to inspect it at full size.</figcaption></figure><div class="checklist" aria-label="Optional extension"><label><input type="checkbox" data-task="optional-design"><span>Optional: one bonus experience has a clear goal or viewing route.</span></label><label><input type="checkbox" data-task="optional-release"><span>Optional: the hosted Bonus route works and all original scene routes still pass.</span></label></div><div class="practice"><h3>Test the result</h3><p>Capture the added experience and one sentence explaining the integration problem you solved. Verify a previously working route after the update to detect accidental changes to the scene order.</p>
+</div><div class="video-list"><a href="https://connect-mediagw.unity.com/h1/20240719/videos/4db8fec7-e658-4074-af46-b5bceab2fff9_6.C.2_-_Set_up_the_bonus_scene_U6_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Set up the bonus scene</strong><small>Official Unity demonstration · tutorial interface</small></span></a></div><p class="source-note">Reference: <a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/add-a-bonus-scene-1?version=6.3" target="_blank" rel="noreferrer">Challenge: Add a bonus scene</a>.</p>
+</section>
+<section class="article-section" id="review"><div class="section-kicker">11 · VERIFY + EXPLAIN</div><h2>Completion criteria and diagnosis</h2>
+<p>The lecture is complete when the required portfolio is playable and its evidence is ready. The optional bonus scene is not part of these checks.</p>
+<div class="checklist" aria-label="Completion criteria"><label><input type="checkbox" data-task="review-model"><span>I can distinguish source project, generated build, hosted release, and recorded evidence.</span></label><label><input type="checkbox" data-task="review-order"><span>I can explain how enabled scene order affects this menu’s index-based navigation.</span></label><label><input type="checkbox" data-task="review-target"><span>I can identify the active Web target and the scene list it uses.</span></label><label><input type="checkbox" data-task="review-release"><span>My required applied task passes through the shared URL, including the latest correction.</span></label><label><input type="checkbox" data-task="review-capture"><span>I played the saved movie and verified its framing and intended audio.</span></label></div><table class="window-table"><thead><tr><th scope="col">Symptom</th><th scope="col">Likely cause</th><th scope="col">Next check</th></tr>
+</thead><tbody><tr><td data-label="Symptom"><span class="cell-content">Button does not load a scene</span></td><td data-label="Likely cause"><span class="cell-content">Target excluded or absent from the active list</span></td><td data-label="Next check"><span class="cell-content">Read the Console, then compare requested index with the enabled list</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Button opens the wrong room</span></td><td data-label="Likely cause"><span class="cell-content">Scene order changed</span></td><td data-label="Next check"><span class="cell-content">Compare every enabled index with the mapping table</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Web target is unavailable</span></td><td data-label="Likely cause"><span class="cell-content">Module missing for this Editor installation</span></td><td data-label="Next check"><span class="cell-content">Install WebGL Build Support through Unity Hub</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Build fails</span></td><td data-label="Likely cause"><span class="cell-content">Compilation or build error</span></td><td data-label="Next check"><span class="cell-content">Inspect the first relevant Console error before rebuilding</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Local HTML fails to load</span></td><td data-label="Likely cause"><span class="cell-content">Opened through file://</span></td><td data-label="Next check"><span class="cell-content">Use Build and Run or an appropriate web server</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Hosted page is blank or reports missing files</span></td><td data-label="Likely cause"><span class="cell-content">Incomplete ZIP or failed processing</span></td><td data-label="Next check"><span class="cell-content">Inspect the full output folder and the host’s upload status</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Hosted version still looks old</span></td><td data-label="Likely cause"><span class="cell-content">Old output uploaded or a different release page opened</span></td><td data-label="Next check"><span class="cell-content">Confirm ZIP contents, existing project, and visible version change</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Browser ignores keys or audio is silent</span></td><td data-label="Likely cause"><span class="cell-content">Canvas focus, browser interaction requirements, or application configuration</span></td><td data-label="Next check"><span class="cell-content">Click inside the player; check focus, mute state, then application settings</span></td></tr>
+<tr><td data-label="Symptom"><span class="cell-content">Recording omits UI or sound</span></td><td data-label="Likely cause"><span class="cell-content">Wrong capture source or audio configuration</span></td><td data-label="Next check"><span class="cell-content">Check Game View source and audio, then inspect a short saved sample</span></td></tr>
+</tbody></table><h3>Explain before you finish</h3><ul><li>Why can a scene work in Play mode but be unavailable from the built menu?</li>
+<li>Which two settings must you check when a custom build profile launches the wrong content?</li>
+<li>What must be repeated after editing a scene that is already published?</li>
+<li>What can a playable link demonstrate that a walkthrough cannot?</li>
+</ul>
+<h3>Official sources</h3><p>All five parts of the supplied Publishing Essentials unit are covered. Procedures follow the Unity Learn 6.3 pages; current 6.3 manual details clarify profile controls. Tutorial images retain the interface shown in their original media.</p>
+<ul class="source-list"><li><a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials" target="_blank" rel="noreferrer">Publishing Essentials — unit overview</a></li>
+<li><a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/build-your-portfolio-project?version=6.3" target="_blank" rel="noreferrer">Build your portfolio project — menu, scene order, Player Settings</a></li>
+<li><a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/publish-to-webgl-1?version=6.3" target="_blank" rel="noreferrer">Publish to WebGL — target, build, Unity Play, testing</a></li>
+<li><a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/add-a-bonus-scene-1?version=6.3" target="_blank" rel="noreferrer">Challenge: Add a bonus scene — optional integration directions</a></li>
+<li><a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/capture-a-video-of-your-project?version=6.3" target="_blank" rel="noreferrer">Capture a video of your project — Recorder and external capture</a></li>
+<li><a href="https://learn.unity.com/pathway/unity-essentials/unit/publishing-essentials/tutorial/share-your-project?version=6.3" target="_blank" rel="noreferrer">Share your project — submission and preview</a></li>
+<li><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/create-build-profile.html" target="_blank" rel="noreferrer">Unity 6.3 Manual — create and manage build profiles</a></li>
+<li><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/build-profile-scene-list.html" target="_blank" rel="noreferrer">Unity 6.3 Manual — manage scenes in a build</a></li>
+<li><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/webgl-gettingstarted.html" target="_blank" rel="noreferrer">Unity 6.3 Manual — Web development and publishing process</a></li>
+<li><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/webgl-building.html" target="_blank" rel="noreferrer">Unity 6.3 Manual — Web Build folder</a></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.recorder@5.1/manual/RecorderMovie.html" target="_blank" rel="noreferrer">Recorder 5.1 Manual — Movie Recorder properties</a></li>
+</ul></section>
+</article></div><footer class="page-footer">SWE 402 technical reference. Source procedures and media: Unity Learn and Unity documentation.</footer><script>
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme.toUpperCase();
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const storageKey = "unity-publishing-essentials-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    </script>
+  </body>
+</html>
