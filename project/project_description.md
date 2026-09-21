@@ -28,7 +28,7 @@ All teams must demonstrate the following competencies in the slice:
 ## Phases and Milestones
 This project runs in four phases aligned to the course schedule.
 
-### Phase 1: Proposal and Pre-Production (Week 7)
+### Phase 1: Proposal and Pre-Production 
 Deliverables (tentative):
 - Scene Proposal (2-3 pages): scene goal, core loop, success/failure conditions, and intended player experience.
 - Reference Breakdown: selected benchmark scene and decomposition of mechanics, visuals, audio, and interaction complexity.
@@ -36,7 +36,7 @@ Deliverables (tentative):
 - Production Plan: milestone backlog in GitHub Projects with task ownership.
 - Repo Setup: initialized repository, branching policy, PR template, and contribution rules.
 
-### Phase 2: Systems Vertical Slice (Week 12, Advanced Mechanics Checkpoint)
+### Phase 2: Systems Vertical Slice 
 Deliverables (tentative):
 - Playable graybox/blockout from start to end.
 - Core mechanics implemented and testable.
@@ -44,14 +44,14 @@ Deliverables (tentative):
 - Base UI and first-pass audio feedback.
 - Playtest report with findings and planned fixes.
 
-### Phase 3: Visual-Audio Production and Optimization (Week 16, Advanced Graphics Checkpoint)
+### Phase 3: Visual-Audio Production and Optimization 
 Deliverables (tentative):
 - Art pass with lighting, materials/shaders, VFX, animation, and camera polish.
 - Audio pass with balanced mix and event-driven sound design.
 - Performance report with profiling screenshots/metrics and optimizations applied.
 - Bug triage log and stability improvements.
 
-### Phase 4: Final Build and Presentation (Week 16)
+### Phase 4: Final Build and Presentation 
 Deliverables (tentative):
 - Final playable build (release candidate).
 - Technical documentation and final repository cleanup.
