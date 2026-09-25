@@ -1,0 +1,1607 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A one-hour SWE 402 Unity lab: configurable Input Actions, keyboard composites, an independent follow camera, and controlled debugging with complete C# scripts."
+    />
+    <title>Unity Player Control — Lecture 07</title>
+    <link rel="icon" href="data:," />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("unity-editor-reference-theme");
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f0eaf7;
+        --paper-deep: #ded2ec;
+        --surface: #faf6ff;
+        --ink: #251a32;
+        --muted: #61516f;
+        --faint: #857391;
+        --line: #b3a0c3;
+        --purple: #713ca0;
+        --purple-soft: #e3d5f1;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #9784a8;
+        --grid: rgba(55, 30, 77, 0.055);
+        --code-ink: #382f11;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #15101d;
+        --paper-deep: #251b32;
+        --surface: #1d1527;
+        --ink: #eee3f8;
+        --muted: #c0accf;
+        --faint: #9580a5;
+        --line: #594268;
+        --purple: #c39aef;
+        --purple-soft: #352247;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #09050e;
+        --grid: rgba(232, 213, 250, 0.04);
+        --code-ink: #201b08;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--purple);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--purple) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--purple);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--purple);
+      }
+
+      .hero::after {
+        content: "07";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--purple);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--purple);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--purple);
+        background: var(--purple-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--purple);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: uppercase;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--purple);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: steps;
+      }
+
+      .steps li {
+        font-family: var(--sans);
+        font-size: 1rem;
+        line-height: 1.75;
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+        counter-increment: steps;
+      }
+
+      .steps li::before {
+        content: counter(steps, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.55rem;
+        color: var(--orange);
+        font: 900 1.02rem/1.5 var(--pixel);
+      }
+
+      .steps .ui-action {
+        display: inline;
+        padding: 0.14em 0.4em;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font-family: var(--pixel);
+        font-size: 0.88em;
+        font-weight: 600;
+        line-height: 1.9;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        overflow-wrap: anywhere;
+      }
+
+      .steps li a {
+        font-family: var(--sans);
+      }
+
+      .steps li > .step-goal {
+        margin: 0 0 0.8rem;
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 1.02rem;
+        font-weight: 650;
+        line-height: 1.5;
+      }
+
+      .step-line {
+        display: block;
+        margin-bottom: 0.45rem;
+      }
+
+      .step-line:last-child {
+        margin-bottom: 0;
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure img {
+        height: auto;
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #211928;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--purple);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--purple);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--purple);
+        background: var(--purple-soft);
+      }
+
+      .practice::before {
+        content: "MINI QUIZ"; /* PRACTICE component */
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--purple);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--purple);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--purple); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--purple);
+        color: var(--purple);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--purple);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--purple);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--purple);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--purple);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table,
+        .shortcut-table {
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .window-table thead,
+        .shortcut-table thead {
+          display: none;
+        }
+
+        .window-table tbody,
+        .shortcut-table tbody {
+          display: grid;
+          gap: 0.85rem;
+        }
+
+        .window-table tr,
+        .shortcut-table tr {
+          display: block;
+          border: 2px solid var(--ink);
+          background: var(--surface);
+          box-shadow: 4px 4px 0 var(--shadow);
+        }
+
+        .window-table td,
+        .shortcut-table td,
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          display: grid;
+          grid-template-columns: minmax(6.3rem, 34%) 1fr;
+          gap: 0.65rem;
+          width: auto;
+          padding: 0.65rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          font-weight: 400;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          color: var(--purple);
+          font-weight: 800;
+        }
+
+        .window-table td::before,
+        .shortcut-table td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font: 800 0.62rem/1.4 var(--pixel);
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box {
+          break-inside: avoid;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      article { overflow-wrap: anywhere; }
+      .code-sample { margin: 1.6rem 0; border: 2px solid var(--ink); background: var(--paper); min-width: 0; }
+      .code-sample figcaption { padding: .7rem 1rem; border-bottom: 2px solid var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+      .code-sample pre { margin: 0; padding: 1rem; overflow-x: auto; font-size: .86rem; line-height: 1.65; tab-size: 4; }
+      .code-sample code { padding: 0; border: 0; background: transparent; color: var(--ink); white-space: pre; }
+      details { margin: 1.5rem 0; border: 2px solid var(--line); padding: 1rem; }
+      summary { cursor: pointer; font-weight: 700; }
+      summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+      @media print { :root, :root[data-theme="dark"] { color-scheme: light; --paper: #fff; --surface: #fff; --paper-deep: #eee; --ink: #251a32; --muted: #61516f; --line: #b3a0c3; --purple: #713ca0; --purple-soft: #eee5f7; --orange: #aa3618; --warning-bg: #f5e8dd; --code-ink: #382f11; --yellow: #efca4a; } .code-sample { break-inside: auto; } .code-sample pre { white-space: pre-wrap; overflow: visible; font-size: 8pt; } .code-sample code { white-space: pre-wrap; } .hero h1 { font-size: 38pt; } }
+
+      [data-instructor] { display: none !important; }
+      body.instructor-mode [data-instructor] { display: revert !important; }
+
+      article :not(pre) > code {
+        font-family: var(--pixel);
+        font-size: .9em;
+        color: var(--purple);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: .08em .3em;
+        overflow-wrap: anywhere;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+      }
+      .code-example {
+        margin: .5rem 0;
+        padding: .8rem 1rem;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--purple);
+        background: var(--surface);
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font: .86rem/1.65 var(--pixel);
+      }
+      .code-example code { font: inherit; color: var(--ink); }
+      .concept-examples { margin: .8rem 0 1.5rem; }
+      .concept-examples > p { margin-bottom: .35rem; font-size: .9rem; }
+      .concept-examples li { margin-bottom: .6rem; }
+      .concept-summary { margin: 2rem 0; padding: 0; border: 0; }
+      .concept-summary > .new-concept-title { font-size: 1rem; }
+
+      .new-concept-title {
+        display: block;
+        margin: 1.4rem 0 .4rem;
+        padding-left: .7rem;
+        border-left: 3px solid var(--purple);
+        color: var(--purple);
+        font-family: var(--sans);
+        font-size: 1rem;
+        font-weight: 750;
+        line-height: 1.5;
+        text-transform: none;
+        letter-spacing: normal;
+      }
+      .new-concept-title span {
+        display: block;
+        margin-bottom: .25rem;
+        line-height: 1.4;
+        font-family: var(--pixel);
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+      .new-concept-title + p { margin-top: .4rem; }
+      #concepts > p { max-width: 680px; }
+      #concepts > h3 { margin: 2.5rem 0 .8rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-family: var(--sans); font-size: 1.35rem; line-height: 1.35; color: var(--ink); }
+      .concept-summary dt { margin-top: 1rem; font-weight: 750; color: var(--purple); }
+      .concept-summary dd { margin: .35rem 0 1rem; max-width: 680px; }
+      .quiz-answer { background: var(--surface); }
+      .section-faq > details { margin: .8rem 0; }
+    </style>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+    <header class="site-header">
+      <a class="site-mark" href="#top">SWE 402 // PLAYER_CONTROL</a>
+      <div class="site-actions">
+        <button class="quiet-button" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-swatch" aria-hidden="true"></span>
+          <span id="themeLabel">LIGHT</span>
+        </button>
+        <button class="quiet-button" id="resetProgress" type="button">RESET TASKS</button>
+        <button class="quiet-button" type="button" onclick="window.print()">PRINT</button>
+      </div>
+    </header>
+
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div class="kicker">SWE 402 · UNITY 6.3 · TECHNICAL REFERENCE</div>
+        <h1>Unity Player<em>Control</em></h1>
+        <p class="dek">Input Actions, Rigidbody movement, and camera position calculations in Unity 6.3.</p>
+        <div class="article-meta"><span>Lecture 07</span><span>60-minute lab</span><span>Unity 6.3 · Input System</span><span>Complete scripts included</span></div>
+      </div>
+    </header>
+
+    <div class="page-grid">
+      <aside class="toc" aria-label="Table of contents">
+        <p class="toc-title">IN THIS LECTURE</p>
+        <ol><li><a href="#concepts"><span>00</span>Conceptual introduction</a></li><li><a href="#plan"><span>01</span>Project preparation</a></li><li><a href="#setup"><span>02</span>Place the starter vehicle</a></li><li><a href="#actions"><span>03</span>Bind a Move action</a></li><li><a href="#camera"><span>04</span>Write the follow camera</a></li><li><a href="#diagnosis"><span>05</span>Diagnose two faults</a></li><li><a href="#applied-task"><span>06</span>Required applied task</a></li><li><a href="#optional-extension"><span>07</span>Required chase camera</a></li><li><a href="#review"><span>08</span>Completion + sources</a></li></ol>
+      </aside>
+
+      <article><section class="lead-box" id="concepts" aria-labelledby="goal-title">
+<div class="eyebrow">LECTURE 07 · CONCEPTUAL INTRODUCTION</div>
+<h2 id="goal-title">From direct key checks to Input Actions and scripted cameras</h2>
+<p>In <a href="../unity-programming-essentials/index.html">Lecture 04 · Programming Essentials</a>, the controller checked keyboard keys directly, then moved and turned a Rigidbody. The camera followed because it was a child of Player. This lab keeps that movement calculation and changes how we supply input and control the camera.</p>
+<p><strong>New in this lecture:</strong> configure keys through Input Actions, enable and disable those actions with the controller, and write an independent camera script. Compare a camera that keeps a fixed world direction with one that stays behind the turning vehicle.</p>
+<p>Use the official Prototype 1 starter package in a new Universal 3D project. You do not need earlier project files. The complete scripts and setup instructions are included below.</p>
+<details><summary>Recap from Lecture 04: the movement and component model</summary>
+<p><strong>Movement.</strong> A <code>Vector2</code> holds two numbers. Our controller uses X for steering and Y for forward/reverse input, not world height. It moves along the vehicle’s forward direction with <code>MovePosition</code> and turns with <code>MoveRotation</code>.</p>
+<p><strong>Timing.</strong> Unity calls <code>Update</code> once per frame and <code>FixedUpdate</code> on its physics schedule. Multiplying speed by <code>Time.fixedDeltaTime</code> converts units per second into distance per physics step.</p>
+<p><strong>Component settings.</strong> Fields store values on a component. The Inspector lets us edit supported fields and assign object references, as you did for collectible speed and the VFX prefab. Apply final values outside Play mode and save.</p>
+</details>
+<p><a href="#plan">Skip to practice</a></p>
+<h3>1. Configure controls with Input Actions</h3>
+<p>In Lecture 04, adding a key meant editing a <code>Keyboard.current</code> check in C#. Here, we want to add another control layout in the Inspector while keeping the movement calculation unchanged. Unity’s Input System provides actions and bindings for this separation.</p>
+<h4 class="new-concept-title"><span>New concept</span>Input Actions</h4>
+<p>Unity’s Input System lets us describe a named operation, such as <strong>Move</strong>, separately from the keys used to perform it. In C#, this is an <code>InputAction</code>. The controller reads the action’s value instead of checking each key individually.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Move:</strong> returns directional input that a controller can use for steering and driving.</li><li><strong>Jump:</strong> reports a button action that a character script could use to request a jump.</li><li><strong>Interact:</strong> reports a button action that a script could use to open a door or pick up an item. The action reports input. The script implements the behavior. Only Move is implemented in this lab.</li></ul></div>
+
+<h4 class="new-concept-title"><span>New concept</span>Bindings</h4>
+<p>A binding connects a device control to an action. We will connect WASD to Move, then add arrow keys to the same action. Both layouts will use the same movement code.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Keyboard:</strong> bind Space to a Jump action.</li><li><strong>Mouse:</strong> bind the left mouse button to a Fire action.</li><li><strong>Alternative control:</strong> bind a gamepad button to the same Jump action. The jump code can read Jump regardless of which binding triggered it. These illustrate bindings, not additional lab tasks.</li></ul></div>
+
+<p>The controller still needs a <code>Vector2</code>: two numbers for steering (X) and forward/reverse input (Y). The action will supply this value instead of our code building it from individual key checks.</p>
+<h4 class="new-concept-title"><span>New concept</span>2D Vector composites</h4>
+<p>A <strong>2D Vector composite</strong> is a binding that combines Up, Down, Left, and Right buttons into one <code>Vector2</code>. The controller uses the resulting X and Y values to calculate steering and forward/reverse movement.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Forward:</strong> W alone produces <code>(0, 1)</code>. The controller drives forward without steering.</li><li><strong>Left:</strong> A alone produces <code>(−1, 0)</code>. The controller steers left without forward input.</li><li><strong>Release:</strong> releasing all four keys produces <code>(0, 0)</code>. Neither driving nor steering is requested.</li></ul></div>
+
+<h3>2. Control when the action listens</h3>
+<p>An Input Action must be enabled before it monitors its controls. We want it to listen while the controller is active and stop when the controller is disabled. Unity’s component event methods give us places to manage that lifetime.</p>
+<p>Lecture 04 used <code>Start</code>, <code>Update</code>, and <code>FixedUpdate</code>: methods Unity calls at particular moments. Two more methods let us respond when the component becomes active or inactive.</p>
+<h4 class="new-concept-title"><span>New concept</span>OnEnable and OnDisable</h4>
+<ul>
+<li><code>OnEnable</code> runs when the component becomes enabled and active. Our code calls <code>moveAction.Enable()</code> here so the action starts monitoring its controls.</li>
+<li><code>OnDisable</code> runs when the component becomes disabled or inactive. Our code disables the action and clears the stored input so the stopped controller does not retain an old command.</li>
+</ul>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Activate:</strong> enable the controller on an active Player. Unity calls <code>OnEnable</code>, and our code enables Move.</li><li><strong>Deactivate:</strong> disable the controller component. Unity calls <code>OnDisable</code>, and our code disables Move and clears the stored value.</li><li><strong>Reactivate:</strong> enable the component again. <code>OnEnable</code> runs again, allowing the action to read controls without creating another controller.</li></ul></div>
+
+<h4 class="new-concept-title"><span>New concept</span>Input sampling and physics movement</h4>
+<p>Lecture 04 checked keys inside <code>FixedUpdate</code>. With this lab’s dynamic Input System update setting, we read the action in <code>Update</code> and store its <code>Vector2</code> value. <code>FixedUpdate</code> then uses that stored value for the Rigidbody movement from Lecture 04. Reading input and applying physics motion now have separate places in the script.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Press W:</strong> <code>Update</code> reads <code>(0, 1)</code>. A subsequent <code>FixedUpdate</code> uses that stored value to move forward.</li><li><strong>Hold W:</strong> physics steps keep using the latest stored input. Each movement calculation uses the physics step duration.</li><li><strong>Release W:</strong> the next <code>Update</code> stores <code>(0, 0)</code>. Subsequent physics steps receive no forward movement request.</li></ul></div>
+
+<h3>3. Expose private settings in the Inspector</h3>
+<p>Lecture 04 used public fields for speed and a VFX prefab reference. We still need Inspector settings, but a field does not have to be public to appear there. This lab introduces <code>[SerializeField]</code> so we can keep fields private and still configure them in Unity.</p>
+<h4 class="new-concept-title"><span>New concept</span>Private serialized fields</h4>
+<p>Unity calls the process of storing supported field values <strong>serialization</strong>. Adding <code>[SerializeField]</code> before a supported private field makes Unity save it and show it in the Inspector. The C# keyword <code>private</code> still restricts direct access from other classes. Inspector visibility and C# access are separate concerns.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>A number:</strong> <pre class="code-example"><code>[SerializeField] private float speed = 5f;</code></pre> exposes a configurable movement speed.</li><li><strong>A vector:</strong> <pre class="code-example"><code>[SerializeField] private Vector3 offset;</code></pre> exposes three camera-offset values.</li><li><strong>An object reference:</strong> <pre class="code-example"><code>[SerializeField] private Transform target;</code></pre> provides an Inspector field where you can assign Player.</li></ul></div>
+
+<p>Just as the collectible needed a VFX prefab reference, the camera needs to know which vehicle to follow. Its <code>target</code> field holds a reference to Player’s <code>Transform</code>, the component that describes an object’s position, rotation, and scale. Dragging Player into Target supplies that reference. Naming an object “Player” alone does not assign it.</p>
+
+<h3>4. Calculate the camera position independently</h3>
+<p>In Lecture 04, parenting made the camera follow Player’s position and rotation automatically. Here, the camera stays outside Player’s hierarchy so our script can choose whether it follows position only or also responds to turning. A following camera needs a position relative to the vehicle. We describe the separation using an <strong>offset</strong>: a displacement from the vehicle to the camera. A <code>Vector3</code> holds the three numbers needed for this displacement: X, Y, and Z.</p>
+<h4 class="new-concept-title"><span>New concept</span>World-space camera offset</h4>
+<p>World coordinates use the scene’s fixed axes. An offset of <code>(0, 5, −8)</code> places the camera 5 units above and 8 units along negative world Z from Player. Adding <code>target.position + offset</code> gives the camera’s world position. Turning Player does not change this offset’s direction. Assign this destination directly. Do not multiply it by <code>deltaTime</code>, which would scale the position coordinates.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>At the origin:</strong> Player <code>(0, 0, 0)</code> plus offset <code>(0, 5, −8)</code> gives camera <code>(0, 5, −8)</code>.</li><li><strong>After moving:</strong> Player <code>(2, 0, 4)</code> plus the same offset gives camera <code>(2, 5, −4)</code>.</li><li><strong>After turning in place:</strong> if Player stays at <code>(2, 0, 4)</code>, the camera stays at <code>(2, 5, −4)</code>. This calculation does not use Player’s rotation.</li></ul></div>
+
+<h4 class="new-concept-title"><span>New concept</span>Player-relative camera offset</h4>
+<p>To keep the camera behind a turning vehicle, the offset must turn with it. The expression <code>target.rotation * offset</code> rotates the displacement using Player’s orientation. Adding Player’s position then places the camera in the scene. Using rotation alone keeps the offset distance independent of Player’s scale. This applies the Local/Global distinction from <a href="../unity-editor-first-contact/index.html#mural">Lecture 01 · Unity Editor Fundamentals</a>.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Facing world +Z:</strong> with offset <code>(0, 5, −8)</code>, the camera sits toward world −Z from Player.</li><li><strong>Facing world +X:</strong> the rotated offset places the camera toward world −X from Player.</li><li><strong>Facing world −Z:</strong> the rotated offset places the camera toward world +Z from Player. In these level turns, the camera remains 5 units above Player.</li></ul></div>
+
+<h4 class="new-concept-title"><span>New concept</span>LookAt: camera orientation</h4>
+<p>Moving the camera does not automatically make it face Player. After setting its position, <code>LookAt(target.position)</code> rotates the camera toward Player. The required final task combines these two operations to make a chase camera.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Player ahead:</strong> <code>LookAt</code> points the camera toward Player from its current location.</li><li><strong>Player moves left:</strong> with the camera position held fixed, calling <code>LookAt</code> again turns the camera toward Player’s new location.</li><li><strong>Camera moves higher:</strong> after changing its position, <code>LookAt</code> adjusts the viewing angle toward Player. <code>LookAt</code> itself does not change the camera’s position.</li></ul></div>
+
+<h3>5. Schedule the camera with LateUpdate</h3>
+<h4 class="new-concept-title"><span>New concept</span>LateUpdate</h4>
+<p>The camera reads the vehicle’s Transform to calculate its own position. Unity provides another event method, <code>LateUpdate</code>, which runs after the frame’s <code>Update</code> methods. We put the camera calculation there so following happens later in the frame.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Movement in <code>Update</code>:</strong> a camera calculation in <code>LateUpdate</code> reads the Transform after that frame’s <code>Update</code> methods have run.</li><li><strong>No player movement:</strong> <code>LateUpdate</code> still runs each frame while the camera component is active. The same target position produces the same camera destination.</li><li><strong>A physics-driven player:</strong> this lab’s camera reads the displayed Transform in <code>LateUpdate</code>. Its timing does not replace <code>FixedUpdate</code> or make physics run once per rendered frame.</li></ul></div>
+
+<h4 class="new-concept-title"><span>New concept</span>Rigidbody interpolation</h4>
+<p><code>LateUpdate</code> controls execution order. It does not smooth motion. Because physics advances in fixed steps, the Rigidbody’s <strong>Interpolate</strong> setting smooths its displayed pose between those steps. The camera follows that displayed Transform through <code>target.position</code>.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Steady travel:</strong> interpolation uses previous physics poses to smooth the displayed motion between fixed steps.</li><li><strong>A stationary vehicle:</strong> identical physics poses produce an unchanged displayed position. Interpolation does not create movement.</li><li><strong>A missing camera target:</strong> interpolation cannot repair the reference. It smooths a body’s displayed motion, not the camera’s configuration.</li></ul></div>
+
+
+<p><a href="#setup">Continue to the practical steps</a>. Each section repeats the relevant concepts under a Refresher label, so you can review them alongside the practical work.</p>
+</section>
+<section class="article-section" id="plan"><div class="section-kicker">01 · PREPARATION</div><h2>Project preparation</h2><p>Project creation, asset placement, and Input System activation reuse earlier Editor skills. This fresh project supplies the scene for the new input and camera work.</p><table class="window-table" data-instructor><thead><tr><th>Time</th><th>Work</th></tr></thead><tbody><tr><td data-label="Time">00–07</td><td data-label="Work">Connect to Lecture 04, then introduce actions, their lifetime, and the two scripted camera calculations.</td></tr><tr><td data-label="Time">07–12</td><td data-label="Work">Place the starter vehicle and attach the supplied controller.</td></tr><tr><td data-label="Time">12–24</td><td data-label="Work">Configure the action, bind WASD, and inspect input values.</td></tr><tr><td data-label="Time">24–34</td><td data-label="Work">Write, assign, and test the follow camera.</td></tr><tr><td data-label="Time">34–39</td><td data-label="Work">Run two controlled fault tests.</td></tr><tr><td data-label="Time">39–48</td><td data-label="Work">Complete the required applied task.</td></tr><tr><td data-label="Time">48–56</td><td data-label="Work">Implement and compare the required player-relative chase camera.</td></tr><tr><td data-label="Time">56–60</td><td data-label="Work">Explain the result, save, and check completion.</td></tr></tbody></table><div class="note"><span class="note-title">Project setup · complete before class</span>This lecture starts from the official <strong>Prototype 1 Starter Files</strong> in Player Control. The package supplies the road scene, vehicles, and obstacles. The two complete scripts on this page supply the behavior. Complete the preparation below before the 60-minute lab so downloads, imports, and Editor restarts do not use teaching time.</div>
+<h3>Prepare the official starter</h3>
+<ol class="steps"><li><p class="step-goal">Create a fresh project with the rendering setup needed by the starter assets.</p><span class="step-line">In <strong class="ui-action">Unity Hub → New project</strong>, select <strong class="ui-action">Unity 6.3</strong> and the <strong class="ui-action">Universal 3D</strong> template.</span><span class="step-line">Name the new project <strong class="ui-action">SWE402_PlayerControl</strong> and create it in a new folder.</span></li><li><p class="step-goal">Bring the ready-made road, vehicles, and obstacles into your project.</p><span class="step-line"><a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/bd48b2c1-0ef2-4453-9cd0-a3017996e5c9/versions%5B_key==%22bd37f72319f1%22%5D.materials%5B_key==%222baf1bfb11be%22%5D.file/Prototype-1_Starter-Files_U6_20260613_025257.unitypackage" target="_blank" rel="noreferrer">Download Prototype 1 Starter Files · Unity 6 (.unitypackage)</a>.</span><span class="step-line">In the new Editor project, select <strong class="ui-action">Assets → Import Package → Custom Package…</strong>.</span><span class="step-line">Select the downloaded <strong class="ui-action">.unitypackage</strong>.</span><span class="step-line">Select <strong class="ui-action">All → Import</strong>.</span><span class="step-line">This download is already a Unity package; import it directly.</span></li><li><p class="step-goal">Create your own working scene while preserving the original starter.</p><span class="step-line">In the Project window, open <strong class="ui-action">Assets → Scenes → Prototype 1</strong>.</span><span class="step-line">Select <strong class="ui-action">File → Save As…</strong> and save a working copy as <strong class="ui-action">Assets/Scenes/PlayerControlLab.unity</strong>.</span><span class="step-line">The original road scene remains available as a clean starting point.</span></li><li><p class="step-goal">Enable the Input System so the controller can receive keyboard input through actions.</p><span class="step-line">Open <strong class="ui-action">Window → Package Management → Package Manager</strong>.</span><span class="step-line">Check <strong class="ui-action">In Project</strong> for <strong class="ui-action">Input System</strong>.</span><span class="step-line">If absent, select <strong class="ui-action">Unity Registry</strong>, find Input System, and install it.</span><span class="step-line">In <strong class="ui-action">Edit → Project Settings → Player → Other Settings → Configuration</strong>, set <strong class="ui-action">Active Input Handling</strong> to <strong class="ui-action">Input System Package (New)</strong>.</span><span class="step-line">Save and allow the restart if prompted.</span><span class="step-line">In <strong class="ui-action">Project Settings → Input System Package → Settings</strong>, keep <strong class="ui-action"><code>Update</code> Mode: Process Events In Dynamic <code>Update</code></strong>.</span></li><li><p class="step-goal">Confirm that the scene, assets, and editor are ready before the lab begins.</p><span class="step-line">Reopen <strong class="ui-action">PlayerControlLab</strong> after any restart.</span><span class="step-line">Confirm that the road is visible in Scene view and <strong class="ui-action">Assets/Course Library/Vehicles</strong> contains vehicle prefabs.</span><span class="step-line">Open your script editor.</span><span class="step-line">Setup is complete.</span></li></ol>
+<p>Package source: <a href="https://learn.unity.com/pathway/junior-programmer/unit/player-control/tutorial/lesson-1-1-start-your-3d-engines?version=6.3" target="_blank" rel="noreferrer">Unity Learn · Lesson 1.1: Start your 3D Engines</a>. Use its Unity 6 starter download if the direct download link changes.</p>
+<p data-instructor><strong>Instructor opening:</strong> show WASD and arrow keys producing the same movement. Turn Player while the camera keeps facing the same world direction. Ask: “Which part should change when we change a key?” Leave the answer visible: <em>binding → action value → movement → camera</em>.</p><details data-instructor><summary>Scope decisions for lecture preparation</summary><p>Editor navigation, prefabs, colliders, Rigidbody basics, time-scaled movement, rotation, and Play-mode tuning were covered in Lectures 01–04. This sheet reuses them without another tutorial. From the Player Control unit, it selects Input Actions from Lesson 1.4 and scripted following from Lesson 1.3. Private serialized fields and paired enable/disable methods clarify those implementations.</p><p>Prepare the official scene import before class. Skip collision effects, layout/tint customization, full plane challenge, project-design document, teamwork module, and quiz. The plane challenge contributes the idea of diagnosing one fault at a time. Camera smoothing systems, gamepad setup, and runtime rebinding are outside the required hour. A short player-relative chase-camera comparison is required. Use the introduction and labeled refreshers for explanation and leave the optional FAQs for questions or later reading.</p></details><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Input Actions</h3><p>Unity’s Input System lets us describe a named operation, such as <strong>Move</strong>, separately from the keys used to perform it. In C#, this is an <code>InputAction</code>. The controller reads the action’s value instead of checking each key individually.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Move:</strong> returns directional input that a controller can use for steering and driving.</li><li><strong>Jump:</strong> reports a button action that a character script could use to request a jump.</li><li><strong>Interact:</strong> reports a button action that a script could use to open a door or pick up an item. The action reports input. The script implements the behavior. Only Move is implemented in this lab.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Do I need my previous project?</summary><p>No. <code>Start</code> from the fresh Universal 3D project and official Prototype 1 package described above. Both required scripts are provided here.</p></details><details><summary>Do I need to watch all the source videos?</summary><p>No. The page contains the required instructions. Videos and these FAQs are optional reference material.</p></details></details></section>
+<section class="article-section" id="setup"><div class="section-kicker">02 · 07–12 MIN</div><h2>Place the vehicle in the starter scene</h2><p>The Rigidbody movement calculation comes from Lecture 04. Use the supplied controller as the baseline. Focus your code reading on its <code>InputAction</code> field, enable/disable methods, and input read in <code>Update</code>. </p><h3 class="new-concept-title"><span>New concept</span>Kinematic Rigidbody</h3><p>With <strong>Is Kinematic</strong> enabled, the script controls the body’s movement rather than gravity and forces. This lab uses that mode for its supplied movement code. <strong>Interpolate</strong>, introduced above, smooths the displayed pose between physics steps.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>This vehicle:</strong> the controller requests position and rotation changes with <code>MovePosition</code> and <code>MoveRotation</code>.</li><li><strong>A moving platform:</strong> a script could move a kinematic body along a predefined route.</li><li><strong>A falling ball:</strong> a body meant to fall under gravity needs dynamic simulation instead. A kinematic body will not begin falling simply because Use Gravity is checked.</li></ul></div>
+
+<p>Open the <strong>PlayerControlLab</strong> scene prepared above. Keep the supplied road, environment, Main Camera, and Directional Light. Use the same red pickup for the guided steps so everyone starts with the same scale and forward direction.</p>
+<ol class="steps"><li><p class="step-goal">Place the vehicle at the road’s starting point, facing the direction it will drive.</p><span class="step-line">In <strong class="ui-action">Assets → Course Library → Vehicles</strong>, drag <strong class="ui-action">Veh_Ute_Red_Z</strong> into the Hierarchy.</span><span class="step-line">Rename this scene instance <strong class="ui-action">Player</strong>.</span><span class="step-line">Set its Transform position and rotation to <strong class="ui-action">(0, 0, 0)</strong> and scale to <strong class="ui-action">(1, 1, 1)</strong>.</span><span class="step-line">Its forward direction is +Z along the road.</span></li><li><p class="step-goal">Give the vehicle a physics body that the supplied script can move and turn.</p><span class="step-line">Select the root <strong class="ui-action">Player</strong> object, not a wheel or other child.</span><span class="step-line">Add a <strong class="ui-action">Rigidbody</strong> and set <strong class="ui-action">Use Gravity: off</strong>, <strong class="ui-action">Is Kinematic: on</strong>, and <strong class="ui-action">Interpolate: Interpolate</strong>.</span><span class="step-line">This lesson uses script-driven motion.</span><span class="step-line">Physics-based driving and obstacle impacts are outside its scope.</span></li><li><p class="step-goal">Add two visible landmarks so you can repeat the same driving test.</p><span class="step-line">From <strong class="ui-action">Assets → Course Library → Obstacles</strong>, drag <strong class="ui-action">Prop_Cone_01</strong> into the scene twice.</span><span class="step-line">Rename the instances <strong class="ui-action">Marker A</strong> and <strong class="ui-action">Marker B</strong> and use the positions below.</span><span class="step-line">Keep them as visual route markers.</span></li><li><p class="step-goal">Frame the vehicle from above and behind without making the camera its child.</p><span class="step-line">Select the existing <strong class="ui-action">Main Camera</strong> and enter the listed position and rotation.</span><span class="step-line">Keep it at the scene root, at the same indentation level as Player.</span></li><li><p class="step-goal">Attach the supplied movement behavior to the vehicle so it can respond once bindings are assigned.</p><span class="step-line">Create <strong class="ui-action">Assets/Scripts</strong>.</span><span class="step-line">Inside it, create a <strong class="ui-action"><code>MonoBehaviour</code> Script</strong> named <strong class="ui-action">PlayerControlLab</strong>.</span><span class="step-line">Replace its entire contents with the file below and save.</span><span class="step-line">Drag the script onto the root Player.</span><span class="step-line">Wait for compilation, then save the scene.</span></li></ol>
+<table class="window-table"><thead><tr><th>Object</th><th>Position (X, Y, Z)</th><th>Rotation / scale</th></tr></thead><tbody>
+<tr><td data-label="Object">Player · Veh_Ute_Red_Z</td><td data-label="Position (X, Y, Z)">(0, 0, 0)</td><td data-label="Rotation / scale">Rotation (0, 0, 0); scale (1, 1, 1)</td></tr>
+<tr><td data-label="Object">Marker A · Prop_Cone_01</td><td data-label="Position (X, Y, Z)">(−3, 0, 12)</td><td data-label="Rotation / scale">Rotation (0, 0, 0); scale (1, 1, 1)</td></tr>
+<tr><td data-label="Object">Marker B · Prop_Cone_01</td><td data-label="Position (X, Y, Z)">(3, 0, 24)</td><td data-label="Rotation / scale">Rotation (0, 0, 0); scale (1, 1, 1)</td></tr>
+<tr><td data-label="Object">Main Camera</td><td data-label="Position (X, Y, Z)">(0, 5, −8)</td><td data-label="Rotation / scale">Rotation (30, 0, 0); scale (1, 1, 1)</td></tr>
+</tbody></table>
+
+<figure class="code-sample"><figcaption>PlayerControlLab.cs · complete file</figcaption><pre><code>using UnityEngine;
+using UnityEngine.InputSystem;
+
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerControlLab : MonoBehaviour
+{
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float rotationSpeed = 120f;
+    [SerializeField] private InputAction moveAction =
+        new InputAction(&quot;Move&quot;, InputActionType.Value,
+            expectedControlType: &quot;Vector2&quot;);
+    [SerializeField] private Vector2 moveInput; // Observe in Play mode.
+    private Rigidbody body;
+
+    private void Awake()
+    {
+        body = GetComponent&lt;Rigidbody&gt;();
+    }
+
+    private void OnEnable()
+    {
+        moveAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveAction.Disable();
+        moveInput = Vector2.zero;
+    }
+
+    private void Update()
+    {
+        moveInput = moveAction.ReadValue&lt;Vector2&gt;();
+    }
+
+    private void FixedUpdate()
+    {
+        Vector3 movement = transform.forward * moveInput.y
+            * speed * Time.fixedDeltaTime;
+        body.MovePosition(body.position + movement);
+
+        float steering = moveInput.x;
+        if (moveInput.y &lt; 0f) steering = -steering;
+        float angle = steering * rotationSpeed * Time.fixedDeltaTime;
+        body.MoveRotation(body.rotation * Quaternion.Euler(0f, angle, 0f));
+    }
+}
+</code></pre></figure><p><a href="scripts/PlayerControlLab.cs" download>Download PlayerControlLab.cs</a></p><div class="practice mini-quiz"><span class="practice-title">Mini quiz · Before bindings</span><p>The controller is attached, but Move Action has no bindings. What should happen when you press W? Which check comes first if the script does not compile?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>Player remains stationary because the action has no bound control producing input. Resolve red Console compile errors before testing bindings. Enter Play mode to test your prediction, then exit before configuring the action.</p></details></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Kinematic Rigidbody</h3><p>With <strong>Is Kinematic</strong> enabled, the script controls the body’s movement rather than gravity and forces. This lab uses that mode for its supplied movement code.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>This vehicle:</strong> the controller requests position and rotation changes with <code>MovePosition</code> and <code>MoveRotation</code>.</li><li><strong>A moving platform:</strong> a script could move a kinematic body along a predefined route.</li><li><strong>A falling ball:</strong> a body meant to fall under gravity needs dynamic simulation instead. A kinematic body will not begin falling simply because Use Gravity is checked.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>OnEnable and OnDisable</h3><ul>
+<li><code>OnEnable</code> runs when the component becomes enabled and active. Our code calls <code>moveAction.Enable()</code> here so the action starts monitoring its controls.</li>
+<li><code>OnDisable</code> runs when the component becomes disabled or inactive. Our code disables the action and clears the stored input so the stopped controller does not retain an old command.</li>
+</ul>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Activate:</strong> enable the controller on an active Player. Unity calls <code>OnEnable</code>, and our code enables Move.</li><li><strong>Deactivate:</strong> disable the controller component. Unity calls <code>OnDisable</code>, and our code disables Move and clears the stored value.</li><li><strong>Reactivate:</strong> enable the component again. <code>OnEnable</code> runs again, allowing the action to read controls without creating another controller.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>Input sampling and physics movement</h3><p>Lecture 04 checked keys inside <code>FixedUpdate</code>. With this lab’s dynamic Input System update setting, we read the action in <code>Update</code> and store its <code>Vector2</code> value. <code>FixedUpdate</code> then uses that stored value for the Rigidbody movement from Lecture 04. Reading input and applying physics motion now have separate places in the script.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Press W:</strong> <code>Update</code> reads <code>(0, 1)</code>. A subsequent <code>FixedUpdate</code> uses that stored value to move forward.</li><li><strong>Hold W:</strong> physics steps keep using the latest stored input. Each movement calculation uses the physics step duration.</li><li><strong>Release W:</strong> the next <code>Update</code> stores <code>(0, 0)</code>. Subsequent physics steps receive no forward movement request.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Should the controller go on a wheel?</summary><p>No. Add it and the Rigidbody to the root object named Player. Child wheels then move with that root.</p></details><details><summary>Why does the car not fall off the road?</summary><p>Gravity is off and the body is kinematic in this focused control test. Falling, suspension, and impact physics are not implemented by this controller.</p></details></details></section>
+<section class="article-section" id="actions"><div class="section-kicker">03 · 12–24 MIN</div><h2>Configure the Move action</h2><p>Lecture 04 hard-coded both keyboard layouts. Here, you will produce the same movement values through Inspector bindings. Adding arrow keys later should require no movement-code changes.</p><p>The supplied controller creates Move as a <strong>Value</strong> action with <strong><code>Vector2</code></strong> input. Configure its bindings below.</p><ol class="steps"><li><p class="step-goal">Set nonzero movement and rotation speeds for testing.</p><span class="step-line">Select Player.</span><span class="step-line">In <strong class="ui-action">Player Control Lab (Script)</strong>, verify <strong class="ui-action">Speed = 5</strong> and <strong class="ui-action">Rotation Speed = 120</strong>.</span></li><li><p class="step-goal">Configure Move to produce the two input values the controller expects.</p><span class="step-line">Expand <strong class="ui-action">Move Action</strong>.</span><span class="step-line">Its gear menu exposes action properties; verify <strong class="ui-action">Action Type: Value</strong> and <strong class="ui-action">Control Type: <code>Vector2</code></strong>.</span></li><li><p class="step-goal">Combine four directional buttons into a single two-dimensional input value.</p><span class="step-line">Select the action’s <strong class="ui-action">+</strong> menu, then <strong class="ui-action">Add Up/Down/Left/Right Composite</strong>.</span><span class="step-line">Expand the resulting <strong class="ui-action">2D Vector</strong> row.</span></li><li><p class="step-goal">Connect WASD to the four directions of the Move action.</p><span class="step-line">Double-click <strong class="ui-action">Up</strong>.</span><span class="step-line">Open its <strong class="ui-action">Path</strong> selector and choose <strong class="ui-action">Listen</strong>.</span><span class="step-line">Press <kbd>W</kbd> and select the detected W key.</span><span class="step-line">Repeat for Down = <kbd>S</kbd>, Left = <kbd>A</kbd>, Right = <kbd>D</kbd>.</span></li><li><p class="step-goal">Confirm that every direction has a key and save the bindings with the scene.</p><span class="step-line">Verify that none of the four rows says <strong class="ui-action">&lt;No Binding&gt;</strong>.</span><span class="step-line">Save the scene.</span><span class="step-line">These are bindings on this component; no separate Input Actions asset or PlayerInput component is needed.</span></li><li><p class="step-goal">Prove that pressing each key produces the expected input value before diagnosing movement.</p><span class="step-line">Enter Play mode, keep Player selected, and click the Game view to give it keyboard focus.</span><span class="step-line">Watch <strong class="ui-action">Move Input</strong> in the Inspector while pressing one key at a time.</span></li></ol><figure class="source-figure"><a href="assets/action-composite.png" target="_blank" aria-label="Open full-size screenshot: Move Action Inspector expanded to show the four unassigned parts of a 2D Vector composite"><img src="assets/action-composite.png" alt="Move Action Inspector expanded to show the four unassigned parts of a 2D Vector composite" loading="lazy" width="1920" height="1080"></a><figcaption>The four child rows belong to one composite. Official Unity 6 lesson footage, 1:00. The source example uses PlayerController; this sheet attaches PlayerControlLab to the vehicle named Player. <a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/c812dbbe-c995-4ad4-b50b-d4fc43bf95b9/versions%5B_key==%2292c957ee44fd%22%5D.sections%5B_key==%22f5Dcpkp7DZC0QRMvpxgd9U%22%5D.body%5B_key==%22c35c2bfd9a50%22%5D.overviewVideo/Unit%201.4%20-%20Step%204%20-%20Assign%20a%20binding%20to%20an%20action%20-%20FINAL%20NEW_20260625_195503.mp4" target="_blank" rel="noreferrer">Unity Learn: Assign bindings to the action</a>. Select the image for full size.</figcaption></figure><figure class="source-figure"><a href="assets/binding-listen.png" target="_blank" aria-label="Open full-size screenshot: Binding Path selector with Listen active beneath the Move Action composite"><img src="assets/binding-listen.png" alt="Binding Path selector with Listen active beneath the Move Action composite" loading="lazy" width="1920" height="1080"></a><figcaption>Double-click a child binding, then use Path → Listen to choose its key. Official lesson footage, 3:28. <a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/c812dbbe-c995-4ad4-b50b-d4fc43bf95b9/versions%5B_key==%2292c957ee44fd%22%5D.sections%5B_key==%22f5Dcpkp7DZC0QRMvpxgd9U%22%5D.body%5B_key==%22c35c2bfd9a50%22%5D.overviewVideo/Unit%201.4%20-%20Step%204%20-%20Assign%20a%20binding%20to%20an%20action%20-%20FINAL%20NEW_20260625_195503.mp4" target="_blank" rel="noreferrer">Unity Learn binding demonstration</a>.</figcaption></figure><table class="window-table"><thead><tr><th>Input</th><th>Move Input (X, Y)</th><th>Meaning in this controller</th></tr></thead><tbody><tr><td data-label="Input">No key</td><td data-label="Move Input (X, Y)">(0, 0)</td><td data-label="Meaning in this controller">Stop translating and turning.</td></tr><tr><td data-label="Input">W</td><td data-label="Move Input (X, Y)">(0, 1)</td><td data-label="Meaning in this controller">Move along Player’s forward direction.</td></tr><tr><td data-label="Input">S</td><td data-label="Move Input (X, Y)">(0, −1)</td><td data-label="Meaning in this controller">Reverse.</td></tr><tr><td data-label="Input">A</td><td data-label="Move Input (X, Y)">(−1, 0)</td><td data-label="Meaning in this controller">Turn left in place.</td></tr><tr><td data-label="Input">D</td><td data-label="Move Input (X, Y)">(1, 0)</td><td data-label="Meaning in this controller">Turn right in place.</td></tr></tbody></table><p><code>moveInput.y</code> means forward/reverse intent here, not world height. <code>moveInput.x</code> means steering, not sideways translation. The movement code makes those choices. With the default normalized composite, a diagonal such as W+D produces components near 0.71; that is expected, not a broken binding.</p><div class="practice mini-quiz"><span class="practice-title">Mini quiz · Input and component lifetime</span><p>Predict the behavior for D alone and W+D. Then predict what happens when you disable and re-enable Player Control Lab. Test each prediction in Play mode.</p><details class="quiz-answer"><summary>Reveal answer</summary><p>D supplies steering with zero forward input, so the vehicle turns in place. W+D combines forward input and steering; the normalized composite produces components near 0.71. Disabling the component disables its action and clears cached input; re-enabling activates it again. Click Game view before testing keys and leave the component enabled afterward.</p></details></div><div class="video-list"><a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/c812dbbe-c995-4ad4-b50b-d4fc43bf95b9/versions%5B_key==%2292c957ee44fd%22%5D.sections%5B_key==%22f5Dcpkp7DZC0QRMvpxgd9U%22%5D.body%5B_key==%22c35c2bfd9a50%22%5D.overviewVideo/Unit%201.4%20-%20Step%204%20-%20Assign%20a%20binding%20to%20an%20action%20-%20FINAL%20NEW_20260625_195503.mp4" target="_blank" rel="noreferrer"><span><strong>Locate and assign composite bindings</strong><small>Optional reference · composite at 0:30; Path and Listen at 2:30</small></span></a></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (2)</span>Input Actions</h3><p>Unity’s Input System lets us describe a named operation, such as <strong>Move</strong>, separately from the keys used to perform it. In C#, this is an <code>InputAction</code>. The controller reads the action’s value instead of checking each key individually.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Move:</strong> returns directional input that a controller can use for steering and driving.</li><li><strong>Jump:</strong> reports a button action that a character script could use to request a jump.</li><li><strong>Interact:</strong> reports a button action that a script could use to open a door or pick up an item. The action reports input. The script implements the behavior. Only Move is implemented in this lab.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>Bindings</h3><p>A binding connects a device control to an action. We will connect WASD to Move, then add arrow keys to the same action. Both layouts will use the same movement code.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Keyboard:</strong> bind Space to a Jump action.</li><li><strong>Mouse:</strong> bind the left mouse button to a Fire action.</li><li><strong>Alternative control:</strong> bind a gamepad button to the same Jump action. The jump code can read Jump regardless of which binding triggered it. These illustrate bindings, not additional lab tasks.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>2D Vector composites</h3><p>A <strong>2D Vector composite</strong> is a binding that combines Up, Down, Left, and Right buttons into one <code>Vector2</code>. The controller uses the resulting X and Y values to calculate steering and forward/reverse movement.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Forward:</strong> W alone produces <code>(0, 1)</code>. The controller drives forward without steering.</li><li><strong>Left:</strong> A alone produces <code>(−1, 0)</code>. The controller steers left without forward input.</li><li><strong>Release:</strong> releasing all four keys produces <code>(0, 0)</code>. Neither driving nor steering is requested.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>Private serialized fields</h3><p>Unity calls the process of storing supported field values <strong>serialization</strong>. Adding <code>[SerializeField]</code> before a supported private field makes Unity save it and show it in the Inspector. The C# keyword <code>private</code> still restricts direct access from other classes. Inspector visibility and C# access are separate concerns.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>A number:</strong> <pre class="code-example"><code>[SerializeField] private float speed = 5f;</code></pre> exposes a configurable movement speed.</li><li><strong>A vector:</strong> <pre class="code-example"><code>[SerializeField] private Vector3 offset;</code></pre> exposes three camera-offset values.</li><li><strong>An object reference:</strong> <pre class="code-example"><code>[SerializeField] private Transform target;</code></pre> provides an Inspector field where you can assign Player.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Why are diagonal values about 0.71 instead of 1?</summary><p>The default 2D Vector composite normalizes diagonal input to length 1. Two equal components are approximately 0.707 each.</p></details><details><summary>Why not enable the action only in Start?</summary><p><code>Start</code> runs once for a component instance. <code>OnEnable</code> runs again when the component is re-enabled, matching the paired <code>OnDisable</code> cleanup.</p></details><details><summary>Do I need a PlayerInput component?</summary><p>No. This script owns an embedded <code>InputAction</code> and enables it directly. Its bindings are configured on the component.</p></details></details></section>
+<section class="article-section" id="camera"><div class="section-kicker">04 · 24–34 MIN</div><h2>Implement a fixed-heading follow camera</h2><p>Lecture 04’s child camera inherited Player’s rotation. This script will follow Player’s position while keeping a fixed heading. Turning the vehicle will demonstrate the difference.</p><ol class="steps"><li><p class="step-goal">Attach the follow-camera script to Main Camera.</p><span class="step-line">Create <strong class="ui-action">FollowPlayerLab.cs</strong> in Scripts.</span><span class="step-line">Replace the template with the complete file below, save, and attach it to <strong class="ui-action">Main Camera</strong>.</span></li><li><p class="step-goal">Tell the follow component which scene object it should track.</p><span class="step-line">In the Main Camera Inspector, drag <strong class="ui-action">“Player”</strong> from the Hierarchy into the script’s <strong class="ui-action">Target</strong> field.</span><span class="step-line">This stores a reference to that scene object’s Transform; typing a name in code would not assign it.</span></li><li><p class="step-goal">Set the camera’s viewing distance and fixed world heading.</p><span class="step-line">Set <strong class="ui-action">Offset = (0, 5, −8)</strong>.</span><span class="step-line">Keep the camera’s Transform rotation at <strong class="ui-action">(30, 0, 0)</strong> and ensure it has no parent or competing camera-control script.</span></li><li><p class="step-goal">Confirm that the camera follows movement while keeping its own orientation.</p><span class="step-line">Enter Play mode.</span><span class="step-line">Move forward, reverse, and turn.</span><span class="step-line">Player stays in view while the camera keeps the same heading.</span><span class="step-line">Stop and save the scene.</span></li></ol><figure class="code-sample"><figcaption>FollowPlayerLab.cs · complete file</figcaption><pre><code>using UnityEngine;
+
+public class FollowPlayerLab : MonoBehaviour
+{
+    [SerializeField] private Transform target;
+    [SerializeField] private Vector3 offset = new Vector3(0f, 5f, -8f);
+
+    private void LateUpdate()
+    {
+        if (target == null) return;
+        transform.position = target.position + offset;
+    }
+}
+</code></pre></figure><p><a href="scripts/FollowPlayerLab.cs" download>Download FollowPlayerLab.cs</a></p><div class="practice mini-quiz"><span class="practice-title">Mini quiz · Calculate the camera pose</span><p>Player is at (−3, 0, 10), with Offset (0, 5, −8). What is the camera position? If Player turns 90° in place, does this camera circle it?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>The camera is at (−3, 5, 2). The displacement is in world space, so turning Player does not rotate the offset or change the camera’s heading. A parented camera would inherit the parent’s rotation.</p></details></div><div class="video-list"><a href="https://connect-mediagw.unity.com/h1/20241204/videos/1a003466-8e5c-44bb-817e-e50d929ae3f3_CWC_U1.L3.S5_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Follow-camera update timing</strong><small>Optional Unity Learn demonstration of Update versus LateUpdate</small></span></a></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Target reference</h3><p>The camera needs to know which vehicle to follow. Its <code>target</code> field holds a reference to Player’s <code>Transform</code>, the component that describes an object’s position, rotation, and scale. Dragging Player into Target supplies that reference. Naming an object “Player” alone does not assign it.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Player assigned:</strong> the camera reads Player’s Transform and follows it.</li><li><strong>Another object assigned:</strong> the same script follows that object instead. The reference determines which Transform is read.</li><li><strong>Target is None:</strong> this lab’s null check returns without updating the camera position. Naming an object Player does not fill the field.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>World-space camera offset</h3><p>World coordinates use the scene’s fixed axes. An offset of <code>(0, 5, −8)</code> places the camera 5 units above and 8 units along negative world Z from Player. Adding <code>target.position + offset</code> gives the camera’s world position. Turning Player does not change this offset’s direction. Assign this destination directly. Do not multiply it by <code>deltaTime</code>, which would scale the position coordinates.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>At the origin:</strong> Player <code>(0, 0, 0)</code> plus offset <code>(0, 5, −8)</code> gives camera <code>(0, 5, −8)</code>.</li><li><strong>After moving:</strong> Player <code>(2, 0, 4)</code> plus the same offset gives camera <code>(2, 5, −4)</code>.</li><li><strong>After turning in place:</strong> if Player stays at <code>(2, 0, 4)</code>, the camera stays at <code>(2, 5, −4)</code>. This calculation does not use Player’s rotation.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>LateUpdate</h3><p>The camera reads the vehicle’s Transform to calculate its own position. Unity provides another event method, <code>LateUpdate</code>, which runs after the frame’s <code>Update</code> methods. We put the camera calculation there so following happens later in the frame.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Movement in <code>Update</code>:</strong> a camera calculation in <code>LateUpdate</code> reads the Transform after that frame’s <code>Update</code> methods have run.</li><li><strong>No player movement:</strong> <code>LateUpdate</code> still runs each frame while the camera component is active. The same target position produces the same camera destination.</li><li><strong>A physics-driven player:</strong> this lab’s camera reads the displayed Transform in <code>LateUpdate</code>. Its timing does not replace <code>FixedUpdate</code> or make physics run once per rendered frame.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>Rigidbody interpolation</h3><p><code>LateUpdate</code> controls execution order. It does not smooth motion. Because physics advances in fixed steps, the Rigidbody’s <strong>Interpolate</strong> setting smooths its displayed pose between those steps. The camera follows that displayed Transform through <code>target.position</code>.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Steady travel:</strong> interpolation uses previous physics poses to smooth the displayed motion between fixed steps.</li><li><strong>A stationary vehicle:</strong> identical physics poses produce an unchanged displayed position. Interpolation does not create movement.</li><li><strong>A missing camera target:</strong> interpolation cannot repair the reference. It smooths a body’s displayed motion, not the camera’s configuration.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Why does changing Camera Position in Play mode not stick?</summary><p><code>LateUpdate</code> assigns that position again every frame. Change Offset to change the follow relationship, then save the chosen value outside Play mode.</p></details><details><summary>Why is Target a Transform rather than a GameObject?</summary><p>The camera only needs position and rotation, which the Transform provides directly. Dragging Player into the field supplies its Transform.</p></details><details><summary>Does the null check fix a missing Target?</summary><p>No. It skips the assignment and prevents an exception. You still need to assign the correct scene object.</p></details></details></section>
+<section class="article-section" id="diagnosis"><div class="section-kicker">05 · 34–39 MIN</div><h2>Diagnose input and camera errors</h2><p>Test one change at a time, as in Lecture 04. The new points to inspect are the action’s bindings and the independent camera’s Target reference.</p><p>Test in order: <strong>key → action value → player movement → camera</strong>. If Move Input changes correctly, stop changing bindings. If Player moves in Scene view, stop changing movement code to solve a camera problem.</p><ol class="steps"><li><p class="step-goal">Learn to identify a binding fault by inspecting the input value directly.</p><span class="step-line">Outside Play mode, deliberately assign the <strong class="ui-action">Down</strong> binding to W instead of S.</span><span class="step-line">Run and press S alone.</span><span class="step-line">Observe Move Input rather than guessing from the camera view.</span><span class="step-line">Stop, restore Down to S, and repeat.</span><span class="step-line">Record the changed value.</span></li><li><p class="step-goal">Learn to distinguish a missing camera reference from a movement failure.</p><span class="step-line">Outside Play mode, set the follow camera’s <strong class="ui-action">Target</strong> field to <strong class="ui-action">None</strong> using its object picker.</span><span class="step-line">Run and move Player.</span><span class="step-line">Confirm in Scene view that Player moves while the camera stays still.</span><span class="step-line">Stop, reassign Player, and retest.</span></li><li><p class="step-goal">Record evidence for each diagnosis and restore a working scene.</p><span class="step-line">For each fault, write one line: <strong>symptom → evidence → changed setting → successful retest</strong>.</span><span class="step-line">Restore both faults before the applied task.</span></li></ol><table class="window-table"><thead><tr><th>Symptom</th><th>Inspect next</th></tr></thead><tbody><tr><td data-label="Symptom">InputSystem or <code>InputAction</code> cannot be found</td><td data-label="Inspect next">Input System package installation and using UnityEngine.InputSystem; resolve Console compile errors first.</td></tr><tr><td data-label="Symptom">Move Input remains (0, 0)</td><td data-label="Inspect next">Game view focus; enabled controller; <code>OnEnable</code>; the four binding paths.</td></tr><tr><td data-label="Symptom">Move Input changes but Player is still</td><td data-label="Inspect next">Speed / Rotation Speed nonzero; Rigidbody and the controller are on the same Player.</td></tr><tr><td data-label="Symptom">Camera stays still</td><td data-label="Inspect next">Target assignment and enabled Follow Player Lab component on Main Camera.</td></tr><tr><td data-label="Symptom">Fixed-heading camera turns when Player turns</td><td data-label="Inspect next">Main Camera should be a root object. Remove an inherited parent or competing rotation script.</td></tr><tr><td data-label="Symptom">Camera follows but appears jittery</td><td data-label="Inspect next">Player Rigidbody Interpolate setting and camera <code>LateUpdate</code> method; avoid a second script moving either object.</td></tr><tr><td data-label="Symptom">Edited script default does not change an existing field</td><td data-label="Inspect next">The component already has a saved Inspector value. Edit that field outside Play mode and save.</td></tr></tbody></table><div class="practice mini-quiz"><span class="practice-title">Mini quiz · Locate the broken connection</span><p>Player moves in Scene view, but the camera stays behind. Which parts of the input-to-camera chain already work? What should you inspect next?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>Input and movement already work: the visible movement proves they produced a result. Inspect the camera component’s enabled state and Target reference, then its position assignment. Changing key bindings will not repair a missing camera reference.</p></details></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (2)</span>Bindings</h3><p>A binding connects a device control to an action. We will connect WASD to Move, then add arrow keys to the same action. Both layouts will use the same movement code.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Keyboard:</strong> bind Space to a Jump action.</li><li><strong>Mouse:</strong> bind the left mouse button to a Fire action.</li><li><strong>Alternative control:</strong> bind a gamepad button to the same Jump action. The jump code can read Jump regardless of which binding triggered it. These illustrate bindings, not additional lab tasks.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (2)</span>Target reference</h3><p>The camera reads the Transform assigned to its Target field. If Player moves but the camera does not follow, check that reference and the camera component’s enabled state. An input-binding change cannot repair a missing camera reference.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Player assigned:</strong> the camera reads Player’s Transform and follows it.</li><li><strong>Another object assigned:</strong> the same script follows that object instead. The reference determines which Transform is read.</li><li><strong>Target is None:</strong> this lab’s null check returns without updating the camera position. Naming an object Player does not fill the field.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Should I edit speed when Move Input stays zero?</summary><p>No. First inspect focus, action enablement, and bindings. Multiplying zero input by a larger speed still produces zero movement.</p></details><details><summary>Why does changing a default in C# not change the Inspector?</summary><p>An existing component can already have a serialized value. Change that component’s Inspector field in Edit mode and save.</p></details></details></section>
+<section class="article-section" id="applied-task"><div class="section-kicker">06 · 39–48 MIN · REQUIRED</div><h2>Applied task — two control layouts, one follow camera</h2><p><strong>Deliverable:</strong> a saved PlayerControlLab scene that accepts WASD and arrow keys through the same action, with an independent fixed-heading camera. Keep the scripts unchanged during this task.</p><ol class="steps"><li><p class="step-goal">Add arrow-key controls without changing the movement code or removing WASD.</p><span class="step-line">Outside Play mode, add a <strong class="ui-action">second Up/Down/Left/Right Composite</strong> under Move Action.</span><span class="step-line">Bind its four parts to Up Arrow, Down Arrow, Left Arrow, and Right Arrow.</span><span class="step-line">Keep the original WASD composite.</span></li><li><p class="step-goal">Verify that both keyboard layouts produce the same driving behavior.</p><span class="step-line">Run the same short route twice: travel toward Marker A, turn toward Marker B, then reverse briefly.</span><span class="step-line">First use WASD, then the arrows.</span><span class="step-line">Stay on the road and steer around the cones; they are route landmarks, not an impact-physics exercise.</span></li><li><p class="step-goal">Compare two camera heights and choose the clearer view of the road.</p><span class="step-line">Change only camera <strong class="ui-action">Offset Y</strong> from 5 to 6 in Play mode.</span><span class="step-line">Compare how much ground is visible with the camera’s unchanged rotation.</span><span class="step-line">Choose 5 or 6.</span></li><li><p class="step-goal">Make your chosen settings persist after Play mode and scene reopening.</p><span class="step-line">Exit Play mode, reapply the chosen Offset Y in Edit mode, and save.</span><span class="step-line">Reopen the scene and test both control layouts again.</span></li><li><p class="step-goal">Keep enough evidence for someone else to verify the finished result.</p><span class="step-line">Keep one screenshot showing both expanded composites and a three-line test note: both layouts work; the camera keeps its heading during turns; the selected offset survives reopening.</span></li></ol><div class="checklist" aria-label="Required applied task"><label><input type="checkbox" data-task="applied-bindings" data-task-kind="required"><span>Both WASD and arrow keys control the same action without a code change.</span></label><label><input type="checkbox" data-task="applied-camera" data-task-kind="required"><span>The root-level camera follows Player and keeps its fixed heading when Player turns.</span></label><label><input type="checkbox" data-task="applied-saved" data-task-kind="required"><span>I reopened the saved scene and verified both layouts and my chosen offset.</span></label><label><input type="checkbox" data-task="applied-evidence" data-task-kind="required"><span>I retained the binding screenshot and three test results.</span></label></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (3)</span>Bindings</h3><p>A binding connects a device control to an action. We will connect WASD to Move, then add arrow keys to the same action. Both layouts will use the same movement code.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Keyboard:</strong> bind Space to a Jump action.</li><li><strong>Mouse:</strong> bind the left mouse button to a Fire action.</li><li><strong>Alternative control:</strong> bind a gamepad button to the same Jump action. The jump code can read Jump regardless of which binding triggered it. These illustrate bindings, not additional lab tasks.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (2)</span>2D Vector composites</h3><p>A <strong>2D Vector composite</strong> is a binding that combines Up, Down, Left, and Right buttons into one <code>Vector2</code>. The controller uses the resulting X and Y values to calculate steering and forward/reverse movement.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Forward:</strong> W alone produces <code>(0, 1)</code>. The controller drives forward without steering.</li><li><strong>Left:</strong> A alone produces <code>(−1, 0)</code>. The controller steers left without forward input.</li><li><strong>Release:</strong> releasing all four keys produces <code>(0, 0)</code>. Neither driving nor steering is requested.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (2)</span>World-space camera offset</h3><p>World coordinates use the scene’s fixed axes. An offset of <code>(0, 5, −8)</code> places the camera 5 units above and 8 units along negative world Z from Player. Adding <code>target.position + offset</code> gives the camera’s world position. Turning Player does not change this offset’s direction. Assign this destination directly. Do not multiply it by <code>deltaTime</code>, which would scale the position coordinates.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>At the origin:</strong> Player <code>(0, 0, 0)</code> plus offset <code>(0, 5, −8)</code> gives camera <code>(0, 5, −8)</code>.</li><li><strong>After moving:</strong> Player <code>(2, 0, 4)</code> plus the same offset gives camera <code>(2, 5, −4)</code>.</li><li><strong>After turning in place:</strong> if Player stays at <code>(2, 0, 4)</code>, the camera stays at <code>(2, 5, −4)</code>. This calculation does not use Player’s rotation.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Does adding arrow keys require a second controller?</summary><p>No. Add a second composite to the existing Move action. A second movement controller can issue competing movement commands.</p></details><details><summary>Is a Play-mode screenshot enough to prove settings were saved?</summary><p>No. Exit Play mode, save the intended values, reopen the scene, and repeat the test. The screenshot records appearance, not persistence.</p></details></details></section>
+<section class="article-section" id="optional-extension"><div class="section-kicker">07 · 48–56 MIN · REQUIRED</div><h2>Required task — implement a player-relative camera</h2><p>You used Local/Global axes in Lecture 01 and a child camera in Lecture 04. Now calculate a player-relative offset explicitly in code, then aim the independent camera with <code>LookAt</code>.</p><p><strong>Deliverable:</strong> a chase camera whose offset turns with Player. Complete this after the fixed-heading camera task; both camera behaviors are required. Save a text copy of the original FollowPlayerLab.cs outside the project’s Assets folder for comparison. Keep only one compiled FollowPlayerLab class in the project.</p><ol class="steps"><li><p class="step-goal">Change the offset from a fixed world direction to a direction that turns with Player.</p><span class="step-line">In <code>LateUpdate</code>, keep the null check.</span><span class="step-line">Replace the position assignment with the two lines below.</span></li><li><p class="step-goal">Observe how a player-relative camera behaves during turning and reversing.</p><span class="step-line">Use Offset (0, 5, −8).</span><span class="step-line">Turn Player through a quarter turn, then reverse.</span><span class="step-line">Compare the camera’s path with the fixed-heading version.</span></li><li><p class="step-goal">Explain both changed expressions and save the required final chase camera.</p><span class="step-line">Explain which expression rotates the displacement and which turns the camera to face Player.</span><span class="step-line">Keep the chase-camera version as your final script. Save the scene after testing. Retain the fixed-heading text copy outside Assets for comparison.</span></li></ol><figure class="code-sample"><figcaption>FollowPlayerLab.cs · replacement inside <code>LateUpdate</code></figcaption><pre><code>transform.position = target.position + target.rotation * offset;
+transform.LookAt(target.position);</code></pre></figure><div class="checklist" aria-label="Required chase-camera extension"><label><input type="checkbox" data-task="optional-relative" data-task-kind="required"><span>I proved that turning Player rotates the camera offset and can explain both changed lines.</span></label></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Player-relative camera offset</h3><p>To keep the camera behind a turning vehicle, the offset must turn with it. The expression <code>target.rotation * offset</code> rotates the displacement using Player’s orientation. Adding Player’s position then places the camera in the scene. Using rotation alone keeps the offset distance independent of Player’s scale. This applies the Local/Global distinction from <a href="../unity-editor-first-contact/index.html#mural">Lecture 01 · Unity Editor Fundamentals</a>.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Facing world +Z:</strong> with offset <code>(0, 5, −8)</code>, the camera sits toward world −Z from Player.</li><li><strong>Facing world +X:</strong> the rotated offset places the camera toward world −X from Player.</li><li><strong>Facing world −Z:</strong> the rotated offset places the camera toward world +Z from Player. In these level turns, the camera remains 5 units above Player.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (1)</span>LookAt: camera orientation</h3><p>Moving the camera does not automatically make it face Player. After setting its position, <code>LookAt(target.position)</code> rotates the camera toward Player. The required final task combines these two operations to make a chase camera.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Player ahead:</strong> <code>LookAt</code> points the camera toward Player from its current location.</li><li><strong>Player moves left:</strong> with the camera position held fixed, calling <code>LookAt</code> again turns the camera toward Player’s new location.</li><li><strong>Camera moves higher:</strong> after changing its position, <code>LookAt</code> adjusts the viewing angle toward Player. <code>LookAt</code> itself does not change the camera’s position.</li></ul></div>
+</div><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Does LookAt move the camera?</summary><p>No. It changes orientation. The preceding position assignment moves the camera.</p></details><details><summary>Why does the camera still turn when I reverse?</summary><p>The offset follows vehicle orientation, not its velocity. Reversing changes travel direction without automatically changing which way the vehicle faces.</p></details><details><summary>Is this a complete production camera?</summary><p>No. It demonstrates coordinate spaces and pose composition. It does not avoid walls or add damping.</p></details></details></section>
+<section class="article-section" id="review"><div class="section-kicker">08 · 56–60 MIN</div><h2>Completion criteria and quick reference</h2><p>Finish when the required scene works and you can answer the questions below. Completion includes both the fixed-heading test and the final player-relative chase camera.</p><div class="checklist" aria-label="Required learning checks"><label><input type="checkbox" data-task="review-chase" data-task-kind="required"><span>I implemented both camera policies and can explain how the rotated offset and <code>LookAt</code> work together.</span></label><label><input type="checkbox" data-task="review-action" data-task-kind="required"><span>I can distinguish an action, a binding, and a composite.</span></label><label><input type="checkbox" data-task="review-lifecycle" data-task-kind="required"><span>I can explain why the action is enabled and disabled with its component.</span></label><label><input type="checkbox" data-task="review-camera" data-task-kind="required"><span>I can calculate the world-space camera position and explain <code>LateUpdate</code>.</span></label><label><input type="checkbox" data-task="review-debug" data-task-kind="required"><span>I can distinguish an input failure from a missing camera reference.</span></label></div><h3>Review questions</h3><ol><li><strong>Where do arrow keys belong?</strong><details class="quiz-answer"><summary>Reveal answer</summary><p>In a second composite on the same action; the movement algorithm does not change.</p></details></li><li><strong>Does private mean hidden from the Inspector?</strong><details class="quiz-answer"><summary>Reveal answer</summary><p>No. <code>[SerializeField]</code> makes these private fields saved and editable by Unity.</p></details></li><li><strong>Does input Y move the character upward?</strong><details class="quiz-answer"><summary>Reveal answer</summary><p>No. This controller uses it as forward/reverse intent.</p></details></li><li><strong>Does <code>LateUpdate</code> guarantee smooth physics?</strong><details class="quiz-answer"><summary>Reveal answer</summary><p>No. It sets frame ordering; Rigidbody interpolation addresses the gaps between physics poses.</p></details></li><li><strong>Why does the fixed-heading camera not circle Player when Player turns?</strong><details class="quiz-answer"><summary>Reveal answer</summary><p>Its world-space offset and its rotation do not depend on Player’s rotation.</p></details></li></ol><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (3)</span>Input Actions</h3><p>Unity’s Input System lets us describe a named operation, such as <strong>Move</strong>, separately from the keys used to perform it. In C#, this is an <code>InputAction</code>. The controller reads the action’s value instead of checking each key individually.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Move:</strong> returns directional input that a controller can use for steering and driving.</li><li><strong>Jump:</strong> reports a button action that a character script could use to request a jump.</li><li><strong>Interact:</strong> reports a button action that a script could use to open a door or pick up an item. The action reports input. The script implements the behavior. Only Move is implemented in this lab.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (3)</span>World-space camera offset</h3><p>World coordinates use the scene’s fixed axes. An offset of <code>(0, 5, −8)</code> places the camera 5 units above and 8 units along negative world Z from Player. Adding <code>target.position + offset</code> gives the camera’s world position. Turning Player does not change this offset’s direction. Assign this destination directly. Do not multiply it by <code>deltaTime</code>, which would scale the position coordinates.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>At the origin:</strong> Player <code>(0, 0, 0)</code> plus offset <code>(0, 5, −8)</code> gives camera <code>(0, 5, −8)</code>.</li><li><strong>After moving:</strong> Player <code>(2, 0, 4)</code> plus the same offset gives camera <code>(2, 5, −4)</code>.</li><li><strong>After turning in place:</strong> if Player stays at <code>(2, 0, 4)</code>, the camera stays at <code>(2, 5, −4)</code>. This calculation does not use Player’s rotation.</li></ul></div>
+<h3 class="new-concept-title"><span>Refresher (2)</span>Player-relative camera offset</h3><p>To keep the camera behind a turning vehicle, the offset must turn with it. The expression <code>target.rotation * offset</code> rotates the displacement using Player’s orientation. Adding Player’s position then places the camera in the scene. Using rotation alone keeps the offset distance independent of Player’s scale. This applies the Local/Global distinction from <a href="../unity-editor-first-contact/index.html#mural">Lecture 01 · Unity Editor Fundamentals</a>.</p>
+<div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Facing world +Z:</strong> with offset <code>(0, 5, −8)</code>, the camera sits toward world −Z from Player.</li><li><strong>Facing world +X:</strong> the rotated offset places the camera toward world −X from Player.</li><li><strong>Facing world −Z:</strong> the rotated offset places the camera toward world +Z from Player. In these level turns, the camera remains 5 units above Player.</li></ul></div>
+</div><h3>Official sources</h3><p>Based on the current Unity 6.3 Player Control unit. This sheet starts from the official Prototype 1 package in a fresh Universal 3D project. It supplies complete Rigidbody movement and follow-camera scripts, with paired action lifecycle methods, so earlier project files are unnecessary. Some official footage uses different field names or intermediate code; follow the complete files on this page.</p><ul class="source-list"><li><span>01</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/player-control/tutorial/lesson-1-1-start-your-3d-engines?version=6.3" target="_blank" rel="noreferrer">Lesson 1.1 · official Prototype 1 starter and fresh-project setup</a></li><li><span>02</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/player-control" target="_blank" rel="noreferrer">Player Control · source unit</a></li><li><span>03</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/player-control/tutorial/lesson-1-4-use-user-input-to-control-the-vehicle?version=6.3" target="_blank" rel="noreferrer">Lesson 1.4 · Input Actions, composites, and input inspection</a></li><li><span>04</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/player-control/tutorial/1-3-make-the-camera-follow-the-vehicle-with-variables?version=6.3" target="_blank" rel="noreferrer">Lesson 1.3 · target references, offsets, and LateUpdate</a></li><li><span>05</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/player-control/tutorial/challenge-1-plane-programming-1?version=6.3" target="_blank" rel="noreferrer">Plane Programming · source of the controlled debugging approach</a></li><li><span>06</span><a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.17/manual/Actions.html" target="_blank" rel="noreferrer">Input System 1.17 · actions and their lifecycle</a></li><li><span>07</span><a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.17/manual/ActionBindings.html" target="_blank" rel="noreferrer">Input System 1.17 · bindings and 2D Vector composites</a></li><li><span>08</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/SerializeField.html" target="_blank" rel="noreferrer">Unity 6.3 · SerializeField</a></li><li><span>09</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/MonoBehaviour.LateUpdate.html" target="_blank" rel="noreferrer">Unity 6.3 · LateUpdate</a></li><li><span>10</span><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/rigidbody-interpolation.html" target="_blank" rel="noreferrer">Unity 6.3 · Rigidbody interpolation</a></li><li><span>11</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Quaternion-operator_multiply.html" target="_blank" rel="noreferrer">Unity 6.3 · rotating a vector with a quaternion</a></li><li><span>12</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Transform.LookAt.html" target="_blank" rel="noreferrer">Unity 6.3 · LookAt</a></li></ul><p>Optional concept refresher (no project files required): <a href="../unity-programming-essentials/index.html">Lecture 04 · Programming Essentials</a>.</p><details class="section-faq"><summary>Optional FAQs</summary><details><summary>Which camera do I finish with?</summary><p>Finish with the required player-relative chase-camera script, and retain the fixed-heading version for comparison.</p></details><details><summary>Are the FAQs assessed tasks?</summary><p>No. They are optional clarifications. The two camera tasks, control-layout test, and completion checklist remain required.</p></details></details></section></article>
+    </div>
+
+    <footer class="page-footer">SWE 402 · Lecture 07. Adapted teaching material and scripts; source tutorial imagery: Unity Learn.</footer>
+
+    <script>
+      // Instructor notes are intentionally hidden on every fresh load.
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "`" || event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
+        if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+        document.body.classList.toggle("instructor-mode");
+      });
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme.toUpperCase();
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const codeInputs = [...document.querySelectorAll("[data-code-digit]")];
+      const storageKey = "unity-player-control-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+        const code = codeInputs.map((input) => input.value).join("");
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks, code }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+      codeInputs.forEach((input, index) => {
+        input.value = (saved.code || "")[index] || "";
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, "").slice(0, 1);
+          saveProgress();
+          if (input.value && codeInputs[index + 1]) codeInputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && codeInputs[index - 1]) {
+            codeInputs[index - 1].focus();
+          }
+        });
+      });
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        codeInputs.forEach((input) => { input.value = ""; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    </script>
+  </body>
+</html>
