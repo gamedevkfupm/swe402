@@ -1,0 +1,1584 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Build a Unity gameplay loop with prefab instances, random spawning, timed methods, boundary cleanup, and filtered trigger interactions."
+    />
+    <title>Unity Basic Gameplay — Lecture 08</title>
+    <link rel="icon" href="data:," />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("unity-editor-reference-theme");
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f0eaf7;
+        --paper-deep: #ded2ec;
+        --surface: #faf6ff;
+        --ink: #251a32;
+        --muted: #61516f;
+        --faint: #857391;
+        --line: #b3a0c3;
+        --purple: #713ca0;
+        --purple-soft: #e3d5f1;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #9784a8;
+        --grid: rgba(55, 30, 77, 0.055);
+        --code-ink: #382f11;
+        --syntax-keyword: #70349b;
+        --syntax-type: #245f91;
+        --syntax-function: #9b461e;
+        --syntax-attribute: #8a3778;
+        --syntax-string: #246c46;
+        --syntax-number: #99501e;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #15101d;
+        --paper-deep: #251b32;
+        --surface: #1d1527;
+        --ink: #eee3f8;
+        --muted: #c0accf;
+        --faint: #9580a5;
+        --line: #594268;
+        --purple: #c39aef;
+        --purple-soft: #352247;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #09050e;
+        --grid: rgba(232, 213, 250, 0.04);
+        --code-ink: #201b08;
+        --syntax-keyword: #d5aff5;
+        --syntax-type: #97cbf2;
+        --syntax-function: #f5bc82;
+        --syntax-attribute: #e5a6d5;
+        --syntax-string: #9cdda9;
+        --syntax-number: #f3c88b;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--purple);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--purple) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--purple);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--purple);
+      }
+
+      .hero::after {
+        content: "08";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: none;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: none;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--purple);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--purple);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--purple);
+        background: var(--purple-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: none;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .learning-outcomes {
+        margin: 0 0 1.4rem;
+        padding-left: 2rem;
+      }
+
+      .learning-outcomes li {
+        padding-left: .35rem;
+        margin: .35rem 0;
+      }
+
+      .learning-outcomes li::marker {
+        color: var(--purple);
+        font-weight: 800;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--purple);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: none;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: none;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--purple);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .steps > li {
+        font-family: var(--sans);
+        font-size: 1rem;
+        line-height: 1.75;
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .steps > li::before {
+        content: attr(data-step);
+        position: absolute;
+        left: 0;
+        top: 0.55rem;
+        color: var(--orange);
+        font: 900 1.02rem/1.5 var(--pixel);
+      }
+
+      .steps .ui-action {
+        display: inline;
+        padding: 0.14em 0.4em;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font-family: var(--pixel);
+        font-size: 0.88em;
+        font-weight: 600;
+        line-height: 1.9;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        overflow-wrap: anywhere;
+      }
+
+      .steps li a {
+        font-family: var(--sans);
+      }
+
+      .steps > li > .step-goal {
+        margin: 0 0 0.8rem;
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 1.02rem;
+        font-weight: 650;
+        line-height: 1.5;
+      }
+
+      .substeps {
+        margin: 0 0 0 -4rem;
+        padding: 0;
+        list-style: none;
+      }
+
+      .substeps > li {
+        display: grid;
+        grid-template-columns: 4rem minmax(0, 1fr);
+        min-width: 0;
+        padding: 0.25rem 0 0.55rem;
+        border: 0;
+      }
+
+      .substeps > li::before {
+        content: attr(data-substep);
+        color: var(--purple);
+        font: 800 0.78rem/2.2 var(--pixel);
+      }
+
+      .substep-text {
+        min-width: 0;
+      }
+
+      .step-explanation {
+        margin: 1.35rem 0 0 -4rem;
+      }
+
+      .article-section .step-explanation-title {
+        margin: 0 0 0.45rem;
+        color: var(--ink);
+        font: 700 1rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .step-explanation > p {
+        margin: 0.55rem 0;
+      }
+
+      .step-explanation > :last-child {
+        margin-bottom: 0;
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure img {
+        height: auto;
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #211928;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--purple);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--purple);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: none;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--purple);
+        background: var(--purple-soft);
+      }
+
+      .practice::before {
+        content: "Mini quiz"; /* PRACTICE component */
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--purple);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: none;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--purple);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--purple); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--purple);
+        color: var(--purple);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--purple);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--purple);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--purple);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--purple);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table,
+        .shortcut-table {
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .window-table thead,
+        .shortcut-table thead {
+          display: none;
+        }
+
+        .window-table tbody,
+        .shortcut-table tbody {
+          display: grid;
+          gap: 0.85rem;
+        }
+
+        .window-table tr,
+        .shortcut-table tr {
+          display: block;
+          border: 2px solid var(--ink);
+          background: var(--surface);
+          box-shadow: 4px 4px 0 var(--shadow);
+        }
+
+        .window-table td,
+        .shortcut-table td,
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          display: grid;
+          grid-template-columns: minmax(6.3rem, 34%) 1fr;
+          gap: 0.65rem;
+          width: auto;
+          padding: 0.65rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          font-weight: 400;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          color: var(--purple);
+          font-weight: 800;
+        }
+
+        .window-table td::before,
+        .shortcut-table td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font: 800 0.62rem/1.4 var(--pixel);
+          letter-spacing: 0.04em;
+          text-transform: none;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box {
+          break-inside: avoid;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      article { overflow-wrap: anywhere; }
+      .code-sample { margin: 1.6rem 0; border: 2px solid var(--ink); background: var(--paper); min-width: 0; }
+      .code-sample figcaption { padding: .7rem 1rem; border-bottom: 2px solid var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+      .code-sample pre { margin: 0; padding: 1rem; overflow-x: auto; font-size: .86rem; line-height: 1.65; tab-size: 4; }
+      .code-sample code { padding: 0; border: 0; background: transparent; color: var(--ink); white-space: pre; }
+      .code-sample .k { color: var(--syntax-keyword); font-weight: 700; }
+      .code-sample .kt, .code-sample .nc, .code-sample .nn { color: var(--syntax-type); }
+      .code-sample .nf { color: var(--syntax-function); }
+      .code-sample .na { color: var(--syntax-attribute); }
+      .code-sample .s { color: var(--syntax-string); }
+      .code-sample .mi, .code-sample .mf { color: var(--syntax-number); }
+      details { margin: 1.5rem 0; border: 2px solid var(--line); padding: 1rem; }
+      summary { cursor: pointer; font-weight: 700; }
+      summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+      @media print { :root, :root[data-theme="dark"] { color-scheme: light; --paper: #fff; --surface: #fff; --paper-deep: #eee; --ink: #251a32; --muted: #61516f; --line: #b3a0c3; --purple: #713ca0; --purple-soft: #eee5f7; --orange: #aa3618; --warning-bg: #f5e8dd; --code-ink: #382f11; --yellow: #efca4a; --syntax-keyword: #70349b; --syntax-type: #245f91; --syntax-function: #9b461e; --syntax-attribute: #8a3778; --syntax-string: #246c46; --syntax-number: #99501e; } .code-sample { break-inside: auto; } .code-sample pre { white-space: pre-wrap; overflow: visible; font-size: 8pt; } .code-sample code { white-space: pre-wrap; } .hero h1 { font-size: 38pt; } }
+
+      [data-instructor] { display: none !important; }
+      body.instructor-mode [data-instructor] { display: revert !important; }
+
+      article :not(pre) > code {
+        font-family: var(--pixel);
+        font-size: .9em;
+        color: var(--purple);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: .08em .3em;
+        overflow-wrap: anywhere;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+      }
+      .code-example {
+        margin: .5rem 0;
+        padding: .8rem 1rem;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--purple);
+        background: var(--surface);
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font: .86rem/1.65 var(--pixel);
+      }
+      .code-example code { font: inherit; color: var(--ink); }
+      .concept-examples { margin: .8rem 0 1.5rem; }
+      .concept-examples > p { margin-bottom: .35rem; font-size: .9rem; }
+      .concept-examples li { margin-bottom: .6rem; }
+      .concept-summary { margin: 2rem 0; padding: 0; border: 0; }
+      .concept-summary > .new-concept-title { font-size: 1rem; }
+
+      .new-concept-title {
+        display: block;
+        margin: 1.4rem 0 .4rem;
+        padding-left: .7rem;
+        border-left: 3px solid var(--purple);
+        color: var(--purple);
+        font-family: var(--sans);
+        font-size: 1rem;
+        font-weight: 750;
+        line-height: 1.5;
+        text-transform: none;
+        letter-spacing: normal;
+      }
+      .new-concept-title span {
+        display: block;
+        margin-bottom: .25rem;
+        line-height: 1.4;
+        font-family: var(--pixel);
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: none;
+      }
+      .new-concept-title + p { margin-top: .4rem; }
+      #concepts > p { max-width: 680px; }
+      #concepts > h3 { margin: 2.5rem 0 .8rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-family: var(--sans); font-size: 1.35rem; line-height: 1.35; color: var(--ink); }
+      .concept-summary dt { margin-top: 1rem; font-weight: 750; color: var(--purple); }
+      .concept-summary dd { margin: .35rem 0 1rem; max-width: 680px; }
+      .quiz-answer { background: var(--surface); }
+      .section-faq > details { margin: .8rem 0; }
+    </style>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+    <header class="site-header">
+      <a class="site-mark" href="#top">SWE 402 // Basic Gameplay</a>
+      <div class="site-actions">
+        <button class="quiet-button" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-swatch" aria-hidden="true"></span>
+          <span id="themeLabel">Light</span>
+        </button>
+        <button class="quiet-button" id="resetProgress" type="button">Reset tasks</button>
+        <button class="quiet-button" type="button" onclick="window.print()">Print</button>
+      </div>
+    </header>
+
+    <header class="hero" id="top"><div class="hero-inner"><div class="kicker">SWE 402 · Chapter 2 · Unity 6.3</div><h1>Unity Basic<em>Gameplay</em></h1><p class="dek">Create food projectiles, spawn animals on a schedule, and process trigger overlaps.</p><div class="article-meta"><span>Lecture 08</span><span>60-minute lab</span><span>Pre-class setup required</span><span>5 complete scripts</span></div></div></header><div class="page-grid"><aside class="toc" aria-label="Table of contents"><p class="toc-title">In this lecture</p><ol><li><a href="#concepts"><span>00</span>Runtime objects and the gameplay loop</a></li><li><a href="#preparation"><span>01</span>Prepare the Prototype 2 project</a></li><li><a href="#projectiles"><span>02</span>Create, move, and remove food projectiles</a></li><li><a href="#spawning"><span>03</span>Randomize and schedule animal spawns</a></li><li><a href="#triggers"><span>04</span>Configure trigger-based feeding</a></li><li><a href="#applied-task"><span>05</span>Required task — test the gameplay loop</a></li><li><a href="#variation"><span>06</span>Required task — test spawn range and tag filtering</a></li><li><a href="#review"><span>07</span>Completion criteria and sources</a></li></ol></aside><article><section class="article-section" id="concepts"><div class="section-kicker">00 · 00–08 min · Concepts</div><h2>Runtime objects and the gameplay loop</h2><p>In <a href="../unity-player-control/index.html#actions">Lecture 07 · Unity Player Control</a>, you connected Input Actions to movement. In its <a href="../unity-player-control/index.html#camera">follow-camera section</a>, one script held a reference to one existing object. Now the number of objects changes: food appears when you fire, animals arrive on a schedule, and finished objects leave the scene.</p><p>Build a small feeding prototype. Move horizontally, launch food, and feed approaching animals. The main learning is how creation, selection, timing, and overlap decisions work together.</p><p><strong>Prior-knowledge recap:</strong> reuse <code>InputAction</code>, <code>OnEnable</code>/<code>OnDisable</code>, serialized references, and physics-step movement from Lecture 07 and <a href="../unity-programming-essentials/index.html">Lecture 04 · Programming Essentials</a>. <a href="../unity-programming-essentials/index.html#feedback">Lecture 04’s filtering and feedback section</a> already used <code>CompareTag</code>, <code>Instantiate</code>, and <code>Destroy</code>. Apply those APIs again to a continuous stream of objects. The new focus is selecting from an array and scheduling repeated creation.</p><h3>Learning outcomes</h3><p>By the end of this lecture, you will be able to:</p><ol class="learning-outcomes"><li>Select a valid random prefab index and a separate spawn position.</li><li>Schedule and cancel repeated method calls.</li><li>Combine creation, physics, filtering, and cleanup to manage runtime objects.</li><li>Diagnose a failure by changing one setting and testing the result.</li></ol><p><a href="#preparation">Skip to practice</a></p><div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Runtime population</h3><p>Before Play mode, a prefab is a saved reusable object in the Project window. It describes the components and starting values a new object should have. Calling <code>Instantiate</code> makes a separate live copy, called an instance, in the scene. You can create several instances from one prefab; moving or destroying one of those copies does not remove the prefab asset or the other copies.</p><p>This game needs objects to enter and leave while it runs. A button press creates food, a timer creates animals, and collision or boundary rules remove individual instances. Watch the Hierarchy during Play mode: the number of live objects changes even though the saved prefab assets stay in the Project window.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Projectile:</strong> Each press creates a separate food instance.</li><li><strong>Enemy:</strong> The same animal prefab can have several active copies.</li><li><strong>Cleanup:</strong> Removing one missed animal leaves its prefab available for later spawns.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Arrays for random prefab selection</h3><p>An array is a numbered collection of slots. The <code>animalPrefabs</code> field holds references to prefab assets, so one manager component can choose among several kinds of animal. Fill its slots in the Inspector. With three slots, their indices are <code>0</code>, <code>1</code>, and <code>2</code>; there is no slot <code>3</code>.</p><p><code>Random.Range(0, animalPrefabs.Length)</code> uses the integer overload: it may return the first index but never the upper bound, so its result is a valid slot when the array is nonempty. A second call with float arguments, such as <code>Random.Range(-10f, 10f)</code>, chooses a horizontal coordinate and may include fractional values. These calls answer different questions: <em>which prefab?</em> and <em>where should its copy appear?</em></p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Three entries:</strong> <code>Random.Range(0, 3)</code> can return <code>0</code>, <code>1</code>, or <code>2</code>.</li><li><strong>One entry:</strong> <code>Random.Range(0, 1)</code> always returns <code>0</code>.</li><li><strong>Position:</strong> <code>Random.Range(-10f, 10f)</code> can return fractional X coordinates. The float overload includes both endpoints; the integer overload excludes its upper endpoint.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Scheduled method calls</h3><p><code>SpawnAnimal</code> is a method: the instructions for creating one animal are written once inside it. Writing a method does not make it run automatically. The manager registers that method with <code>InvokeRepeating</code>, giving Unity its name, how long to wait before the first call, and how long to wait between later calls. Each scheduled call runs the method once and creates one new animal.</p><p>For example, a <code>2f</code> initial delay and <code>2f</code> interval lead to calls at about game seconds 2, 4, and 6. This is a schedule in scaled game time, so pausing with <code>Time.timeScale = 0</code> also pauses the calls. Disabling the manager cancels its schedule; enabling it again starts a new initial delay.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>First spawn:</strong> Delay <code>2f</code> starts after about two game seconds.</li><li><strong>Next spawns:</strong> Interval <code>2f</code> produces calls near seconds 2, 4, and 6.</li><li><strong>Disabled manager:</strong> <code>CancelInvoke</code> explicitly cancels the schedule when the component is disabled.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Trigger filtering</h3><p>A visible mesh and a physics Collider have different jobs. The mesh is drawn on screen; the Collider gives Unity a shape it can test for contact. Marking a Collider as a trigger makes it report an overlap without using that Collider to physically push the other object away. When the overlap begins, Unity calls <code>OnTriggerEnter</code> on the relevant component and passes in the other Collider.</p><p>That callback can run for more than the interaction we want. The animal therefore checks whether the other object has the <code>Food</code> tag before removing anything. A food overlap counts as feeding; an overlap with another animal or the ground does not. The tag is a label you assign to the food prefab root in the Inspector, not a visual property Unity guesses from its mesh.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Food meets animal:</strong> Remove the food and the fed animal.</li><li><strong>Animal meets animal:</strong> Ignore the overlap because the other object is not tagged <code>Food</code>.</li><li><strong>Ground meets animal:</strong> Ignore ground overlap; touching the floor must not count as feeding.</li></ul></div></div><div data-instructor><h3>Instructor timing and scope</h3><p>Preparation is completed before class. Use 8 minutes for concepts, 8 for player and projectile tests, 10 for spawning, 12 for trigger decisions, 16 for required application and variation, and 6 for review. The supplied scripts remove transcription time. Ask students to predict each controlled test before running it. Omit the separate Play Fetch challenge, personal-project lab, cube exercise, and camera-projection exploration from this hour.</p></div></section><section class="article-section" id="preparation"><div class="section-kicker">01 · Pre-class · Allow 20–30 min</div><h2>Prepare the Prototype 2 project</h2><p>Use Unity 6.3 and a new Universal 3D project named <strong>Basic Gameplay</strong>. No previous project files are needed. Finish downloads, package import, script import, and scene assembly before class.</p><ol class="steps"><li data-step="1.1"><p class="step-goal">Import the official environment.</p><ol class="substeps"><li data-substep="1.1.1"><span class="substep-text">Download <a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/c16d7a63-0db1-4f1c-81b5-072968e726d8/versions%5B_key==%22557b55aacd55%22%5D.materials%5B_key==%22467d5b84b551%22%5D.file/Prototype-2_Starter-Files_U6_20260613_025845.unitypackage" rel="noreferrer" target="_blank">Prototype 2 Starter Files (.unitypackage)</a>.</span></li><li data-substep="1.1.2"><span class="substep-text">Use <span class="ui-action">Assets → Import Package → Custom Package…</span>, select the downloaded file, and import its contents. This current download is already a <code>.unitypackage</code>; it does not need ZIP extraction.</span></li><li data-substep="1.1.3"><span class="substep-text">Open <span class="ui-action">Assets/Scenes/Prototype 2.unity</span>.</span></li><li data-substep="1.1.4"><span class="substep-text">Use <span class="ui-action">File → Save As…</span> to save <span class="ui-action">Assets/Scenes/Basic Gameplay.unity</span>. The original starter scene can remain as a reference.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The package adds the official environment and model assets. Saving the imported scene as <code>Basic Gameplay.unity</code> gives this lab its own editable scene while preserving the starter scene.</p><figure class="source-figure"><img alt="Unity Scene view showing the imported Prototype 2 grass field and side borders" loading="lazy" src="assets/starter-scene.png"/><figcaption>The imported environment before gameplay objects are added. Source: <a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay/tutorial/lesson-2-1-player-positioning?version=6.3" rel="noreferrer" target="_blank">Unity Learn, Lesson 2.1</a>.</figcaption></figure></div></li><li data-step="1.2"><p class="step-goal">Prepare input and the five scripts.</p><ol class="substeps"><li data-substep="1.2.1"><span class="substep-text">In <span class="ui-action">Window → Package Management → Package Manager</span>, confirm Input System is installed.</span></li><li data-substep="1.2.2"><span class="substep-text">Use <span class="ui-action">Edit → Project Settings → Player → Other Settings → Configuration → Active Input Handling → Both</span>; apply and restart if prompted, following the source unit.</span></li><li data-substep="1.2.3"><span class="substep-text">Download <a download="" href="gameplay-scripts.zip">the five lecture scripts</a>.</span></li><li data-substep="1.2.4"><span class="substep-text">Extract them and copy the five <code>.cs</code> files into a new <span class="ui-action">Assets/Scripts</span> folder.</span></li><li data-substep="1.2.5"><span class="substep-text">Wait for compilation; resolve any red Console errors before continuing. The same complete files appear below.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>Unity must compile the scripts before their components can appear in the Inspector. Input System provides the Move and Fire actions used by <code>PlayerFeeder</code>; a Console compile error would prevent the later setup from working.</p><div class="note"><p><strong>Preparation checkpoint:</strong> the starter package contains the environment scene and Course Library models, materials, and prefabs; it contains no gameplay C# scripts. The lecture supplies those scripts. Keep only one copy of each class under Assets.</p></div></div></li><li data-step="1.3"><p class="step-goal">Place the player and use a stable top-down camera.</p><ol class="substeps"><li data-substep="1.3.1"><span class="substep-text">Drag <span class="ui-action">Assets/Course Library/Humans/SimpleFarmer_Man_01_White.prefab</span> into the Hierarchy window.</span></li><li data-substep="1.3.2"><span class="substep-text">Rename it <span class="ui-action">Player</span>; set position and rotation to <code>(0, 0, 0)</code>.</span></li><li data-substep="1.3.3"><span class="substep-text">On Main Camera, set position <code>(0, 25, 9)</code>, rotation <code>(90, 0, 0)</code>, Projection <span class="ui-action">Orthographic</span>, and Size <span class="ui-action">16</span>.</span></li><li data-substep="1.3.4"><span class="substep-text">Use a <span class="ui-action">16:9</span> Game view for the lab.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The Player starts at the world origin, and the fixed orthographic camera shows the play area from above. These shared coordinates make the later X limits and Z travel distances predictable.</p></div></li><li data-step="1.4"><p class="step-goal">Create editable lab copies of the food and animals.</p><ol class="substeps"><li data-substep="1.4.1"><span class="substep-text">Create <span class="ui-action">Assets/Prefabs</span>.</span></li><li data-substep="1.4.2"><span class="substep-text">Drag <span class="ui-action">Course Library/Food/Food_Pizza_01</span> and three animals into the scene: <span class="ui-action">Animals/Farm/Animal_Cow_Brown</span>, <span class="ui-action">Animals/Farm/Animal_Horse_Brown</span>, and <span class="ui-action">Animals/Forest/Animal_Fox_01</span>.</span></li><li data-substep="1.4.3"><span class="substep-text">For each instance, use its Hierarchy context menu <span class="ui-action">Prefab → Unpack Completely</span>.</span></li><li data-substep="1.4.4"><span class="substep-text">Rename them <span class="ui-action">Food</span>, <span class="ui-action">Cow</span>, <span class="ui-action">Horse</span>, and <span class="ui-action">Fox</span>. This leaves the imported library unchanged.</span></li><li data-substep="1.4.5"><span class="substep-text">Set Food rotation to <code>(0, 0, 0)</code> and uniform scale to <code>(2, 2, 2)</code>.</span></li><li data-substep="1.4.6"><span class="substep-text">Set animal rotations to <code>(0, 180, 0)</code>. Leave animal scale at its imported value.</span></li><li data-substep="1.4.7"><span class="substep-text">Attach the <a href="scripts/LaneMover.cs"><code>LaneMover.cs</code></a> and <a href="scripts/LaneCleanup.cs"><code>LaneCleanup.cs</code></a> scripts from <span class="ui-action">Assets/Scripts</span> to the Food, Cow, Horse, and Fox root GameObjects. Their complete source also appears in Section 02.</span></li><li data-substep="1.4.8"><span class="substep-text">On the Rigidbody added by <code>LaneMover</code>, turn <span class="ui-action">Use Gravity</span> off and <span class="ui-action">Is Kinematic</span> on.</span></li><li data-substep="1.4.9"><span class="substep-text">Set Food Speed to <code>12</code> and animal Speed to <code>4</code>.</span></li><li data-substep="1.4.10"><span class="substep-text">Set Report Miss on for animals only.</span></li><li data-substep="1.4.11"><span class="substep-text">Drag each configured root into <span class="ui-action">Assets/Prefabs</span>.</span></li><li data-substep="1.4.12"><span class="substep-text">Delete their scene instances. You will add collision components during class.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>These lab prefabs are saved definitions in the Project window. Editing each root before saving it means later food and animal instances inherit the mover, cleanup rule, speed, and Rigidbody settings. Deleting the scene instances leaves the scene ready for runtime creation.</p></div></li><li data-step="1.5"><p class="step-goal">Connect Player and the manager.</p><ol class="substeps"><li data-substep="1.5.1"><span class="substep-text">Attach <code>PlayerFeeder</code> to Player.</span></li><li data-substep="1.5.2"><span class="substep-text">Assign the Food prefab from the Project window to Food Prefab.</span></li><li data-substep="1.5.3"><span class="substep-text">Configure Move Action as <span class="ui-action">Value / Vector2</span>, add an <span class="ui-action">Up/Down/Left/Right Composite</span>, and bind Left and Right to the keyboard arrow keys. Leave Up and Down unbound.</span></li><li data-substep="1.5.4"><span class="substep-text">Configure Fire Action as <span class="ui-action">Button</span>, add a binding to <span class="ui-action">&lt;Keyboard&gt;/space</span>, and leave Interactions empty.</span></li><li data-substep="1.5.5"><span class="substep-text">Create an empty root named <span class="ui-action">SpawnManager</span>, attach <code>AnimalSpawner</code>, and disable that component for the first test.</span></li><li data-substep="1.5.6"><span class="substep-text">Set Animal Prefabs Size to <code>3</code> and drag the three lab animal assets from the Project window into its slots.</span></li><li data-substep="1.5.7"><span class="substep-text">Save the scene.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p><code>PlayerFeeder</code> now has a prefab reference and two configured actions. <code>SpawnManager</code> holds the three animal prefab references; its component stays disabled for the first projectile test so animals do not obscure that result.</p></div></li></ol><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Runtime population</h3><p>Before Play mode, a prefab is a saved reusable object in the Project window. It describes the components and starting values a new object should have. Calling <code>Instantiate</code> makes a separate live copy, called an instance, in the scene. You can create several instances from one prefab; moving or destroying one of those copies does not remove the prefab asset or the other copies.</p><p>This game needs objects to enter and leave while it runs. A button press creates food, a timer creates animals, and collision or boundary rules remove individual instances. Watch the Hierarchy during Play mode: the number of live objects changes even though the saved prefab assets stay in the Project window.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Projectile:</strong> Each press creates a separate food instance.</li><li><strong>Enemy:</strong> The same animal prefab can have several active copies.</li><li><strong>Cleanup:</strong> Removing one missed animal leaves its prefab available for later spawns.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Arrays for random prefab selection</h3><p>An array is a numbered collection of slots. The <code>animalPrefabs</code> field holds references to prefab assets, so one manager component can choose among several kinds of animal. Fill its slots in the Inspector. With three slots, their indices are <code>0</code>, <code>1</code>, and <code>2</code>; there is no slot <code>3</code>.</p><p><code>Random.Range(0, animalPrefabs.Length)</code> uses the integer overload: it may return the first index but never the upper bound, so its result is a valid slot when the array is nonempty. A second call with float arguments, such as <code>Random.Range(-10f, 10f)</code>, chooses a horizontal coordinate and may include fractional values. These calls answer different questions: <em>which prefab?</em> and <em>where should its copy appear?</em></p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Three entries:</strong> <code>Random.Range(0, 3)</code> can return <code>0</code>, <code>1</code>, or <code>2</code>.</li><li><strong>One entry:</strong> <code>Random.Range(0, 1)</code> always returns <code>0</code>.</li><li><strong>Position:</strong> <code>Random.Range(-10f, 10f)</code> can return fractional X coordinates. The float overload includes both endpoints; the integer overload excludes its upper endpoint.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Scheduled method calls</h3><p><code>SpawnAnimal</code> is a method: the instructions for creating one animal are written once inside it. Writing a method does not make it run automatically. The manager registers that method with <code>InvokeRepeating</code>, giving Unity its name, how long to wait before the first call, and how long to wait between later calls. Each scheduled call runs the method once and creates one new animal.</p><p>For example, a <code>2f</code> initial delay and <code>2f</code> interval lead to calls at about game seconds 2, 4, and 6. This is a schedule in scaled game time, so pausing with <code>Time.timeScale = 0</code> also pauses the calls. Disabling the manager cancels its schedule; enabling it again starts a new initial delay.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>First spawn:</strong> Delay <code>2f</code> starts after about two game seconds.</li><li><strong>Next spawns:</strong> Interval <code>2f</code> produces calls near seconds 2, 4, and 6.</li><li><strong>Disabled manager:</strong> <code>CancelInvoke</code> explicitly cancels the schedule when the component is disabled.</li></ul></div></div></section><section class="article-section" id="projectiles"><div class="section-kicker">02 · 08–16 min · Guided test</div><h2>Create, move, and remove food projectiles</h2><p>Launch one food projectile, observe its movement and removal, then check the Player’s horizontal limits.</p><ol class="steps"><li data-step="2.1"><p class="step-goal">Observe one complete projectile lifetime.</p><ol class="substeps"><li data-substep="2.1.1"><span class="substep-text">Enter Play mode with AnimalSpawner disabled.</span></li><li data-substep="2.1.2"><span class="substep-text">Focus Game view.</span></li><li data-substep="2.1.3"><span class="substep-text">Tap Space once, then hold it. One press creates one Food instance; holding does not create one every frame.</span></li><li data-substep="2.1.4"><span class="substep-text">In the Hierarchy window, watch the Food clone appear and later disappear after crossing <code>z = 25</code>.</span></li><li data-substep="2.1.5"><span class="substep-text">Stop Play mode.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>Trace one food object from start to finish. The Player holds a reference to the saved food prefab. When Fire is pressed, <code>PlayerFeeder</code> creates a live copy at a launch point in front of the Player. That copy has its own <code>LaneMover</code>, Rigidbody, and <code>LaneCleanup</code> components. Its mover advances it each physics step; its cleanup component checks whether it has passed the far Z limit and removes that particular copy.</p><p>The Z limit is a world coordinate, not a test of what appears inside the camera view. A projectile can leave the visible frame before or after it reaches that coordinate. After Section 04 adds the feeding rule, a food–animal overlap will remove both instances. For this first test, the boundary rule removes unused food so copies do not accumulate.</p><figure class="code-sample"><figcaption>PlayerFeeder.cs</figcaption><pre><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine.InputSystem</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PlayerFeeder</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="n">InputAction</span><span class="w"> </span><span class="n">moveAction</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="n">InputAction</span><span class="w"> </span><span class="n">fireAction</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="n">GameObject</span><span class="w"> </span><span class="n">foodPrefab</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10f</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">xLimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnEnable</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">moveAction</span><span class="p">.</span><span class="n">Enable</span><span class="p">();</span>
+<span class="w">        </span><span class="n">fireAction</span><span class="p">.</span><span class="n">Enable</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnDisable</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">moveAction</span><span class="p">.</span><span class="n">Disable</span><span class="p">();</span>
+<span class="w">        </span><span class="n">fireAction</span><span class="p">.</span><span class="n">Disable</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Update</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">horizontal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">moveAction</span><span class="p">.</span><span class="n">ReadValue</span><span class="o">&lt;</span><span class="n">Vector2</span><span class="o">&gt;</span><span class="p">().</span><span class="n">x</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Vector3</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
+<span class="w">        </span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">horizontal</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Time</span><span class="p">.</span><span class="n">deltaTime</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="n">xLimit</span><span class="p">)</span><span class="w"> </span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">xLimit</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">xLimit</span><span class="p">)</span><span class="w"> </span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xLimit</span><span class="p">;</span>
+<span class="w">        </span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fireAction</span><span class="p">.</span><span class="n">WasPressedThisFrame</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">foodPrefab</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Vector3</span><span class="w"> </span><span class="n">launchPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Vector3</span><span class="p">(</span><span class="mf">0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Instantiate</span><span class="p">(</span><span class="n">foodPrefab</span><span class="p">,</span><span class="w"> </span><span class="n">launchPosition</span><span class="p">,</span><span class="w"> </span><span class="n">foodPrefab</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">rotation</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></figure><p><code>WasPressedThisFrame()</code> is true on the frame when Fire changes from unpressed to pressed. Holding the button keeps it pressed, but does not create another press transition on every frame. The Fire action here is configured as a simple Button with no Hold or Tap interaction.</p><p>The Inspector field identifies <em>which</em> prefab to use; assigning that field does not put a projectile into the scene. <code>Instantiate</code> creates the live copy. Its position argument places the copy at the Player’s world position plus a launch offset, lifting it to animal-body height and moving it ahead of the Player. Its rotation argument keeps the prefab’s saved orientation.</p><figure class="code-sample"><figcaption>LaneMover.cs</figcaption><pre><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="na">[RequireComponent(typeof(Rigidbody))]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">LaneMover</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">8f</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="n">Rigidbody</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Awake</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetComponent</span><span class="o">&lt;</span><span class="n">Rigidbody</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">FixedUpdate</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Vector3</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">forward</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Time</span><span class="p">.</span><span class="n">fixedDeltaTime</span><span class="p">;</span>
+<span class="w">        </span><span class="n">body</span><span class="p">.</span><span class="n">MovePosition</span><span class="p">(</span><span class="n">body</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">step</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></figure><p>When a new instance starts, <code>Awake</code> finds its Rigidbody once and stores that reference. <code>FixedUpdate</code> then runs on physics steps, and <code>MovePosition</code> asks the Rigidbody to move by a small distance each step. This continues the movement pattern used in Lecture 07.</p><p>The script moves along each object’s <em>local forward</em> direction. Food faces world +Z, toward the animals. An animal prefab rotated 180° around Y faces world −Z, toward the Player. Both can use a positive speed because their rotations give the same movement code opposite world directions. If an animal moves away, check its saved prefab rotation before changing the speed sign.</p><figure class="code-sample"><figcaption>LaneCleanup.cs</figcaption><pre><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">LaneCleanup</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">upperZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">25f</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">lowerZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">6f</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">reportMiss</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Update</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">upperZ</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Destroy</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">lowerZ</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reportMiss</span><span class="p">)</span><span class="w"> </span><span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">"Animal missed the feeding line."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Destroy</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></figure><p>Inside <code>LaneCleanup</code>, <code>gameObject</code> means the particular scene object carrying that component. <code>Destroy(gameObject)</code> removes that instance and its attached components; it does not delete the prefab asset in the Project window. A later button press or scheduled spawn can still create another copy from the same asset.</p><p>The <code>reportMiss</code> setting distinguishes animals from food at cleanup time. When an animal crosses its miss boundary, it writes a Console message before removal. Food simply disappears at its boundary. The message is feedback for this lab; it does not stop Play mode or start a game-over sequence.</p></div></li><li data-step="2.2"><p class="step-goal">Verify the player limits after movement.</p><ol class="substeps"><li data-substep="2.2.1"><span class="substep-text">Run again and hold each arrow key. Player X stops at <code>-10</code> and <code>10</code>.</span></li><li data-substep="2.2.2"><span class="substep-text">Read the order in <code>Update</code>: calculate the next position, constrain X, assign it, then launch. The player does not spend a frame outside the allowed range.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The Player’s <code>Update</code> method calculates a candidate X position, clamps it to the allowed range, and only then assigns it to the Transform. The test confirms the saved <code>xLimit</code> applies in both directions before a launch position is calculated.</p></div></li></ol><div class="practice"><p>Food starts at <code>z = 1.5</code> and moves at <code>12</code> units/second. Approximately when will it pass <code>z = 25</code>?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>After about <code>(25 - 1.5) / 12 = 1.96</code> seconds, with physics-step and frame timing affecting the exact removal frame.</p></details></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (2)</span>Runtime population</h3><p>Before Play mode, a prefab is a saved reusable object in the Project window. It describes the components and starting values a new object should have. Calling <code>Instantiate</code> makes a separate live copy, called an instance, in the scene. You can create several instances from one prefab; moving or destroying one of those copies does not remove the prefab asset or the other copies.</p><p>This game needs objects to enter and leave while it runs. A button press creates food, a timer creates animals, and collision or boundary rules remove individual instances. Watch the Hierarchy during Play mode: the number of live objects changes even though the saved prefab assets stay in the Project window.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Projectile:</strong> Each press creates a separate food instance.</li><li><strong>Enemy:</strong> The same animal prefab can have several active copies.</li><li><strong>Cleanup:</strong> Removing one missed animal leaves its prefab available for later spawns.</li></ul></div></div></section><section class="article-section" id="spawning"><div class="section-kicker">03 · 16–26 min · Guided work</div><h2>Randomize and schedule animal spawns</h2><p>Use the prepared SpawnManager to spawn animals repeatedly. Change its interval once, then observe how missed animals leave the scene.</p><ol class="steps"><li data-step="3.1"><p class="step-goal">Test the scheduler with one visible change.</p><ol class="substeps"><li data-substep="3.1.1"><span class="substep-text">Enable AnimalSpawner outside Play mode.</span></li><li data-substep="3.1.2"><span class="substep-text">Keep First Delay and Interval at <code>2</code>, X Range at <code>10</code>, and Spawn Z at <code>18</code>.</span></li><li data-substep="3.1.3"><span class="substep-text">Enter Play mode and observe several arrivals.</span></li><li data-substep="3.1.4"><span class="substep-text">Stop, change Interval to <code>1</code>, and run again. Only the gap between arrivals should change; animal speed stays at <code>4</code>.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The <code>SpawnManager</code> scene object was created in Section 01. Its <code>animalPrefabs</code> array contains references to saved prefab assets, not already-spawned animals. The manager keeps the choices and settings needed to create new instances.</p><p>Each time <code>SpawnAnimal</code> runs, the first random call chooses an array index. For example, if slots <code>0</code>, <code>1</code>, and <code>2</code> contain three animal prefabs and the result is <code>1</code>, the method selects the prefab in slot <code>1</code>. A second random call chooses X, such as <code>-4.2</code>. With <code>spawnZ = 18</code>, the new instance starts at <code>(-4.2, 0, 18)</code> and uses the selected prefab’s saved rotation. The next call creates a different live instance even if it picks the same prefab again.</p><p>Choosing a prefab does not determine its X coordinate: the two random calls are independent. The code does not remove a choice after using it, so two consecutive calls may pick the same animal. X values may also be close together or repeat. Random selection gives possible results; it does not promise a different animal or an even spread on every call.</p><figure class="code-sample"><figcaption>AnimalSpawner.cs</figcaption><pre><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AnimalSpawner</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="n">GameObject</span><span class="p">[]</span><span class="w"> </span><span class="n">animalPrefabs</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">xRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10f</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">spawnZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">18f</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">firstDelay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2f</span><span class="p">;</span>
+<span class="w">    </span><span class="na">[SerializeField]</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnEnable</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">animalPrefabs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">animalPrefabs</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">interval</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mf">0f</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Debug</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">"Assign animal prefabs and a positive interval."</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">GameObject</span><span class="w"> </span><span class="n">prefab</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">animalPrefabs</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prefab</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Debug</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">"Fill every animal prefab slot."</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">InvokeRepeating</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="n">SpawnAnimal</span><span class="p">),</span><span class="w"> </span><span class="n">firstDelay</span><span class="p">,</span><span class="w"> </span><span class="n">interval</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnDisable</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">CancelInvoke</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="n">SpawnAnimal</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SpawnAnimal</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">animalPrefabs</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="o">-</span><span class="n">xRange</span><span class="p">,</span><span class="w"> </span><span class="n">xRange</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Vector3</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Vector3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mf">0f</span><span class="p">,</span><span class="w"> </span><span class="n">spawnZ</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GameObject</span><span class="w"> </span><span class="n">prefab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">animalPrefabs</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+<span class="w">        </span><span class="n">Instantiate</span><span class="p">(</span><span class="n">prefab</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">prefab</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">rotation</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></figure><p><code>SpawnAnimal</code> is an ordinary C# method that creates one animal when called. <code>InvokeRepeating</code> tells Unity to call it later and then repeatedly; no code in <code>Update</code> has to count frames. <code>nameof(SpawnAnimal)</code> provides the method name to that scheduling call. It helps keep the name in sync if you rename the method in code.</p><p><code>OnEnable</code> establishes the schedule when the component becomes active. <code>OnDisable</code> calls <code>CancelInvoke</code> so scheduled spawns stop when it becomes inactive. Enabling it again runs <code>OnEnable</code> and starts a fresh first delay. The delay and interval use scaled game time, so changing <code>Time.timeScale</code> changes their real-world pace.</p><p>The manager checks its setup before it asks Unity to schedule spawns. If the array is empty, no valid index exists. If a slot is unassigned, a later random choice could select a missing prefab. If the repeat interval is zero or negative, the intended repeated timing is invalid. Each guard reports the problem and uses <code>return</code> to leave <code>OnEnable</code> before scheduling.</p><p>The <code>foreach</code> loop visits each prefab reference in the array once to catch an unassigned slot. It does not spawn every listed animal; actual selection happens later inside <code>SpawnAnimal</code>. A <code>return</code> here ends only the current method call, so the game keeps running while you fix the Inspector assignment.</p></div></li><li data-step="3.2"><p class="step-goal">Confirm the population cleans itself up.</p><ol class="substeps"><li data-substep="3.2.1"><span class="substep-text">Do not fire. Watch animals travel past Player and disappear below <code>z = -6</code>. Each miss produces a Console message.</span></li><li data-substep="3.2.2"><span class="substep-text">Stop Play mode and restore Interval to <code>2</code>.</span></li><li data-substep="3.2.3"><span class="substep-text">Save the scene.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>Each scheduled call creates one independent animal instance. <code>LaneCleanup</code> removes a missed instance when it crosses the lower Z boundary and reports that miss. With a roughly 24-unit trip at speed <code>4</code>, an animal remains active for about six seconds, so the active population should remain bounded instead of growing indefinitely.</p></div></li></ol><div class="practice"><p>Why is <code>Random.Range(0, animalPrefabs.Length - 1)</code> incorrect for selecting among three entries?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>The integer overload excludes its upper bound. With three entries, that call returns only 0 or 1, so index 2 is never chosen. Use <code>Length</code> as the exclusive bound.</p></details></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (2)</span>Arrays for random prefab selection</h3><p>An array is a numbered collection of slots. The <code>animalPrefabs</code> field holds references to prefab assets, so one manager component can choose among several kinds of animal. Fill its slots in the Inspector. With three slots, their indices are <code>0</code>, <code>1</code>, and <code>2</code>; there is no slot <code>3</code>.</p><p><code>Random.Range(0, animalPrefabs.Length)</code> uses the integer overload: it may return the first index but never the upper bound, so its result is a valid slot when the array is nonempty. A second call with float arguments, such as <code>Random.Range(-10f, 10f)</code>, chooses a horizontal coordinate and may include fractional values. These calls answer different questions: <em>which prefab?</em> and <em>where should its copy appear?</em></p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Three entries:</strong> <code>Random.Range(0, 3)</code> can return <code>0</code>, <code>1</code>, or <code>2</code>.</li><li><strong>One entry:</strong> <code>Random.Range(0, 1)</code> always returns <code>0</code>.</li><li><strong>Position:</strong> <code>Random.Range(-10f, 10f)</code> can return fractional X coordinates. The float overload includes both endpoints; the integer overload excludes its upper endpoint.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (2)</span>Scheduled method calls</h3><p><code>SpawnAnimal</code> is a method: the instructions for creating one animal are written once inside it. Writing a method does not make it run automatically. The manager registers that method with <code>InvokeRepeating</code>, giving Unity its name, how long to wait before the first call, and how long to wait between later calls. Each scheduled call runs the method once and creates one new animal.</p><p>For example, a <code>2f</code> initial delay and <code>2f</code> interval lead to calls at about game seconds 2, 4, and 6. This is a schedule in scaled game time, so pausing with <code>Time.timeScale = 0</code> also pauses the calls. Disabling the manager cancels its schedule; enabling it again starts a new initial delay.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>First spawn:</strong> Delay <code>2f</code> starts after about two game seconds.</li><li><strong>Next spawns:</strong> Interval <code>2f</code> produces calls near seconds 2, 4, and 6.</li><li><strong>Disabled manager:</strong> <code>CancelInvoke</code> explicitly cancels the schedule when the component is disabled.</li></ul></div></div></section><section class="article-section" id="triggers"><div class="section-kicker">04 · 26–38 min · Guided work</div><h2>Configure trigger-based feeding</h2><p>Add a Food tag and trigger shapes, then test whether a food projectile feeds an animal on overlap.</p><ol class="steps"><li data-step="4.1"><p class="step-goal">Observe the missing response and label Food.</p><ol class="substeps"><li data-substep="4.1.1"><span class="substep-text">Before adding trigger Colliders, enter Play mode and fire once at an animal. Observe the food pass through without feeding; then stop Play mode.</span></li><li data-substep="4.1.2"><span class="substep-text">Select the Food prefab.</span></li><li data-substep="4.1.3"><span class="substep-text">In the Inspector, use <span class="ui-action">Tag → Add Tag…</span> and add <span class="ui-action">Food</span>.</span></li><li data-substep="4.1.4"><span class="substep-text">Return to the Food prefab and assign the <span class="ui-action">Food</span> tag to its root. Child tagging is unnecessary for this setup.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The first test shows the missing behavior. A visible overlap does not give the scripts a contact event by itself. Assigning the <code>Food</code> tag gives the later callback a category it can check; creating the tag without assigning it would leave the food unclassified.</p></div></li><li data-step="4.2"><p class="step-goal">Give every moving root exactly one trigger shape.</p><ol class="substeps"><li data-substep="4.2.1"><span class="substep-text">Open each lab prefab in Prefab Mode. Inspect its hierarchy for existing Colliders.</span></li><li data-substep="4.2.2"><span class="substep-text">Remove extra imported Colliders from these lab copies if present; keep one Box Collider on the root.</span></li><li data-substep="4.2.3"><span class="substep-text">Use <span class="ui-action">Add Component → Box Collider</span> where needed.</span></li><li data-substep="4.2.4"><span class="substep-text">Enable <span class="ui-action">Is Trigger</span> on the root Box Collider.</span></li><li data-substep="4.2.5"><span class="substep-text">Use <span class="ui-action">Edit Collider</span> and the handles to fit the model.</span></li><li data-substep="4.2.6"><span class="substep-text">Ensure the food and animal boxes overlap vertically: food travels at world <code>y = 1</code>, while animal pivots are at ground height. Fit boxes to bodies, not just pivot points.</span></li><li data-substep="4.2.7"><span class="substep-text">Confirm the root Rigidbody has <span class="ui-action">Use Gravity</span> off and <span class="ui-action">Is Kinematic</span> on.</span></li><li data-substep="4.2.8"><span class="substep-text">Save each prefab before leaving Prefab Mode.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>Meshes are drawn for the camera, while Colliders give physics shapes to compare. A trigger reports when those shapes begin overlapping without using that trigger shape as a solid barrier. Fitting the boxes at the food’s travel height makes the overlap detectable.</p><table class="window-table"><thead><tr><th>Object</th><th>Required configuration</th><th>Responsibility</th></tr></thead><tbody><tr><td data-label="Object">Food root</td><td data-label="Required configuration">Box Collider: Is Trigger on; kinematic Rigidbody, gravity off; tag Food</td><td data-label="Responsibility">Moves forward and identifies an edible projectile.</td></tr><tr><td data-label="Object">Each animal root</td><td data-label="Required configuration">Box Collider: Is Trigger on; kinematic Rigidbody, gravity off; FeedAnimal</td><td data-label="Responsibility">Moves down the lane and accepts only Food.</td></tr><tr><td data-label="Object">Player / Ground</td><td data-label="Required configuration">No new collision behavior required</td><td data-label="Responsibility">Player supplies input; the ground supplies the visible field. Player uses Transform movement because this lab gives it no physics interactions.</td></tr></tbody></table><p>For this event to arrive, both objects need Colliders, at least one Collider must be a trigger, and at least one object must have a Rigidbody. The lab places the components on the prefab roots and uses kinematic Rigidbodies so the scripts control movement. If food visibly passes through an animal without a callback, check these physics settings and their height in the scene.</p></div></li><li data-step="4.3"><p class="step-goal">Apply the response to animals only.</p><ol class="substeps"><li data-substep="4.3.1"><span class="substep-text">Attach <code>FeedAnimal</code> to Cow, Horse, and Fox prefab roots.</span></li><li data-substep="4.3.2"><span class="substep-text">Save each prefab. Do not attach it to Food.</span></li><li data-substep="4.3.3"><span class="substep-text">Enter Play mode.</span></li><li data-substep="4.3.4"><span class="substep-text">Aim at an approaching animal and press Space. The food and animal should disappear on overlap.</span></li><li data-substep="4.3.5"><span class="substep-text">Let another animal pass to confirm cleanup still works.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The animal’s <code>FeedAnimal</code> component decides what a reported overlap means. The callback below receives the other Collider, checks its tag, and removes objects only when the other object is Food.</p><figure class="code-sample"><figcaption>FeedAnimal.cs</figcaption><pre><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FeedAnimal</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">fed</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnTriggerEnter</span><span class="p">(</span><span class="n">Collider</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fed</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">other</span><span class="p">.</span><span class="n">CompareTag</span><span class="p">(</span><span class="s">"Food"</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="n">fed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">other</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">SetActive</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Destroy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Destroy</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></figure><p>When a qualifying overlap begins, Unity calls <code>OnTriggerEnter(Collider other)</code> on the animal’s <code>FeedAnimal</code> component. The parameter <code>other</code> is the Collider that entered this animal’s trigger. That gives the method an object to inspect: it can check the other object’s tag and decide whether to respond.</p><p>In the callback, <code>other.CompareTag("Food")</code> asks whether the incoming Collider’s GameObject carries the <code>Food</code> tag. If it does not, the method returns, leaving the animal and the other object alone. This is why the tag belongs on the same food prefab root as its Collider in this lab.</p><p>When food enters, <code>fed</code> changes to true so a second callback cannot feed the same animal again while removal is pending. The code disables that food object immediately, then requests destruction of the food and animal instances. The saved prefab assets remain available for later creation. This walkthrough assumes the single-root-collider setup specified in preparation.</p></div></li></ol><div class="practice"><p>Two animals overlap. Why should neither disappear?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>Neither root has the Food tag, so the callback returns before removing anything. A physics event reports contact; the condition supplies the gameplay meaning.</p></details></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Trigger filtering</h3><p>A visible mesh and a physics Collider have different jobs. The mesh is drawn on screen; the Collider gives Unity a shape it can test for contact. Marking a Collider as a trigger makes it report an overlap without using that Collider to physically push the other object away. When the overlap begins, Unity calls <code>OnTriggerEnter</code> on the relevant component and passes in the other Collider.</p><p>That callback can run for more than the interaction we want. The animal therefore checks whether the other object has the <code>Food</code> tag before removing anything. A food overlap counts as feeding; an overlap with another animal or the ground does not. The tag is a label you assign to the food prefab root in the Inspector, not a visual property Unity guesses from its mesh.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Food meets animal:</strong> Remove the food and the fed animal.</li><li><strong>Animal meets animal:</strong> Ignore the overlap because the other object is not tagged <code>Food</code>.</li><li><strong>Ground meets animal:</strong> Ignore ground overlap; touching the floor must not count as feeding.</li></ul></div></div><details class="section-faq"><summary>Optional FAQ: why use a trigger?</summary><p>We want an overlap notification without the food physically pushing the animal. A solid-contact response would use a different configuration and typically <code>OnCollisionEnter</code>. Do not substitute the callback name without changing the physics setup.</p></details></section><section class="article-section" id="applied-task"><div class="section-kicker">05 · 38–48 min · Required</div><h2>Required task — test the gameplay loop</h2><p><strong>Deliverable:</strong> save a playable <span class="ui-action">Basic Gameplay.unity</span> scene and capture a short recording or sequential screenshots showing a launch, a successful feed, and a missed-animal cleanup. Include one screenshot of the populated Animal Prefabs array.</p><ol class="steps"><li data-step="5.1"><p class="step-goal">Run a complete test from the saved scene.</p><ol class="substeps"><li data-substep="5.1.1"><span class="substep-text">Start with no manually placed Food or animal instances.</span></li><li data-substep="5.1.2"><span class="substep-text">Confirm Player stays within its limits and each Space press creates food.</span></li><li data-substep="5.1.3"><span class="substep-text">Observe at least 12 spawns.</span></li><li data-substep="5.1.4"><span class="substep-text">Record which prefabs appear and whether X positions vary.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>This combined run checks player limits, launch behavior, and repeated spawning in the saved scene. Twelve spawns give several observations, but random selection still does not guarantee every animal or an even distribution.</p><figure class="source-figure"><img alt="Top-down Unity scene showing a player, a food projectile, and three animals on the field" loading="lazy" src="assets/scene-objects.png"/><figcaption>Visual reference for the player–food–animal arrangement, from <a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay/tutorial/lesson-2-1-player-positioning?version=6.3" rel="noreferrer" target="_blank">Unity Learn, Lesson 2.1</a>. Animal choices, spacing, and camera framing in your result may differ.</figcaption></figure></div></li><li data-step="5.2"><p class="step-goal">Collect evidence of both removal paths.</p><ol class="substeps"><li data-substep="5.2.1"><span class="substep-text">Feed an animal and show that both objects disappear.</span></li><li data-substep="5.2.2"><span class="substep-text">Then allow an animal to cross the lower bound and show the miss message.</span></li><li data-substep="5.2.3"><span class="substep-text">Stop Play mode.</span></li><li data-substep="5.2.4"><span class="substep-text">Check settings outside Play mode and save.</span></li><li data-substep="5.2.5"><span class="substep-text">Retain the evidence outside Assets if it is only for submission.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>A successful feed removes both interacting instances. A miss follows a different path: <code>LaneCleanup</code> removes the animal at the lower boundary and logs it. Capturing both results shows that the scene handles contact and non-contact outcomes.</p></div></li></ol><div aria-label="Required applied task" class="checklist"><label><input data-task="loop-launch" data-task-kind="required" type="checkbox"/><span>Player stays in bounds and one press launches one Food instance.</span></label><label><input data-task="loop-spawn" data-task-kind="required" type="checkbox"/><span>The array contains prefab assets and spawns vary in species and position.</span></label><label><input data-task="loop-feed" data-task-kind="required" type="checkbox"/><span>A Food–animal overlap removes both; unrelated overlap does not feed.</span></label><label><input data-task="loop-cleanup" data-task-kind="required" type="checkbox"/><span>Missed animals and unused food are removed at their world-space bounds.</span></label></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (3)</span>Runtime population</h3><p>Before Play mode, a prefab is a saved reusable object in the Project window. It describes the components and starting values a new object should have. Calling <code>Instantiate</code> makes a separate live copy, called an instance, in the scene. You can create several instances from one prefab; moving or destroying one of those copies does not remove the prefab asset or the other copies.</p><p>This game needs objects to enter and leave while it runs. A button press creates food, a timer creates animals, and collision or boundary rules remove individual instances. Watch the Hierarchy during Play mode: the number of live objects changes even though the saved prefab assets stay in the Project window.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Projectile:</strong> Each press creates a separate food instance.</li><li><strong>Enemy:</strong> The same animal prefab can have several active copies.</li><li><strong>Cleanup:</strong> Removing one missed animal leaves its prefab available for later spawns.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (2)</span>Trigger filtering</h3><p>A visible mesh and a physics Collider have different jobs. The mesh is drawn on screen; the Collider gives Unity a shape it can test for contact. Marking a Collider as a trigger makes it report an overlap without using that Collider to physically push the other object away. When the overlap begins, Unity calls <code>OnTriggerEnter</code> on the relevant component and passes in the other Collider.</p><p>That callback can run for more than the interaction we want. The animal therefore checks whether the other object has the <code>Food</code> tag before removing anything. A food overlap counts as feeding; an overlap with another animal or the ground does not. The tag is a label you assign to the food prefab root in the Inspector, not a visual property Unity guesses from its mesh.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Food meets animal:</strong> Remove the food and the fed animal.</li><li><strong>Animal meets animal:</strong> Ignore the overlap because the other object is not tagged <code>Food</code>.</li><li><strong>Ground meets animal:</strong> Ignore ground overlap; touching the floor must not count as feeding.</li></ul></div></div></section><section class="article-section" id="variation"><div class="section-kicker">06 · 48–54 min · Required</div><h2>Required task — test spawn range and tag filtering</h2><p><strong>Deliverable:</strong> a three-line test note: prediction, observed result, and final setting. Change the spawn width, then isolate one collision fault. Save the working configuration at the end.</p><ol class="steps"><li data-step="6.1"><p class="step-goal">Predict and test a narrower spawn region.</p><ol class="substeps"><li data-substep="6.1.1"><span class="substep-text">Outside Play mode, change SpawnManager X Range from <code>10</code> to <code>3</code>. Keep Player X Limit at <code>10</code>.</span></li><li data-substep="6.1.2"><span class="substep-text">Run and observe at least six spawns.</span></li><li data-substep="6.1.3"><span class="substep-text">Explain why the player can still travel farther sideways than the spawn region.</span></li><li data-substep="6.1.4"><span class="substep-text">Stop Play mode and restore X Range to <code>10</code>.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p><code>xRange</code> controls where animals can appear; the Player’s <code>xLimit</code> controls where the Player can move. Changing one value leaves the other unchanged, so the narrower spawn region should not narrow Player movement.</p></div></li><li data-step="6.2"><p class="step-goal">Remove one classification setting and explain the symptom.</p><ol class="substeps"><li data-substep="6.2.1"><span class="substep-text">Temporarily set the Food prefab tag to <span class="ui-action">Untagged</span>.</span></li><li data-substep="6.2.2"><span class="substep-text">Run and aim at an animal: both objects should pass through without feeding, though their cleanup still works.</span></li><li data-substep="6.2.3"><span class="substep-text">Stop, restore the Food tag to <span class="ui-action">Food</span>, save the prefab, and retest one successful feed.</span></li><li data-substep="6.2.4"><span class="substep-text">Save the scene with Interval <code>2</code> and X Range <code>10</code>.</span></li></ol><div class="step-explanation"><h3 class="step-explanation-title">Explanation</h3><p>The Colliders can still report an overlap when Food is untagged, but <code>CompareTag("Food")</code> rejects it. Restoring the tag and retesting isolates classification as the cause while keeping the physics setup the same.</p></div></li></ol><div class="practice"><p>Does a working trigger guarantee a successful feeding response?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>No. The event can occur while <code>CompareTag("Food")</code> rejects the object. Inspect both physics setup and the response condition.</p></details></div><div class="checklist"><label><input data-task="variation-range" data-task-kind="required" type="checkbox"/><span>I tested the narrower spawn region, recorded the result, and restored X Range to 10.</span></label><label><input data-task="variation-filter" data-task-kind="required" type="checkbox"/><span>I reproduced the wrong-tag fault and restored successful feeding.</span></label></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (3)</span>Arrays for random prefab selection</h3><p>An array is a numbered collection of slots. The <code>animalPrefabs</code> field holds references to prefab assets, so one manager component can choose among several kinds of animal. Fill its slots in the Inspector. With three slots, their indices are <code>0</code>, <code>1</code>, and <code>2</code>; there is no slot <code>3</code>.</p><p><code>Random.Range(0, animalPrefabs.Length)</code> uses the integer overload: it may return the first index but never the upper bound, so its result is a valid slot when the array is nonempty. A second call with float arguments, such as <code>Random.Range(-10f, 10f)</code>, chooses a horizontal coordinate and may include fractional values. These calls answer different questions: <em>which prefab?</em> and <em>where should its copy appear?</em></p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Three entries:</strong> <code>Random.Range(0, 3)</code> can return <code>0</code>, <code>1</code>, or <code>2</code>.</li><li><strong>One entry:</strong> <code>Random.Range(0, 1)</code> always returns <code>0</code>.</li><li><strong>Position:</strong> <code>Random.Range(-10f, 10f)</code> can return fractional X coordinates. The float overload includes both endpoints; the integer overload excludes its upper endpoint.</li></ul></div></div><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (3)</span>Trigger filtering</h3><p>A visible mesh and a physics Collider have different jobs. The mesh is drawn on screen; the Collider gives Unity a shape it can test for contact. Marking a Collider as a trigger makes it report an overlap without using that Collider to physically push the other object away. When the overlap begins, Unity calls <code>OnTriggerEnter</code> on the relevant component and passes in the other Collider.</p><p>That callback can run for more than the interaction we want. The animal therefore checks whether the other object has the <code>Food</code> tag before removing anything. A food overlap counts as feeding; an overlap with another animal or the ground does not. The tag is a label you assign to the food prefab root in the Inspector, not a visual property Unity guesses from its mesh.</p><div class="concept-examples"><p><strong>Examples</strong></p><ul><li><strong>Food meets animal:</strong> Remove the food and the fed animal.</li><li><strong>Animal meets animal:</strong> Ignore the overlap because the other object is not tagged <code>Food</code>.</li><li><strong>Ground meets animal:</strong> Ignore ground overlap; touching the floor must not count as feeding.</li></ul></div></div></section><section class="article-section" id="review"><div class="section-kicker">07 · 54–60 min · Review</div><h2>Completion criteria and sources</h2><p>The saved result has one Player, one active SpawnManager, a camera and environment, and four configured lab prefab assets. Runtime clones appear only during Play mode. The scene keeps running after a miss; a full loss/restart system is outside this lecture.</p><table class="window-table"><thead><tr><th>Symptom</th><th>Likely cause</th><th>Check</th></tr></thead><tbody><tr><td data-label="Symptom">No input</td><td data-label="Likely cause">Action disabled or missing binding</td><td data-label="Check">Focus Game view; inspect Move and Fire bindings and paired lifecycle methods.</td></tr><tr><td data-label="Symptom">Nothing spawns</td><td data-label="Likely cause">Disabled manager, empty array, or missing slot</td><td data-label="Check">Read Console errors; assign Project assets and enable the component.</td></tr><tr><td data-label="Symptom">Animals travel away</td><td data-label="Likely cause">Wrong prefab rotation</td><td data-label="Check">Animal Y rotation must be 180°; speed remains positive.</td></tr><tr><td data-label="Symptom">Food passes through</td><td data-label="Likely cause">No qualifying overlap, wrong tag, or missing script</td><td data-label="Check">Check collider height, root tag, trigger flags, Rigidbody, and FeedAnimal.</td></tr><tr><td data-label="Symptom">Objects accumulate</td><td data-label="Likely cause">Cleanup missing on the asset</td><td data-label="Check">Open the prefab, confirm LaneCleanup, then test a newly spawned instance.</td></tr><tr><td data-label="Symptom">Inspector edit has no later effect</td><td data-label="Likely cause">Changed a runtime clone or a scheduled interval mid-run</td><td data-label="Check">Stop Play mode, edit the asset or saved component, then restart.</td></tr></tbody></table><div class="checklist" aria-label="Completion criteria"><label><input type="checkbox" data-task="review-array" data-task-kind="required"><span>I can explain why valid indices end at Length − 1 and why repeats are possible.</span></label><label><input type="checkbox" data-task="review-schedule" data-task-kind="required"><span>I can distinguish a method from the schedule that calls it.</span></label><label><input type="checkbox" data-task="review-lifetime" data-task-kind="required"><span>I can trace creation, movement, trigger filtering, and cleanup for one instance.</span></label><label><input type="checkbox" data-task="review-saved" data-task-kind="required"><span>My final scene and prefabs are saved with all required tests passing.</span></label></div><div class="practice"><p>What persists after leaving Play mode: spawned clones, the prefab assets, or edits made only to runtime instances?</p><details class="quiz-answer"><summary>Reveal answer</summary><p>The saved prefab assets persist. Runtime clones are removed when Play mode ends, and ordinary runtime Inspector edits are not retained. Make final configuration changes outside Play mode.</p></details></div><h3>Official sources and adaptation notes</h3><p>This lecture selects the spawning and interaction sequence from Unity’s Basic Gameplay unit. The complete lecture scripts retain the previous course’s paired action lifecycle and Rigidbody movement. They add a press-transition check, array validation, explicit trigger filtering, and neutral miss logging. Source screenshots may show intermediate objects or older interface details; use this page’s complete files and Unity 6.3 settings.</p><ul class="source-list"><li><span>01</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay" target="_blank" rel="noreferrer">Basic Gameplay · unit scope</a></li><li><span>02</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay/tutorial/lesson-2-1-player-positioning?version=6.3" target="_blank" rel="noreferrer">2.1 Player Positioning · starter and bounds</a></li><li><span>03</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay/tutorial/lesson-2-2-food-flight?version=6.3" target="_blank" rel="noreferrer">2.2 Food Flight · instance lifetime</a></li><li><span>04</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay/tutorial/lesson-2-3-random-animal-stampede?version=6.3" target="_blank" rel="noreferrer">2.3 Random Animal Stampede · arrays and random choice</a></li><li><span>05</span><a href="https://learn.unity.com/pathway/junior-programmer/unit/basic-gameplay/tutorial/lesson-2-4-collision-decisions?version=6.3" target="_blank" rel="noreferrer">2.4 Collision Decisions · timing and triggers</a></li><li><span>06</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Object.Instantiate.html" target="_blank" rel="noreferrer">Instantiate · copy an object</a></li><li><span>07</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Object.Destroy.html" target="_blank" rel="noreferrer">Destroy · remove an instance</a></li><li><span>08</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Random.Range.html" target="_blank" rel="noreferrer">Random.Range · integer and float bounds</a></li><li><span>09</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/MonoBehaviour.InvokeRepeating.html" target="_blank" rel="noreferrer">InvokeRepeating · scheduling</a></li><li><span>10</span><a href="https://docs.unity3d.com/6000.3/Documentation/ScriptReference/MonoBehaviour.OnTriggerEnter.html" target="_blank" rel="noreferrer">OnTriggerEnter · physics requirements</a></li></ul><p><a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.17/api/UnityEngine.InputSystem.InputAction.html" target="_blank" rel="noreferrer">Input System · InputAction and WasPressedThisFrame</a></p><h3>Optional motion reference</h3><p><a href="https://connect-mediagw.unity.com/h1/20241208/videos/9a870712-c5ff-4cc7-912c-5dc8cb7aa3f3_CWC_U2.L4_Intro._U6.mp4" target="_blank" rel="noreferrer">▶ Unity Learn · Collision Decisions overview video</a> — watch the intended arrival and feeding sequence. No additional task is required.</p></section></article></div>    <footer class="page-footer">SWE 402 · Lecture 08. Adapted teaching material and scripts; source tutorial imagery: Unity Learn.</footer>
+
+    <script>
+      // Instructor notes are intentionally hidden on every fresh load.
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "`" || event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
+        if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+        document.body.classList.toggle("instructor-mode");
+      });
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme[0].toUpperCase() + normalizedTheme.slice(1);
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const codeInputs = [...document.querySelectorAll("[data-code-digit]")];
+      const storageKey = "unity-basic-gameplay-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+        const code = codeInputs.map((input) => input.value).join("");
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks, code }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+      codeInputs.forEach((input, index) => {
+        input.value = (saved.code || "")[index] || "";
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, "").slice(0, 1);
+          saveProgress();
+          if (input.value && codeInputs[index + 1]) codeInputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && codeInputs[index - 1]) {
+            codeInputs[index - 1].focus();
+          }
+        });
+      });
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        codeInputs.forEach((input) => { input.value = ""; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    </script>
+  </body>
+</html>
