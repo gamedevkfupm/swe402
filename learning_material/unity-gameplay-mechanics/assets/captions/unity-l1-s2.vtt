@@ -1,0 +1,362 @@
+WEBVTT
+
+1
+00:00:00.600 --> 00:00:03.500
+(futuristic sound)
+
+2
+00:00:05.300 --> 00:00:08.133
+- Awesome, we have our
+scene setup here and you
+
+3
+00:00:08.133 --> 00:00:10.533
+can see the cool sky box all around it to
+
+4
+00:00:10.533 --> 00:00:13.466
+create this cool nighttime
+effect at the bottom.
+
+5
+00:00:13.466 --> 00:00:16.300
+So we're gonna do a little
+bit more scene setup.
+
+6
+00:00:16.300 --> 00:00:20.033
+So, in this game, what
+we're actually gonna do is
+
+7
+00:00:20.033 --> 00:00:23.066
+we're gonna use one of
+our primitive shapes.
+
+8
+00:00:23.066 --> 00:00:26.066
+So in our hierarchy, we
+can go to the top
+
+9
+00:00:26.066 --> 00:00:28.700
+or right click in the hierarchy,
+
+10
+00:00:30.600 --> 00:00:33.366
+so we're gonna make a 3D
+object and we're going to
+
+11
+00:00:33.366 --> 00:00:35.900
+make a sphere.
+
+12
+00:00:35.900 --> 00:00:38.866
+Now, you can see our sphere is floating off
+
+13
+00:00:38.866 --> 00:00:41.400
+onto the side so that's
+definitely not good.
+
+14
+00:00:41.400 --> 00:00:43.066
+So what we're gonna do first is we're just
+
+15
+00:00:43.066 --> 00:00:48.000
+going to reset this back
+to the center of our world.
+
+16
+00:00:48.000 --> 00:00:50.433
+So I'm just going to
+use the icon on the
+
+17
+00:00:50.433 --> 00:00:52.633
+right side of transform.
+
+18
+00:00:52.633 --> 00:00:55.933
+Click on it and then reset position.
+
+19
+00:00:55.933 --> 00:00:59.000
+And there you go, now our
+sphere is exactly in the center.
+
+20
+00:00:59.000 --> 00:01:00.633
+I'm just going to rename this because this
+
+21
+00:01:00.633 --> 00:01:02.900
+will actually be what our player controls
+
+22
+00:01:02.900 --> 00:01:04.233
+so this will be the player.
+
+23
+00:01:06.633 --> 00:01:10.600
+Now, if you can see our little sphere,
+
+24
+00:01:10.600 --> 00:01:13.966
+if we focus on it with
+F, it's kind of small.
+
+25
+00:01:13.966 --> 00:01:16.433
+Especially in the game view.
+
+26
+00:01:16.433 --> 00:01:19.133
+So what we're going to do is
+we're just gonna scale it up.
+
+27
+00:01:19.133 --> 00:01:21.833
+So we'll actually just
+set all of these values
+
+28
+00:01:21.833 --> 00:01:24.600
+on the X,Y, and Z to 1.5 manually.
+
+29
+00:01:29.400 --> 00:01:31.066
+That looks pretty good.
+
+30
+00:01:31.066 --> 00:01:33.466
+Let's see, we have a
+little bit of clipping
+
+31
+00:01:33.466 --> 00:01:34.900
+through the ground so
+we're actually just going
+
+32
+00:01:34.900 --> 00:01:37.400
+to move the sphere up a little bit
+
+33
+00:01:37.400 --> 00:01:39.533
+so that way it's at
+least above the ground.
+
+34
+00:01:40.400 --> 00:01:43.333
+So now that we have our
+sphere in the world here,
+
+35
+00:01:43.333 --> 00:01:44.633
+we're going to use a rigid body
+
+36
+00:01:44.633 --> 00:01:46.666
+so we can actually use
+physics and then gravity
+
+37
+00:01:46.666 --> 00:01:50.200
+will actually make this
+sphere fall onto this plane.
+
+38
+00:01:50.200 --> 00:01:53.766
+So we're going to go to the
+inspector on the right side
+
+39
+00:01:53.766 --> 00:01:57.300
+click add component, type in rigid,
+
+40
+00:01:57.300 --> 00:02:00.633
+so we have our rigid
+body and we apply that
+
+41
+00:02:00.633 --> 00:02:03.633
+and it already uses
+gravity which is great.
+
+42
+00:02:03.633 --> 00:02:07.166
+And then one little bit of
+setup that we're gonna do is
+
+43
+00:02:07.166 --> 00:02:12.166
+we're actually going to apply
+textures onto this object now.
+
+44
+00:02:13.100 --> 00:02:16.900
+So, if we go to our project
+window and then we go
+
+45
+00:02:16.900 --> 00:02:20.233
+to our textures folder
+underneath our course library,
+
+46
+00:02:20.233 --> 00:02:23.400
+if we expand that you can
+see all of these different
+
+47
+00:02:23.400 --> 00:02:27.100
+textures that we have,
+so similarly to how we
+
+48
+00:02:27.100 --> 00:02:29.733
+could apply textures to
+some of our background
+
+49
+00:02:29.733 --> 00:02:33.000
+scenes we can actually apply
+textures onto our characters.
+
+50
+00:02:33.000 --> 00:02:37.233
+So, I'm going to, in this
+case, let's see let's try
+
+51
+00:02:37.233 --> 00:02:39.566
+this checkered texture.
+
+52
+00:02:39.566 --> 00:02:41.933
+So I can just drag it
+directly onto the player
+
+53
+00:02:41.933 --> 00:02:44.500
+and it will immediately
+change the texture.
+
+54
+00:02:45.800 --> 00:02:48.700
+Or, I can take on of the
+other textures and I can
+
+55
+00:02:48.700 --> 00:02:51.700
+drag it directly onto
+our object in the scene
+
+56
+00:02:51.700 --> 00:02:53.700
+and it'll change it that way.
+
+57
+00:02:53.700 --> 00:02:55.833
+So texture mapping is
+a really useful way to
+
+58
+00:02:55.833 --> 00:02:58.166
+be able to apply different textures
+
+59
+00:02:58.166 --> 00:03:00.066
+and materials onto our objects.
+
+60
+00:03:00.066 --> 00:03:04.766
+If we wanted to make our ball shinier
+
+61
+00:03:04.766 --> 00:03:07.600
+or use a different color
+or something like that
+
+62
+00:03:07.600 --> 00:03:09.866
+we can use texture maps
+to be able to do so.
+
+63
+00:03:10.966 --> 00:03:12.333
+So, what you're gonna do is you're gonna
+
+64
+00:03:12.333 --> 00:03:15.033
+go into your hierarchy, right click,
+
+65
+00:03:15.033 --> 00:03:19.766
+create a 3D object, and
+we're going to make a sphere.
+
+66
+00:03:19.766 --> 00:03:24.766
+And then your sphere you're
+going to rename to player.
+
+67
+00:03:26.400 --> 00:03:28.366
+You're going to reset the position so that
+
+68
+00:03:28.366 --> 00:03:30.866
+it's back at 000.
+
+69
+00:03:30.866 --> 00:03:35.866
+Scale up your sphere to
+be 1.5 on the X,Y, and Z.
+
+70
+00:03:37.966 --> 00:03:40.133
+And then you're probably
+going to want to reposition
+
+71
+00:03:40.133 --> 00:03:43.866
+your sphere on the Y axis.
+
+72
+00:03:43.866 --> 00:03:46.366
+Then you're going to add a rigid body.
+
+73
+00:03:46.366 --> 00:03:47.666
+And then last but not least you're gonna
+
+74
+00:03:47.666 --> 00:03:50.700
+go into your assets in the course library
+
+75
+00:03:50.700 --> 00:03:52.766
+in your textures folder
+and you're going to
+
+76
+00:03:52.766 --> 00:03:55.266
+click and drag a texture
+either onto the player
+
+77
+00:03:55.266 --> 00:03:57.733
+in the hierarchy or in the scene view.
+
+78
+00:03:57.733 --> 00:03:59.766
+Now it's your turn.
+
+79
+00:03:59.766 --> 00:04:02.700
+(futuristic sound)

@@ -1,0 +1,274 @@
+WEBVTT
+
+00:00:01.720 --> 00:00:05.937
+Cool, so we've got it
+so that our player looks
+
+00:00:05.949 --> 00:00:12.790
+really good while they're running through
+the scene, but we do have another weird
+
+00:00:12.802 --> 00:00:16.280
+thing where it's pretty
+awkward that they're
+
+00:00:16.430 --> 00:00:21.560
+still running while they're jumping, unless
+you're in like an action movie, that's not
+
+00:00:21.561 --> 00:00:24.593
+really something that
+people usually do, so
+
+00:00:24.605 --> 00:00:31.520
+we're going to do some things to the jumping
+animation to really make it look real.
+
+00:00:31.521 --> 00:00:33.770
+In fact, we're actually
+going to use our
+
+00:00:33.782 --> 00:00:36.440
+player controller script
+to be able to do that.
+
+00:00:36.441 --> 00:00:39.896
+So if we go to our assets
+and we can just close
+
+00:00:39.908 --> 00:00:43.080
+off the source files,
+collapse them because
+
+00:00:43.081 --> 00:00:49.760
+it opened it up when we opened the animation
+controller, and now if we open our player
+
+00:00:49.761 --> 00:00:53.688
+controller script, now
+in our player controller
+
+00:00:53.700 --> 00:00:59.600
+script, we're actually going to get a
+reference this time to our animators.
+
+00:00:59.601 --> 00:01:02.624
+So similar to how we
+got a reference to our rigid
+
+00:01:02.625 --> 00:01:05.880
+body, we're going to get a
+reference to our animators.
+
+00:01:05.881 --> 00:01:08.340
+So we'll also make
+this private because we
+
+00:01:08.352 --> 00:01:11.000
+don't need to find this
+outside of our class.
+
+00:01:12.920 --> 00:01:16.721
+It'll be of type
+animator, not animation,
+
+00:01:16.733 --> 00:01:22.760
+and we'll just call this player,
+and for now, for player animation.
+
+00:01:22.761 --> 00:01:26.198
+Now just like our rigid
+body, we actually need
+
+00:01:26.210 --> 00:01:29.360
+to get the actual
+component on our object.
+
+00:01:32.529 --> 00:01:39.080
+So player anim is set to our get component,
+and what component are we getting?
+
+00:01:42.679 --> 00:01:48.680
+Our animator, and then make sure to
+call the method and close your statement.
+
+00:01:48.681 --> 00:01:52.127
+Now in our update
+function is actually where
+
+00:01:52.139 --> 00:01:55.440
+we want this animation
+to happen, but what
+
+00:01:55.441 --> 00:01:58.760
+animation exactly are
+we trying to make happen?
+
+00:01:58.761 --> 00:02:01.560
+Well, let's see.
+
+00:02:02.840 --> 00:02:06.603
+In Unity, if we go to
+our animator, and we
+
+00:02:06.615 --> 00:02:10.840
+find our player animator,
+now if we take a look
+
+00:02:10.841 --> 00:02:16.600
+at our layers again, you can see that we
+have all of our different layers, and we want
+
+00:02:16.601 --> 00:02:20.960
+our player to jump, so
+we'll go to our jumping layer.
+
+00:02:20.961 --> 00:02:25.880
+And we're going to center
+all of our animation states.
+
+00:02:25.881 --> 00:02:32.840
+Now we have one that goes
+from run to running jump.
+
+00:02:32.841 --> 00:02:35.040
+Now how do we get there?
+
+00:02:35.041 --> 00:02:36.040
+Interesting.
+
+00:02:36.041 --> 00:02:43.760
+So you can see, to get from run, under our
+conditions, there's something called a jump
+
+00:02:43.910 --> 00:02:45.400
+trig.
+
+00:02:48.260 --> 00:02:52.070
+So let's see if in our
+parameters, so we do
+
+00:02:52.082 --> 00:02:58.640
+have something called a jump
+trig that we would be able to use.
+
+00:02:59.640 --> 00:03:03.367
+Now if we follow the
+naming of all of these
+
+00:03:03.379 --> 00:03:07.640
+different variables, so
+you can see we have speed
+
+00:03:09.220 --> 00:03:16.720
+underscore F, so that must be a float, and
+under animation int, so that's an integer,
+
+00:03:16.721 --> 00:03:20.331
+their whole numbers,
+under our static B,
+
+00:03:20.343 --> 00:03:27.160
+crouch B, so since they're check
+boxes, they're probably booleans.
+
+00:03:27.161 --> 00:03:30.908
+So I think our jump
+trig is probably actually
+
+00:03:30.920 --> 00:03:38.160
+a trigger that you could think very
+similarly like the triggers on our colliders.
+
+00:03:38.161 --> 00:03:42.283
+So in our player controller
+script, so we have
+
+00:03:42.295 --> 00:03:46.160
+this place where we
+make this jump actually
+
+00:03:46.310 --> 00:03:50.016
+happen, so let's see,
+so if we use our player
+
+00:03:50.028 --> 00:03:53.500
+animator, let's take
+a look at some of the
+
+00:03:53.501 --> 00:03:57.685
+methods, that's super
+convenient, dot set triggers,
+
+00:03:57.697 --> 00:04:01.400
+set the value of the
+given trigger parameter,
+
+00:04:01.950 --> 00:04:04.960
+and it's got an overload.
+
+00:04:05.435 --> 00:04:10.480
+Let's see, that seems like something that
+we want to use, so we'll use set trigger.
+
+00:04:10.481 --> 00:04:16.600
+That way we can use our jump trig,
+let's see, maybe what's the other option?
+
+00:04:17.350 --> 00:04:21.480
+Oh, I can just use the name.
+
+00:04:26.720 --> 00:04:33.520
+So if we set this to be, I believe it was
+spelled like so, now this set trigger method
+
+00:04:35.310 --> 00:04:43.160
+should activate our jump trigger when we
+press the space bars inside or if statement.
+
+00:04:43.960 --> 00:04:47.840
+Well, let's give it a try,
+let's see what happens.
+
+00:04:51.620 --> 00:04:54.388
+So if we play our game
+and we jump, oh my
+
+00:04:54.400 --> 00:04:57.520
+gosh, that was a little
+weird, but we have the
+
+00:04:59.760 --> 00:05:02.971
+jumping animation,
+that's cool, it kind of
+
+00:05:02.983 --> 00:05:06.360
+looks like Superman
+or something, superhero.
+
+00:05:07.560 --> 00:05:12.720
+All right, so to get started activating these
+animations, what we're going to do is in
+
+00:05:12.721 --> 00:05:19.840
+our player controller class, make sure that
+you add your own animator variable and then
+
+00:05:19.841 --> 00:05:23.684
+in the start method,
+make sure that you assign
+
+00:05:23.696 --> 00:05:27.720
+your animator variable
+to the animator component
+
+00:05:27.721 --> 00:05:31.148
+and then in our update
+method, where the player
+
+00:05:31.160 --> 00:05:37.640
+actually jumps, just make sure to
+set the trigger for our jump animation.
+
+00:05:37.641 --> 00:05:43.640
+Now it's your turn.

@@ -1,0 +1,117 @@
+WEBVTT
+
+1
+00:00:00.462 --> 00:00:03.212
+[music]
+
+2
+00:00:05.550 --> 00:00:09.243
+[Instructor] You know, if you take
+the word Unity and add an R sound,
+
+3
+00:00:09.243 --> 00:00:13.060
+you get Unitry, which kind
+of sounds like unit three.
+
+4
+00:00:13.750 --> 00:00:17.686
+It's a pretty amazing coincidence,
+because we are about to start Unit 3.
+
+5
+00:00:18.980 --> 00:00:22.050
+In this Unit, we will create
+a beautiful, fast-paced,
+
+6
+00:00:22.050 --> 00:00:24.080
+endless side-scrolling game
+
+7
+00:00:24.080 --> 00:00:27.596
+where the player needs to jump
+over obstacles in their path.
+
+8
+00:00:27.596 --> 00:00:31.510
+[music] [game sounds]
+[explosion]
+
+9
+00:00:31.510 --> 00:00:34.351
+Now, as you were watching
+and listening to that,
+
+10
+00:00:34.710 --> 00:00:37.330
+you probably noticed
+that it felt a lot more polished
+
+11
+00:00:37.330 --> 00:00:39.424
+than either of our previous prototypes.
+
+12
+00:00:40.120 --> 00:00:42.890
+That's because it had Animation,
+Sound,
+
+13
+00:00:42.890 --> 00:00:44.900
+and Particle Effects.
+
+14
+00:00:44.900 --> 00:00:47.280
+Did you see the character
+running, jumping,
+
+15
+00:00:47.280 --> 00:00:49.380
+and dramatically falling over?
+
+16
+00:00:49.380 --> 00:00:52.404
+Did you hear the Sound Effects
+and Music in the background?
+
+17
+00:00:52.800 --> 00:00:55.522
+Did you see the little Particle
+Effects kicking up from the back
+
+18
+00:00:55.522 --> 00:00:59.206
+of the character's feet and the massive
+explosion at the end? [explosion]
+
+19
+00:01:00.270 --> 00:01:02.849
+It's these little touches
+that will take your good Project
+
+20
+00:01:03.100 --> 00:01:06.980
+and make it great. These elements
+help immerse the player
+
+21
+00:01:06.980 --> 00:01:09.000
+in the environment you've created.
+
+22
+00:01:09.360 --> 00:01:11.350
+Being able to add them
+to your Projects
+
+23
+00:01:11.350 --> 00:01:13.369
+will be a literal game changer.
+
+24
+00:01:14.030 --> 00:01:16.139
+So let's start creating.
+
+25
+00:01:16.139 --> 00:01:18.159
+[music]

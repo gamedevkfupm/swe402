@@ -1,0 +1,284 @@
+WEBVTT
+
+1
+00:00:00.566 --> 00:00:03.166
+[music]
+
+2
+00:00:05.733 --> 00:00:09.100
+[Instructor] Great, now our Player
+character animations
+
+3
+00:00:09.100 --> 00:00:11.966
+are in a really good place.
+We have our Running animations,
+
+4
+00:00:12.333 --> 00:00:14.800
+and then when we jump,
+you can see we jump for joy,
+
+5
+00:00:15.200 --> 00:00:17.566
+but we have this weird little issue
+where when we jump,
+
+6
+00:00:18.000 --> 00:00:20.033
+the animation stops short,
+
+7
+00:00:20.033 --> 00:00:22.733
+and then we start running in the air,
+
+8
+00:00:22.900 --> 00:00:24.933
+which doesn't really look right.
+
+9
+00:00:25.400 --> 00:00:27.466
+So we're actually going to go
+
+10
+00:00:27.466 --> 00:00:30.000
+into our "Running_Jump" animation,
+
+11
+00:00:31.533 --> 00:00:35.233
+and similarly to how we set
+the "Speed"
+
+12
+00:00:35.233 --> 00:00:37.833
+to be a little bit faster
+for the run
+
+13
+00:00:37.833 --> 00:00:40.000
+to just make it look like
+the Player's running faster,
+
+14
+00:00:41.466 --> 00:00:45.000
+we're going to set our animation
+Speed just a bit slower.
+
+15
+00:00:45.933 --> 00:00:48.266
+We'll do a 0.7,
+
+16
+00:00:48.266 --> 00:00:51.533
+just so that the animation now runs
+just a bit longer,
+
+17
+00:00:52.000 --> 00:00:54.666
+instead of faster,
+so when we press Play,
+
+18
+00:00:57.533 --> 00:01:01.400
+now when we jump,
+the animation definitely works
+
+19
+00:01:01.400 --> 00:01:03.466
+a lot better; it lasts a bit longer.
+
+20
+00:01:06.766 --> 00:01:09.000
+I think one thing that we're going to do
+
+21
+00:01:09.000 --> 00:01:11.300
+just to make it look
+a little bit more realistic
+
+22
+00:01:11.300 --> 00:01:13.733
+is we're actually going to go
+into our Player Object,
+
+23
+00:01:14.766 --> 00:01:17.666
+and we're going to Play around
+with some of the variables,
+
+24
+00:01:17.666 --> 00:01:19.666
+so specifically our "Mass,"
+
+25
+00:01:20.066 --> 00:01:22.200
+our "Jump Force," 
+and our "Gravity Modifier"
+
+26
+00:01:22.200 --> 00:01:24.966
+to just make it look
+a lot more realistic,
+
+27
+00:01:25.066 --> 00:01:27.500
+and better for what we want it to be.
+
+28
+00:01:28.300 --> 00:01:32.266
+So our Mass on our Rigidbody
+is a little low.
+
+29
+00:01:32.766 --> 00:01:35.233
+People don't normally
+weigh just 1 kilogram,
+
+30
+00:01:35.233 --> 00:01:37.566
+so we're going to change our Mass.
+
+31
+00:01:38.266 --> 00:01:41.633
+Usually, on average, a person
+weighs about 60 kilograms or so,
+
+32
+00:01:42.100 --> 00:01:44.400
+so we'll see what
+that does when we press Play.
+
+33
+00:01:47.333 --> 00:01:49.700
+And we have the jumping animation,
+but we don't really,
+
+34
+00:01:49.700 --> 00:01:51.700
+we don't really go anywhere.
+
+35
+00:01:52.066 --> 00:01:54.233
+So let's play around
+with the Jump Force a little bit.
+
+36
+00:01:54.233 --> 00:01:56.233
+Maybe let's edit to...
+
+37
+00:01:56.533 --> 00:01:59.733
+a little bit over,
+like 10 times the actual Mass.
+
+38
+00:02:00.400 --> 00:02:02.966
+So we'll do like a 700.
+We'll see how that looks.
+
+39
+00:02:06.866 --> 00:02:08.866
+Ooh, I got it a little bit high.
+
+40
+00:02:11.233 --> 00:02:13.400
+So maybe, let's see,
+
+41
+00:02:14.200 --> 00:02:17.266
+if we go to our Gravity Modifier,
+let's make it a little bit,
+
+42
+00:02:17.266 --> 00:02:20.566
+let's make it a little bit more.
+Let's make it like a 1.5.
+
+43
+00:02:24.700 --> 00:02:26.700
+And now when we jump,
+
+44
+00:02:28.166 --> 00:02:30.166
+not bad...
+
+45
+00:02:30.866 --> 00:02:34.200
+Pretty close. So we could probably 
+fiddle with these values a bit more,
+
+46
+00:02:34.533 --> 00:02:36.333
+but it looks pretty good.
+
+47
+00:02:36.333 --> 00:02:38.666
+We get pretty close to the Ground
+before we start running.
+
+48
+00:02:40.466 --> 00:02:42.800
+So now what you're going to do is
+
+49
+00:02:43.233 --> 00:02:45.666
+in your Player Animator window,
+
+50
+00:02:46.700 --> 00:02:48.666
+if you go to the Jumping Layer,
+
+51
+00:02:49.166 --> 00:02:51.966
+and then we click on the Running_Jump.
+
+52
+00:02:52.566 --> 00:02:55.733
+So we'll set the animation
+Speed to be a little bit slower.
+
+53
+00:02:55.733 --> 00:02:57.733
+So I set mine to 0.7.
+
+54
+00:02:58.833 --> 00:03:00.866
+And then on our Player Object,
+
+55
+00:03:01.600 --> 00:03:05.233
+we're going to make
+the Player weigh a bit more,
+
+56
+00:03:05.233 --> 00:03:08.200
+so let's make it about
+60 or so kilograms.
+
+57
+00:03:08.933 --> 00:03:12.966
+We pushed up the Jump Force
+up to 700.
+
+58
+00:03:13.833 --> 00:03:16.766
+And then we increased
+Gravity just a little bit,
+
+59
+00:03:17.433 --> 00:03:20.433
+so we set it to about 1.5
+so the Player falls
+
+60
+00:03:20.433 --> 00:03:22.833
+a little bit faster when they reach
+the Ground.
+
+61
+00:03:23.600 --> 00:03:25.400
+Now it's your turn.
+
+62
+00:03:25.500 --> 00:03:28.166
+[music]

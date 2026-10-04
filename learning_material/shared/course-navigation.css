@@ -1,0 +1,19 @@
+.course-heading { display:flex; align-items:center; gap:0.65rem; min-width:0; }
+.course-menu-toggle,.course-menu-close { display:inline-flex; align-items:center; justify-content:center; flex:none; width:36px; height:36px; padding:0; border:2px solid currentColor; border-radius:0; background:transparent; color:inherit; cursor:pointer; }
+.course-menu-toggle:hover,.course-menu-close:hover { background:var(--accent-soft,rgba(128,92,166,.12)); }
+.course-menu-toggle:focus-visible,.course-menu-close:focus-visible,.course-sheet-menu a:focus-visible { outline:3px solid var(--accent,#8056ad); outline-offset:3px; }
+.course-sheet-menu { position:fixed; inset:4.5rem auto auto 1rem; box-sizing:border-box; width:min(340px,calc(100vw - 2rem)); max-height:calc(100dvh - 5.5rem); overflow:auto; margin:0; padding:1rem; border:2px solid #30203e; border-radius:0; box-shadow:5px 5px 0 #30203e; background:#f7f2fa; color:#24192d; font-family:Arial,sans-serif; }
+.course-sheet-menu::backdrop { background:rgba(20,15,28,.32); }
+.course-menu-top { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.65rem; }
+.course-menu-top h2 { margin:0; padding:0; border:0; font:700 18px/1.4 ui-monospace,monospace; color:inherit; text-transform:none; }
+.course-menu-close { font:26px/1 Arial,sans-serif; }
+.course-sheet-menu ul { display:block; list-style:none; margin:0; padding:0; }
+.course-sheet-menu li { display:block; margin:0; padding:0; }
+.course-sheet-menu a { display:block; padding:.65rem .5rem; color:inherit; font:15px/1.4 Arial,sans-serif; text-decoration:none; border-bottom:1px solid #d7c9e1; }
+.course-sheet-menu a:hover { background:#e9ddf2; }
+.course-sheet-menu a[aria-current="page"] { background:#e1cfef; color:#532b79; font-weight:700; border-left:3px solid #8056ad; }
+[data-theme="dark"] .course-sheet-menu { background:#211b2b; color:#f1eafa; border-color:#b99ad5; box-shadow:5px 5px 0 #b99ad5; }
+[data-theme="dark"] .course-sheet-menu a { border-bottom-color:#4b3b5c; }
+[data-theme="dark"] .course-sheet-menu a:hover { background:#372a45; }
+[data-theme="dark"] .course-sheet-menu a[aria-current="page"] { background:#42304f; color:#dfbafc; border-left-color:#bb83ec; }
+@media print { .course-menu-toggle,.course-sheet-menu { display:none!important; } }

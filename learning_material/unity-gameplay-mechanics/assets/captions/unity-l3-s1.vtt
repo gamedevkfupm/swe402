@@ -1,0 +1,276 @@
+WEBVTT
+
+1
+00:00:00.766 --> 00:00:03.833
+(light techno music)
+
+2
+00:00:05.733 --> 00:00:07.266
+- [Instructor] Now we have the
+
+3
+00:00:08.766 --> 00:00:12.333
+enemies following the
+player around the scene,
+
+4
+00:00:13.600 --> 00:00:15.400
+and what we want to do is
+
+5
+00:00:15.400 --> 00:00:18.466
+introduce a new mechanic into this game,
+
+6
+00:00:18.466 --> 00:00:20.733
+and so we'll actually create a power-up
+
+7
+00:00:20.733 --> 00:00:24.166
+to give the player some
+temporary superpowers.
+
+8
+00:00:24.166 --> 00:00:26.433
+So if we go down to our Project window,
+
+9
+00:00:26.433 --> 00:00:27.733
+in our Assets folder,
+
+10
+00:00:27.733 --> 00:00:30.600
+there is a Course Library
+where we have Pickups,
+
+11
+00:00:30.600 --> 00:00:35.266
+and we can choose any kind of
+Pickup that we want to use.
+
+12
+00:00:35.266 --> 00:00:36.733
+I think I'm gonna use this gem
+
+13
+00:00:36.733 --> 00:00:40.733
+just because it's large so
+it's a bit easier to see.
+
+14
+00:00:40.733 --> 00:00:42.233
+So you can kinda see it there.
+
+15
+00:00:43.100 --> 00:00:45.800
+We're going to rename
+the gem to be Powerup,
+
+16
+00:00:46.866 --> 00:00:50.400
+and then we're gonna just
+change its scale and position
+
+17
+00:00:50.400 --> 00:00:53.500
+so that way we can play around with it.
+
+18
+00:00:53.500 --> 00:00:54.700
+Put it up there.
+
+19
+00:00:57.566 --> 00:01:01.433
+I'll zero this, just
+make these round numbers.
+
+20
+00:01:01.433 --> 00:01:04.400
+Now, our Powerup is a bit small
+
+21
+00:01:04.400 --> 00:01:05.566
+and it's a little hard to see,
+
+22
+00:01:05.566 --> 00:01:07.800
+so we're actually going to focus on it
+
+23
+00:01:09.200 --> 00:01:11.300
+and make it a bit larger.
+
+24
+00:01:12.366 --> 00:01:14.333
+So let's see what happens if we do 1.5,
+
+25
+00:01:16.033 --> 00:01:17.133
+0.5, and 1.5.
+
+26
+00:01:19.266 --> 00:01:21.100
+I'll just make it all round, too.
+
+27
+00:01:22.466 --> 00:01:23.866
+Cool.
+
+28
+00:01:23.866 --> 00:01:25.966
+Now it's very easy to see within our game.
+
+29
+00:01:27.600 --> 00:01:30.266
+Now we're going to go to our Add Component
+
+30
+00:01:30.266 --> 00:01:32.100
+in our Powerup Inspector.
+
+31
+00:01:32.100 --> 00:01:33.666
+We're going to add a Box Collider
+
+32
+00:01:33.666 --> 00:01:35.800
+so that we can actually collide with this.
+
+33
+00:01:37.533 --> 00:01:39.433
+It looks pretty good.
+
+34
+00:01:41.666 --> 00:01:43.500
+Think it fits around nicely.
+
+35
+00:01:43.500 --> 00:01:45.433
+Yeah, cool, that's fine.
+
+36
+00:01:45.433 --> 00:01:46.633
+And then we're just going to make sure
+
+37
+00:01:46.633 --> 00:01:48.600
+that we check the Is Trigger box
+
+38
+00:01:48.600 --> 00:01:51.433
+so then that way we can
+actually collide with it
+
+39
+00:01:51.433 --> 00:01:53.200
+with our player
+
+40
+00:01:53.200 --> 00:01:57.066
+and then have it do something
+when we hit the actual gem.
+
+41
+00:01:58.900 --> 00:02:03.100
+Now we can add a tag to our Powerup
+
+42
+00:02:03.100 --> 00:02:05.766
+so that way it's easier to find,
+
+43
+00:02:05.766 --> 00:02:08.400
+and we'll tag it as Powerup
+
+44
+00:02:11.066 --> 00:02:13.633
+and then just make sure in the Inspector,
+
+45
+00:02:13.633 --> 00:02:17.266
+on your Powerup, to just apply that tag,
+
+46
+00:02:17.266 --> 00:02:19.600
+and then we're going to take our Powerup
+
+47
+00:02:19.600 --> 00:02:22.000
+and we're just going to drag
+
+48
+00:02:22.000 --> 00:02:24.433
+and drop it into our Prefabs folder,
+
+49
+00:02:25.700 --> 00:02:28.100
+and we're going to make
+an original Prefab,
+
+50
+00:02:29.466 --> 00:02:30.300
+and then there you go.
+
+51
+00:02:30.300 --> 00:02:32.866
+And now we have our
+Powerup and our Prefabs,
+
+52
+00:02:32.866 --> 00:02:34.066
+and you can see it here.
+
+53
+00:02:35.166 --> 00:02:37.600
+So what you're gonna do
+
+54
+00:02:37.600 --> 00:02:40.033
+is you're gonna go into
+your Assets folder,
+
+55
+00:02:40.033 --> 00:02:42.700
+go into the Pickups
+under the Course Library,
+
+56
+00:02:42.700 --> 00:02:46.700
+select one on your own, drag
+and drop it into the Hierarchy,
+
+57
+00:02:46.700 --> 00:02:47.900
+and then you can just position it
+
+58
+00:02:47.900 --> 00:02:50.100
+so that it's a little
+bit better positioned.
+
+59
+00:02:51.533 --> 00:02:54.800
+And then you're going
+to rename it Powerup,
+
+60
+00:02:54.800 --> 00:02:57.700
+make sure to add a Box Collider,
+
+61
+00:02:57.700 --> 00:03:00.366
+change the scale so
+that it's a bit larger,
+
+62
+00:03:00.366 --> 00:03:04.466
+and then apply a tag for
+it to be called Powerup.
+
+63
+00:03:04.466 --> 00:03:05.400
+Now it's your turn.
+
+64
+00:03:06.400 --> 00:03:09.466
+(light techno music)

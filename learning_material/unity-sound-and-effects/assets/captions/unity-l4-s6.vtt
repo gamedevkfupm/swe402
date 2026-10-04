@@ -1,0 +1,413 @@
+WEBVTT
+
+1
+00:00:00.066 --> 00:00:03.000
+[music]
+
+2
+00:00:05.533 --> 00:00:07.400
+[Instructor] Cool so we've added
+
+3
+00:00:07.400 --> 00:00:10.833
+our sounds for Jumping and Crashing,
+which is great.
+
+4
+00:00:11.966 --> 00:00:14.733
+Now, we're going to go back
+into our PlayerController Script,
+
+5
+00:00:15.300 --> 00:00:21.100
+and we're just going to create 
+another...private variable
+
+6
+00:00:21.100 --> 00:00:24.100
+for our Component,
+so this one'll be,
+
+7
+00:00:24.433 --> 00:00:26.233
+in this case we want Audio, right,
+
+8
+00:00:26.233 --> 00:00:29.833
+we want to be able to emit
+the Audio from our Player,
+
+9
+00:00:29.833 --> 00:00:31.833
+so the Player needs
+an "Audio Source".
+
+10
+00:00:32.200 --> 00:00:34.233
+We take the "AudioSource"
+of our Player,
+
+11
+00:00:35.966 --> 00:00:38.466
+and we'll just call this
+"playerAudio."
+
+12
+00:00:41.433 --> 00:00:44.000
+So, this is the Audio
+that plays from the Player,
+
+13
+00:00:44.433 --> 00:00:47.366
+and our Start() method,
+we're very familiar now,
+
+14
+00:00:48.033 --> 00:00:50.300
+so we'll use our playerAudio variable,
+
+15
+00:00:52.300 --> 00:00:54.300
+and we're going to set it...
+
+16
+00:00:54.766 --> 00:00:56.766
+to our...
+
+17
+00:00:57.200 --> 00:00:59.266
+"Audio Source" Component,
+
+18
+00:00:59.266 --> 00:01:04.166
+so, "GetComponent<AudioSource>()"
+
+19
+00:01:07.966 --> 00:01:11.100
+So now, since we have our jump,
+and our crash sound
+
+20
+00:01:11.900 --> 00:01:15.400
+what we need to do is actually
+play those Audio clips.
+
+21
+00:01:19.766 --> 00:01:23.433
+So, down in our code,
+when the Player jumps,
+
+22
+00:01:24.066 --> 00:01:28.500
+we're actually going to use
+our new playerAudio variable,
+
+23
+00:01:30.400 --> 00:01:32.566
+and we're going to use a new method,
+
+24
+00:01:32.866 --> 00:01:36.866
+and so there's specifically
+one called "Play()".
+
+25
+00:01:38.100 --> 00:01:42.266
+There's a "playOnAwake",
+so when anything starts, it'll play.
+
+26
+00:01:42.666 --> 00:01:44.533
+And then there's a "PlayOneShot(),"
+
+27
+00:01:44.533 --> 00:01:48.033
+so basically that'll just play it once,
+and then we'll be done.
+
+28
+00:01:48.633 --> 00:01:50.633
+So we PlayOneShot(),
+
+29
+00:01:50.933 --> 00:01:55.700
+and then we want our AudioClip,
+so this our jump, so our "jumpSound,"
+
+30
+00:01:56.133 --> 00:01:58.300
+and then it looks like
+there's another variable
+
+31
+00:01:58.300 --> 00:02:01.633
+that we can add, so we can
+actually change the Volume
+
+32
+00:02:02.966 --> 00:02:06.033
+when we play our jump sound. 
+We'll just set it to be,
+
+33
+00:02:06.333 --> 00:02:08.566
+we'll just leave
+it to the full Volume for now.
+
+34
+00:02:18.300 --> 00:02:20.266
+And then, we're going to do
+the same thing
+
+35
+00:02:20.266 --> 00:02:22.300
+for when the game is over,
+so we're going
+
+36
+00:02:22.300 --> 00:02:24.333
+to use our playerAudio,
+
+37
+00:02:24.933 --> 00:02:27.733
+and we're going to PlayOneShot(),
+
+38
+00:02:28.466 --> 00:02:31.466
+because we actually need
+to use AudioClips in this,
+
+39
+00:02:33.533 --> 00:02:37.066
+and then, in this case,
+we're going to use our "crashSound,"
+
+40
+00:02:39.033 --> 00:02:41.666
+and we're going to set it to...
+
+41
+00:02:41.666 --> 00:02:43.800
+full Volume,
+once again.
+
+42
+00:02:44.766 --> 00:02:49.166
+Cool. Now we save, so when
+we go back into Unity,
+
+43
+00:02:49.833 --> 00:02:53.233
+now, when we play our game,
+we should hear some Effects
+
+44
+00:02:53.233 --> 00:02:55.266
+when we jump, and when we crash.
+
+45
+00:02:55.733 --> 00:02:58.900
+[happy game music]
+
+46
+00:02:58.900 --> 00:03:04.766
+And we jump.
+And I didn't hear anything.
+
+47
+00:03:04.766 --> 00:03:09.266
+What if we crash,
+what's going to happen?
+
+48
+00:03:09.266 --> 00:03:12.666
+It didn't seem like
+anything happened?
+
+49
+00:03:13.766 --> 00:03:15.800
+Let's see, let's go,
+let's look at our errors.
+
+50
+00:03:16.266 --> 00:03:18.566
+There's no Audio Source oh!
+
+51
+00:03:18.566 --> 00:03:20.566
+I made a mistake.
+
+52
+00:03:21.533 --> 00:03:26.300
+So, in Player, we actually
+need to add the Audio Source,
+
+53
+00:03:26.300 --> 00:03:29.300
+because we didn't actually
+use one.
+
+54
+00:03:30.266 --> 00:03:32.433
+Let's go add a Component,
+
+55
+00:03:32.433 --> 00:03:34.366
+we're going to look
+for an Audio Source,
+
+56
+00:03:35.700 --> 00:03:37.700
+there you go.
+
+57
+00:03:38.000 --> 00:03:40.533
+So now that we have the Audio Source
+that we're using,
+
+58
+00:03:40.533 --> 00:03:42.733
+and we have the clips
+that the Audio Source
+
+59
+00:03:42.733 --> 00:03:46.366
+will be playing,
+now when we press Play,
+
+60
+00:03:46.933 --> 00:03:49.066
+that error should go away,
+
+61
+00:03:49.466 --> 00:03:52.833
+[happy game music] and we jump.
+[jump sound]
+
+62
+00:03:52.833 --> 00:03:55.733
+There you go and then,
+
+63
+00:03:55.733 --> 00:03:58.033
+I can't stop jumping right now,
+it's just too exciting,
+
+64
+00:03:58.033 --> 00:04:01.000
+and then when I crash finally,
+
+65
+00:04:01.000 --> 00:04:03.200
+[crash noise] Nice!
+
+66
+00:04:03.200 --> 00:04:05.200
+Awesome, so
+
+67
+00:04:05.800 --> 00:04:08.700
+now we have an amazing game...
+
+68
+00:04:09.166 --> 00:04:11.700
+full of Sound Effects and Audio,
+
+69
+00:04:12.200 --> 00:04:15.633
+so what you're going to do is
+you're going to make sure
+
+70
+00:04:15.633 --> 00:04:18.833
+that you add an Audio Source
+to your Player.
+
+71
+00:04:19.666 --> 00:04:21.666
+Don't make that mistake like I did,
+
+72
+00:04:22.000 --> 00:04:24.000
+and then in your
+PlayerController class,
+
+73
+00:04:24.000 --> 00:04:28.366
+you're going to get an AudioSource 
+variable and we'll just call it the
+
+74
+00:04:28.366 --> 00:04:32.133
+playerAudio, so that way, we can emit
+any of the clips that play,
+
+75
+00:04:32.366 --> 00:04:34.366
+so that way,
+our Camera can hear it.
+
+76
+00:04:34.466 --> 00:04:38.900
+In our Start() method, make sure
+that you get the Component
+
+77
+00:04:39.533 --> 00:04:41.400
+for our playerAudio,
+which will be
+
+78
+00:04:41.400 --> 00:04:43.400
+our AudioSource that we added.
+
+79
+00:04:43.933 --> 00:04:46.133
+In our Update() method,
+make sure
+
+80
+00:04:46.133 --> 00:04:49.600
+that whenever the Player
+presses the space bar,
+
+81
+00:04:49.900 --> 00:04:52.400
+you make sure to PlayOneShot(),
+so then that way
+
+82
+00:04:52.400 --> 00:04:55.733
+the OneShot will actually play
+the AudioClips that we have saved.
+
+83
+00:04:56.100 --> 00:04:57.966
+We'll play the jumpSound,
+and we'll make sure
+
+84
+00:04:57.966 --> 00:05:02.000
+that it's at full Volume.
+And then in our OnCollisionEnter(),
+
+85
+00:05:02.000 --> 00:05:04.433
+when we Collide with an Obstacle,
+
+86
+00:05:04.433 --> 00:05:07.033
+we're going to do another OneShot
+
+87
+00:05:07.033 --> 00:05:09.800
+and we're going to play our crashSound
+at full Volume.
+
+88
+00:05:10.400 --> 00:05:12.433
+So, now it's your turn.
+
+89
+00:05:12.933 --> 00:05:15.833
+[music]

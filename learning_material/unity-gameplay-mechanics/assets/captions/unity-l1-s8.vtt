@@ -1,0 +1,252 @@
+WEBVTT
+
+00:00:02.640 --> 00:00:10.640
+A song we do have the camera that rotates
+around the focal point and we've set up the
+
+00:00:10.641 --> 00:00:13.520
+basis to the input
+system to make this work.
+
+00:00:13.521 --> 00:00:17.720
+Now we need to rotate around that focal
+point using the user input and we're going to
+
+00:00:17.721 --> 00:00:20.240
+use some rotation speed
+to make that happen.
+
+00:00:20.590 --> 00:00:22.660
+I want you to open
+up your rotate camera
+
+00:00:22.672 --> 00:00:25.120
+script and we have the
+awake method for finding
+
+00:00:25.121 --> 00:00:28.800
+the controls and enabling
+what we needed to use.
+
+00:00:28.801 --> 00:00:30.909
+Now we're going to
+go down below or on a
+
+00:00:30.921 --> 00:00:33.520
+neighbour and we're going
+to write another method
+
+00:00:33.570 --> 00:00:36.146
+called void update and
+make sure you have
+
+00:00:36.158 --> 00:00:41.000
+two curly braces below and that's
+going to be able to help us check for it.
+
+00:00:41.001 --> 00:00:43.569
+So now we're going to want
+to read the move action which
+
+00:00:43.570 --> 00:00:47.280
+will be affected to as we've
+done in previous videos.
+
+00:00:47.281 --> 00:00:52.360
+So we'll write a local variable which is a
+vector to and we're going to call this move
+
+00:00:52.361 --> 00:00:55.480
+input because we only need
+to use it in this method here.
+
+00:00:55.481 --> 00:00:59.503
+We'll set that equal to
+the controls dot player
+
+00:00:59.515 --> 00:01:04.720
+dot move because now we found the
+controls dot player and that's enabled.
+
+00:01:04.721 --> 00:01:10.360
+We can quite easily access the name move
+within the script and then we'll say dot read
+
+00:01:10.361 --> 00:01:14.440
+value and in open and
+close angled brackets.
+
+00:01:14.441 --> 00:01:18.200
+Then what I want you to do is write vector
+two that we've done before and then at the
+
+00:01:18.201 --> 00:01:21.920
+end of that add the two parentheses and a
+semicolon so we're going to make sure that
+
+00:01:22.069 --> 00:01:27.360
+we update the move input with the
+value of whatever our move is at any point.
+
+00:01:27.361 --> 00:01:29.800
+So then we can begin to use this.
+
+00:01:29.801 --> 00:01:35.840
+So we can then create another local variable
+to store this and make it visually easier
+
+00:01:35.889 --> 00:01:41.960
+to understand so we can have a float called
+horizontal input and then we can set that
+
+00:01:44.129 --> 00:01:48.137
+to move import dot x
+because that is going to
+
+00:01:48.149 --> 00:01:52.080
+be the thing that
+moves us left and right or
+
+00:01:52.080 --> 00:01:58.520
+using the A and D or the arrow
+keys that we might want to use.
+
+00:01:58.521 --> 00:02:03.200
+Make sure you do add a semicolon to the end
+just in case you forgot about it and then
+
+00:02:03.201 --> 00:02:05.525
+below here then we
+need to use this in our
+
+00:02:05.537 --> 00:02:08.039
+transform dot rotate to
+make sure that we can
+
+00:02:08.520 --> 00:02:12.508
+use the horizontal input.
+We can say transform
+
+00:02:12.520 --> 00:02:16.520
+dot rotate with a capital
+R is going to rotate
+
+00:02:16.521 --> 00:02:22.271
+around something and then
+we're going to say vector three dot
+
+00:02:22.272 --> 00:02:26.360
+up add a comma and then we're
+going to use our horizontal input.
+
+00:02:26.361 --> 00:02:28.783
+Of course we could
+use move input dot x but
+
+00:02:28.795 --> 00:02:31.400
+sometimes giving it an
+M like horizontal input
+
+00:02:31.401 --> 00:02:36.000
+makes it easy to understand if you're looking
+back and then we're going to times by a
+
+00:02:36.001 --> 00:02:42.240
+rotation speed which we haven't quite created
+and then we'll also multiply by time dot
+
+00:02:42.315 --> 00:02:47.320
+delta time and end the bracket and the
+semicolon just so that we can make sure this
+
+00:02:47.321 --> 00:02:51.520
+is done frame rate independent
+and across a period of time.
+
+00:02:51.670 --> 00:02:55.520
+I want to head to the top of our script and
+have a public variable and we're going to
+
+00:02:55.570 --> 00:03:01.840
+have this as a float and call this rotation
+speed like we wanted so that equal we could
+
+00:03:01.841 --> 00:03:05.655
+say 150 F just for now
+and you can make sure
+
+00:03:05.667 --> 00:03:09.320
+that rotation speed
+is spelled the same so
+
+00:03:09.321 --> 00:03:12.100
+that we can start using
+this in our game and
+
+00:03:12.112 --> 00:03:17.085
+we can save that out now if we go back into
+unity and make sure your focal point does
+
+00:03:17.097 --> 00:03:22.640
+have your rotate camera script and it should
+be set to 150 with the rotation speed.
+
+00:03:22.641 --> 00:03:28.280
+So now you can see if I hold a we rotate
+left and right and we can also use the arrow
+
+00:03:28.281 --> 00:03:31.468
+keys because it was
+set up in our input actions
+
+00:03:31.480 --> 00:03:34.680
+editor to be able to
+use all of these controls.
+
+00:03:34.681 --> 00:03:36.604
+So to make this happen
+I want you to head to
+
+00:03:36.616 --> 00:03:38.640
+your rotate camera script
+and add a new public
+
+00:03:38.740 --> 00:03:41.818
+float rotation speed
+and set it something like
+
+00:03:41.830 --> 00:03:44.720
+150 F just so you got
+a speed that's usable
+
+00:03:44.721 --> 00:03:49.360
+then create an update method void update and
+then we're going to have a private vector
+
+00:03:49.361 --> 00:03:52.079
+to variable move input
+and set that equal to
+
+00:03:52.091 --> 00:03:57.284
+controls dot player dot move dot read value
+vector 2 then we'll have another private
+
+00:03:57.296 --> 00:04:00.280
+variable called horizontal
+input equals the move
+
+00:04:00.281 --> 00:04:05.600
+input dot x but the left and right and it's
+just nice a way to give it a nice name so
+
+00:04:05.601 --> 00:04:07.819
+instead of it looking
+mouse dot x here we've
+
+00:04:07.831 --> 00:04:13.406
+got it looking with horizontal input we do
+transform dot rotate vector 3 up comma the
+
+00:04:13.418 --> 00:04:24.880
+horizontal input times by the rotation
+speed times by time dot delta time

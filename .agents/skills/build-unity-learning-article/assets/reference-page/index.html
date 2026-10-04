@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Technical reference for composing a Unity 6.3 scene, configuring materials and physics, creating prefabs, and controlling the camera and lighting."
+      content="Technical reference for installing Unity 6.3, using the core Editor windows, navigating Scene view, modifying GameObjects, and completing the mural exercise."
     />
-    <title>Unity 3D Essentials — Technical Reference</title>
+    <title>Unity Editor Fundamentals — Technical Reference</title>
     <link rel="icon" href="data:," />
     <script>
       (() => {
@@ -225,7 +225,7 @@
       }
 
       .hero::after {
-        content: "02";
+        content: "01";
         position: absolute;
         right: max(1rem, calc((100vw - 1180px) / 2));
         bottom: -0.12em;
@@ -1142,12 +1142,12 @@
         }
       }
     </style>
-  <link rel="stylesheet" href="../shared/course-navigation.css"><script defer src="../shared/course-navigation.js"></script></head>
+  </head>
   <body>
     <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
 
     <header class="site-header">
-      <a class="site-mark" href="#top">SWE 402 // UNITY_3D_REFERENCE</a>
+      <a class="site-mark" href="#top">SWE 402 // UNITY_EDITOR_REFERENCE</a>
       <div class="site-actions">
         <button class="quiet-button" id="themeToggle" type="button" aria-pressed="false">
           <span class="theme-swatch" aria-hidden="true"></span>
@@ -1161,13 +1161,13 @@
     <header class="hero" id="top">
       <div class="hero-inner">
         <div class="kicker">SWE 402 · UNITY 6.3 · TECHNICAL REFERENCE</div>
-        <h1>Unity 3D<em>Essentials</em></h1>
+        <h1>Unity Editor<em>Fundamentals</em></h1>
         <p class="dek">
-          Reference for composing a 3D scene, configuring materials and physics, creating reusable prefabs, and presenting the result with camera and lighting controls.
+          Reference for installing Unity 6.3, identifying Editor windows, modifying GameObjects, navigating Scene view, and completing the mural exercise.
         </p>
         <div class="article-meta">
           <span>Unity 6.3</span>
-          <span>Lecture 02</span>
+          <span>Entry level</span>
           <span>Concepts + procedures</span>
           <span>Progress stored locally</span>
         </div>
@@ -1178,13 +1178,13 @@
       <aside class="toc" aria-label="Table of contents">
         <p class="toc-title">IN THIS LECTURE</p>
         <ol>
-          <li><a href="#room"><span>01</span>Compose the room</a></li>
-          <li><a href="#ball"><span>02</span>Construct the ball</a></li>
-          <li><a href="#physics"><span>03</span>Configure physics</a></li>
-          <li><a href="#tower"><span>04</span>Build the tower</a></li>
-          <li><a href="#prefabs"><span>05</span>Control prefab changes</a></li>
-          <li><a href="#presentation"><span>06</span>Frame the scene</a></li>
-          <li><a href="#extensions"><span>07</span>Extend the system</a></li>
+          <li><a href="#install"><span>01</span>Install Unity</a></li>
+          <li><a href="#project"><span>02</span>Open the project</a></li>
+          <li><a href="#interface"><span>03</span>Read the interface</a></li>
+          <li><a href="#objects"><span>04</span>Modify GameObjects</a></li>
+          <li><a href="#navigation"><span>05</span>Navigate 3D space</a></li>
+          <li><a href="#hunt"><span>06</span>Scavenger hunt</a></li>
+          <li><a href="#mural"><span>07</span>Manipulate mural pieces</a></li>
           <li><a href="#review"><span>08</span>Completion criteria</a></li>
         </ol>
       </aside>
@@ -1192,329 +1192,365 @@
       <article>
         <section class="lead-box" aria-labelledby="goal-title">
           <div class="eyebrow">Learning outcomes</div>
-          <h2 id="goal-title">Build a 3D scene as a system of reusable, physical objects.</h2>
+          <h2 id="goal-title">Build a reliable model of the Unity Editor.</h2>
           <p>
-            The finished scene is a furnished room in which a ball falls onto a ramp and collides with a tower. Each visible result comes from a specific asset, GameObject, or component.
+            After completing this reference, you should be able to locate the primary Editor windows, identify their data scope, modify Transform values, navigate Scene view, test in Play mode, and save a scene. Memorizing every control is not required.
           </p>
           <ul class="outcomes">
-            <li>Place and transform prefab instances.</li>
-            <li>Separate geometry, appearance, collision, and motion.</li>
-            <li>Configure a Rigidbody, Collider, and Physics Material.</li>
-            <li>Create, instantiate, and edit a prefab.</li>
-            <li>Organize objects with parent-child relationships.</li>
-            <li>Compose the Game view with camera, light, and skybox controls.</li>
+            <li>Differentiate Unity Hub from Unity Editor.</li>
+            <li>Open the required project and scene.</li>
+            <li>Locate assets, GameObjects, and components.</li>
+            <li>Run and stop Play mode safely.</li>
+            <li>Frame, fly, orbit, pan, and zoom in Scene view.</li>
+            <li>Translate and rotate mural pieces.</li>
           </ul>
           <div class="note">
-            <span class="note-title">Opening demonstration</span>
-            Run the completed scene once. Trace the chain: gravity moves the ball, the ramp redirects it, and the collision transfers motion to the blocks.
+            <span class="note-title">Instructor demonstration</span>
+            Observe the running robot. Identify the transition from Scene view to Game view when Play mode starts.
           </div>
         </section>
 
-        <section class="article-section" id="room">
-          <div class="section-kicker">01 · SCENE COMPOSITION</div>
-          <h2>Compose the room from prefab instances</h2>
+        <section class="article-section" id="install">
+          <div class="section-kicker">01 · SETUP</div>
+          <h2>Install Unity and identify its two applications</h2>
           <p class="drop-cap">
-            A Unity scene stores GameObjects and their relationships. The Project window stores reusable assets. Dragging a prefab asset into a scene creates a prefab instance in the Hierarchy.
+            Unity uses two desktop applications with separate responsibilities. Instructions that say “open Unity” may refer to either application.
           </p>
 
           <div class="comparison">
             <div>
-              <strong>PREFAB ASSET · PROJECT</strong>
-              <p>A reusable object definition stored on disk. It can produce many consistent instances.</p>
+              <strong>UNITY HUB</strong>
+              <p>Installation and project manager. It installs Editor versions, manages licenses, and creates or opens projects.</p>
             </div>
             <div>
-              <strong>PREFAB INSTANCE · HIERARCHY</strong>
-              <p>A placed occurrence of that definition in the active scene. Its Transform records where it is.</p>
+              <strong>UNITY EDITOR</strong>
+              <p>Authoring application. It edits scenes and GameObjects, runs Play mode, and builds executables.</p>
             </div>
-          </div>
-
-          <ol class="steps">
-            <li>Open <strong>Assets → _Unity Essentials → Scenes → 2_KidsRoom_3D_Scene</strong>.</li>
-            <li>From <strong>Prefabs → Rooms</strong>, drag <strong>01_Bedroom</strong> into the Scene view.</li>
-            <li>Set its Position to <strong>X 0, Y 0, Z 0</strong>. This places the room at the world origin.</li>
-            <li>Browse <strong>Prefabs → Bedroom</strong>. Single-click a prefab to preview it before placing it.</li>
-            <li>Add a bed against the left wall, then add a rug and at least one more furniture item.</li>
-            <li>Leave one corner clear for the physics tower. Save with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>S</kbd>.</li>
-          </ol>
-
-          <figure class="source-figure breakout">
-            <img src="./assets/furnished-room.png" alt="Unity Scene view showing a bedroom prefab furnished with a bed, bedside table, and rug" />
-            <figcaption><strong>Composition check:</strong> furniture is placed against room surfaces while an open area remains for the simulation. Screenshot: Unity Learn.</figcaption>
-          </figure>
-
-          <div class="practice">
-            <span class="practice-title">Placement test</span>
-            Orbit around the room and inspect it from the top. Correct any object that intersects a wall, floats above the floor, or blocks the open physics area.
           </div>
 
           <p>
-            Source:
-            <a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/add-furniture-to-the-kids-room?version=6.3" target="_blank" rel="noreferrer">Add furniture to the kid's room ↗</a>
+            Unity Personal is the normal free starting plan for individuals. Eligible students can also enroll in the
+            <a href="https://unity.com/products/unity-student" target="_blank" rel="noreferrer">Unity Student plan</a>
+            for education-focused benefits. Plan terms can change, so use Unity’s current page as the source of truth.
           </p>
-        </section>
-
-        <section class="article-section" id="ball">
-          <div class="section-kicker">02 · GEOMETRY + APPEARANCE</div>
-          <h2>Construct the ball, then assign its visual material</h2>
-          <p>
-            A primitive sphere is only the starting geometry. Its Transform determines placement and size; the Mesh Renderer and Material determine its visible surface.
-          </p>
-
-          <table class="window-table">
-            <thead>
-              <tr><th>Layer</th><th>Unity element</th><th>Responsibility</th></tr>
-            </thead>
-            <tbody>
-              <tr><td data-label="Layer">Location</td><td data-label="Unity element">Transform</td><td data-label="Responsibility">Position, rotation, and scale.</td></tr>
-              <tr><td data-label="Layer">Geometry</td><td data-label="Unity element">Mesh Filter</td><td data-label="Responsibility">The vertices and triangles that define the sphere.</td></tr>
-              <tr><td data-label="Layer">Appearance</td><td data-label="Unity element">Mesh Renderer + Material</td><td data-label="Responsibility">How the mesh is drawn and shaded.</td></tr>
-              <tr><td data-label="Layer">Collision</td><td data-label="Unity element">Sphere Collider</td><td data-label="Responsibility">The boundary used by the physics engine.</td></tr>
-              <tr><td data-label="Layer">Motion</td><td data-label="Unity element">Rigidbody</td><td data-label="Responsibility">Gravity, mass, drag, and simulated movement.</td></tr>
-            </tbody>
-          </table>
 
           <ol class="steps">
-            <li>Right-click the Hierarchy and choose <strong>3D Object → Sphere</strong>. Rename it <strong>Ball</strong>.</li>
-            <li>Set Scale to <strong>0.25, 0.25, 0.25</strong>. One Unity unit usually represents one metre.</li>
-            <li>Set Position to <strong>X 2, Y 3, Z -1</strong>.</li>
-            <li>Create <strong>Materials → My Materials</strong>, then create a Material named <strong>Ball_Mat</strong>.</li>
-            <li>Adjust Base Map Color, Metallic, and Smoothness. Drag <strong>Ball_Mat</strong> onto the Ball.</li>
-          </ol>
-
-          <div class="note">
-            <span class="note-title">Material is not physics</span>
-            <strong>Ball_Mat</strong> controls visible shading. It does not control bounce, friction, gravity, or mass.
-          </div>
-
-          <div class="practice">
-            <span class="practice-title">Controlled observation</span>
-            Enter Play mode before adding a Rigidbody. The Ball should remain suspended. Stop Play mode before continuing; this confirms that a Transform alone does not create physical motion.
-          </div>
-        </section>
-
-        <section class="article-section" id="physics">
-          <div class="section-kicker">03 · PHYSICS COMPONENTS</div>
-          <h2>Configure gravity, bounce, and collision</h2>
-          <p>
-            Physics is component-based. A Rigidbody makes a GameObject participate in simulation, a Collider defines contact geometry, and a Physics Material controls surface response.
-          </p>
-
-          <div class="comparison">
-            <div>
-              <strong>RIGIDBODY</strong>
-              <p>Moves the object under gravity and forces. Mass changes how strongly it exchanges momentum in collisions.</p>
-            </div>
-            <div>
-              <strong>COLLIDER</strong>
-              <p>Defines the contact boundary. A visible mesh without a Collider can be passed through.</p>
-            </div>
-          </div>
-
-          <ol class="steps">
-            <li>Select <strong>Ball</strong> and choose <strong>Add Component → Rigidbody</strong>. Test: it should now fall.</li>
-            <li>Create a <strong>Physics Material</strong> named <strong>Ball_Physics</strong> and set Bounciness to <strong>1</strong>.</li>
-            <li>Assign <strong>Ball_Physics</strong> to the Material field of the Ball's <strong>Sphere Collider</strong>.</li>
-            <li>Add the <strong>Ramp</strong> prefab from <strong>Prefabs → Shapes</strong>. Position it under the Ball and rotate it toward the open corner.</li>
-            <li>Test once without a ramp Collider. Observe the Ball passing through the visible ramp.</li>
-            <li>Add a <strong>Mesh Collider</strong> to the Ramp and enable <strong>Convex</strong>. Test again and save.</li>
+            <li>Download and install <strong>Unity Hub</strong>, then sign in with your Unity account.</li>
+            <li>In the Hub, open <strong>Installs</strong> and choose <strong>Install Editor</strong>.</li>
+            <li>Select the Unity 6 version used in class. If asked, choose the module for a compatible code editor.</li>
+            <li>Wait for the installation to finish. The Editor is large, so this can take time.</li>
           </ol>
 
           <figure class="source-figure">
-            <img src="./assets/ball-components.png" alt="Unity Inspector showing Ball_Mat on the Mesh Renderer and Ball_Physics on the Sphere Collider" />
-            <figcaption><strong>Two material systems:</strong> Ball_Mat is assigned to the renderer; Ball_Physics is assigned to the collider. Screenshot: Unity Learn.</figcaption>
+            <img src="./assets/install-unity-6.png" alt="Unity Hub showing the Unity 6 Editor installation screen" />
+            <figcaption><strong>What to look for:</strong> Unity 6 appears inside the Hub’s installation flow. Screenshot: Unity Learn.</figcaption>
           </figure>
-
-          <table class="shortcut-table">
-            <thead><tr><th>Observed failure</th><th>Likely missing configuration</th><th>Inspect</th></tr></thead>
-            <tbody>
-              <tr><td data-label="Observed failure">Ball remains suspended</td><td data-label="Likely cause">No Rigidbody</td><td data-label="Inspect">Ball components</td></tr>
-              <tr><td data-label="Observed failure">Ball falls but barely bounces</td><td data-label="Likely cause">No Physics Material or low Bounciness</td><td data-label="Inspect">Sphere Collider</td></tr>
-              <tr><td data-label="Observed failure">Ball passes through ramp</td><td data-label="Likely cause">No Collider on Ramp</td><td data-label="Inspect">Ramp components</td></tr>
-              <tr><td data-label="Observed failure">Object looks wrong but collides correctly</td><td data-label="Likely cause">Visual Material issue</td><td data-label="Inspect">Mesh Renderer</td></tr>
-            </tbody>
-          </table>
-
-          <h3>Targeted video references</h3>
-          <div class="video-list">
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/543bf7ff-00b8-4c2e-bf46-658aaa45aa78_2.2.7_-_Add_Rigidbody_comp_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Add a Rigidbody</strong><small>Enable gravity-driven motion</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240927/videos/dcfee6d1-b8bb-4a38-bc21-66617d43a624_2.2.8_-_Create_and_apply_a_Physics_Material_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Apply a Physics Material</strong><small>Configure surface bounce</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/17e840ef-c8e6-41a0-8379-8dda1a94426e_2.2.11_-_Add_collider_to_ramp_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Add the ramp Collider</strong><small>Make visible geometry collidable</small></span></a>
-          </div>
-
-          <p>
-            Source:
-            <a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/make-a-bouncy-ball?version=6.3" target="_blank" rel="noreferrer">Make a bouncy ball ↗</a>
-          </p>
-        </section>
-
-        <section class="article-section" id="tower">
-          <div class="section-kicker">04 · REUSABLE OBJECTS</div>
-          <h2>Build a physical tower from one block</h2>
-          <p>
-            The tower introduces a production pattern: configure one object, convert it into a prefab, then instantiate it. Repetition happens after the object is correct.
-          </p>
-
-          <ol class="steps">
-            <li>Create a <strong>Cube</strong>, rename it <strong>Block</strong>, and reset its Transform.</li>
-            <li>Use approximately <strong>0.1, 0.25, 0.1</strong> for Scale, then place the Block in the Ball's path.</li>
-            <li>Add a <strong>Rigidbody</strong>. Without it, the Block can obstruct the Ball but will not respond as a freely simulated body.</li>
-            <li>Create a Project folder named <strong>My Prefabs</strong>. Drag Block from the Hierarchy into it.</li>
-            <li>Duplicate or drag instances to make a stable tower. Inspect the structure from multiple angles.</li>
-            <li>Test the chain: Ball → Ramp → Tower. Adjust placement, not the physics rules, until contact occurs.</li>
-          </ol>
 
           <div class="practice">
-            <span class="practice-title">Tower stability test</span>
-            Build at least six Block instances. Alternate their orientation or offset them carefully, then enter Play mode. The tower should remain stable until struck.
+            <span class="practice-title">Installation verification</span>
+            Confirm that Unity Hub opens, your account is signed in, and a Unity 6 Editor appears under <strong>Installs</strong>.
+            <br />
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/unity-essentials-install-unity?version=6.3" target="_blank" rel="noreferrer">Open the complete Unity Learn installation guide ↗</a>
           </div>
-
-          <figure class="source-figure breakout">
-            <img src="./assets/ball-tower-result.png" alt="Unity Game view showing a red ball after colliding with a collapsed tower of blocks" />
-            <figcaption><strong>System result:</strong> the Ball reaches the tower after the ramp redirects its motion. Screenshot: Unity Learn.</figcaption>
-          </figure>
         </section>
 
-        <section class="article-section" id="prefabs">
-          <div class="section-kicker">05 · PREFAB CONTROL</div>
-          <h2>Edit the definition, then organize the instances</h2>
+        <section class="article-section" id="project">
+          <div class="section-kicker">02 · PROJECT</div>
+          <h2>Open the Unity Essentials project</h2>
           <p>
-            A prefab is useful because shared changes can be made once. Open the Block prefab in Prefab Mode, change its Rigidbody Mass to <strong>0.1 kg</strong>, and assign a visual Material. Every connected instance should update.
+            The course uses Unity’s Essentials Pathway template. It already contains the robot, playground, scenes, shortcuts, and mural pieces used in this lecture.
           </p>
-
-          <div class="comparison">
-            <div>
-              <strong>EDIT ONE INSTANCE</strong>
-              <p>Changes only that occurrence unless the override is applied back to the prefab.</p>
-            </div>
-            <div>
-              <strong>EDIT IN PREFAB MODE</strong>
-              <p>Changes the reusable definition and updates its connected instances.</p>
-            </div>
-          </div>
 
           <ol class="steps">
-            <li>Double-click the Block prefab asset to enter <strong>Prefab Mode</strong>.</li>
-            <li>Set Rigidbody Mass to <strong>0.1</strong>. Use the Mesh Renderer Material field to assign its appearance.</li>
-            <li>Exit Prefab Mode and verify that every Block instance reflects the changes.</li>
-            <li>Select all tower blocks. Create an empty parent and name it <strong>Block_Tower</strong>.</li>
-            <li>Move or rotate <strong>Block_Tower</strong>. Its child blocks should move as one group.</li>
-            <li>Optionally convert Block_Tower into a prefab to create several tower instances.</li>
+            <li>Open <strong>Unity Hub</strong> and select <strong>New project</strong>.</li>
+            <li>At the top, choose <strong>Unity 6.0 or newer</strong>.</li>
+            <li>Select the <strong>Essentials Pathway</strong> template.</li>
+            <li>Name the project, choose a safe location, and select <strong>Create project</strong>.</li>
           </ol>
 
-          <div class="note">
-            <span class="note-title">Hierarchy relationship</span>
-            Parenting groups Transforms; it does not merge the child meshes or Rigidbodies. Each Block still participates in physics independently.
-          </div>
+          <figure class="source-figure breakout">
+            <img src="./assets/project-open.png" alt="Unity Essentials guided project open in the Unity Editor" />
+            <figcaption><strong>Instruction modes:</strong> use the Unity Learn website, or select Start Mission 1 to display the tutorial inside the Editor. Screenshot: Unity Learn.</figcaption>
+          </figure>
 
-          <h3>Targeted video references</h3>
-          <div class="video-list">
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/3f0080a2-ed30-43fb-96cc-1ee2c85382f6_2.3.5_-_Create_a_Block_Prefab_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Create the Block prefab</strong><small>Convert a configured instance</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/f0703947-2911-41ea-a9fa-45f92a57fbab_2.3.7_-_Reduce_weight_in_prefab_mode_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Edit in Prefab Mode</strong><small>Update mass across instances</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/6150677c-53dd-4f8a-a7a9-cb2c73c8e06d_2.3.9_-_Organize_Blocks_with_a_Parent_GameObject_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Create a parent GameObject</strong><small>Organize tower instances</small></span></a>
+          <div class="pull-quote">
+            Use one instruction source at a time. Both the website and embedded tutorial modify the same project.
+            <small>Use a second display if one is available.</small>
           </div>
 
           <p>
-            Source:
-            <a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/make-a-tower-of-prefab-blocks?version=6.3" target="_blank" rel="noreferrer">Make a tower of prefab blocks ↗</a>
+            If you follow this article or the Unity Learn website, switch the top-right <strong>Layout</strong> menu to <strong>Default</strong>. You can restore Unity’s tutorial panel later through <strong>Tutorials → Show Tutorials</strong>.
+          </p>
+
+          <figure class="source-figure">
+            <img src="./assets/default-layout.png" alt="Unity Layout menu with Default highlighted" />
+            <figcaption>The Default layout makes your screen match the interface descriptions below. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/open-the-unity-essentials-project?version=6.3" target="_blank" rel="noreferrer">Open the Unity Essentials project ↗</a>
           </p>
         </section>
 
-        <section class="article-section" id="presentation">
-          <div class="section-kicker">06 · CAMERA + LIGHTING</div>
-          <h2>Frame the simulation for the Game view</h2>
+        <section class="article-section" id="interface">
+          <div class="section-kicker">03 · INTERFACE</div>
+          <h2>Understand the Editor window model</h2>
           <p>
-            Scene view is an authoring camera. Game view displays the active Camera GameObject. The final presentation depends on the Camera, Directional Light, and skybox rather than the Scene view angle.
+            The Default layout displays multiple windows simultaneously. Each window exposes a different scope of project data or a different view of the active scene.
           </p>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/editor-overview.png" alt="Unity Editor default layout with Hierarchy, Scene, Inspector, and Project areas outlined" />
+            <figcaption><strong>The default layout:</strong> Hierarchy on the left, Scene and Game in the center, Inspector on the right, and Project at the bottom. Screenshot: Unity Learn.</figcaption>
+          </figure>
 
           <table class="window-table">
             <thead>
-              <tr><th>Control</th><th>Changes</th><th>Does not change</th></tr>
+              <tr><th>Area</th><th>Data scope</th><th>Primary function</th></tr>
             </thead>
             <tbody>
-              <tr><td data-label="Control">Camera Transform</td><td data-label="Changes">Viewpoint and viewing direction</td><td data-label="Does not change">Object positions</td></tr>
-              <tr><td data-label="Control">Field of View</td><td data-label="Changes">How wide or narrow the perspective appears</td><td data-label="Does not change">Camera location</td></tr>
-              <tr><td data-label="Control">Directional Light rotation</td><td data-label="Changes">Direction of scene illumination and shadows</td><td data-label="Does not change">Sun effect through position</td></tr>
-              <tr><td data-label="Control">Skybox</td><td data-label="Changes">Background and environmental reflections</td><td data-label="Does not change">Scene geometry</td></tr>
+              <tr><td data-label="Area">Project</td><td data-label="Data scope">Files and reusable assets stored in the project</td><td data-label="Primary function">Access reusable source assets.</td></tr>
+              <tr><td data-label="Area">Hierarchy</td><td data-label="Data scope">GameObjects instantiated in the active scene</td><td data-label="Primary function">Access the current scene graph.</td></tr>
+              <tr><td data-label="Area">Scene</td><td data-label="Data scope">Editable spatial view of the scene</td><td data-label="Primary function">Position and inspect GameObjects.</td></tr>
+              <tr><td data-label="Area">Game</td><td data-label="Data scope">Output from the active Camera</td><td data-label="Primary function">Preview camera output during Play mode.</td></tr>
+              <tr><td data-label="Area">Inspector</td><td data-label="Data scope">Components and serialized values on the selection</td><td data-label="Primary function">Inspect and modify object data.</td></tr>
             </tbody>
           </table>
 
-          <ol class="steps">
-            <li>Enable the <strong>Cameras</strong> overlay in Scene view so the selected Camera shows a preview.</li>
-            <li>Navigate to a view that includes the Ball, Ramp, Tower, and enough room context.</li>
-            <li>Select the Camera and press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to align it with the current Scene view.</li>
-            <li>Adjust Camera Position, Rotation, and Field of View. Verify the result in Game view.</li>
-            <li>Rotate the <strong>Directional Light</strong>; then adjust its Color and Intensity. Its position does not affect the sun-like direction.</li>
-            <li>Drag a skybox from <strong>Materials → Skyboxes</strong> onto the sky.</li>
-            <li>If baked lighting or reflections are stale, open <strong>Window → Rendering → Lighting</strong> and choose <strong>Generate Lighting</strong>.</li>
-          </ol>
+          <div class="note">
+            <span class="note-title">Data scope</span>
+            The <strong>Project</strong> window lists assets stored on disk. The <strong>Hierarchy</strong> lists instantiated GameObjects in the active scene.
+          </div>
 
-          <figure class="source-figure">
-            <img src="./assets/camera-light-overview.png" alt="Unity scene showing the Camera, Directional Light, ball, ramp, and tower in a furnished room" />
-            <figcaption>The Camera defines Game view; the Directional Light and skybox define much of the scene's presentation. Screenshot: Unity Learn.</figcaption>
-          </figure>
+          <div class="practice">
+            <span class="practice-title">Open the starter scene</span>
+            In the Project window, open <strong>Assets → _Unity Essentials → Scenes</strong>, then double-click <strong>-1_Starter_Scene</strong>. The robot and its environment should appear.
+          </div>
+
+          <h3>Hierarchy means parent and child</h3>
+          <p>
+            GameObjects can be organized as a tree. A parent contains child GameObjects. Expand the triangle beside <strong>Boxes</strong> in the Hierarchy to see this structure.
+          </p>
+
+          <p>
+            Double-clicking any GameObject in the Hierarchy frames it in the Scene view. If you get lost, double-click <strong>Ground</strong> to return to a wide view of the environment.
+          </p>
+        </section>
+
+        <section class="article-section" id="objects">
+          <div class="section-kicker">04 · OBJECTS + PLAY</div>
+          <h2>Modify GameObjects and verify behavior in Play mode</h2>
+
+          <div class="comparison">
+            <div>
+              <strong>SCENE VIEW · AUTHORING VIEWPORT</strong>
+              <p>Manipulate scene contents from an editor-controlled camera.</p>
+            </div>
+            <div>
+              <strong>GAME VIEW · CAMERA OUTPUT</strong>
+              <p>Display the output of the active Camera during Play mode.</p>
+            </div>
+          </div>
+
+          <p>
+            Select the Play button at the top center of the Editor. Unity enters <strong>Play mode</strong> and shows the Game view. In the starter scene, use the arrow keys or <kbd>WASD</kbd> to move, <kbd>Space</kbd> to jump, the mouse to look, and <kbd>Shift</kbd> to run.
+          </p>
 
           <div class="warning">
-            <span class="note-title">Play mode tint</span>
-            Set a subtle Playmode Tint in Preferences or Settings → Colors. It is a state indicator: if the Editor is tinted, changes made during the simulation are temporary.
+            <span class="note-title">Play mode state is temporary</span>
+            Changes made while Play mode is active are normally discarded when Play mode stops. Exit Play mode before making changes that must persist.
           </div>
 
-          <div class="video-list">
-            <a href="https://connect-mediagw.unity.com/h1/20240719/videos/1e35511f-e6b0-4304-8fc5-9d20ba98bcc8_2.4.3_-_Align_the_camera_with_the_perfect_view_-_VIDEO_U6_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Align the Camera</strong><small>Transfer a Scene view composition</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240521/videos/9a6a4856-22cb-4eb5-9d59-1d9cc9be1ca2_2.4.4_-_Adjust_your_lighting_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Adjust lighting</strong><small>Rotate and tune the Directional Light</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/574bff1f-e2fd-4ed4-8d3b-150ca187a868_2.4.5_-_Edit_the_skybox_-_VIDEO.mp4" target="_blank" rel="noreferrer"><span><strong>Edit the skybox</strong><small>Change the environment background</small></span></a>
-          </div>
-
+          <h3>Inspect components and Transform data</h3>
           <p>
-            Source:
-            <a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/adjust-the-lights-background-and-camera-angle?version=6.3" target="_blank" rel="noreferrer">Adjust the lights, background, and camera angle ↗</a>
+            Select a GameObject in the Scene or Hierarchy. Its components appear in the Inspector. Components provide properties and behavior: the Transform stores position, rotation, and scale; other components can make the object visible, interactive, physical, or scripted.
+          </p>
+
+          <div class="axis-line" aria-label="Unity coordinate axes">
+            <span class="x">X · red · left/right</span>
+            <span class="y">Y · green · up/down</span>
+            <span class="z">Z · blue · forward/back</span>
+          </div>
+
+          <div class="practice">
+            <span class="practice-title">Transform exercise</span>
+            <ol>
+              <li>Exit Play mode and select the <strong>Star</strong> GameObject.</li>
+              <li>Find Position at the top of the Inspector.</li>
+              <li>Reduce X by 1–2 units and Y by 1–2 units.</li>
+              <li>Enter Play mode and try to collect the star. Stop when finished.</li>
+            </ol>
+            If you make a mistake, use <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>Z</kbd>.
+          </div>
+
+          <h3>Persist changes by saving the scene</h3>
+          <p>
+            Unity does not automatically save your scene. An asterisk beside the scene name means there are unsaved changes. Press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>S</kbd>; the asterisk should disappear.
+          </p>
+
+          <h3>Targeted video references</h3>
+          <p>Use a video when a specific control cannot be located from the written procedure.</p>
+          <div class="video-list">
+            <a href="https://connect-mediagw.unity.com/h1/20240510/videos/7c06c85f-5679-4134-99a2-f0bd47d20b64_1.1.2_-_The_Project_Window_-_VIDEO_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Project window</strong><small>Find and open assets</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240510/videos/70a470e3-b7da-47e9-b4e6-27c2df46696c_1.1.3_-_The_Hierarchy_window_-_VIDEO_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Hierarchy</strong><small>Explore GameObjects</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240927/videos/188d4b37-cad2-4f9c-9584-7b96adb9bd27_1.1.6_-_Enter_Play_mode_in_Game_view_-_VIDEO_U6.mp4" target="_blank" rel="noreferrer"><span><strong>Play mode</strong><small>Test through Game view</small></span></a>
+            <a href="https://connect-mediagw.unity.com/h1/20240510/videos/2a6242a3-3496-4904-860a-abef371e1fa9_1.1.7_-_Edit_the_GameObjects__properties_in_the_Inspector_-_VIDEO_V2.mp4" target="_blank" rel="noreferrer"><span><strong>Inspector</strong><small>Edit a GameObject</small></span></a>
+          </div>
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/explore-the-editor-interface-1-1?version=6.3" target="_blank" rel="noreferrer">Explore the Editor Interface ↗</a>
           </p>
         </section>
 
-        <section class="article-section" id="extensions">
-          <div class="section-kicker">07 · EXTENSION LADDER</div>
-          <h2>Extend one part of the system</h2>
+        <section class="article-section" id="navigation">
+          <div class="section-kicker">05 · 3D NAVIGATION</div>
+          <h2>Use the Scene view navigation controls</h2>
+          <div class="pull-quote">
+            Navigation is a prerequisite for object placement: first control the Scene camera, then edit the scene.
+            <small>Unity Learn compares this to learning how to hold a pencil before drawing.</small>
+          </div>
+
           <p>
-            Choose one extension. The levels indicate the number of new operations, not the quality of the final result.
+            Open <strong>_Unity Essentials → Scenes → 1_Playground_Navigation_Scene</strong>. Move slowly at first. Tap a key, observe the result, and reset your view often. Speed comes after control.
           </p>
 
-          <div class="hunt" aria-label="Optional 3D extension exercises">
+          <table class="shortcut-table">
+            <thead><tr><th>Action</th><th>Control</th><th>Effect</th></tr></thead>
+            <tbody>
+              <tr><td data-label="Action">Frame</td><td data-label="Control"><kbd>F</kbd> or double-click a GameObject</td><td data-label="Effect">Center and scale the view around the selection.</td></tr>
+              <tr><td data-label="Action">Look</td><td data-label="Control">Right-click + drag</td><td data-label="Effect">Rotate the Scene camera in place.</td></tr>
+              <tr><td data-label="Action">Fly</td><td data-label="Control">Hold right-click + <kbd>WASD</kbd>; <kbd>Q</kbd>/<kbd>E</kbd> down/up</td><td data-label="Effect">Translate and rotate the Scene camera concurrently.</td></tr>
+              <tr><td data-label="Action">Orbit</td><td data-label="Control"><kbd>Alt</kbd>/<kbd>Option</kbd> + left-drag</td><td data-label="Effect">Rotate the Scene camera around the selected pivot.</td></tr>
+              <tr><td data-label="Action">Zoom</td><td data-label="Control">Mouse wheel or two-finger trackpad scroll</td><td data-label="Effect">Move the Scene camera toward or away from the pivot.</td></tr>
+              <tr><td data-label="Action">Pan</td><td data-label="Control">Select the Hand/View tool, then left-drag</td><td data-label="Effect">Translate the Scene camera parallel to the view plane.</td></tr>
+            </tbody>
+          </table>
+
+          <p>
+            The top-row tool shortcuts form a memorable sequence: <kbd>Q</kbd> View, <kbd>W</kbd> Move, <kbd>E</kbd> Rotate, <kbd>R</kbd> Scale, <kbd>T</kbd> Rect, and <kbd>Y</kbd> Transform.
+          </p>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/shortcut-reference.png" alt="Unity Editor with the shortcuts cheat sheet selected and visible in the Inspector" />
+            <figcaption><strong>Keep this open while practicing:</strong> select _Shortcuts-Cheat_Sheet in the Project window and read it in the Inspector. Screenshot: Unity Learn.</figcaption>
+          </figure>
+        </section>
+
+        <section class="article-section" id="hunt">
+          <div class="section-kicker">06 · NAVIGATION EXERCISE</div>
+          <h2>Complete the playground scavenger hunt</h2>
+          <p>
+            Four numbers are hidden in the playground. Each location forces you to use a different navigation skill. Write each digit in order, then test the combined code in Play mode. This page intentionally does not reveal the answer.
+          </p>
+
+          <div class="hunt" aria-label="Scavenger hunt checklist">
             <label class="hunt-row">
-              <input type="checkbox" data-task="extension-snap" />
+              <input type="checkbox" data-task="swingset" />
               <span class="hunt-index">01</span>
-              <strong>VERTEX SNAP</strong>
-              <span>Hold V, grab a lower vertex, and snap it to a target vertex. Build a precise tower of three or four blocks.</span>
-              <kbd>EASY</kbd>
+              <strong>SWINGSET</strong>
+              <span>Use Flythrough mode to inspect the back of the top bar.</span>
+              <kbd>RMB + WASD</kbd>
             </label>
             <label class="hunt-row">
-              <input type="checkbox" data-task="extension-shapes" />
+              <input type="checkbox" data-task="grill" />
               <span class="hunt-index">02</span>
-              <strong>NEW SHAPES</strong>
-              <span>Add shape prefabs, then configure a Collider, Convex, Rigidbody, Material, and proportional scale.</span>
-              <kbd>MEDIUM</kbd>
+              <strong>GRILL</strong>
+              <span>Select it, frame it, and zoom inside.</span>
+              <kbd>F + Wheel</kbd>
             </label>
             <label class="hunt-row">
-              <input type="checkbox" data-task="extension-art" />
+              <input type="checkbox" data-task="structure" />
               <span class="hunt-index">03</span>
-              <strong>WALL ART</strong>
-              <span>Apply an image Material to a Quad. Duplicate a slightly larger Quad behind it to create a frame.</span>
-              <kbd>EXPERT</kbd>
+              <strong>PLAY STRUCTURE</strong>
+              <span>Frame it, then orbit underneath.</span>
+              <kbd>Alt + drag</kbd>
+            </label>
+            <label class="hunt-row">
+              <input type="checkbox" data-task="firepit" />
+              <span class="hunt-index">04</span>
+              <strong>FIREPIT</strong>
+              <span>Use a side view and disable Perspective.</span>
+              <kbd>Gizmo</kbd>
             </label>
           </div>
 
-          <div class="note">
-            <span class="note-title">Vertex snapping detail</span>
-            Hold <kbd>V</kbd>, then drag from the object's vertex—not from a gizmo arrow—to the destination vertex.
+          <div class="code-box">
+            <div>
+              <strong>YOUR FOUR-DIGIT CODE</strong>
+              <small>Enter the code in Play mode. Fireworks confirm that the code is accepted.</small>
+            </div>
+            <div class="code-inputs" aria-label="Four digit code">
+              <input inputmode="numeric" maxlength="1" aria-label="First digit" data-code-digit />
+              <input inputmode="numeric" maxlength="1" aria-label="Second digit" data-code-digit />
+              <input inputmode="numeric" maxlength="1" aria-label="Third digit" data-code-digit />
+              <input inputmode="numeric" maxlength="1" aria-label="Fourth digit" data-code-digit />
+            </div>
           </div>
 
-          <div class="video-list">
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/0430221d-3943-40b3-9e95-a022de705c68_2.C.2_-_Easy_-_Make_a_perfect_block_tower_with_vertex_snapping.mp4" target="_blank" rel="noreferrer"><span><strong>Vertex snapping</strong><small>Align exact mesh points</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/04d1dba0-c33d-45b9-a863-e273368ab6e2_2.C.3_-_Medium_-_Add_different_shaped_prefab_blocks.mp4" target="_blank" rel="noreferrer"><span><strong>Different shapes</strong><small>Configure a new physical object</small></span></a>
-            <a href="https://connect-mediagw.unity.com/h1/20240514/videos/b1ac0ae1-1d25-4429-a6db-fd4c19c35a8c_2.C.4_-_Expert_-_Add_and_frame_custom_artwork_.mp4" target="_blank" rel="noreferrer"><span><strong>Custom wall art</strong><small>Use a texture, Material, and Quads</small></span></a>
+          <h3>Perspective vs Isometric</h3>
+          <p>
+            The Scene gizmo is the cube and colored cones in the upper-right of the Scene view. Click a cone to align to a side or top view. Right-click the gizmo and disable <strong>Perspective</strong> to enter Isometric mode. Isometric view removes perspective distortion, which can reveal shapes hidden by depth.
+          </p>
+
+          <figure class="source-figure">
+            <img src="./assets/scene-gizmo.png" alt="Unity Scene view orientation gizmo highlighted in the upper-right" />
+            <figcaption>The Scene gizmo controls viewing direction and Perspective/Isometric projection. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <p>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/master-3d-scene-navigation?version=6.3" target="_blank" rel="noreferrer">Master 3D scene navigation ↗</a>
+          </p>
+        </section>
+
+        <section class="article-section" id="mural">
+          <div class="section-kicker">07 · OBJECT MANIPULATION</div>
+          <h2>Design a mural in Scene view</h2>
+          <p>
+            The mural exercise applies Move, Rotate, coordinate-space, and projection controls to tangram pieces. Use the supplied reference or define another valid arrangement.
+          </p>
+
+          <figure class="source-figure breakout">
+            <img src="./assets/mural-overview.png" alt="Colorful tangram pieces in Unity ready for the mural activity" />
+            <figcaption>Start with the large pieces, then fit the smaller pieces around them. Screenshot: Unity Learn.</figcaption>
+          </figure>
+
+          <h3>Global and Local coordinates</h3>
+          <div class="comparison">
+            <div>
+              <strong>GLOBAL</strong>
+              <p>The axes stay fixed like north, south, east, and west. This is useful when every piece should move in the same world directions.</p>
+            </div>
+            <div>
+              <strong>LOCAL</strong>
+              <p>The axes rotate with the object—its own forward, up, and side. This is useful when movement should follow the object’s orientation.</p>
+            </div>
+          </div>
+
+          <div class="axis-line" aria-label="Mural movement axes">
+            <span class="x">Move across X · red</span>
+            <span class="z">Move across Z · blue</span>
+            <span class="y">Rotate around Y · green</span>
+          </div>
+
+          <ol class="steps">
+            <li>Select the <strong>Mural</strong> GameObject, enable it in the Inspector, and double-click it to frame the pieces and reference.</li>
+            <li>Use the Scene gizmo for a top view. Choose <strong>Global</strong> coordinates.</li>
+            <li>Press <kbd>W</kbd> for Move. Start with a large triangle and position it using the red X and blue Z arrows.</li>
+            <li>Press <kbd>E</kbd> for Rotate. Drag the green Y ring with a straight mouse motion until the piece fits.</li>
+            <li>In Isometric view, drag the small square between the X and Z arrows to slide a piece across both axes at once.</li>
+            <li>Complete the design, disable <strong>Tangram_Reference</strong>, restore Perspective, orbit to inspect the result, and save.</li>
+          </ol>
+
+          <div class="practice">
+            <span class="practice-title">Efficient workflow</span>
+            Position first. Rotate second. Switch between <kbd>W</kbd> and <kbd>E</kbd>. Save after every meaningful improvement.
           </div>
 
           <p>
-            Source:
-            <a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/3d-essentials-more-things-to-try?version=6.3" target="_blank" rel="noreferrer">3D Essentials: more things to try ↗</a>
+            Full reference:
+            <a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/design-a-mural-in-scene-view?version=6.3" target="_blank" rel="noreferrer">Design a mural in the Scene view ↗</a>
           </p>
         </section>
 
@@ -1522,35 +1558,26 @@
           <div class="section-kicker">08 · VERIFICATION</div>
           <h2>Completion criteria</h2>
           <p>
-            The lecture is complete when the system works and you can explain which part produces each result.
+            The lecture is complete when you can perform each operation without step-by-step prompting.
           </p>
 
           <div class="checklist" aria-label="End of lecture checklist">
-            <label><input type="checkbox" data-task="review-room" /><span>I can place prefab instances and correct their Transforms.</span></label>
-            <label><input type="checkbox" data-task="review-components" /><span>I can separate mesh, renderer, collider, and Rigidbody responsibilities.</span></label>
-            <label><input type="checkbox" data-task="review-physics" /><span>The Ball falls, bounces from the Ramp, and reaches the Tower.</span></label>
-            <label><input type="checkbox" data-task="review-prefab" /><span>I can create a prefab and update its instances through Prefab Mode.</span></label>
-            <label><input type="checkbox" data-task="review-parent" /><span>I can explain what parenting changes and what it does not merge.</span></label>
-            <label><input type="checkbox" data-task="review-camera" /><span>The Camera frames the complete interaction in Game view.</span></label>
-            <label><input type="checkbox" data-task="review-light" /><span>I can adjust the Directional Light and skybox without moving scene objects.</span></label>
-            <label><input type="checkbox" data-task="review-save" /><span>I tested outside Play mode changes and saved the scene.</span></label>
+            <label><input type="checkbox" data-task="review-hub" /><span>I can explain the difference between Unity Hub and Unity Editor.</span></label>
+            <label><input type="checkbox" data-task="review-project" /><span>I can open the Essentials project and -1_Starter_Scene.</span></label>
+            <label><input type="checkbox" data-task="review-ui" /><span>I can explain Project vs Hierarchy and Scene vs Game.</span></label>
+            <label><input type="checkbox" data-task="review-play" /><span>I can enter and exit Play mode without losing changes.</span></label>
+            <label><input type="checkbox" data-task="review-inspector" /><span>I can use the Inspector to change a Transform value.</span></label>
+            <label><input type="checkbox" data-task="review-nav" /><span>I can frame, fly, orbit, pan, and zoom in the Scene view.</span></label>
+            <label><input type="checkbox" data-task="review-mural" /><span>I can move, rotate, inspect, and save mural pieces.</span></label>
           </div>
-
-          <h3>Diagnostic questions</h3>
-          <ol class="steps">
-            <li>Why can a visible ramp fail to stop the Ball?</li>
-            <li>Why does changing Ball_Mat not increase Bounciness?</li>
-            <li>When should you edit a prefab asset instead of one instance?</li>
-            <li>Which Camera property changes framing without changing Camera position?</li>
-          </ol>
 
           <h3>Unity Learn sources</h3>
           <ul class="source-list">
-            <li><span>01</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/add-furniture-to-the-kids-room?version=6.3" target="_blank" rel="noreferrer">Add furniture to the kid's room</a></li>
-            <li><span>02</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/make-a-bouncy-ball?version=6.3" target="_blank" rel="noreferrer">Make a bouncy ball</a></li>
-            <li><span>03</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/make-a-tower-of-prefab-blocks?version=6.3" target="_blank" rel="noreferrer">Make a tower of prefab blocks</a></li>
-            <li><span>04</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/adjust-the-lights-background-and-camera-angle?version=6.3" target="_blank" rel="noreferrer">Adjust lights, background, and camera angle</a></li>
-            <li><span>05</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/3d-essentials/tutorial/3d-essentials-more-things-to-try?version=6.3" target="_blank" rel="noreferrer">3D Essentials: more things to try</a></li>
+            <li><span>01</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/unity-essentials-install-unity?version=6.3" target="_blank" rel="noreferrer">Unity Essentials: Install Unity</a></li>
+            <li><span>02</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/open-the-unity-essentials-project?version=6.3" target="_blank" rel="noreferrer">Open the Unity Essentials project</a></li>
+            <li><span>03</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/explore-the-editor-interface-1-1?version=6.3" target="_blank" rel="noreferrer">Explore the Editor Interface</a></li>
+            <li><span>04</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/master-3d-scene-navigation?version=6.3" target="_blank" rel="noreferrer">Master 3D scene navigation</a></li>
+            <li><span>05</span><a href="https://learn.unity.com/pathway/unity-essentials/unit/editor-essentials/tutorial/design-a-mural-in-scene-view?version=6.3" target="_blank" rel="noreferrer">Design a mural in the Scene view</a></li>
           </ul>
 
           <div class="next-module">END OF CURRENT MATERIAL // APPEND FUTURE SECTIONS BELOW</div>
@@ -1586,7 +1613,8 @@
 
       const progressBar = document.getElementById("readingProgress");
       const taskInputs = [...document.querySelectorAll("[data-task]")];
-      const storageKey = "unity-3d-essentials-article-progress";
+      const codeInputs = [...document.querySelectorAll("[data-code-digit]")];
+      const storageKey = "unity-editor-first-contact-article-progress";
 
       function updateReadingProgress() {
         const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -1606,9 +1634,10 @@
         const tasks = Object.fromEntries(
           taskInputs.map((input) => [input.dataset.task, input.checked]),
         );
+        const code = codeInputs.map((input) => input.value).join("");
 
         try {
-          window.localStorage.setItem(storageKey, JSON.stringify({ tasks }));
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks, code }));
         } catch {
           // The article remains usable if browser storage is unavailable.
         }
@@ -1620,8 +1649,23 @@
         input.addEventListener("change", saveProgress);
       });
 
+      codeInputs.forEach((input, index) => {
+        input.value = (saved.code || "")[index] || "";
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, "").slice(0, 1);
+          saveProgress();
+          if (input.value && codeInputs[index + 1]) codeInputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && codeInputs[index - 1]) {
+            codeInputs[index - 1].focus();
+          }
+        });
+      });
+
       document.getElementById("resetProgress").addEventListener("click", () => {
         taskInputs.forEach((input) => { input.checked = false; });
+        codeInputs.forEach((input) => { input.value = ""; });
         try { window.localStorage.removeItem(storageKey); } catch {}
       });
 

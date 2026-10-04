@@ -1,0 +1,262 @@
+WEBVTT
+
+00:00:00.269 --> 00:00:08.119
+Cool, so we've hit the ground running now.
+
+00:00:08.120 --> 00:00:10.748
+We have our running
+animation setup, we have
+
+00:00:10.760 --> 00:00:15.480
+a jumping animation, so we
+can fly through the air so excited.
+
+00:00:15.481 --> 00:00:19.360
+Now we just need to add one more thing, which
+is whenever we collide with one of these
+
+00:00:19.361 --> 00:00:23.240
+barriers, we're not just going to
+keep running into one of the barriers.
+
+00:00:23.241 --> 00:00:29.640
+So what we can do is we can use one
+of our other layers for character deaths.
+
+00:00:29.641 --> 00:00:34.640
+Now in our deaths layer, you can see all of
+the different kinds of states that they can
+
+00:00:34.641 --> 00:00:38.392
+go through, so we can
+go from alive to a death
+
+00:00:38.404 --> 00:00:44.668
+one, so let's see if we double click that,
+and we'll see we'll play that, see how that
+
+00:00:44.680 --> 00:00:47.600
+looks, falls over, and
+then death one is just
+
+00:00:47.601 --> 00:00:54.600
+the character falling over, death
+two, what does this one look like?
+
+00:00:54.601 --> 00:00:58.698
+falls over in front, so falling
+over front doesn't really make
+
+00:00:58.699 --> 00:01:04.239
+any sense in this case, so we'll
+probably just go with death one.
+
+00:01:04.240 --> 00:01:10.680
+Now let's see how we can actually make
+this death animation play when it happens.
+
+00:01:10.681 --> 00:01:14.552
+So let's see the
+transitions here, so let's see
+
+00:01:14.564 --> 00:01:18.200
+the conditions are, so
+the death bull should
+
+00:01:18.201 --> 00:01:25.280
+be set to true, and there's a death
+type integer that's equal to one.
+
+00:01:25.281 --> 00:01:29.054
+So as a good way to
+kind of manage the state,
+
+00:01:29.066 --> 00:01:32.600
+we can actually see
+the second transition,
+
+00:01:32.601 --> 00:01:35.960
+and you can see death type
+becomes equal to two in that case.
+
+00:01:36.559 --> 00:01:41.080
+So since we want the first death animation,
+that's the one that we'll go with.
+
+00:01:41.081 --> 00:01:45.073
+So if we go into our scripts
+again, all the way down
+
+00:01:45.173 --> 00:01:49.480
+at the bottom here, go to
+our player controller script.
+
+00:01:49.481 --> 00:01:53.640
+So now in our player controller script,
+we're going to go to the place where we end
+
+00:01:53.641 --> 00:02:00.280
+the game, where we have
+that game over, bit of code.
+
+00:02:00.281 --> 00:02:03.569
+So down in our on
+collision enter, you can
+
+00:02:03.581 --> 00:02:08.039
+see if we collide with an
+obstacle, then the game is over.
+
+00:02:08.040 --> 00:02:10.347
+So this seems like a
+pretty good place where
+
+00:02:10.359 --> 00:02:15.360
+we can actually make
+this death animation occur.
+
+00:02:16.275 --> 00:02:24.200
+So let's see what kind of methods
+we have for our player animator.
+
+00:02:24.201 --> 00:02:25.201
+So let's see.
+
+00:02:25.275 --> 00:02:29.000
+So we had set trigger to set a trigger.
+
+00:02:29.001 --> 00:02:33.520
+Now that death b was a
+bull, so can we set bull?
+
+00:02:33.570 --> 00:02:35.080
+Oh, cool, perfect.
+
+00:02:37.505 --> 00:02:45.080
+So we'll set bull, and we wanted
+the death bull to be true, so let's see.
+
+00:02:45.180 --> 00:02:48.320
+We can use an int id or
+we can use the string name.
+
+00:02:49.160 --> 00:02:57.160
+So I believe the name was
+capital d f underscore b for the bull.
+
+00:02:57.161 --> 00:03:04.480
+And then the value that we want to set
+it to, so in this case, we set it to true.
+
+00:03:04.481 --> 00:03:05.481
+Cool.
+
+00:03:05.530 --> 00:03:07.569
+So now we set death
+to true, but we need to
+
+00:03:07.581 --> 00:03:11.120
+actually make sure that we
+select the proper death type.
+
+00:03:15.800 --> 00:03:23.200
+So let's see if we can actually set that
+to, so player anim, and then let's see.
+
+00:03:24.640 --> 00:03:32.640
+So it was an integer, so there's a set
+integer option to, so we'll select that one.
+
+00:03:33.200 --> 00:03:41.200
+And I believe to probably use a string
+again, just double check, string name.
+
+00:03:45.290 --> 00:03:48.995
+So then it was, believe
+it was a capital d f
+
+00:03:49.007 --> 00:03:52.640
+capital t type, and
+then an underscore int.
+
+00:03:52.641 --> 00:03:58.440
+And then I believe the one that
+we wanted was the first one, so one.
+
+00:03:58.490 --> 00:04:01.746
+So now if we save,
+so hopefully if we typed
+
+00:04:01.758 --> 00:04:04.829
+everything properly,
+and we set the proper
+
+00:04:04.904 --> 00:04:10.240
+values, it should, when
+we go into our game, cool.
+
+00:04:10.241 --> 00:04:13.161
+So when we play, let's
+see what happens when
+
+00:04:13.173 --> 00:04:17.290
+we run into the obstacle,
+wait for one of them to spawn.
+
+00:04:17.640 --> 00:04:20.774
+Oh, there they go,
+and falls over, and then
+
+00:04:20.786 --> 00:04:24.080
+it goes into the dead
+state in our animation.
+
+00:04:24.081 --> 00:04:27.200
+So perfect.
+
+00:04:27.201 --> 00:04:30.551
+So now what you're
+going to do to add in this
+
+00:04:30.563 --> 00:04:34.000
+animation is in your
+player controller script,
+
+00:04:34.001 --> 00:04:37.476
+in our on collision
+enter method, where we
+
+00:04:37.488 --> 00:04:41.640
+actually collide with an
+obstacle to end our game.
+
+00:04:41.641 --> 00:04:46.160
+That's where we're going to
+use our player animator variable.
+
+00:04:46.161 --> 00:04:52.280
+And we're going to set the
+animation to be our death be.
+
+00:04:52.330 --> 00:04:55.076
+And since our death
+be is a Boolean, we use
+
+00:04:55.088 --> 00:04:58.040
+set bool to set it to
+true for our death type,
+
+00:04:58.165 --> 00:05:02.920
+because it's an integer, we set it with
+integer, and we'll set that one to one.
+
+00:05:02.921 --> 00:05:05.978
+So then when we go
+play the game, you can
+
+00:05:05.990 --> 00:05:09.360
+watch as the animator
+window transitions when
+
+00:05:11.050 --> 00:05:18.800
+the player hits one of the obstacles.

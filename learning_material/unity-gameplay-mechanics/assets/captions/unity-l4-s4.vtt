@@ -1,0 +1,243 @@
+WEBVTT
+
+1
+00:00:00.633 --> 00:00:03.133
+[music]
+
+2
+00:00:05.400 --> 00:00:08.733
+[Instructor] Now we can control
+the enemies spawning
+
+3
+00:00:08.733 --> 00:00:11.133
+whenever they all leave the scene.
+
+4
+00:00:11.933 --> 00:00:13.800
+So what we're going to do is
+
+5
+00:00:13.800 --> 00:00:16.866
+increase the number of enemies
+every time we defeat a wave.
+
+6
+00:00:17.366 --> 00:00:21.433
+So, we'll have 1 spawn, and then we can
+have 2 spawn, and 3, and so on.
+
+7
+00:00:23.133 --> 00:00:25.266
+In our SpawnManager Script
+
+8
+00:00:25.366 --> 00:00:28.600
+we're going to use
+a variable to control...
+
+9
+00:00:28.900 --> 00:00:32.100
+the actual number
+of enemies in the wave.
+
+10
+00:00:32.433 --> 00:00:35.866
+So, we'll make a public variable
+so we can see what it does again,
+
+11
+00:00:36.666 --> 00:00:38.700
+make it an Integer,
+
+12
+00:00:38.933 --> 00:00:41.600
+and then we'll call it "waveNumber,"
+
+13
+00:00:43.366 --> 00:00:45.700
+and we'll set it to 1
+in the beginning,
+
+14
+00:00:46.266 --> 00:00:49.666
+and then we'll actually use
+this waveNumber to dictate
+
+15
+00:00:49.666 --> 00:00:51.666
+how many enemies should spawn
+
+16
+00:00:51.833 --> 00:00:53.633
+after we defeat every enemy.
+
+17
+00:00:53.633 --> 00:00:56.200
+In our "if() statement," 
+since this is where we know
+
+18
+00:00:56.200 --> 00:00:58.100
+when enemies are defeated,
+
+19
+00:00:58.533 --> 00:01:01.333
+this is actually where we'll "increment"
+our waveNumber.
+
+20
+00:01:01.333 --> 00:01:05.100
+So we'll change
+our "SpawnEnemyWave(),"
+
+21
+00:01:05.766 --> 00:01:07.766
+and start to be wave number,
+
+22
+00:01:08.766 --> 00:01:11.266
+so this will spawn 1
+enemy at the beginning.
+
+23
+00:01:12.233 --> 00:01:14.533
+Now, when we've defeated
+all of the enemies
+
+24
+00:01:14.533 --> 00:01:16.466
+we'll set waveNumber,
+
+25
+00:01:16.466 --> 00:01:19.733
+and we'll use
+that "++," this time.
+
+26
+00:01:20.200 --> 00:01:22.700
+So now when the enemies
+are all defeated,
+
+27
+00:01:22.900 --> 00:01:25.066
+it will increase waveNumber by 1,
+
+28
+00:01:25.200 --> 00:01:27.200
+so now waveNumber should be 2.
+
+29
+00:01:27.266 --> 00:01:29.500
+And then if we change the enemies
+
+30
+00:01:29.500 --> 00:01:32.266
+to Spawn Parameter,
+to be a wave number here,
+
+31
+00:01:33.100 --> 00:01:35.800
+so then it should spawn
+2 enemies afterwards.
+
+32
+00:01:36.733 --> 00:01:38.566
+So, now if we test
+our game,
+
+33
+00:01:39.933 --> 00:01:42.200
+we should see 1 enemy spawn;
+there we go.
+
+34
+00:01:42.500 --> 00:01:44.566
+And then if we hit
+this enemy off,
+
+35
+00:01:45.800 --> 00:01:48.133
+2 enemies spawn.
+Then see if we can hit both.
+
+36
+00:01:48.133 --> 00:01:50.133
+Oh, we have 1.
+
+37
+00:01:51.733 --> 00:01:54.200
+And the last 1
+will go off,
+
+38
+00:01:54.200 --> 00:01:56.700
+and then do we get 3?
+
+39
+00:01:57.600 --> 00:01:58.800
+And there you go.
+
+40
+00:01:59.300 --> 00:02:02.400
+So, now in your SpawnManager Script,
+
+41
+00:02:02.400 --> 00:02:04.466
+you're going to add
+another variable
+
+42
+00:02:05.300 --> 00:02:07.333
+to keep track of the waveNumber.
+
+43
+00:02:08.633 --> 00:02:10.500
+So we'll set it to 1,
+and we'll make it public
+
+44
+00:02:10.500 --> 00:02:12.566
+so we can see what it's doing.
+
+45
+00:02:12.766 --> 00:02:16.800
+In our Start() Method,
+change EnemyWave to waveNumber,
+
+46
+00:02:18.966 --> 00:02:21.533
+and then in our Update() Method,
+where we can actually keep track
+
+47
+00:02:21.533 --> 00:02:24.133
+of when we hit the point
+where all the enemies
+
+48
+00:02:24.133 --> 00:02:26.566
+are off the scene,
+and we create a new one,
+
+49
+00:02:27.033 --> 00:02:29.133
+we'll increment wave number
+by 1 here,
+
+50
+00:02:29.666 --> 00:02:32.933
+and then we'll spawn 
+a new EnemyWave using
+
+51
+00:02:32.933 --> 00:02:34.933
+the incremented number.
+
+52
+00:02:35.033 --> 00:02:37.333
+Now it's your turn.
+
+53
+00:02:37.600 --> 00:02:40.100
+[music]

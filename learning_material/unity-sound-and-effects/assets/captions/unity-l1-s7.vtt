@@ -1,0 +1,217 @@
+WEBVTT
+
+00:00:01.740 --> 00:00:09.740
+In the previous video we used the
+spacebar to make the character jump.
+
+00:00:10.090 --> 00:00:13.226
+But in this video we want to create a more
+of a perfect jump so we're going to be able
+
+00:00:13.250 --> 00:00:18.680
+to modify the jump force and the gravity
+to make it feel a little bit more snappy.
+
+00:00:18.681 --> 00:00:21.629
+If we head back into
+our player controller script
+
+00:00:21.641 --> 00:00:24.240
+and we never get down
+to the update method.
+
+00:00:24.241 --> 00:00:29.080
+Using a value in the advance of 10 and it's
+not great to add code the value down here.
+
+00:00:29.280 --> 00:00:32.159
+What we want to do is
+add a brand new variable.
+
+00:00:32.459 --> 00:00:35.171
+So we'll call this one
+public float and we'll just
+
+00:00:35.172 --> 00:00:38.840
+call this jump force and
+we'll set that equal to 10.
+
+00:00:38.841 --> 00:00:40.160
+Just like we had before.
+
+00:00:40.161 --> 00:00:42.845
+Now we can copy our
+jump force and replace that
+
+00:00:42.857 --> 00:00:45.440
+times 10 in there just
+so that we can control
+
+00:00:45.614 --> 00:00:46.840
+it in the inspector.
+
+00:00:46.841 --> 00:00:48.423
+In our start method
+we want to be able to
+
+00:00:48.435 --> 00:00:50.185
+control that gravity
+to make it feel a little
+
+00:00:50.209 --> 00:00:55.160
+bit more snappy while bringing the player
+back down to where it should be originally.
+
+00:00:55.161 --> 00:00:58.160
+So what we can do is use physics.
+
+00:00:58.161 --> 00:01:03.080
+Which is just the physics system and we can
+use dot and then we'll say gravity because
+
+00:01:03.081 --> 00:01:05.174
+we can affect gravity
+on all rigid bodies
+
+00:01:05.186 --> 00:01:07.600
+within the scene and
+we can use the star or the
+
+00:01:07.601 --> 00:01:13.280
+multiply symbol equals a variable
+that we're going to be able to use.
+
+00:01:13.281 --> 00:01:15.760
+I'll just name that variable.
+
+00:01:15.761 --> 00:01:18.162
+Now up here we want
+to have another public
+
+00:01:18.174 --> 00:01:20.760
+float and the variable
+we're going to create.
+
+00:01:20.761 --> 00:01:25.160
+Call this one gravity modifier and you don't
+need to give it an initial value if you
+
+00:01:25.161 --> 00:01:28.765
+don't want and I'm just
+going to copy that and paste
+
+00:01:28.865 --> 00:01:33.360
+that in here and make sure I
+add a semicolon on the end.
+
+00:01:33.361 --> 00:01:36.440
+This means we're just
+going to multiply the
+
+00:01:36.452 --> 00:01:39.760
+gravity that we have
+by the gravity multiplier
+
+00:01:39.760 --> 00:01:46.160
+and that multiplication equals is just a
+shorthand way of saying physics dot gravity
+
+00:01:46.409 --> 00:01:53.160
+equals physics dot gravity
+times by gravity modifier.
+
+00:01:53.161 --> 00:01:56.415
+So you can see we've
+just removed this portion
+
+00:01:56.427 --> 00:01:59.480
+like this and we still
+have that multiplier
+
+00:01:59.481 --> 00:02:02.929
+and that equals and we
+just move it multiply over
+
+00:02:02.941 --> 00:02:06.120
+there and we can then
+get the same statement.
+
+00:02:06.145 --> 00:02:09.360
+It just makes it a shorthand
+version of doing the same thing.
+
+00:02:09.361 --> 00:02:11.464
+If we save this script
+we go back into unity
+
+00:02:11.476 --> 00:02:16.600
+select on our player and you can see the
+jump forces 10 and gravity modifier is zero.
+
+00:02:16.601 --> 00:02:18.522
+Now if we test this
+out something weird is
+
+00:02:18.534 --> 00:02:20.560
+going to happen if we
+press base you can see
+
+00:02:20.561 --> 00:02:24.520
+that there is no gravity and
+they just character flies up forever.
+
+00:02:24.521 --> 00:02:27.128
+So if we stop that and
+you can see if we set
+
+00:02:27.140 --> 00:02:29.640
+the gravity modifier
+to one this will just
+
+00:02:29.641 --> 00:02:34.440
+be whatever gravity is times one
+so that will be just its default value.
+
+00:02:34.441 --> 00:02:37.400
+So if we press play again it
+will be just like we did originally.
+
+00:02:37.401 --> 00:02:39.632
+Just remember each
+time you want to modify the
+
+00:02:39.644 --> 00:02:41.840
+gravity modifier while
+you're in game because
+
+00:02:41.841 --> 00:02:44.319
+it only does it once
+in the start method so
+
+00:02:44.331 --> 00:02:48.680
+make sure you just stop your
+game and modify that value after.
+
+00:02:48.681 --> 00:02:51.090
+So I've stopped my
+game, I've set the jump
+
+00:02:51.102 --> 00:02:55.600
+force 15 and then modified it to and
+now the jump looks a little bit snappier.
+
+00:02:55.601 --> 00:02:59.880
+So what I want you to be able to do is go
+back into your player controller script, add
+
+00:02:59.881 --> 00:03:05.480
+yourself a public float for jump force and
+gravity modifier, set the jump force equal
+
+00:03:05.505 --> 00:03:09.038
+to 10 and then within
+your start method use
+
+00:03:09.050 --> 00:03:18.840
+physics dot gravity multiplied
+equals gravity modifier.

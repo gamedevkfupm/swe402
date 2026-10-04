@@ -1,0 +1,195 @@
+WEBVTT
+
+1
+00:00:01.100 --> 00:00:03.166
+[music]
+
+2
+00:00:05.300 --> 00:00:08.066
+[Instructor] Cool. So we've got
+some background music
+
+3
+00:00:08.066 --> 00:00:11.700
+playing in our game [happy game music]
+for our nice happy forest,
+
+4
+00:00:11.700 --> 00:00:15.033
+and our nice happy character
+jumping through the Scene.
+
+5
+00:00:17.133 --> 00:00:20.700
+So, one of the last things
+that we're going to do
+
+6
+00:00:21.700 --> 00:00:25.133
+is we're going to add in some
+"Sound Effects" for the Player.
+
+7
+00:00:25.433 --> 00:00:29.933
+Now Sound Effects are a bit
+different than using Music Audio
+
+8
+00:00:29.933 --> 00:00:32.366
+because we actually need
+to trigger those Sound Effects
+
+9
+00:00:32.366 --> 00:00:35.233
+in our code. So actually,
+what we're going to do is,
+
+10
+00:00:35.233 --> 00:00:37.566
+first we're going to go
+into our PlayerController Script,
+
+11
+00:00:38.600 --> 00:00:41.100
+and now in our PlayerController Script,
+
+12
+00:00:41.333 --> 00:00:44.533
+we're going to create
+two new variables.
+
+13
+00:00:45.800 --> 00:00:49.400
+So the first one will be a public,
+
+14
+00:00:49.633 --> 00:00:52.800
+and in this case,
+since we're actually using Audio clips,
+
+15
+00:00:53.000 --> 00:00:56.766
+we can actually just use
+the "AudioClip".
+
+16
+00:00:59.000 --> 00:01:01.666
+So now we have an AudioClip class.
+
+17
+00:01:02.700 --> 00:01:05.100
+And we'll call this,
+The "jumpSound."
+
+18
+00:01:08.333 --> 00:01:12.100
+And then we need a second
+AudioClip for our "crashSound."
+
+19
+00:01:21.900 --> 00:01:24.133
+So now that we have
+these public variables,
+
+20
+00:01:24.866 --> 00:01:26.866
+now if we go back into Unity,
+
+21
+00:01:26.866 --> 00:01:29.600
+you can see when we click
+on the Player,
+
+22
+00:01:30.100 --> 00:01:32.933
+so there's the Jump Sound
+which has no Audio Clip,
+
+23
+00:01:32.933 --> 00:01:34.933
+and the Crash Sound 
+which also has no Audio Clip.
+
+24
+00:01:35.833 --> 00:01:37.933
+So we're actually going to go
+into the "SFX."
+
+25
+00:01:38.733 --> 00:01:41.733
+So there's a bunch of different
+options for jumping and crashing.
+
+26
+00:01:42.833 --> 00:01:45.666
+So if we just make sure
+that we go back to the Player,
+
+27
+00:01:45.666 --> 00:01:50.500
+and we'll just drag one of them.
+I'll just do crash2 for our crash sound.
+
+28
+00:01:51.233 --> 00:01:54.200
+And then jump3 for our jump sound.
+
+29
+00:01:54.600 --> 00:01:58.466
+So now what you're going to do is,
+in your PlayerController class,
+
+30
+00:01:58.466 --> 00:02:00.900
+you're going to create
+two new variables yourself
+
+31
+00:02:01.566 --> 00:02:03.433
+for the AudioClips.
+
+32
+00:02:03.433 --> 00:02:05.600
+One AudioClip variable for the jump,
+
+33
+00:02:06.166 --> 00:02:09.400
+and one for the crash, 
+and make sure that they're public,
+
+34
+00:02:09.400 --> 00:02:12.533
+so that way we can assign it,
+when we get into Unity.
+
+35
+00:02:13.700 --> 00:02:17.266
+And then in Unity, you're going to click
+the Player,
+
+36
+00:02:17.933 --> 00:02:21.533
+and then just make sure that you go
+into your Course Library, Sound,
+
+37
+00:02:22.133 --> 00:02:24.133
+SFX for Sound Effects.
+
+38
+00:02:24.566 --> 00:02:27.666
+Drag and drop one of the jumps
+into the jump sound,
+
+39
+00:02:27.666 --> 00:02:29.666
+and one of the crashes 
+into the crash sound.
+
+40
+00:02:30.500 --> 00:02:32.466
+Now it's your turn.
+
+41
+00:02:32.633 --> 00:02:35.700
+[music]

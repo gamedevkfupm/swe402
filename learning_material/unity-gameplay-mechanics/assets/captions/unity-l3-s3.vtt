@@ -1,0 +1,243 @@
+WEBVTT
+
+00:00:03.020 --> 00:00:06.830
+We've added in
+functionality so that we can
+
+00:00:06.842 --> 00:00:11.020
+actually have the player
+run into our power-up,
+
+00:00:11.021 --> 00:00:16.880
+and then on our player game object, you
+can see that has power-up turns to true.
+
+00:00:16.881 --> 00:00:21.400
+Now this power-up will be very
+useful only for a specific circumstance.
+
+00:00:21.401 --> 00:00:24.309
+When our player runs
+into one of our spawned
+
+00:00:24.321 --> 00:00:27.640
+enemies on our screen,
+while we have the power-up.
+
+00:00:27.641 --> 00:00:31.000
+Now one thing we want to make sure
+we do, just to make our lives a bit easier,
+
+00:00:31.001 --> 00:00:37.680
+is if we go into our pre-fab's folder,
+if we double-click on our enemy,
+
+00:00:37.681 --> 00:00:44.172
+we want to set their tags
+to be enemy, so we'll add
+
+00:00:44.173 --> 00:00:50.520
+a tag, make sure you add
+a custom tag for enemy,
+
+00:00:50.521 --> 00:00:58.000
+and then go back to the
+enemy under the pre-fab window,
+
+00:00:58.001 --> 00:01:07.200
+go to the tag section, add the enemy tag,
+and then we can leave our pre-fab window.
+
+00:01:07.200 --> 00:01:09.720
+So now we have a tag for our enemy.
+
+00:01:09.721 --> 00:01:12.713
+Next we're going to go
+into our player controller
+
+00:01:12.714 --> 00:01:15.840
+script, and in our
+player controller script,
+
+00:01:15.841 --> 00:01:21.520
+we're actually going to create a new
+method underneath On Trigger Enter,
+
+00:01:22.640 --> 00:01:30.640
+so we're going to make an
+On Collision Enter method.
+
+00:01:30.641 --> 00:01:35.440
+Now the reason we actually want to use
+On Collision Enter versus On Trigger Enter
+
+00:01:35.589 --> 00:01:39.456
+is because On Trigger
+Enter is useful when you are
+
+00:01:39.457 --> 00:01:43.440
+just trying to understand
+triggers between colliders.
+
+00:01:43.441 --> 00:01:49.000
+But if you're trying to do something with
+physics, you use On Collision Enter instead.
+
+00:01:49.001 --> 00:01:54.520
+In our On Collision Enter
+method, we're going to check again
+
+00:01:54.520 --> 00:01:57.560
+for another condition, so
+we need an F statement.
+
+00:02:04.200 --> 00:02:14.323
+So if the object we're colliding
+with is an enemy, and if
+
+00:02:14.373 --> 00:02:19.960
+our player has the power up,
+then we should do something.
+
+00:02:19.961 --> 00:02:24.000
+In this case, we're just going to
+use a debug.log statement for now,
+
+00:02:24.100 --> 00:02:26.520
+so that way we know that it worked.
+
+00:02:26.570 --> 00:02:32.840
+So if we debug.log, so that
+way we can see in our console,
+
+00:02:32.841 --> 00:02:40.120
+now we can type in a string,
+so we'll say collided with.
+
+00:02:40.121 --> 00:02:44.360
+And now what we're actually going to
+do is something called concatenation.
+
+00:02:44.410 --> 00:02:50.840
+So we can actually add strings together to
+be able to create one entire full message.
+
+00:02:50.890 --> 00:02:55.800
+So we have this first string that we
+typed out literally using our quotes.
+
+00:02:55.801 --> 00:02:59.000
+And now we actually want to know
+the name of what we've collided with,
+
+00:02:59.050 --> 00:03:05.840
+so we would get the
+collision.gameobject.name.
+
+00:03:05.841 --> 00:03:10.080
+And you see when we use
+.name, we actually get a string back.
+
+00:03:10.081 --> 00:03:12.920
+And then we use another plus sign.
+
+00:03:12.970 --> 00:03:19.080
+And then another set of
+quotes for a literal string again.
+
+00:03:19.130 --> 00:03:22.280
+With power up, set two.
+
+00:03:22.380 --> 00:03:28.080
+And then if we do a plus,
+and then we use has power up.
+
+00:03:28.180 --> 00:03:33.560
+So this will tell us, when we've collided
+with whatever we collide with an enemy,
+
+00:03:33.610 --> 00:03:37.480
+it will tell us that our power
+up is set to true or false.
+
+00:03:37.580 --> 00:03:41.160
+In this case, it'll be true because
+we've added that in our if statement.
+
+00:03:41.310 --> 00:03:48.040
+So you can actually use variables and
+strings in an entire message for a debug.log.
+
+00:03:48.140 --> 00:03:53.800
+So that way we have a string,
+and then you add in another string,
+
+00:03:53.900 --> 00:03:57.080
+and then you add in the
+string literal once again.
+
+00:03:57.180 --> 00:04:02.360
+And then you can even add in different
+variables like Booleans or integers or floats.
+
+00:04:02.460 --> 00:04:05.560
+If you're looking for
+some precise information.
+
+00:04:05.710 --> 00:04:12.040
+So now when we save this,
+so in Unity, when we press play,
+
+00:04:12.279 --> 00:04:20.279
+if we pick up the power up, and then
+we hopefully collide with our enemy,
+
+00:04:20.430 --> 00:04:22.825
+there you go. On the
+bottom, you can see collided
+
+00:04:22.837 --> 00:04:25.000
+with enemy clone with
+power ups at the true.
+
+00:04:25.150 --> 00:04:29.560
+Or if we check our console window,
+you can see it up there as well.
+
+00:04:29.710 --> 00:04:35.160
+So now it's your turn, you're
+going to go into your enemy prefab.
+
+00:04:35.210 --> 00:04:39.240
+Make sure you apply the enemy tag.
+
+00:04:39.315 --> 00:04:43.221
+In our player controller script,
+make sure that you add an
+
+00:04:43.246 --> 00:04:47.480
+on collision enter method
+into your player controller script.
+
+00:04:47.505 --> 00:04:53.400
+In that on collision enter method, make sure
+you add an if statement that will check.
+
+00:04:53.425 --> 00:04:57.960
+If we collide with another
+game object whose tag is enemy.
+
+00:04:57.961 --> 00:05:00.976
+And we have a power
+up, then we'll print out
+
+00:05:00.988 --> 00:05:04.360
+this log statement to
+tell us that we've collided
+
+00:05:04.361 --> 00:05:07.240
+with an enemy while
+our power up is activated.
+
+00:05:07.390 --> 00:05:13.880
+Now it's your turn.

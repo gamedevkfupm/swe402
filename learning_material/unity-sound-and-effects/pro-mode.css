@@ -1,0 +1,69 @@
+.pro-only { display: none; }
+.pro-mode .pro-only { display: block; }
+.pro-mode button.pro-only { display: inline-flex; }
+.pro-mode .guided-goal,
+.pro-mode [data-pro-hint]:not(.hint-revealed) { display: none !important; }
+#proToggle { gap: .5rem; }
+#proToggle[aria-pressed="true"] { background: var(--purple-soft); border-color: var(--purple); }
+#proToggleState { font-size: .75rem; color: var(--muted); }
+.pro-mode-note { max-width: 72ch; margin-top: 1.25rem; color: var(--muted); font-size: .9rem; }
+.pro-brief { margin: .6rem 0 1rem; }
+.pro-resources { font-size: .9rem; }
+.pro-hint-controls { margin: .8rem 0 1.2rem; }
+.pro-extra { margin: 2rem 0; }
+.hint-button { border-color: var(--purple); color: var(--purple); }
+.pro-mode .steps > li { margin-bottom: 1.5rem; }
+@media print { .pro-only, .pro-mode-note { display: none !important; } }
+
+.pro-checklist { list-style: none; padding: 0; }
+.pro-checklist li { margin: .65rem 0; }
+.pro-checklist label { display: flex; align-items: flex-start; gap: .65rem; cursor: pointer; }
+.pro-checklist input { flex: 0 0 auto; width: 1.1rem; height: 1.1rem; margin-top: .2rem; accent-color: var(--purple); }
+.pro-checklist input:checked + span { color: var(--muted); }
+
+.checkpoint-row { display: flex; align-items: flex-start; gap: .5rem; }
+.checkpoint-row label { flex: 1; min-width: 0; }
+.pro-mode button.checkpoint-hint-button { flex: 0 0 2rem; width: 2rem; height: 2rem; padding: 0; justify-content: center; border-radius: 50%; font-weight: 700; }
+.checkpoint-hint-button[aria-expanded="true"] { background: var(--purple-soft); }
+.checkpoint-hint-content { margin: .65rem 0 1rem 1.75rem; padding: .75rem 1rem; border-left: 2px solid var(--purple); background: var(--surface); color: var(--ink); }
+.checkpoint-hint-content .substep-text + .substep-text { margin-top: 1rem; }
+.checkpoint-hint-content p:first-child { margin-top: 0; }
+.checkpoint-hint-content p:last-child { margin-bottom: 0; }
+
+.pro-check-progress { position: fixed; bottom: .8rem; left: .8rem; z-index: 40; width: 232px; box-sizing: border-box; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.pro-check-progress-label { margin: 0 0 .45rem; font-size: .75rem; font-weight: 600; }
+.pro-check-progress-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+.pro-check-square { appearance: none; display: block; aspect-ratio: 1; min-width: 0; padding: 0; border: 1px solid var(--muted); border-radius: 1px; background: var(--paper-deep); cursor: pointer; }
+.pro-check-square.without-hint, .pro-check-progress-legend .without-hint { background: #f2cf43; }
+.pro-check-square.with-hint, .pro-check-progress-legend .with-hint { background: #f28a35; }
+.pro-check-square:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+.pro-check-progress-legend { display: flex; gap: .75rem; margin: .5rem 0 0; font-size: .65rem; color: var(--muted); }
+.pro-check-progress-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+.pro-check-progress-legend i { width: 9px; height: 9px; border: 1px solid #66542d; }
+@media (max-width: 680px) { .pro-check-progress { width: 196px; left: .5rem; bottom: .5rem; padding: .5rem; } .pro-mode { padding-bottom: 150px; } }
+@media print { .pro-check-progress { display: none !important; } }
+
+.pro-quiz-star { appearance: none; background: transparent; border: 0; padding: 0; min-width: 0; aspect-ratio: 1; font-size: 20px; line-height: 1; color: var(--muted); cursor: pointer; }
+.pro-quiz-star.quiz-correct { color: #f2cf43; }
+.pro-quiz-star.quiz-incorrect { color: #f28a35; }
+.pro-quiz-star:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+/* Compact progress markers at 60% of their original size. */
+.pro-check-progress { width: 139.2px; }
+.pro-check-progress-grid { gap: 1.8px; }
+.pro-quiz-star { font-size: 12px; }
+@media (max-width: 680px) { .pro-check-progress { width: 117.6px; padding: 0; } }
+
+/* One compact marker row per practical lesson section. */
+.pro-check-progress { width: auto; max-width: calc(100vw - 1rem); }
+.pro-check-progress-grid { display: flex; flex-direction: column; gap: 3px; }
+.pro-progress-section-row { display: flex; gap: 1.8px; align-items: center; }
+.pro-progress-section-row .pro-check-square,
+.pro-progress-section-row .pro-quiz-star { width: 9px; height: 9px; flex: 0 0 9px; }
+.pro-progress-section-row .pro-quiz-star { font-size: 12px; }
+@media (max-width: 680px) { .pro-check-progress { width: auto; padding: 0; } }
+
+/* Match marker boxes and avoid font-baseline offsets in quiz stars. */
+.pro-progress-section-row > button { box-sizing: border-box; margin: 0; min-height: 0; padding: 0; align-self: center; }
+.pro-progress-section-row .pro-quiz-star { display: flex; align-items: center; justify-content: center; font-size: 0; line-height: 0; }
+.pro-quiz-star svg { display: block; width: 9px; height: 9px; flex: 0 0 9px; }

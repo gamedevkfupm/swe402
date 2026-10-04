@@ -1,0 +1,334 @@
+WEBVTT
+
+1
+00:00:01.200 --> 00:00:03.233
+[music]
+
+2
+00:00:05.500 --> 00:00:08.133
+[Instructor] We've added our Player
+Object to the Scene now,
+
+3
+00:00:09.033 --> 00:00:12.700
+and for this game this entire
+platform is going to be
+
+4
+00:00:12.700 --> 00:00:15.500
+the center point
+of our entire Player View.
+
+5
+00:00:16.033 --> 00:00:17.933
+We're actually going to
+make it so that they can
+
+6
+00:00:17.933 --> 00:00:19.733
+manipulate the View itself.
+
+7
+00:00:19.733 --> 00:00:22.300
+So we're going to use the
+Camera to be able to do so.
+
+8
+00:00:23.666 --> 00:00:24.766
+How we're going to do that,
+
+9
+00:00:24.766 --> 00:00:27.000
+is we're going to need
+a central point here,
+
+10
+00:00:27.000 --> 00:00:28.366
+exactly where the ball is
+
+11
+00:00:28.366 --> 00:00:30.333
+that we can actually Rotate around,
+
+12
+00:00:30.566 --> 00:00:34.700
+so we'll Create an empty
+GameObject in our Hierarchy.
+
+13
+00:00:34.700 --> 00:00:38.700
+If we right-click, Create Empty,
+we have the GameObject,
+
+14
+00:00:38.700 --> 00:00:42.400
+now you can see it's spawned
+at a strange position.
+
+15
+00:00:42.866 --> 00:00:44.866
+So we'll fix that just a little bit.
+
+16
+00:00:46.066 --> 00:00:49.166
+If we go to Transform,
+and we click on the icon.
+
+17
+00:00:49.733 --> 00:00:51.733
+We can Reset the Position.
+
+18
+00:00:52.700 --> 00:00:55.800
+So now our empty GameObject
+
+19
+00:00:55.800 --> 00:00:57.800
+is exactly in the center
+of our scene,
+
+20
+00:00:59.266 --> 00:01:01.333
+we're going to name
+this the "Focal Point."
+
+21
+00:01:02.500 --> 00:01:05.700
+So in this case, this GameObject
+will be the center point
+
+22
+00:01:05.700 --> 00:01:07.700
+of our entire scene.
+
+23
+00:01:09.100 --> 00:01:12.033
+It's especially useful
+that this is an empty GameObject,
+
+24
+00:01:12.033 --> 00:01:14.433
+because this is literally
+just going to be a position,
+
+25
+00:01:14.433 --> 00:01:16.466
+and a point that we rotate around.
+
+26
+00:01:16.700 --> 00:01:19.300
+In order to control the Camera,
+we can actually,
+
+27
+00:01:19.966 --> 00:01:22.433
+left-click on the Main Camera
+in our Hierarchy,
+
+28
+00:01:22.900 --> 00:01:25.933
+drag and drop it onto the Focal Point
+GameObject.
+
+29
+00:01:27.300 --> 00:01:30.933
+So now the Main Camera is
+a child Object
+
+30
+00:01:31.400 --> 00:01:33.400
+of our Focal Point.
+
+31
+00:01:34.333 --> 00:01:37.133
+And so, in fact,
+because the Main Camera
+
+32
+00:01:37.133 --> 00:01:39.933
+is always tied to the
+location of our Focal Point
+
+33
+00:01:39.933 --> 00:01:43.666
+by doing this, if we
+rotate our Focal Point,
+
+34
+00:01:44.100 --> 00:01:46.366
+for example on the Y-axis,
+
+35
+00:01:48.400 --> 00:01:51.800
+our Camera will actually
+rotate around the Game View.
+
+36
+00:01:52.833 --> 00:01:55.033
+Based on that Focal Point.
+
+37
+00:01:55.033 --> 00:01:57.033
+So it creates this really cool effect,
+
+38
+00:01:58.033 --> 00:02:00.866
+and the center of our platform
+
+39
+00:02:00.866 --> 00:02:02.866
+is always the center
+of our Camera.
+
+40
+00:02:03.166 --> 00:02:05.166
+So I'm going to reset
+that really quick.
+
+41
+00:02:05.833 --> 00:02:07.866
+So now it's back at the center.
+
+42
+00:02:07.866 --> 00:02:11.000
+Now with that in mind,
+what we can do is use code
+
+43
+00:02:11.000 --> 00:02:13.966
+to actually control the
+rotation of this Focal Point.
+
+44
+00:02:13.966 --> 00:02:16.666
+So if we go to our Project window,
+
+45
+00:02:17.033 --> 00:02:19.033
+right-click on Assets,
+
+46
+00:02:19.933 --> 00:02:21.966
+and we're going to
+Create a new Folder.
+
+47
+00:02:22.900 --> 00:02:25.066
+And this Folder will
+hold all of our Scripts.
+
+48
+00:02:25.800 --> 00:02:27.233
+Now in our Scripts Folder,
+
+49
+00:02:27.233 --> 00:02:29.233
+we're going to right-click on that.
+
+50
+00:02:29.733 --> 00:02:32.866
+We're going to Create
+a new script.
+
+51
+00:02:34.066 --> 00:02:36.466
+And this Script will be
+called "RotateCamera."
+
+52
+00:02:37.900 --> 00:02:40.733
+And this is what we'll use
+to control the rotation.
+
+53
+00:02:41.500 --> 00:02:43.600
+Now we're actually going
+to drag RotateCamera
+
+54
+00:02:43.600 --> 00:02:45.600
+onto the Focal Point,
+
+55
+00:02:47.433 --> 00:02:49.800
+so now that the Script
+is on our Focal Point,
+
+56
+00:02:50.633 --> 00:02:53.933
+this is how we can change
+the rotation of the Y-axis
+
+57
+00:02:53.933 --> 00:02:56.700
+so that the Camera always
+rotates around that point.
+
+58
+00:02:57.533 --> 00:02:59.500
+So now it's your turn.
+
+59
+00:02:59.500 --> 00:03:02.666
+You're going to right-click
+on the Hierarchy,
+
+60
+00:03:02.666 --> 00:03:04.666
+and Create an empty GameObject,
+
+61
+00:03:05.433 --> 00:03:08.166
+we'll rename that GameObject
+to be Focal Point.
+
+62
+00:03:09.400 --> 00:03:12.000
+You're going to left-click,
+and drag your Main Camera
+
+63
+00:03:12.000 --> 00:03:14.000
+onto the Focal Point, so that way
+
+64
+00:03:14.000 --> 00:03:16.100
+it's nested underneath
+the Focal Point.
+
+65
+00:03:17.466 --> 00:03:20.233
+You're going to go into your
+Assets Folder, right-click,
+
+66
+00:03:20.533 --> 00:03:22.900
+Create a new
+Folder for our Scripts.
+
+67
+00:03:24.600 --> 00:03:26.500
+And then in our Scripts Folder,
+
+68
+00:03:26.500 --> 00:03:28.700
+you're going to Create
+a RotateCamera Script.
+
+69
+00:03:29.233 --> 00:03:32.366
+And then that RotateCamera Script
+you'll apply to the Focal Point,
+
+70
+00:03:32.366 --> 00:03:36.300
+so that way we can give the player 
+control of the rotation of that point.
+
+71
+00:03:36.700 --> 00:03:38.733
+Now it's your turn.
+
+72
+00:03:38.800 --> 00:03:40.866
+[music]

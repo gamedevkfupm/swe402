@@ -1,0 +1,512 @@
+WEBVTT
+
+1
+00:00:00.585 --> 00:00:02.835
+[music]
+
+2
+00:00:05.510 --> 00:00:07.840
+[Instructor] Cool, so we have
+our character in the Scene,
+
+3
+00:00:07.840 --> 00:00:10.870
+and whenever we run 
+into one of the Obstacles,
+
+4
+00:00:11.100 --> 00:00:13.140
+right now he's so happy
+we just missed one,
+
+5
+00:00:13.680 --> 00:00:16.800
+and we hit one of them, and you can
+see "Game Over" pops up at the bottom.
+
+6
+00:00:17.410 --> 00:00:19.540
+Now we actually want
+to be able to do things
+
+7
+00:00:19.540 --> 00:00:21.540
+when we end our game.
+
+8
+00:00:21.910 --> 00:00:23.740
+One of the thing's that we'll do
+is we'll make
+
+9
+00:00:23.740 --> 00:00:25.790
+it so that the Background
+stops scrolling,
+
+10
+00:00:26.030 --> 00:00:29.369
+and the Obstacles stop
+when the game is over.
+
+11
+00:00:30.070 --> 00:00:31.883
+To do that we'll actually need to do
+
+12
+00:00:31.883 --> 00:00:34.130
+some communications between our Scripts
+
+13
+00:00:34.130 --> 00:00:36.160
+to be able to know when to stop
+the game.
+
+14
+00:00:37.130 --> 00:00:39.436
+Now, in our MoveLeft Script,
+
+15
+00:00:39.720 --> 00:00:43.280
+how exactly are we going
+to know what's happening
+
+16
+00:00:43.280 --> 00:00:45.340
+in our PlayerController Script?
+
+17
+00:00:45.340 --> 00:00:47.719
+Well, for now we'll create a variable
+
+18
+00:00:48.320 --> 00:00:51.080
+so that we can hold a reference
+to our Script so...
+
+19
+00:00:51.610 --> 00:00:54.559
+specifically because our
+PlayerController Script
+
+20
+00:00:55.180 --> 00:00:57.444
+is a class called
+"PlayerController",
+
+21
+00:00:57.870 --> 00:01:00.320
+we actually just
+call PlayerController.
+
+22
+00:01:01.320 --> 00:01:03.400
+Now, this is very similar
+to how you would just
+
+23
+00:01:03.400 --> 00:01:05.670
+call GameObjects but in this case,
+
+24
+00:01:05.670 --> 00:01:07.630
+we're just calling
+a PlayerController,
+
+25
+00:01:07.630 --> 00:01:09.750
+and we'll name this "player...
+
+26
+00:01:10.927 --> 00:01:13.458
+Controller... Script,"
+
+27
+00:01:14.620 --> 00:01:17.690
+and although not very creative,
+is very descriptive
+
+28
+00:01:17.690 --> 00:01:21.540
+which is incredibly helpful.
+Now, in our Start() method
+
+29
+00:01:21.540 --> 00:01:23.874
+this is actually
+how we're going to connect
+
+30
+00:01:24.230 --> 00:01:26.067
+our reference to our Script
+
+31
+00:01:26.067 --> 00:01:28.121
+to the actual PlayerController Script
+
+32
+00:01:28.497 --> 00:01:31.130
+in our game. So, we're going
+
+33
+00:01:31.130 --> 00:01:34.120
+to use our playerControllerScript,
+
+34
+00:01:36.450 --> 00:01:40.570
+and we're going to set 
+this to the PlayerController Script
+
+35
+00:01:40.730 --> 00:01:42.710
+on our Player.
+
+36
+00:01:42.710 --> 00:01:45.791
+So we can actually use
+the GameObject class,
+
+37
+00:01:47.490 --> 00:01:49.488
+and in our game,
+
+38
+00:01:49.774 --> 00:01:51.774
+we're going to Find()
+
+39
+00:01:55.390 --> 00:01:57.540
+the name of our Object,
+
+40
+00:01:57.540 --> 00:01:59.380
+which in this case in our game
+
+41
+00:01:59.380 --> 00:02:01.550
+is called, "Player"
+
+42
+00:02:01.550 --> 00:02:04.672
+so this'll find Player
+in the Scene Hierarchy,
+
+43
+00:02:05.080 --> 00:02:07.362
+and now that we've found our Player
+
+44
+00:02:07.750 --> 00:02:09.993
+we can actually get their Component,
+
+45
+00:02:13.520 --> 00:02:16.820
+and we're looking for specifically
+
+46
+00:02:17.520 --> 00:02:19.820
+their "PlayerController" Object
+
+47
+00:02:19.820 --> 00:02:22.226
+which we put inside the left,
+and right carets.
+
+48
+00:02:25.500 --> 00:02:27.644
+And then, since this is a method,
+we make sure
+
+49
+00:02:27.644 --> 00:02:29.651
+that we put our parenthesis.
+
+50
+00:02:30.230 --> 00:02:33.158
+So now this is how we can set
+our PlayerControllerScript
+
+51
+00:02:33.430 --> 00:02:36.347
+to be the actual PlayerController Script
+
+52
+00:02:36.574 --> 00:02:38.524
+in our game
+
+53
+00:02:38.524 --> 00:02:40.584
+by using the Player
+in our scene.
+
+54
+00:02:41.294 --> 00:02:44.810
+And now in our Update() method,
+we can actually stop things from moving
+
+55
+00:02:45.290 --> 00:02:47.565
+whenever we Collide with that Player,
+
+56
+00:02:48.290 --> 00:02:50.784
+and the gameOver condition happens.
+
+57
+00:02:51.320 --> 00:02:53.330
+So if()...
+
+58
+00:02:55.110 --> 00:02:58.560
+playerControllerScript, 
+since we now have that reference,
+
+59
+00:03:00.120 --> 00:03:02.861
+and we want to check
+whenever the game is over,
+
+60
+00:03:04.880 --> 00:03:07.950
+however in this case we're looking
+to move things
+
+61
+00:03:07.950 --> 00:03:09.850
+when the game is not over so,
+
+62
+00:03:09.850 --> 00:03:11.840
+if gameOver
+
+63
+00:03:12.130 --> 00:03:14.436
+is equal to false
+
+64
+00:03:14.660 --> 00:03:16.460
+we use those two equal signs
+
+65
+00:03:16.460 --> 00:03:18.490
+to say that it's equal to
+
+66
+00:03:18.740 --> 00:03:20.970
+instead of setting
+gameOver to false,
+
+67
+00:03:21.660 --> 00:03:24.136
+and then we use our curly brackets,
+
+68
+00:03:24.510 --> 00:03:26.490
+and then press Enter,
+and we can actually just cut
+
+69
+00:03:26.490 --> 00:03:28.830
+this entire translate() method,
+
+70
+00:03:29.900 --> 00:03:31.810
+and put it inside 
+this if() statement.
+
+71
+00:03:31.810 --> 00:03:33.630
+One very important thing to note
+
+72
+00:03:33.630 --> 00:03:36.300
+is that you can see
+that we can very easily
+
+73
+00:03:36.300 --> 00:03:38.866
+get our gameOver variable
+
+74
+00:03:39.556 --> 00:03:41.450
+from our PlayerControllerScript.
+
+75
+00:03:41.450 --> 00:03:43.876
+Now, if this was
+a private variable,
+
+76
+00:03:44.470 --> 00:03:46.859
+in fact we wouldn't be able
+to see this at all.
+
+77
+00:03:47.560 --> 00:03:50.260
+Now, if gameOver
+were a private variable,
+
+78
+00:03:50.260 --> 00:03:52.065
+we wouldn't be able
+to see this at all.
+
+79
+00:03:52.630 --> 00:03:56.147
+Just like public variables can
+be seen in the Unity Editor,
+
+80
+00:03:56.900 --> 00:03:58.910
+and private variables cannot,
+
+81
+00:03:59.270 --> 00:04:02.381
+public variables can be seen
+in other classes
+
+82
+00:04:02.950 --> 00:04:04.970
+while private variables cannot.
+
+83
+00:04:05.200 --> 00:04:09.331
+So if I were to get
+a MoveLeft Script somewhere,
+
+84
+00:04:10.020 --> 00:04:12.365
+and I wanted to get
+the speed variable
+
+85
+00:04:12.510 --> 00:04:14.530
+I would have no way
+of doing that.
+
+86
+00:04:14.800 --> 00:04:17.920
+If I made the gameOver
+variable private
+
+87
+00:04:18.150 --> 00:04:20.129
+inside of our PlayerController Script,
+
+88
+00:04:21.030 --> 00:04:23.560
+I would have no way
+of seeing this variable,
+
+89
+00:04:23.930 --> 00:04:26.180
+and being able to know
+if it was true or false.
+
+90
+00:04:26.830 --> 00:04:28.650
+So now,
+
+91
+00:04:28.650 --> 00:04:31.390
+if our gameOver is false,
+
+92
+00:04:31.640 --> 00:04:34.609
+if our game is not over,
+then we're just going to keep moving
+
+93
+00:04:34.609 --> 00:04:37.551
+things to the left.
+So if we save in Unity,
+
+94
+00:04:38.330 --> 00:04:40.812
+now this time when we Play the game,
+
+95
+00:04:41.410 --> 00:04:43.940
+and our Player runs 
+into one of the Obstacles,
+
+96
+00:04:44.340 --> 00:04:46.340
+everything stops.
+
+97
+00:04:47.380 --> 00:04:50.149
+And we're still jumping
+for joy, so excited,
+
+98
+00:04:50.600 --> 00:04:52.870
+and you can see
+all of these Obstacles,
+
+99
+00:04:52.870 --> 00:04:55.477
+just Spawning on each other,
+and there's not enough space.
+
+100
+00:04:56.290 --> 00:04:59.436
+Now what you're going to do
+is in your MoveLeft Script,
+
+101
+00:05:00.010 --> 00:05:02.300
+you're going to get a reference
+
+102
+00:05:02.300 --> 00:05:05.910
+of our playerControllerScript
+on our Player
+
+103
+00:05:05.910 --> 00:05:08.767
+by creating your own
+PlayerController variable.
+
+104
+00:05:10.320 --> 00:05:13.147
+In our Start() method,
+you're going to set that variable
+
+105
+00:05:13.830 --> 00:05:17.390
+to the PlayerController Object
+or Component
+
+106
+00:05:18.530 --> 00:05:21.766
+on our Player GameObject
+in our scene,
+
+107
+00:05:22.620 --> 00:05:25.408
+and then whenever the game
+
+108
+00:05:25.964 --> 00:05:27.984
+is not over
+
+109
+00:05:28.460 --> 00:05:31.310
+we're going to make sure
+that all of our Obstacles,
+
+110
+00:05:31.310 --> 00:05:33.320
+and our Background keeps moving
+
+111
+00:05:33.670 --> 00:05:36.373
+until our Game Over happens.
+
+112
+00:05:37.118 --> 00:05:39.118
+Now it's your turn.
+
+113
+00:05:39.183 --> 00:05:41.223
+[music]

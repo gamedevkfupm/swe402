@@ -1,0 +1,189 @@
+WEBVTT
+
+00:00:02.580 --> 00:00:10.580
+so we've made it so that our player
+can jump in the scene and they look so
+
+00:00:11.440 --> 00:00:19.440
+excited look at them go but a funny little
+thing that you can do is because we're
+
+00:00:19.441 --> 00:00:24.120
+just looking for whatever the space
+bar is down the character just goes up in
+
+00:00:24.420 --> 00:00:29.920
+fact if we just keep pressing space
+bar our player will just fly off into
+
+00:00:29.921 --> 00:00:35.560
+space it's very fitting we need to actually
+fix that and we'll have to use some
+
+00:00:35.561 --> 00:00:42.640
+of our coding skills to do so so in our
+player controller we're going to create
+
+00:00:42.641 --> 00:00:48.040
+a new variable and this one will be
+public so we can see what it does and we're
+
+00:00:48.041 --> 00:00:54.880
+going to use something called a bool
+which is short for Boolean we'll get into
+
+00:00:54.881 --> 00:00:59.080
+that in a bit but for now we'll call
+it is on ground so that we know the
+
+00:01:01.419 --> 00:01:08.520
+player is on the ground and we're going
+to set this equal to true now a Boolean
+
+00:01:08.521 --> 00:01:15.880
+value is another kind of data type
+just like an integer is for a whole
+
+00:01:18.440 --> 00:01:26.440
+numbers floats are for decimals a
+bool is simply a value that holds true or
+
+00:01:26.441 --> 00:01:31.960
+false this is particularly useful whenever
+we have our conditional statements
+
+00:01:32.459 --> 00:01:38.840
+that are trying to check if something
+is true so what we can do is in our if
+
+00:01:38.841 --> 00:01:45.140
+statement we can actually add some
+code in here so for example when the space
+
+00:01:45.141 --> 00:01:50.200
+bar is down this condition is true
+and it'll add the player force to make the
+
+00:01:51.949 --> 00:01:59.600
+player jump we can use two ampersand
+symbols which if you hold shift and press 7
+
+00:02:03.319 --> 00:02:10.520
+twice this means and and then if we type
+is on ground so this means that whenever
+
+00:02:10.770 --> 00:02:18.400
+the player is on the ground and whenever
+they press the space bar we'll then
+
+00:02:18.600 --> 00:02:22.680
+apply that force to make them jump
+instead of letting them be able to fly off
+
+00:02:22.980 --> 00:02:28.800
+into space one more thing that we're
+going to add in our if statement is when
+
+00:02:35.370 --> 00:02:40.720
+the player jumps we're going to
+set is on ground to false so now in our
+
+00:02:40.721 --> 00:02:44.440
+update function we'll know that when
+the player jumps they're no longer on
+
+00:02:44.441 --> 00:02:49.560
+the ground and so therefore because
+is on ground is false this entire statement
+
+00:02:50.160 --> 00:02:57.120
+will not be true and so it won't let you
+actually jump again the only downside is
+
+00:02:57.121 --> 00:03:03.400
+that we never actually set is on ground
+back to true so we're actually going
+
+00:03:03.401 --> 00:03:09.560
+to use our collisions again so since
+we have a collider on the player and we
+
+00:03:09.710 --> 00:03:12.750
+have colliders on the ground we know
+that when the player touches the ground
+
+00:03:13.430 --> 00:03:20.880
+that they've entered the collider box
+for the ground so if we type private void
+
+00:03:22.440 --> 00:03:30.440
+on collision enter and conveniently
+visual studio auto completes for me the
+
+00:03:30.590 --> 00:03:35.480
+entire method so I don't have to
+write all that out myself so whenever the
+
+00:03:35.481 --> 00:03:41.040
+player enters a collision with something
+now we can set our is on ground
+
+00:03:43.170 --> 00:03:50.320
+to true now if we save this and we go
+back to unity and in our scene view we'll
+
+00:03:50.321 --> 00:03:55.880
+bring our focus back to the player and
+we'll get a better angle there you go so
+
+00:03:55.881 --> 00:04:00.720
+we can watch this is on ground variable
+down here this Boolean and right now
+
+00:04:00.721 --> 00:04:06.400
+since it's true it's checked off we know
+we're on the ground and when we press
+
+00:04:06.401 --> 00:04:11.960
+space is on ground is unchecked when
+we land back on the ground is on ground is
+
+00:04:11.961 --> 00:04:18.480
+checked so it's another good reason
+to jump for joy cool so now what you're
+
+00:04:18.481 --> 00:04:22.600
+gonna do is you're going to create
+your own Boolean variable called is on
+
+00:04:22.601 --> 00:04:28.280
+ground and we're going to set that to
+true in our if statement you're gonna use
+
+00:04:28.480 --> 00:04:34.520
+two ampersand symbols remember hold shift
+and seven and then you're going to add
+
+00:04:34.695 --> 00:04:38.880
+is on ground so that way it's another
+statement that also has to be true within
+
+00:04:38.881 --> 00:04:42.440
+this if statement when the player
+jumps you're going to set is on ground to
+
+00:04:42.490 --> 00:04:48.160
+false and then using our colliders we
+know when the players on the ground and
+
+00:04:48.161 --> 00:04:54.120
+when they're not so you're going to
+use the on collision enter method and then
+
+00:04:54.121 --> 00:04:55.557
+you're going to set is on
+ground back to true when
+
+00:04:55.558 --> 00:05:05.780
+the player collides with
+the ground now it's your turn

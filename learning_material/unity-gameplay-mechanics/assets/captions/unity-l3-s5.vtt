@@ -1,0 +1,276 @@
+WEBVTT
+
+00:00:06.379 --> 00:00:12.980
+And run into our enemy, and
+it will fly off into the distance.
+
+00:00:12.981 --> 00:00:16.125
+Now the problem here is
+that our power-up basically
+
+00:00:16.137 --> 00:00:18.860
+lasts forever, and
+that's not entirely fair.
+
+00:00:18.861 --> 00:00:21.300
+So we're actually going
+to add a timer in so
+
+00:00:21.312 --> 00:00:25.300
+that we can remove this
+power-up at a certain time.
+
+00:00:25.500 --> 00:00:28.765
+In our player controller
+script, we're going
+
+00:00:28.777 --> 00:00:35.000
+to go down underneath our on-trigger-enter,
+and we're going to create a new method.
+
+00:00:35.001 --> 00:00:38.160
+So this method is going
+to be a little strange.
+
+00:00:38.259 --> 00:00:43.600
+It's called an iInumerator.
+
+00:00:43.601 --> 00:00:46.069
+You might notice that after
+adding the iInumerator type,
+
+00:00:46.070 --> 00:00:49.800
+your IDE highlights it with
+a red squiggly error line.
+
+00:00:49.801 --> 00:00:53.960
+If you check Unity's console, you'll likely
+see an error message saying the type or
+
+00:00:53.961 --> 00:00:57.360
+namespace name
+iInumerator could not be found.
+
+00:00:57.361 --> 00:01:00.680
+Are you missing a using
+directive or an assembly reference?
+
+00:01:00.681 --> 00:01:04.120
+There's no need to worry,
+however, because this is a simple fix.
+
+00:01:04.121 --> 00:01:07.080
+The issue here is that we're
+missing a using directive.
+
+00:01:07.081 --> 00:01:09.785
+In C#, using directives
+are lines at the beginning
+
+00:01:09.797 --> 00:01:14.360
+of a script that specify which name
+spaces your code needs access to.
+
+00:01:14.361 --> 00:01:16.342
+So adding the right
+using statement lets your
+
+00:01:16.354 --> 00:01:20.400
+code know where to look for
+the type that you're trying to use.
+
+00:01:20.401 --> 00:01:24.960
+In this case, we need to add the
+using system.collection directive.
+
+00:01:24.961 --> 00:01:27.508
+So go ahead and add
+that line at the top of your
+
+00:01:27.520 --> 00:01:29.920
+script, along with the
+other using statement.
+
+00:01:29.921 --> 00:01:33.120
+Once you've added it, the error
+in your IDE should disappear.
+
+00:01:33.121 --> 00:01:35.421
+Once you save your script,
+then return to Unity, you'll
+
+00:01:35.422 --> 00:01:39.040
+see that the console error
+has been resolved as well.
+
+00:01:39.041 --> 00:01:44.240
+With that out of the way, let's jump
+back into working with Cobra Teens.
+
+00:01:48.559 --> 00:01:55.760
+That will call our power
+up countdown routine.
+
+00:01:55.800 --> 00:02:03.800
+Now an iInumerator is something in
+programming and C# known as an interface.
+
+00:02:03.974 --> 00:02:10.240
+In this case, it's not entirely necessary
+to go into how it works or what it does, but
+
+00:02:10.241 --> 00:02:13.994
+it is very helpful to
+be able to do certain
+
+00:02:14.006 --> 00:02:21.800
+things like enable a countdown
+timer outside of our update loop.
+
+00:02:21.801 --> 00:02:26.840
+The way we're able to use this countdown
+timer outside of our update loop is through
+
+00:02:26.940 --> 00:02:34.520
+use of something called Cobra Teens that
+will be able to run with a function called
+
+00:02:34.620 --> 00:02:36.280
+wait for seconds.
+
+00:02:36.281 --> 00:02:39.819
+Now to be able to
+make this entire process
+
+00:02:39.831 --> 00:02:43.720
+work, we actually need
+to use a keyword called
+
+00:02:44.960 --> 00:02:48.371
+yield, and so this will
+actually enable us to
+
+00:02:48.383 --> 00:02:52.961
+run this timer in a place
+outside of our update loop.
+
+00:02:58.210 --> 00:03:04.360
+So if we type yield, return, new, and
+we're creating a new wait for seconds.
+
+00:03:04.361 --> 00:03:09.120
+And we'll wait for, let's call
+it a seven or so seconds.
+
+00:03:09.121 --> 00:03:15.720
+So now our iInumerator is going to create a
+new thread outside of our update loop, and
+
+00:03:15.721 --> 00:03:19.125
+it will use the wait
+for seconds method to
+
+00:03:19.137 --> 00:03:22.880
+wait for seven seconds
+before we do something.
+
+00:03:23.680 --> 00:03:29.920
+Now, it'll wait for seven seconds, and then
+eventually once that timer is stopped, we
+
+00:03:31.040 --> 00:03:39.040
+can set our has power up to false, and then
+we're able to reset our player's state back
+
+00:03:39.190 --> 00:03:42.760
+to before they picked up the power up.
+
+00:03:42.761 --> 00:03:48.240
+Now in order to actually use this method,
+we then need to use another method, which
+
+00:03:48.241 --> 00:03:50.493
+will put inside of our
+on trigger enter in our
+
+00:03:50.505 --> 00:03:52.720
+if statement, because
+that's when the players
+
+00:03:52.845 --> 00:03:56.010
+picked up the power
+up, we're going to start
+
+00:03:56.022 --> 00:03:59.200
+a co routine, which
+will actually start that
+
+00:03:59.300 --> 00:04:03.560
+thread, start that loop
+outside of our update method.
+
+00:04:03.561 --> 00:04:09.800
+And then we call our
+power up countdown routine.
+
+00:04:10.040 --> 00:04:13.983
+So it'll start another
+thread, use the power
+
+00:04:13.995 --> 00:04:18.040
+up countdown routine,
+wait for seven seconds,
+
+00:04:18.041 --> 00:04:22.320
+set our power up to false, and then
+we'll be back to the way we started.
+
+00:04:22.321 --> 00:04:25.337
+So then we go in our
+game, let's take a look
+
+00:04:25.349 --> 00:04:28.240
+at the player and just
+watch the has power
+
+00:04:31.050 --> 00:04:34.637
+up variable, watch
+that checkbox, pick up
+
+00:04:34.649 --> 00:04:41.560
+the power up, enemy goes away, and
+eventually has power up should turn off.
+
+00:04:41.561 --> 00:04:44.080
+There you go.
+
+00:04:44.081 --> 00:04:50.260
+So what you're going to do in your player
+controller script, you're going to add this
+
+00:04:50.261 --> 00:04:55.160
+line of code to create
+an I enumerator method.
+
+00:04:55.161 --> 00:05:00.680
+In this I enumerator method, make sure
+to use yield return new wait for seconds.
+
+00:05:00.681 --> 00:05:03.810
+That way it waits for a
+certain amount of time
+
+00:05:03.822 --> 00:05:08.080
+before it actually does this
+sets our power up to false.
+
+00:05:08.280 --> 00:05:14.120
+And then in our on trigger enter, one we've
+picked up a power up, we start a co routine
+
+00:05:14.320 --> 00:05:21.120
+and use our power up countdown
+routine to start that countdown timer.
+
+00:05:21.121 --> 00:05:22.121
+Now it's your turn.

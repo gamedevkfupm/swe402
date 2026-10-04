@@ -1,0 +1,222 @@
+WEBVTT
+
+1
+00:00:01.126 --> 00:00:03.211
+[music]
+
+2
+00:00:05.422 --> 00:00:08.133
+[Instructor] I hope you're ready.
+Because we are about to get started
+
+3
+00:00:08.133 --> 00:00:10.051
+on Unit 4.
+
+4
+00:00:10.051 --> 00:00:12.178
+Now I know there are
+a lot of people out there
+
+5
+00:00:12.178 --> 00:00:14.556
+who say that this Unit
+is the toughest one
+
+6
+00:00:14.556 --> 00:00:16.391
+in this entire course.
+
+7
+00:00:16.391 --> 00:00:19.269
+But you made it through Unit 3,
+and that was no walk in the park,
+
+8
+00:00:19.728 --> 00:00:21.730
+so I think you're ready.
+
+9
+00:00:22.022 --> 00:00:25.775
+In this Unit, we will program
+an arcade style sumo battle,
+
+10
+00:00:26.109 --> 00:00:28.236
+with the Objective
+of knocking waves
+
+11
+00:00:28.236 --> 00:00:32.115
+of increasingly numerous enemies
+off of a floating island.
+
+12
+00:00:33.241 --> 00:00:36.369
+The Player will have to use
+powerups in a desperate effort
+
+13
+00:00:36.453 --> 00:00:38.830
+to withstand their relentless onslaught.
+
+14
+00:00:39.706 --> 00:00:42.000
+If it sound dramatic,
+that's because it is.
+
+15
+00:00:42.625 --> 00:00:45.670
+In creating this Prototype,
+you will learn how to introduce
+
+16
+00:00:45.670 --> 00:00:48.089
+new "Gameplay Mechanics"
+into your projects.
+
+17
+00:00:49.299 --> 00:00:52.927
+A Gameplay Mechanic is a rule
+or system in your game
+
+18
+00:00:53.178 --> 00:00:56.097
+that ideally makes
+it more interesting to play.
+
+19
+00:00:57.307 --> 00:01:00.185
+One new mechanic you'll learn
+to program is a Powerup,
+
+20
+00:01:00.977 --> 00:01:04.230
+a temporary state that will
+give the Player an advantage.
+
+21
+00:01:05.023 --> 00:01:07.400
+These are not only super fun
+for the Player to use,
+
+22
+00:01:07.734 --> 00:01:10.403
+but can completely change
+the way a game is played.
+
+23
+00:01:11.112 --> 00:01:13.239
+Now the user needs to decide,
+
+24
+00:01:13.239 --> 00:01:15.408
+should I go for the Powerup now?
+
+25
+00:01:15.408 --> 00:01:17.535
+Maybe I should save the Powerup.
+
+26
+00:01:17.535 --> 00:01:19.537
+What should I do
+when I get the Powerup?
+
+27
+00:01:20.080 --> 00:01:23.249
+All of these new questions,
+and strategies will suddenly emerge,
+
+28
+00:01:23.583 --> 00:01:25.585
+and make your game
+way more interesting.
+
+29
+00:01:26.544 --> 00:01:28.755
+The other mechanic
+we'll introduce is
+
+30
+00:01:28.755 --> 00:01:31.966
+if you defeat all the enemies
+a new wave will appear
+
+31
+00:01:31.966 --> 00:01:34.427
+with one more enemy
+than the previous wave,
+
+32
+00:01:34.677 --> 00:01:36.721
+Increasing the Difficulty over time.
+
+33
+00:01:37.764 --> 00:01:39.557
+This will also completely change the way
+
+34
+00:01:39.557 --> 00:01:43.478
+the game can be played because,
+instead of being a static experience
+
+35
+00:01:43.478 --> 00:01:46.106
+that the Player can quickly master,
+and become bored of,
+
+36
+00:01:46.731 --> 00:01:49.150
+it has limitless potential
+to challenge
+
+37
+00:01:49.150 --> 00:01:51.194
+even the most expert Players.
+
+38
+00:01:52.028 --> 00:01:53.905
+These two Gameplay Mechanics,
+
+39
+00:01:53.905 --> 00:01:57.325
+Powerups, and "Increasing
+Difficulty" go hand and hand
+
+40
+00:01:57.700 --> 00:02:00.537
+because as the game
+increases in difficulty
+
+41
+00:02:00.912 --> 00:02:03.331
+you can introduce new
+Powerups to match it.
+
+42
+00:02:03.790 --> 00:02:07.585
+This combination basically
+removes all limitations
+
+43
+00:02:07.585 --> 00:02:09.504
+from your project development
+
+44
+00:02:09.504 --> 00:02:12.006
+because you can continually
+up the ante
+
+45
+00:02:12.006 --> 00:02:15.093
+increasing one and then increasing
+the other in response.
+
+46
+00:02:15.885 --> 00:02:18.388
+The sky's the limit here,
+so lets start creating.
+
+47
+00:02:20.348 --> 00:02:22.475
+[music]

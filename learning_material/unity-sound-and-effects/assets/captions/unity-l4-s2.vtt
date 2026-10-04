@@ -1,0 +1,266 @@
+WEBVTT
+
+1
+00:00:01.200 --> 00:00:03.333
+[music]
+
+2
+00:00:05.633 --> 00:00:09.466
+[Instructor] Cool, so, we have this
+cool smoke explosion
+
+3
+00:00:09.466 --> 00:00:11.400
+here that we can Play,
+
+4
+00:00:11.400 --> 00:00:14.366
+but one of the things we need
+to do is actually make it Play
+
+5
+00:00:14.866 --> 00:00:18.133
+when the Player runs into
+one of our Obstacles.
+
+6
+00:00:18.500 --> 00:00:20.533
+So If I time it right, [explosion]
+
+7
+00:00:21.600 --> 00:00:24.333
+so something like that, pretty close.
+The computer can probably do
+
+8
+00:00:24.333 --> 00:00:26.700
+it better than I can
+so we'll just have the computer do it.
+
+9
+00:00:27.500 --> 00:00:30.400
+So we can actually do that by going
+
+10
+00:00:30.400 --> 00:00:32.400
+into our PlayerController Script.
+
+11
+00:00:32.533 --> 00:00:34.433
+And then in our PlayerController Script,
+
+12
+00:00:34.433 --> 00:00:37.366
+very similar to how we got
+our Components
+
+13
+00:00:37.400 --> 00:00:39.933
+for our Rigidbody and our Animator,
+
+14
+00:00:40.333 --> 00:00:42.200
+we'll do something similar.
+
+15
+00:00:42.200 --> 00:00:44.866
+In this case,
+because our Particle System
+
+16
+00:00:44.866 --> 00:00:47.033
+is actually outside
+
+17
+00:00:47.300 --> 00:00:49.700
+of our Player Components
+
+18
+00:00:50.300 --> 00:00:52.300
+we'll make this a "public...
+
+19
+00:00:52.566 --> 00:00:54.600
+ParticleSystem..."
+
+20
+00:00:56.600 --> 00:00:58.733
+And we'll call
+this the "explosionParticle."
+
+21
+00:01:02.233 --> 00:01:05.066
+So now this'll create
+one of those variables
+
+22
+00:01:05.066 --> 00:01:06.933
+in our Component that we
+need to drag
+
+23
+00:01:06.933 --> 00:01:09.100
+something on to.
+So we'll do that later.
+
+24
+00:01:09.400 --> 00:01:11.700
+Now in our PlayerController
+if() statement
+
+25
+00:01:12.366 --> 00:01:16.333
+whenever a Player runs into an Obstacle
+
+26
+00:01:16.333 --> 00:01:18.400
+this is where we're actually
+going to make
+
+27
+00:01:18.866 --> 00:01:20.866
+our explosionParticle happen.
+
+28
+00:01:21.433 --> 00:01:25.366
+So, when the Player dies,
+we can add another line,
+
+29
+00:01:25.900 --> 00:01:28.133
+and we have the explosionParticle now,
+
+30
+00:01:29.400 --> 00:01:31.400
+and we can actually
+
+31
+00:01:31.600 --> 00:01:34.066
+just "Play()" the Particle.
+
+32
+00:01:34.500 --> 00:01:37.666
+And so that entire animation
+Effect will just play
+
+33
+00:01:37.966 --> 00:01:40.066
+as soon as it hits this line of code.
+
+34
+00:01:40.066 --> 00:01:44.400
+So, we run into an Obstacle,
+Game Over happens, Player dies,
+
+35
+00:01:44.533 --> 00:01:47.833
+and it'll Play the explosion
+Effect that we have.
+
+36
+00:01:48.266 --> 00:01:50.466
+And then, in Unity,
+
+37
+00:01:50.766 --> 00:01:53.833
+just make sure that when you go
+to your Player Object
+
+38
+00:01:54.400 --> 00:01:56.533
+you take your explosion smoke,
+
+39
+00:01:56.533 --> 00:01:59.066
+and drag it down
+to the PlayerController Script,
+
+40
+00:01:59.833 --> 00:02:02.200
+and drop it into the Explosion Particle.
+
+41
+00:02:04.066 --> 00:02:06.333
+So now, when we press Play...
+
+42
+00:02:08.466 --> 00:02:10.833
+when the Player runs into an Obstacle
+
+43
+00:02:10.833 --> 00:02:12.833
+we should see a big puff of smoke.
+
+44
+00:02:13.333 --> 00:02:16.000
+Perfect, that's exactly
+what we were looking for.
+
+45
+00:02:17.200 --> 00:02:19.400
+So, now what you're going to do,
+
+46
+00:02:19.400 --> 00:02:21.300
+is in your PlayerController Script,
+
+47
+00:02:21.300 --> 00:02:25.433
+you're going to create a public
+variable that is a Particle System,
+
+48
+00:02:25.433 --> 00:02:27.433
+and we'll call it explosion Particle.
+
+49
+00:02:27.900 --> 00:02:30.800
+And then in our OnCollisionEnter()
+method,
+
+50
+00:02:31.200 --> 00:02:33.966
+where we actually end the game
+by running into an Obstacle,
+
+51
+00:02:34.433 --> 00:02:38.533
+we're just going to call 
+that explosionParticle variable,
+
+52
+00:02:38.666 --> 00:02:41.033
+and Play it so it Plays the animation.
+
+53
+00:02:42.133 --> 00:02:45.233
+And then, in Unity,
+just make sure to click and drag
+
+54
+00:02:45.233 --> 00:02:48.066
+on your explosion smoke
+in your Hierarchy,
+
+55
+00:02:48.866 --> 00:02:52.666
+drop it into the Particle
+in your PlayerController Script,
+
+56
+00:02:53.033 --> 00:02:55.366
+and then when you Play the game, 
+and run it you should see
+
+57
+00:02:55.366 --> 00:02:57.700
+a big puff of smoke when you run
+into an Obstacle.
+
+58
+00:02:58.400 --> 00:03:00.400
+Now it's your turn.
+
+59
+00:03:00.466 --> 00:03:03.100
+[music]

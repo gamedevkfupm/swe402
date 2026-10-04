@@ -1,0 +1,292 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:03.666
+[music]
+
+2
+00:00:05.700 --> 00:00:09.500
+[Instructor] Okay, cool,
+so we have our little character here,
+
+3
+00:00:09.800 --> 00:00:11.666
+happily jumping along through the forest,
+
+4
+00:00:11.666 --> 00:00:13.600
+and occasionally
+that Obstacle comes through.
+
+5
+00:00:14.133 --> 00:00:15.966
+But we do have a larger problem,
+where,
+
+6
+00:00:15.966 --> 00:00:18.366
+because we're making 
+it look like the character's running
+
+7
+00:00:18.366 --> 00:00:21.966
+through the woods, in fact, 
+it's our Background
+
+8
+00:00:21.966 --> 00:00:23.966
+that's running away
+from our character.
+
+9
+00:00:25.633 --> 00:00:27.466
+So we need to figure out a way
+
+10
+00:00:27.466 --> 00:00:29.500
+that we can actually fix that,
+
+11
+00:00:29.733 --> 00:00:31.800
+and I have a little
+bit of an idea.
+
+12
+00:00:31.800 --> 00:00:34.100
+So one thing that I could do
+
+13
+00:00:34.100 --> 00:00:36.733
+is actually,
+if I select our Background,
+
+14
+00:00:37.533 --> 00:00:40.566
+and I Control + D to duplicate,
+
+15
+00:00:41.133 --> 00:00:43.166
+I can create another Background,
+
+16
+00:00:43.966 --> 00:00:47.866
+and then I can just keep creating
+these Backgrounds over, and over again,
+
+17
+00:00:47.866 --> 00:00:50.533
+and then it'll just look like
+the Player's running through.
+
+18
+00:00:51.366 --> 00:00:54.533
+However, that's probably one of the
+worst ways that I could actually solve
+
+19
+00:00:54.533 --> 00:00:57.400
+this problem because then I'll
+just have maybe, like,
+
+20
+00:00:58.100 --> 00:01:01.566
+50 or 100 of these Backgrounds 
+that are just constantly moving
+
+21
+00:01:02.400 --> 00:01:04.233
+all across the player.
+
+22
+00:01:04.233 --> 00:01:07.966
+And, eventually, they do run out
+so I can't actually make that infinite,
+
+23
+00:01:07.966 --> 00:01:10.500
+and it'll actually
+create some big problems for
+
+24
+00:01:10.966 --> 00:01:13.233
+making sure that
+our game plays well
+
+25
+00:01:13.733 --> 00:01:17.200
+as it's trying to render all
+of these different scenes
+
+26
+00:01:17.200 --> 00:01:19.066
+that are moving through the scene.
+
+27
+00:01:19.066 --> 00:01:23.466
+So another option is if
+we delete this Background
+
+28
+00:01:23.466 --> 00:01:25.333
+because I don't think
+that solution's
+
+29
+00:01:25.333 --> 00:01:28.233
+a very good idea at all. Another way
+we could think about this problem
+
+30
+00:01:28.233 --> 00:01:30.200
+is we actually have
+this Background here
+
+31
+00:01:30.733 --> 00:01:33.766
+and if you look at the halfway
+point, just about there,
+
+32
+00:01:34.033 --> 00:01:36.533
+you can see that the Background
+actually repeats itself,
+
+33
+00:01:36.533 --> 00:01:38.966
+so, it's got the same trees,
+and it's got the same rocks at the end.
+
+34
+00:01:39.633 --> 00:01:42.166
+So we already have our own
+little repeating Background.
+
+35
+00:01:42.600 --> 00:01:45.966
+And actually, we can think
+of the problem in this way, where,
+
+36
+00:01:46.533 --> 00:01:48.600
+if you take a look
+at the player's screen,
+
+37
+00:01:49.000 --> 00:01:51.000
+as we move the Background over,
+
+38
+00:01:51.533 --> 00:01:53.866
+just about at this point here,
+
+39
+00:01:53.933 --> 00:01:57.000
+it looks like the Background
+is exactly the same.
+
+40
+00:01:57.633 --> 00:02:00.633
+And so what we can do is
+precisely at this point,
+
+41
+00:02:00.633 --> 00:02:03.433
+we can actually just reset 
+our Background,
+
+42
+00:02:04.500 --> 00:02:06.566
+and it will look like the player,
+
+43
+00:02:06.566 --> 00:02:09.000
+is constantly running
+through an endless Background
+
+44
+00:02:09.000 --> 00:02:11.000
+when in fact it's just these
+
+45
+00:02:11.300 --> 00:02:13.200
+two images next to each other
+
+46
+00:02:13.900 --> 00:02:17.500
+and we're just constantly
+putting it overlapping each other
+
+47
+00:02:17.500 --> 00:02:20.000
+every single time we want it
+to look the player's running.
+
+48
+00:02:20.366 --> 00:02:22.433
+So we're going to try,
+and do it that way instead.
+
+49
+00:02:22.800 --> 00:02:25.100
+We're going to need a
+Script in order to do so,
+
+50
+00:02:25.100 --> 00:02:27.633
+so we're going to right-click
+on our Scripts Folder,
+
+51
+00:02:28.066 --> 00:02:30.700
+Create a new Script,
+
+52
+00:02:31.066 --> 00:02:33.100
+and we'll call this
+RepeatBackground
+
+53
+00:02:33.633 --> 00:02:35.633
+in order to repeat
+our Background.
+
+54
+00:02:38.133 --> 00:02:40.500
+And now with this Script,
+we're going to drag
+
+55
+00:02:40.500 --> 00:02:43.133
+it and drop it,
+onto our Background Object.
+
+56
+00:02:44.966 --> 00:02:47.366
+And then we're going to make
+sure that it's applied.
+
+57
+00:02:48.000 --> 00:02:51.300
+So now you're going to go
+into your Scripts Folder,
+
+58
+00:02:51.300 --> 00:02:53.600
+make a RepeatBackground Script,
+
+59
+00:02:53.733 --> 00:02:55.666
+and then you're going to
+apply that Script
+
+60
+00:02:55.666 --> 00:02:57.666
+onto the Background.
+
+61
+00:02:58.133 --> 00:03:00.133
+Now it's your turn.
+
+62
+00:03:00.133 --> 00:03:02.133
+[music]

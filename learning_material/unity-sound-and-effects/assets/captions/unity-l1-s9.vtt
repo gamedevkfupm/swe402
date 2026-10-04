@@ -1,0 +1,321 @@
+WEBVTT
+
+00:00:02.860 --> 00:00:10.860
+Cool, so we've got our little character here
+in the forest, hopping along and the grid
+
+00:00:11.060 --> 00:00:16.379
+outdoors, so happy to
+be outside, wild and free.
+
+00:00:17.280 --> 00:00:21.820
+Now, what we're going to do is we're going
+to add some obstacles to make this a little
+
+00:00:21.821 --> 00:00:28.220
+bit more game-like, so we're going to go
+into our assets folder, go to our obstacles,
+
+00:00:31.740 --> 00:00:34.721
+go, oh, kind of like
+this barrier, kind of
+
+00:00:34.733 --> 00:00:37.940
+looks like a fence, so
+we'll go and drop this
+
+00:00:37.940 --> 00:00:43.980
+into our hierarchy, and we're just going to
+position this a little farther back, let's
+
+00:00:44.029 --> 00:00:47.700
+call it, let's put it like the edge of the
+screen, like right there, cool, perfect.
+
+00:00:47.701 --> 00:00:50.648
+So now that we have
+our barrier, you can see
+
+00:00:50.660 --> 00:00:53.620
+that it has nothing for
+components, so we're
+
+00:00:53.621 --> 00:00:56.364
+going to have to add
+some things like a box
+
+00:00:56.376 --> 00:00:59.260
+collider, so that the
+player can collide with
+
+00:01:05.209 --> 00:01:08.197
+it, cool, and we'll
+just resize this box
+
+00:01:08.209 --> 00:01:11.660
+collider really quick,
+so we've set up our box
+
+00:01:11.661 --> 00:01:14.278
+collider so that it
+looks really nice, cool,
+
+00:01:14.290 --> 00:01:16.860
+that's perfect, now
+we're actually going to
+
+00:01:23.429 --> 00:01:25.298
+add a rigid body, so
+now this is an actual
+
+00:01:25.310 --> 00:01:27.280
+physical object in the
+scene that the player
+
+00:01:27.281 --> 00:01:31.260
+can actually run into and collide with, and
+it'll use physics, so it might topple over
+
+00:01:31.509 --> 00:01:34.273
+if you run into it, if
+you notice, we actually
+
+00:01:34.285 --> 00:01:36.820
+didn't check the is
+trigger box on the box
+
+00:01:36.919 --> 00:01:39.324
+collider, that's because
+this isn't actually a
+
+00:01:39.336 --> 00:01:41.700
+collider that will have
+us destroy the object
+
+00:01:41.701 --> 00:01:46.260
+or anything, it's just so that we know when
+we run into it, and then we're just going
+
+00:01:46.261 --> 00:01:53.540
+to rename this barrier, this fence really
+quick, and we're going to call it obstacle,
+
+00:01:53.541 --> 00:01:55.913
+now what we're going
+to do is in our assets
+
+00:01:55.925 --> 00:01:58.420
+folder, we're going to
+make a prefab, because
+
+00:01:58.421 --> 00:02:02.196
+we're going to use this
+again, so we're going
+
+00:02:02.208 --> 00:02:08.867
+to make a prefab's folder, and then we'll
+take our obstacle, and we'll left click,
+
+00:02:08.879 --> 00:02:12.420
+drag it down into
+prefabs, so now we'll make
+
+00:02:15.300 --> 00:02:19.474
+an original prefab, and
+here you can see that
+
+00:02:19.486 --> 00:02:26.368
+we have this fence saved, and now that we
+have this prefab saved, we're actually going
+
+00:02:26.380 --> 00:02:29.460
+to make it move in the
+scene, so we're going
+
+00:02:30.110 --> 00:02:37.860
+to make a script, and we'll call it move
+left, very simple name, because it'll just
+
+00:02:40.030 --> 00:02:43.431
+make things move left,
+so now we'll take the
+
+00:02:43.443 --> 00:02:46.780
+move left script,
+apply it to our obstacle,
+
+00:02:46.781 --> 00:02:49.863
+and then just make
+sure that we override our
+
+00:02:49.875 --> 00:02:52.900
+obstacle to apply it
+to all of our prefabs,
+
+00:02:52.901 --> 00:02:55.468
+and then in our move
+left script, we're just
+
+00:02:55.480 --> 00:03:01.407
+going to open it up really quick, now inside
+of our move left script, we're going to
+
+00:03:01.419 --> 00:03:05.380
+create a variable for
+speed, so this will just
+
+00:03:05.381 --> 00:03:08.632
+be private, and it'll
+be a float, because we
+
+00:03:08.644 --> 00:03:11.760
+can always just edit
+it inside of our code
+
+00:03:13.255 --> 00:03:20.980
+later, we'll call it speed, and we'll set
+it to 30 for now, and then we're actually
+
+00:03:20.981 --> 00:03:22.928
+going to move this
+using our transform.
+
+00:03:22.940 --> 00:03:25.540
+translate once again instead
+of trying to use physics
+
+00:03:27.860 --> 00:03:31.403
+to move a fence, so
+we'll just transform
+
+00:03:31.415 --> 00:03:35.860
+translate, like we always
+do, and then we're going
+
+00:03:44.890 --> 00:03:50.967
+to move it to the left, since the fence
+is to the right of the player, so vector 3.
+
+00:03:50.968 --> 00:03:54.999
+left, we want this to move
+over time instead of moving
+
+00:03:55.011 --> 00:03:58.018
+every single frame,
+so we'll use time.
+
+00:04:08.598 --> 00:04:10.656
+delta time, and then we'll
+move it at the speed that
+
+00:04:10.668 --> 00:04:15.835
+we set, and then if we save, so now in unity
+when we press play, our fence flies at a
+
+00:04:15.847 --> 00:04:19.660
+really fast speed at
+the player, and I think
+
+00:04:19.810 --> 00:04:22.646
+we're just flying off
+into the distance, there
+
+00:04:22.658 --> 00:04:25.260
+it goes, so we can
+always change the speed
+
+00:04:25.300 --> 00:04:29.333
+of that to something
+less later, what we can
+
+00:04:29.345 --> 00:04:33.300
+do for now is because
+we're actually making
+
+00:04:33.301 --> 00:04:36.962
+look like the player is
+running, we're actually
+
+00:04:36.974 --> 00:04:43.094
+just going to move everything around the
+player to make it look like they're running,
+
+00:04:43.106 --> 00:04:46.180
+so if we actually take
+this move left script,
+
+00:04:50.830 --> 00:04:55.980
+then we apply it to our background, this
+now creates the illusion when we press play,
+
+00:04:56.155 --> 00:04:58.753
+that our player is
+running through the scene,
+
+00:04:58.765 --> 00:05:01.260
+even though in fact
+the player's not moving
+
+00:05:01.261 --> 00:05:05.340
+at all, you're going to make the player look
+like they're moving, so what you're going
+
+00:05:05.341 --> 00:05:09.071
+to do is grab an obstacle
+from the obstacles
+
+00:05:09.083 --> 00:05:12.740
+folder, create it, make
+sure that you add a
+
+00:05:12.790 --> 00:05:18.740
+box collider, a rigid body, if you want you
+can even add the move left script now, then
+
+00:05:18.741 --> 00:05:21.425
+add it to your scripts
+folder, and then you can
+
+00:05:21.437 --> 00:05:24.020
+create your prefabs
+folder, drag the obstacle
+
+00:05:24.021 --> 00:05:30.980
+down into prefabs, and then your move left
+script, you're going to give it a speed, so
+
+00:05:30.981 --> 00:05:38.060
+just set it for 30 for now, in your update
+method you're just going to move it through
+
+00:05:38.110 --> 00:05:41.373
+translating the transform,
+so we're going to
+
+00:05:41.385 --> 00:05:44.660
+move it to the left,
+over time add a certain
+
+00:05:44.835 --> 00:05:47.703
+speed, and then a
+nice little effect that you
+
+00:05:47.715 --> 00:05:50.660
+can do is on your
+background, you can actually
+
+00:05:50.661 --> 00:05:52.888
+add the move left
+script, so then that way
+
+00:05:52.900 --> 00:05:55.300
+when you press play,
+it looks like the player
+
+00:05:55.400 --> 00:05:57.131
+is moving to the
+right, when in fact
+
+00:05:57.143 --> 00:06:11.220
+everything else is moving
+to the left, now it's your turn.

@@ -1,0 +1,265 @@
+WEBVTT
+
+00:00:03.760 --> 00:00:07.610
+We've added in
+controls for our player, so
+
+00:00:07.622 --> 00:00:11.760
+then that way we can
+move them up if we press
+
+00:00:11.960 --> 00:00:16.239
+the up key or backwards
+if we press the down key.
+
+00:00:16.465 --> 00:00:23.520
+If we press the left or right arrow keys,
+you can see that we rotate around our scene.
+
+00:00:23.521 --> 00:00:28.080
+So now what we want to do is we actually
+want to push the player in the direction that
+
+00:00:28.130 --> 00:00:31.050
+the camera's facing,
+so for example, if we're
+
+00:00:31.062 --> 00:00:39.280
+facing this way, we want our player
+to go directly up in our game view.
+
+00:00:43.909 --> 00:00:50.160
+Now an interesting to note is this
+button in the top left for global or local.
+
+00:00:53.039 --> 00:01:01.040
+You can see when I change it, the
+positions of those arrows actually change.
+
+00:01:01.041 --> 00:01:04.728
+So currently you can
+see actually what is
+
+00:01:04.740 --> 00:01:08.800
+the y direction of our
+ball as it's rotating.
+
+00:01:08.801 --> 00:01:14.800
+If we take a look at our focal point, we
+can actually see which way is currently the
+
+00:01:14.999 --> 00:01:20.080
+front of our focal point, the
+direction that our camera's facing.
+
+00:01:20.279 --> 00:01:23.966
+So if we rotate our
+camera and we watch these
+
+00:01:23.978 --> 00:01:27.760
+axes, you can actually
+see the z axis pointing
+
+00:01:27.761 --> 00:01:30.400
+in the direction that
+our camera is pointing.
+
+00:01:31.599 --> 00:01:35.520
+So you can see our camera,
+there's the direction in our game.
+
+00:01:35.594 --> 00:01:39.124
+As we rotate, you can
+actually see that the
+
+00:01:39.136 --> 00:01:42.760
+camera is following
+those local coordinates.
+
+00:01:42.761 --> 00:01:47.920
+Now it's helpful to use local
+coordinates in a case like this.
+
+00:01:47.921 --> 00:01:49.416
+When you're actually
+trying to set up your
+
+00:01:49.428 --> 00:01:51.080
+scene and set up your
+environment and you want
+
+00:01:51.081 --> 00:01:53.979
+everything to be in the
+same place, using something
+
+00:01:53.980 --> 00:01:57.560
+like our global coordinate
+system is a lot better.
+
+00:01:57.561 --> 00:02:01.600
+So then that way you can make sure that
+when you're changing the positions of things
+
+00:02:01.601 --> 00:02:03.718
+or you're changing
+the rotation or anything
+
+00:02:03.730 --> 00:02:05.960
+like that, you can always
+make sure that when
+
+00:02:05.961 --> 00:02:08.120
+you drag these arrows,
+it doesn't drag it off.
+
+00:02:08.121 --> 00:02:14.640
+For example, if I change this to local and
+I rotate the y, when I drag the z, it's not
+
+00:02:14.641 --> 00:02:19.480
+actually going directly forward
+on the z, it's going at an angle.
+
+00:02:19.481 --> 00:02:21.480
+So we'll reset all of that.
+
+00:02:21.481 --> 00:02:26.440
+So using global and using local
+are helpful for different situations.
+
+00:02:26.441 --> 00:02:31.362
+So in our player controller
+class, what we're actually
+
+00:02:31.412 --> 00:02:36.680
+going to do is get a
+reference to our focal point.
+
+00:02:36.681 --> 00:02:41.560
+So that way we can know when the focal point
+is facing in a certain direction, we will
+
+00:02:41.561 --> 00:02:44.400
+move that player in
+the direction it's facing.
+
+00:02:44.401 --> 00:02:50.880
+So we'll create a new private
+since our focal point is a game object.
+
+00:02:50.881 --> 00:02:56.360
+We need a game object variable
+and we'll just call this the focal point.
+
+00:02:56.361 --> 00:02:58.320
+So we avoid confusion.
+
+00:02:58.321 --> 00:03:03.600
+In our start method, we want to
+get a reference to that focal point.
+
+00:03:03.601 --> 00:03:06.800
+So we'll get our focal point
+variable and we'll set it.
+
+00:03:06.801 --> 00:03:10.369
+Now in this case,
+because our game object is
+
+00:03:10.381 --> 00:03:13.800
+in the scene, we can
+use game object.find.
+
+00:03:13.801 --> 00:03:17.800
+So this will find that game
+object in the project hierarchy.
+
+00:03:17.801 --> 00:03:19.360
+And we can actually just use the name.
+
+00:03:19.361 --> 00:03:25.880
+So we called it focal point
+with capital P and F and spaces.
+
+00:03:25.881 --> 00:03:28.400
+So now we have a
+reference to that focal point.
+
+00:03:28.401 --> 00:03:30.851
+So now instead of
+moving the player in the
+
+00:03:30.863 --> 00:03:33.560
+forward direction of
+our world, we'll actually
+
+00:03:33.561 --> 00:03:39.280
+make it the forward direction
+that our camera is pointing in.
+
+00:03:39.281 --> 00:03:46.040
+So if we use our focal point and we get its
+current transform and we get the forward
+
+00:03:49.630 --> 00:03:56.480
+direction that it's facing, now if we go
+into Unity, when we press play on the editor,
+
+00:03:56.481 --> 00:03:59.280
+you can see that I can still
+move forward or backwards.
+
+00:03:59.281 --> 00:04:01.930
+But then if I rotate the
+camera, say 90 degrees,
+
+00:04:01.942 --> 00:04:05.160
+now when I move forward,
+it goes in that direction.
+
+00:04:05.161 --> 00:04:07.880
+And when I go backwards, it
+goes in the opposite direction.
+
+00:04:07.881 --> 00:04:11.289
+So now we can actually
+use our camera to be
+
+00:04:11.301 --> 00:04:15.120
+able to control how our
+ball moves in the scene.
+
+00:04:15.121 --> 00:04:17.902
+So what you're going
+to do is you're going
+
+00:04:17.914 --> 00:04:22.840
+to add your own private game
+object variable for the focal point.
+
+00:04:22.841 --> 00:04:25.968
+When you're start
+method, you're going to get
+
+00:04:25.980 --> 00:04:29.120
+a reference to the
+focal point in our project
+
+00:04:29.121 --> 00:04:32.840
+hierarchy and set that
+to our own variable.
+
+00:04:32.841 --> 00:04:35.698
+And then in our update
+method, instead of
+
+00:04:35.710 --> 00:04:39.000
+using the vector 3 dot
+forward, you're actually
+
+00:04:39.300 --> 00:04:44.840
+going to use the forward
+direction of our focal point.
+
+00:04:44.841 --> 00:04:45.841
+Now it's your turn.

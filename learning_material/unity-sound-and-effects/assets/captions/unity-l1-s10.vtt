@@ -1,0 +1,286 @@
+WEBVTT
+
+00:00:01.560 --> 00:00:09.560
+Alright, so we have it so that it looks like
+the player is running through the scene.
+
+00:00:09.710 --> 00:00:14.240
+What in fact, everything is
+actually just flying out the player.
+
+00:00:14.241 --> 00:00:17.321
+So now what we're going
+to do is we're actually
+
+00:00:17.333 --> 00:00:19.900
+going to use a spawn
+manager to be able
+
+00:00:20.050 --> 00:00:23.960
+to create more obstacles
+that fly at the player.
+
+00:00:23.961 --> 00:00:26.563
+So to do that, we're going
+to go into our hierarchy
+
+00:00:26.613 --> 00:00:32.880
+and we can just right-click
+and create empty.
+
+00:00:32.881 --> 00:00:39.640
+Now we have an empty game object
+and this will be our spawn manager.
+
+00:00:40.720 --> 00:00:48.720
+And then in our scripts, we're going
+to make a spawn manager script.
+
+00:00:48.721 --> 00:00:54.920
+And then just make sure to click
+and drag that onto our spawn manager.
+
+00:00:54.921 --> 00:00:58.720
+So now that we know it's
+been added as a component.
+
+00:00:58.721 --> 00:01:01.600
+So we'll open our spawn manager up.
+
+00:01:02.049 --> 00:01:07.200
+So in our script, we're going to
+need a reference to our obstacle.
+
+00:01:07.201 --> 00:01:12.240
+So we need to make it public so that
+we can drop that reference in there.
+
+00:01:12.264 --> 00:01:17.920
+And since it's a prefab, we
+have to use a game object.
+
+00:01:17.921 --> 00:01:24.720
+And then we'll just call
+this obstacle prefab for now.
+
+00:01:24.721 --> 00:01:26.520
+And then close that.
+
+00:01:26.521 --> 00:01:28.973
+Now we're going to
+create another variable,
+
+00:01:28.985 --> 00:01:31.680
+very similar to a variable
+that we made before.
+
+00:01:31.681 --> 00:01:37.400
+So this will be private, so we can just
+set it whenever we want inside of our code.
+
+00:01:37.401 --> 00:01:42.880
+It'll be a vector three
+because we're doing a position.
+
+00:01:42.881 --> 00:01:49.040
+And this will be the spawn
+position for our obstacles.
+
+00:01:49.041 --> 00:01:56.640
+And we'll set this to be a new vector
+three since we're getting another position.
+
+00:01:56.689 --> 00:02:00.180
+And we'll set it to, let's
+call it 25 on the X so
+
+00:02:00.255 --> 00:02:04.120
+that it's all the way on
+the right side of the screen.
+
+00:02:04.120 --> 00:02:07.800
+We don't need it in the
+air, so zero on the Y.
+
+00:02:10.290 --> 00:02:17.640
+And then we don't need any kind of depth
+towards us, so we'll call it zero on the Z.
+
+00:02:17.641 --> 00:02:20.761
+And then in our start
+method, we're going to create
+
+00:02:20.811 --> 00:02:29.920
+that prefab once again
+using our instantiate method.
+
+00:02:29.970 --> 00:02:35.720
+So this way we can create clones
+or copies of our obstacle prefab.
+
+00:02:35.721 --> 00:02:41.800
+The object that we're going to create is
+our obstacle prefab, which we listed above.
+
+00:02:41.801 --> 00:02:47.640
+We're going to have it spawn at
+the position that we set in our variable.
+
+00:02:47.641 --> 00:02:50.419
+And we want it to be
+facing the same direction
+
+00:02:50.431 --> 00:02:53.040
+that we set it when
+we created this prefab.
+
+00:02:53.041 --> 00:02:58.840
+So get the obstacle prefab.
+
+00:02:58.841 --> 00:03:06.600
+We're going to get its transform component
+and we'll get the rotation of our prefab.
+
+00:03:06.601 --> 00:03:10.341
+So you can see back in
+unity in our spawn manager
+
+00:03:10.353 --> 00:03:14.801
+script, it's updated to have
+that instantiate method.
+
+00:03:15.200 --> 00:03:16.360
+It's got our variables.
+
+00:03:16.361 --> 00:03:18.521
+So now when we
+press play, our obstacle
+
+00:03:18.533 --> 00:03:22.041
+should fly at us and we
+should create another one.
+
+00:03:23.440 --> 00:03:28.804
+And when we see one obstacle
+interesting, so at the bottom
+
+00:03:28.805 --> 00:03:33.880
+here it says that there was an
+unassigned reference exception.
+
+00:03:33.881 --> 00:03:38.120
+So this red exclamation point
+means that it was an error.
+
+00:03:38.360 --> 00:03:46.360
+And it says that our obstacle prefab wasn't
+assigned obstacle prefab of spawn manager.
+
+00:03:46.361 --> 00:03:51.320
+So I think actually what happened
+in our spawn manager, I see.
+
+00:03:51.321 --> 00:03:58.360
+So I didn't actually drag the
+obstacle prefab into the variable.
+
+00:04:00.360 --> 00:04:04.960
+So let me do that really quick, cool.
+
+00:04:05.010 --> 00:04:08.080
+So now when I press
+play, now up there you go.
+
+00:04:08.081 --> 00:04:09.081
+So we have two.
+
+00:04:09.230 --> 00:04:12.640
+And I wonder if two are just going to fly
+at us randomly from the screen, perfect.
+
+00:04:12.641 --> 00:04:15.207
+So since we're spawning
+one of our obstacles
+
+00:04:15.219 --> 00:04:17.740
+through code, we
+don't actually really need
+
+00:04:17.741 --> 00:04:21.959
+this obstacle anymore, that's just
+about everything it's going to do.
+
+00:04:21.960 --> 00:04:23.640
+And we're not editing a massive amount.
+
+00:04:23.641 --> 00:04:25.120
+So we'll just remove that.
+
+00:04:25.121 --> 00:04:32.880
+So in that way, when we press play,
+it spawns one and it flies at us, cool.
+
+00:04:32.881 --> 00:04:36.371
+So now what you're
+going to do is create your
+
+00:04:36.383 --> 00:04:43.240
+own empty game object in your
+project hierarchy, call it spawn manager.
+
+00:04:43.241 --> 00:04:47.600
+And then in your scripts, you're
+going to make a spawn manager script.
+
+00:04:47.601 --> 00:04:54.520
+You're going to add that as a component to
+the spawn manager game object in our scene.
+
+00:04:54.521 --> 00:04:58.246
+And then in our spawn
+manager script, you're
+
+00:04:58.258 --> 00:05:04.960
+going to make a variable to get
+the reference of our obstacle prefab.
+
+00:05:04.961 --> 00:05:05.961
+So it'll be public.
+
+00:05:06.110 --> 00:05:08.360
+So that way we can
+actually attach a prefab to it.
+
+00:05:08.960 --> 00:05:12.560
+It'll be a game object since it's a prefab.
+
+00:05:12.561 --> 00:05:17.200
+We're going to make a private position
+that we're going to spawn things at.
+
+00:05:17.201 --> 00:05:22.200
+So we're going to use the
+coordinates 25, 0 and 0.
+
+00:05:22.640 --> 00:05:26.398
+And then we're going
+to instantiate a new
+
+00:05:26.410 --> 00:05:30.640
+obstacle prefab at our
+spawn position and make
+
+00:05:30.641 --> 00:05:36.440
+sure that it spawns at the rotation
+that we had the prefab set up before.
+
+00:05:36.441 --> 00:05:41.640
+And then last but not least, don't do what
+I did and make sure to drag your obstacle
+
+00:05:41.690 --> 00:05:48.280
+prefab into the obstacle prefab section
+here in your spawn manager script.
+
+00:05:48.281 --> 00:05:54.080
+Now it's your turn.

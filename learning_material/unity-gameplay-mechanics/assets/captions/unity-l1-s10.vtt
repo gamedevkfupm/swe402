@@ -1,0 +1,211 @@
+WEBVTT
+
+00:00:02.080 --> 00:00:05.795
+So now we can use
+the input to rotate the
+
+00:00:05.807 --> 00:00:11.081
+bolt, we're going to translate
+this to creating some movement.
+
+00:00:11.330 --> 00:00:14.183
+We'll go back into our player
+controller script here and you
+
+00:00:14.184 --> 00:00:17.640
+can see that we'll start
+adjusting this to make it happen.
+
+00:00:17.641 --> 00:00:21.260
+The rotation speed that we had,
+we can rename this to a player
+
+00:00:21.261 --> 00:00:25.000
+speed just to make this more
+suitable for what we're going to use.
+
+00:00:25.001 --> 00:00:29.440
+We're going to also want a reference to
+our rigid body that's on our player to make
+
+00:00:29.441 --> 00:00:32.680
+it show that we can cause it to
+have some forces to make it move.
+
+00:00:32.779 --> 00:00:36.560
+Underneath that input system variable, we'll
+have another private variable, it's going
+
+00:00:36.561 --> 00:00:39.672
+to be type rigid body
+and we're going to give
+
+00:00:39.684 --> 00:00:42.600
+this a name of player
+RB with a semicolon.
+
+00:00:42.601 --> 00:00:44.120
+So then we can use this.
+
+00:00:44.121 --> 00:00:49.400
+We also do need to make sure that we find
+it in a wake to cache the reference because
+
+00:00:49.499 --> 00:00:52.440
+it's great to just do this once
+before everything initializes.
+
+00:00:52.739 --> 00:00:56.109
+So we'll say player RB
+equals get component
+
+00:00:56.121 --> 00:00:59.660
+and then in the angle
+brackets left and right
+
+00:00:59.709 --> 00:01:01.691
+we'll have rigid body,
+the parentheses and
+
+00:01:01.703 --> 00:01:05.440
+the semicolon because we're just
+finding that component that we need.
+
+00:01:05.441 --> 00:01:07.574
+Now in the side, the update
+method where we had the move
+
+00:01:07.575 --> 00:01:11.760
+input, the forward input
+and the transform dot rotate.
+
+00:01:11.761 --> 00:01:15.000
+In this case, we don't want
+transform dot rotate anymore.
+
+00:01:15.001 --> 00:01:19.480
+We can just rename this and we can use
+something different so we'll say player RB is
+
+00:01:19.481 --> 00:01:22.544
+what we can use and we'll say
+dot add force because we want to
+
+00:01:22.545 --> 00:01:26.880
+force the right to body with
+some elements of force in that.
+
+00:01:26.881 --> 00:01:29.058
+So to move it forward,
+we'll use another vector
+
+00:01:29.070 --> 00:01:31.120
+three, but instead of
+up, we'll use a vector
+
+00:01:31.121 --> 00:01:35.600
+three dot forward because we want to push
+it in that direction and instead of having
+
+00:01:35.601 --> 00:01:41.160
+a comma here, we're going to times that
+by the forward input that we already had.
+
+00:01:41.161 --> 00:01:44.373
+Then we multiply the
+rotation speed, but we
+
+00:01:44.385 --> 00:01:47.760
+also need to get the
+player speed and replace
+
+00:01:47.761 --> 00:01:53.560
+that so it's multiplied the player
+speed, multiplied by time dot delta time.
+
+00:01:53.561 --> 00:01:55.120
+Then we can save this out.
+
+00:01:55.121 --> 00:01:57.073
+Now our player has the
+rigid body and the play
+
+00:01:57.085 --> 00:01:59.881
+controller with the player
+speed of around 150.
+
+00:02:00.079 --> 00:02:02.446
+If we test this out, we
+can move S to move
+
+00:02:02.458 --> 00:02:05.120
+backwards and then
+double you to move forwards.
+
+00:02:05.121 --> 00:02:07.257
+It is a little bit
+unresponsive so I like to
+
+00:02:07.269 --> 00:02:11.760
+put the player speed up to around 1000 and
+then we get a more of a responsive take on
+
+00:02:11.772 --> 00:02:14.400
+the movement forward
+and backward and you can
+
+00:02:14.600 --> 00:02:16.823
+up the mass and adjust
+any of the drag settings
+
+00:02:16.835 --> 00:02:21.120
+if you want this to feel slightly different
+when you're controlling your character.
+
+00:02:21.121 --> 00:02:23.838
+So what I want you to
+do is go to your player
+
+00:02:23.850 --> 00:02:26.640
+controller script and
+rename the public float,
+
+00:02:26.641 --> 00:02:29.095
+which was rotation speed
+to player speed, make
+
+00:02:29.107 --> 00:02:33.240
+sure you add a private variable
+rigid body and call this player happy.
+
+00:02:33.241 --> 00:02:37.000
+In the awake method, make sure player
+happy is equal to the get components.
+
+00:02:37.001 --> 00:02:40.600
+We need to initialize
+and find the component.
+
+00:02:40.601 --> 00:02:46.720
+Then down in the update method, we make
+sure that we're using then player rigid body
+
+00:02:46.721 --> 00:02:49.515
+dot add force and it's
+going to be vector 3
+
+00:02:49.527 --> 00:02:52.400
+dot forward times by
+the forward input times
+
+00:02:52.401 --> 00:02:56.600
+by player speed and
+times by time dot delta time.
+
+00:02:56.601 --> 00:03:00.240
+And then you can come back into unity at
+just any of your rigid body settings and you
+
+00:03:03.940 --> 00:03:11.640
+play controller player
+speed and test it out.

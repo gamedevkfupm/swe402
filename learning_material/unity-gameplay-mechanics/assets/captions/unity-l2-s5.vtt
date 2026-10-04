@@ -1,0 +1,395 @@
+WEBVTT
+
+1
+00:00:00.933 --> 00:00:04.900
+(technological whirring)
+
+2
+00:00:04.900 --> 00:00:05.733
+(shorts out)
+
+3
+00:00:05.733 --> 00:00:09.066
+- [Man] So we're able to spawn
+our enemy using code now,
+
+4
+00:00:09.066 --> 00:00:11.800
+and we can set it to whatever
+positions that we want.
+
+5
+00:00:11.800 --> 00:00:14.333
+But we're gonna make it a
+little more random than just
+
+6
+00:00:14.333 --> 00:00:18.133
+manually putting in a
+position to spawn at.
+
+7
+00:00:19.233 --> 00:00:22.233
+So we're actually going to
+use the "random" class again
+
+8
+00:00:22.233 --> 00:00:25.866
+to generate random numbers
+that the enemies will spawn at.
+
+9
+00:00:25.866 --> 00:00:28.366
+So in our Start method is where we're
+
+10
+00:00:28.366 --> 00:00:30.800
+going to create these random positions,
+
+11
+00:00:30.800 --> 00:00:34.266
+so we'll use a float,
+
+12
+00:00:35.233 --> 00:00:37.866
+and we need a spawn position.
+
+13
+00:00:39.066 --> 00:00:43.600
+Now, keep in mind in our
+game we have a certain range
+
+14
+00:00:43.600 --> 00:00:47.000
+that we want to work
+in for the X and the Z.
+
+15
+00:00:47.000 --> 00:00:51.900
+So, on the Z, if we just use
+our SpawnManager for example.
+
+16
+00:00:51.900 --> 00:00:56.233
+So probably about up to there,
+so around like nine on the Z,
+
+17
+00:00:56.233 --> 00:00:59.800
+so negative nine or so on the other side,
+
+18
+00:01:00.966 --> 00:01:03.500
+and then on the X
+
+19
+00:01:05.466 --> 00:01:07.866
+you want to make sure that it's even,
+
+20
+00:01:07.866 --> 00:01:12.866
+so we could probably keep it
+negative nine and nine as well.
+
+21
+00:01:13.366 --> 00:01:17.066
+So, for our spawn position
+we'll both need an X.
+
+22
+00:01:17.066 --> 00:01:19.500
+Okay, so you want to
+change the range at all
+
+23
+00:01:19.500 --> 00:01:22.633
+and we'll make it be a random range.
+
+24
+00:01:26.366 --> 00:01:27.866
+And the minimum value
+
+25
+00:01:27.866 --> 00:01:29.900
+that we want is gonna be negative nine,
+
+26
+00:01:31.500 --> 00:01:36.366
+and we're going to use
+a maximum value of nine.
+
+27
+00:01:38.700 --> 00:01:41.700
+And then same thing for our Z position.
+
+28
+00:01:42.566 --> 00:01:46.733
+So a Float, spawn position of Z,
+
+29
+00:01:49.100 --> 00:01:50.800
+get a random range,
+
+30
+00:01:52.600 --> 00:01:55.700
+and we'll say negative nine
+and nine for that for now.
+
+31
+00:01:57.833 --> 00:02:00.200
+And then in our Instantiate method,
+
+32
+00:02:01.133 --> 00:02:03.166
+so we can change this new vector3
+
+33
+00:02:05.000 --> 00:02:09.733
+we'll make it a spawn position
+X, and a spawn position Z.
+
+34
+00:02:14.800 --> 00:02:16.033
+Now if we wanted to clean this up
+
+35
+00:02:16.033 --> 00:02:18.466
+even just a little bit more,
+
+36
+00:02:18.466 --> 00:02:21.300
+so we can just make a new vector3,
+
+37
+00:02:22.500 --> 00:02:26.066
+we'll make this the
+actual random position,
+
+38
+00:02:30.766 --> 00:02:35.366
+and then we can actually just
+take out this entire line,
+
+39
+00:02:35.366 --> 00:02:36.600
+we'll paste it,
+
+40
+00:02:38.366 --> 00:02:40.366
+and then where that new Vector 3 was
+
+41
+00:02:40.366 --> 00:02:42.466
+we can just call this "random position".
+
+42
+00:02:42.466 --> 00:02:45.866
+So now this line is very readable,
+
+43
+00:02:45.866 --> 00:02:49.266
+we're instantiating our enemy
+prefab at a random position
+
+44
+00:02:49.266 --> 00:02:51.300
+using the rotation that it's set at,
+
+45
+00:02:51.300 --> 00:02:53.900
+and then we calculate that
+random position above it.
+
+46
+00:02:55.000 --> 00:02:57.500
+Last but not least,
+
+47
+00:02:57.500 --> 00:03:01.233
+now we do have a few
+more hard-coded values
+
+48
+00:03:01.233 --> 00:03:04.733
+so we'll clean that up
+just a little bit more,
+
+49
+00:03:04.733 --> 00:03:07.500
+just to make our code
+as readable as possible.
+
+50
+00:03:07.500 --> 00:03:10.700
+So we're going to make a
+private variable this time
+
+51
+00:03:10.700 --> 00:03:15.533
+of float and we'll call
+this the "spawnRange"
+
+52
+00:03:17.633 --> 00:03:19.533
+and we'll make that nine
+
+53
+00:03:23.333 --> 00:03:26.633
+so then that way we're always
+keeping it within that square
+
+54
+00:03:26.633 --> 00:03:28.800
+so that way we don't
+accidentally spawn an enemy
+
+55
+00:03:28.800 --> 00:03:32.666
+outside of the octagon shape that we have.
+
+56
+00:03:32.666 --> 00:03:35.766
+We'll go into our Random Range,
+
+57
+00:03:35.766 --> 00:03:37.600
+just change this to spawnRange.
+
+58
+00:03:40.200 --> 00:03:41.833
+One thing to note, this
+is a bit redundant.
+
+59
+00:03:41.833 --> 00:03:43.933
+We could easy just make
+it a spawn position
+
+60
+00:03:43.933 --> 00:03:45.533
+but if we ever wanted to change the Z,
+
+61
+00:03:45.533 --> 00:03:47.000
+at least now we have the option,
+
+62
+00:03:47.000 --> 00:03:50.400
+so, it just makes things
+a little bit easier.
+
+63
+00:03:50.400 --> 00:03:53.533
+Now when we save and we go into Unity
+
+64
+00:03:53.533 --> 00:03:57.000
+and we play our game,
+you should see a ball
+
+65
+00:03:57.000 --> 00:04:00.300
+spawns in a random
+position and then we stop.
+
+66
+00:04:00.300 --> 00:04:04.533
+If we try again, different position
+
+67
+00:04:04.533 --> 00:04:06.533
+and then one more time for good measure,
+
+68
+00:04:08.233 --> 00:04:10.933
+and there you go! Awesome!
+
+69
+00:04:11.933 --> 00:04:13.900
+So what you're gonna do is in
+
+70
+00:04:13.900 --> 00:04:17.600
+your SpawnManager class,
+you can create your own
+
+71
+00:04:17.600 --> 00:04:20.633
+private float variable for the spawnRange
+
+72
+00:04:20.633 --> 00:04:21.733
+and our start class we're just
+
+73
+00:04:21.733 --> 00:04:23.733
+going to clean up our code a lot
+
+74
+00:04:23.733 --> 00:04:26.433
+and make it so that our enemies
+spawn at a random position.
+
+75
+00:04:26.433 --> 00:04:31.433
+So, using a X-position
+variable for the spawn
+
+76
+00:04:31.700 --> 00:04:35.033
+we'll set it to a random
+range within our spawnRange,
+
+77
+00:04:35.033 --> 00:04:38.400
+between the negative and
+the positive position.
+
+78
+00:04:38.400 --> 00:04:41.666
+Same thing with the Z, to a
+negative and positive position,
+
+79
+00:04:41.666 --> 00:04:43.433
+somewhere within a random range.
+
+80
+00:04:44.566 --> 00:04:48.600
+We're going to create a new
+vector3 to hold our position,
+
+81
+00:04:49.766 --> 00:04:51.633
+and that's where we're going to change out
+
+82
+00:04:51.633 --> 00:04:55.500
+the hard-coded values
+to be our spawn position
+
+83
+00:04:55.500 --> 00:04:59.966
+for the X and the Z and then
+in our Instantiate method
+
+84
+00:04:59.966 --> 00:05:02.066
+we can just take out that entire vector3
+
+85
+00:05:02.066 --> 00:05:04.266
+and then just make that one whole variable
+
+86
+00:05:04.266 --> 00:05:09.166
+so then this line of code is
+an incredibly easy to read.
+
+87
+00:05:09.166 --> 00:05:10.566
+Now it's your turn!
+
+88
+00:05:10.566 --> 00:05:13.966
+(technological whirring)

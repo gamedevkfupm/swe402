@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Unity Learning Article"
+  short_description: "Create consistent Unity lecture references"
+  default_prompt: "Use $build-unity-learning-article to turn these Unity Learn links and instructor notes into a semester-consistent HTML study reference."

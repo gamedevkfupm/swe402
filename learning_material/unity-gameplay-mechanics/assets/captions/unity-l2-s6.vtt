@@ -1,0 +1,449 @@
+WEBVTT
+
+1
+00:00:05.700 --> 00:00:08.900
+- [Tutor] We've added
+the ability for our enemy
+
+2
+00:00:08.900 --> 00:00:11.866
+to spawn at random
+positions on our screen.
+
+3
+00:00:15.800 --> 00:00:19.933
+Now, we're going to do just
+a bit more code clean up
+
+4
+00:00:19.933 --> 00:00:22.033
+and teach you something new about
+
+5
+00:00:22.033 --> 00:00:24.200
+creating your own custom methods.
+
+6
+00:00:25.100 --> 00:00:30.066
+In our spawn manager script,
+we have in our Start method,
+
+7
+00:00:30.066 --> 00:00:35.066
+a way to create a position
+for each of our enemies.
+
+8
+00:00:35.833 --> 00:00:40.133
+Now, in the past we've made our
+own custom functions before,
+
+9
+00:00:40.133 --> 00:00:42.266
+so we're going to do that again.
+
+10
+00:00:42.266 --> 00:00:47.100
+Now, we're going to make this
+a private method, so that way,
+
+11
+00:00:47.100 --> 00:00:50.100
+we only need to use this
+method inside of this class,
+
+12
+00:00:50.100 --> 00:00:52.400
+so we don't need it anywhere else really.
+
+13
+00:00:52.400 --> 00:00:54.900
+For now, we're going to
+make this a void method,
+
+14
+00:00:54.900 --> 00:00:59.900
+so it doesn't really do
+anything, except tell us things.
+
+15
+00:00:59.933 --> 00:01:02.866
+We're going to call it
+GenerateSpawnPosition.
+
+16
+00:01:07.800 --> 00:01:10.866
+And then we can just leave the parentheses
+
+17
+00:01:10.866 --> 00:01:14.000
+because we're not actually
+passing it any information,
+
+18
+00:01:14.000 --> 00:01:16.166
+it's just going to do something.
+
+19
+00:01:16.166 --> 00:01:18.866
+So now, in our GenerateSpawnPosition,
+
+20
+00:01:18.866 --> 00:01:22.233
+we're actually just
+going to use this code,
+
+21
+00:01:22.233 --> 00:01:26.233
+so that we can create
+our own spawn position.
+
+22
+00:01:26.233 --> 00:01:30.766
+So if we control or
+command x, and we paste it
+
+23
+00:01:30.766 --> 00:01:33.100
+into our GenerateSpawnPosition.
+
+24
+00:01:33.100 --> 00:01:35.666
+So now you can see our random
+position is mad at us for now,
+
+25
+00:01:35.666 --> 00:01:36.833
+but that's fine.
+
+26
+00:01:36.833 --> 00:01:41.600
+So what this is gonna do, is
+enter GenerateSpawnPosition.
+
+27
+00:01:41.600 --> 00:01:44.466
+When we call this in our
+scripts and our update,
+
+28
+00:01:44.466 --> 00:01:46.500
+it'll create a random
+spawn position for us.
+
+29
+00:01:46.500 --> 00:01:48.733
+So it'll create this random X position,
+
+30
+00:01:48.733 --> 00:01:51.400
+it'll create this random Z position.
+
+31
+00:01:51.400 --> 00:01:54.766
+And then, it will store those numbers
+
+32
+00:01:54.766 --> 00:01:57.533
+into a random position, which is great,
+
+33
+00:01:57.533 --> 00:02:00.866
+except the problem is, it
+doesn't actually do anything
+
+34
+00:02:00.866 --> 00:02:03.800
+from there, it just does this calculation,
+
+35
+00:02:03.800 --> 00:02:06.566
+gives us a random coordinate
+and then it doesn't actually
+
+36
+00:02:06.566 --> 00:02:09.100
+do anything with the coordinate.
+
+37
+00:02:09.100 --> 00:02:14.100
+Now, this is a key difference
+between using void functions,
+
+38
+00:02:14.200 --> 00:02:16.733
+and return type functions.
+
+39
+00:02:16.733 --> 00:02:20.800
+So a void function, you
+use for a specific tasks
+
+40
+00:02:20.800 --> 00:02:23.733
+that you do not need to return a value.
+
+41
+00:02:23.733 --> 00:02:27.066
+For example, in one of
+our previous lessons,
+
+42
+00:02:27.066 --> 00:02:32.066
+we actually used a spawn
+method using the void keyword.
+
+43
+00:02:33.000 --> 00:02:35.600
+Now in that case, we just wanted to create
+
+44
+00:02:35.600 --> 00:02:38.366
+a random object on the
+screen and that's all that
+
+45
+00:02:38.366 --> 00:02:39.466
+that method did.
+
+46
+00:02:39.466 --> 00:02:44.266
+However, when we actually use
+methods that return a value,
+
+47
+00:02:44.266 --> 00:02:47.033
+we do it for the purpose
+of giving us information
+
+48
+00:02:47.033 --> 00:02:48.733
+after a calculation.
+
+49
+00:02:48.733 --> 00:02:52.500
+So GenerateSpawnPosition,
+actually gives us a position
+
+50
+00:02:52.500 --> 00:02:54.333
+that we need to use.
+
+51
+00:02:54.333 --> 00:02:59.000
+So, we take out the void keyword
+and we put in the specific
+
+52
+00:02:59.000 --> 00:03:02.166
+type of data that we want
+to come out of this method.
+
+53
+00:03:03.033 --> 00:03:06.566
+In this case, we go from
+a void to a Vector3.
+
+54
+00:03:08.900 --> 00:03:12.633
+Now, you can see that
+our program is mad at us
+
+55
+00:03:12.633 --> 00:03:16.166
+because this doesn't return a value.
+
+56
+00:03:16.166 --> 00:03:18.133
+Fortunately, we have a value here,
+
+57
+00:03:18.133 --> 00:03:21.400
+we have a Vector3 that we've already made.
+
+58
+00:03:21.400 --> 00:03:25.700
+But now, we need this
+Vector3 to actually come out
+
+59
+00:03:25.700 --> 00:03:28.400
+and result from this method.
+
+60
+00:03:28.400 --> 00:03:31.566
+So, if we actually type
+in the keyword return,
+
+61
+00:03:32.900 --> 00:03:35.400
+we can return our random position.
+
+62
+00:03:38.266 --> 00:03:42.900
+So now, when we actually
+go into our Start method,
+
+63
+00:03:42.900 --> 00:03:45.500
+where we had the random position before,
+
+64
+00:03:45.500 --> 00:03:49.933
+we can actually now just call
+generate random position.
+
+65
+00:03:56.100 --> 00:03:58.100
+So now in our Instantiate method,
+
+66
+00:03:58.100 --> 00:04:00.900
+it's no longer unhappy with us.
+
+67
+00:04:00.900 --> 00:04:04.866
+That's because, in place
+of our random position,
+
+68
+00:04:04.866 --> 00:04:07.533
+when we call GenerateSpawnPosition,
+
+69
+00:04:07.533 --> 00:04:12.533
+it actually outputs or
+returns a random Vector3
+
+70
+00:04:14.233 --> 00:04:15.266
+that we need.
+
+71
+00:04:16.200 --> 00:04:19.866
+So, in specific cases, where
+we're actually trying to get
+
+72
+00:04:19.866 --> 00:04:23.666
+some kind of data out of our methods,
+
+73
+00:04:23.666 --> 00:04:28.633
+we can use return types, to
+actually get that data back
+
+74
+00:04:28.633 --> 00:04:30.066
+from that method.
+
+75
+00:04:30.066 --> 00:04:31.733
+Now, it's a very confusing concept,
+
+76
+00:04:31.733 --> 00:04:34.933
+the difference between Vector3's and voids
+
+77
+00:04:34.933 --> 00:04:36.700
+but over time, as you use them more
+
+78
+00:04:36.700 --> 00:04:39.000
+and understand how you're
+supposed to use them,
+
+79
+00:04:39.000 --> 00:04:40.166
+it gets a lot easier.
+
+80
+00:04:42.633 --> 00:04:46.166
+So now you can see when we go
+into our game and press play,
+
+81
+00:04:49.266 --> 00:04:52.533
+it spawns a random enemy
+in a random position.
+
+82
+00:04:52.533 --> 00:04:55.633
+If we press play again, it spawns it
+
+83
+00:04:55.633 --> 00:04:58.566
+in another random position once again.
+
+84
+00:04:58.566 --> 00:05:03.166
+So what you're gonna do, in
+your spawn manager script,
+
+85
+00:05:04.100 --> 00:05:07.666
+you're going to create
+a new private method
+
+86
+00:05:08.866 --> 00:05:13.700
+and instead of void, like you
+can see in Update or Start,
+
+87
+00:05:13.700 --> 00:05:16.033
+we're going to actually put Vector3
+
+88
+00:05:17.933 --> 00:05:20.700
+and we're gonna call this
+GenerateSpawnPosition.
+
+89
+00:05:21.566 --> 00:05:24.133
+And then we take all the code that we use
+
+90
+00:05:24.133 --> 00:05:27.833
+to generate random positions
+on the X and the Z.
+
+91
+00:05:28.933 --> 00:05:32.833
+We then take our vector
+variable that we've created
+
+92
+00:05:32.833 --> 00:05:37.066
+and then we use the word
+return and we return
+
+93
+00:05:37.066 --> 00:05:40.200
+that variable that we've made so that way
+
+94
+00:05:40.200 --> 00:05:42.400
+when we use our instantiate method
+
+95
+00:05:43.866 --> 00:05:47.400
+or GenerateSpawnPosition,
+will actually give us
+
+96
+00:05:47.400 --> 00:05:49.966
+a Vector3 that we can then use
+
+97
+00:05:49.966 --> 00:05:52.433
+as part of this entire line of code.
+
+98
+00:05:53.733 --> 00:05:54.666
+Now it's your turn.
+
+99
+00:05:56.500 --> 00:05:59.066
+(upbeat sound)

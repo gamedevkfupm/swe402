@@ -1,0 +1,224 @@
+WEBVTT
+
+1
+00:00:00.349 --> 00:00:02.849
+[music]
+
+2
+00:00:05.260 --> 00:00:08.120
+[Instructor] All right. So let's
+get started with Prototype 3.
+
+3
+00:00:08.120 --> 00:00:10.580
+Now I'm going to import
+the Project files,
+
+4
+00:00:10.580 --> 00:00:12.604
+and set up my new Unity Project.
+
+5
+00:00:12.604 --> 00:00:15.351
+But since we've already done
+that let me just open up Unity
+
+6
+00:00:15.351 --> 00:00:17.808
+so that we can get going.
+Now I'm going to go
+
+7
+00:00:17.808 --> 00:00:19.621
+into the scenes Folder,
+
+8
+00:00:19.621 --> 00:00:21.620
+underneath my Project window.
+
+9
+00:00:21.830 --> 00:00:24.299
+Open up "Prototype 3",
+by double-clicking on it.
+
+10
+00:00:25.740 --> 00:00:28.200
+I'm going to delete my sample scene
+by right-clicking on it.
+
+11
+00:00:32.100 --> 00:00:36.090
+Delete. Let me reposition
+my Camera here.
+
+12
+00:00:36.090 --> 00:00:38.343
+I'm on the other side, okay. Cool.
+
+13
+00:00:38.343 --> 00:00:40.340
+So that looks like what's
+in our Game View,
+
+14
+00:00:41.120 --> 00:00:46.255
+and then last but not least,
+once I've had all my Assets imported
+
+15
+00:00:47.200 --> 00:00:50.020
+you can actually select
+the Background Object
+
+16
+00:00:50.270 --> 00:00:52.430
+in the scene on the right side,
+
+17
+00:00:52.430 --> 00:00:55.230
+you'll see in the Inspector
+for the Background,
+
+18
+00:00:55.640 --> 00:00:57.650
+this "Sprite Renderer".
+
+19
+00:00:57.720 --> 00:01:01.620
+Now a Sprite Renderer is a Component
+that enables you to render
+
+20
+00:01:01.620 --> 00:01:06.070
+or to see images in your game,
+and in your environment.
+
+21
+00:01:06.070 --> 00:01:08.217
+So in this case,
+we have this Background image.
+
+22
+00:01:08.670 --> 00:01:13.152
+So we use our Sprite Renderer
+to actually see that image in our scene,
+
+23
+00:01:13.360 --> 00:01:15.382
+especially when you're making 2D games,
+
+24
+00:01:15.382 --> 00:01:17.735
+Sprite Renderers are
+particularly useful.
+
+25
+00:01:18.010 --> 00:01:22.011
+Or if you have a character with items
+or they're carrying something.
+
+26
+00:01:22.660 --> 00:01:25.178
+So with our Sprite Renderer,
+on the right
+
+27
+00:01:25.700 --> 00:01:30.410
+there's an little property called
+Sprite, and you can see currently
+
+28
+00:01:30.410 --> 00:01:32.790
+it's set to "Background_Town"
+all the way
+
+29
+00:01:32.790 --> 00:01:34.964
+on the right side of the Inspector.
+
+30
+00:01:35.414 --> 00:01:38.320
+There's this little circle icon,
+it's a radio button
+
+31
+00:01:38.320 --> 00:01:40.140
+so you can actually click on it.
+
+32
+00:01:40.140 --> 00:01:42.143
+And there are all these different
+options.
+
+33
+00:01:42.753 --> 00:01:45.550
+So there's in fact actually 3 different
+Backgrounds we can use.
+
+34
+00:01:45.550 --> 00:01:47.618
+So you can select one
+that works for you best.
+
+35
+00:01:51.860 --> 00:01:54.770
+I kind of liked this forest scene.
+It's very natural.
+
+36
+00:01:54.770 --> 00:01:58.570
+It's got a lot of bright colors
+on it. So now I can just close out
+
+37
+00:01:58.570 --> 00:02:01.572
+of this window, and we have
+a Background selected.
+
+38
+00:02:02.060 --> 00:02:05.363
+All right. So what you're going
+to do is open up the Unity Hub,
+
+39
+00:02:05.363 --> 00:02:07.850
+and create a new
+Prototype through Project.
+
+40
+00:02:07.850 --> 00:02:12.192
+Use the link below in the steps
+to download the Project starter files.
+
+41
+00:02:12.320 --> 00:02:14.800
+Make sure to open
+the Prototype 3 scene
+
+42
+00:02:14.800 --> 00:02:16.800
+and delete the sample scene.
+
+43
+00:02:16.940 --> 00:02:20.120
+And then you can select
+the Background Object in the Hierarchy.
+
+44
+00:02:20.120 --> 00:02:23.730
+And then in the Sprite Renderer
+Component, you can go to Sprite
+
+45
+00:02:23.730 --> 00:02:27.371
+and select a new Background image
+to use if you want to use the city,
+
+46
+00:02:27.371 --> 00:02:30.472
+nature or town Background.
+So now it's your turn.
+
+47
+00:02:31.014 --> 00:02:33.414
+[music]

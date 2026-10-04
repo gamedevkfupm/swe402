@@ -1,0 +1,429 @@
+WEBVTT
+
+00:00:03.160 --> 00:00:07.013
+So, our game is looking
+really good now, so
+
+00:00:07.025 --> 00:00:11.160
+we have the background
+that scrolls endlessly.
+
+00:00:11.161 --> 00:00:13.522
+We have our happy player
+who jumps through the
+
+00:00:13.534 --> 00:00:15.960
+forest as they're avoiding
+all these obstacles.
+
+00:00:15.961 --> 00:00:18.716
+And now what we want to do
+is we want to actually make it so
+
+00:00:18.717 --> 00:00:25.120
+that we can end our game and
+send it to a game over screen.
+
+00:00:25.121 --> 00:00:27.471
+So what we're going to
+do is we need to figure
+
+00:00:27.483 --> 00:00:29.640
+out how we can
+actually label all of these
+
+00:00:29.740 --> 00:00:32.490
+different objects so
+that whenever our player
+
+00:00:32.502 --> 00:00:35.080
+collides with them we
+know what we've hit.
+
+00:00:35.081 --> 00:00:39.760
+One really cool way of doing this
+is by using something called tags.
+
+00:00:39.761 --> 00:00:42.242
+So if you look at the
+top right of our inspector,
+
+00:00:42.254 --> 00:00:47.320
+we have our ground selected and
+there's this little button called tag.
+
+00:00:47.321 --> 00:00:50.640
+And what we can actually do is
+create different tags for different things.
+
+00:00:50.641 --> 00:00:53.418
+So we can actually go
+and tag our player as
+
+00:00:53.430 --> 00:00:56.480
+player, tag our main
+camera as our main camera,
+
+00:00:56.481 --> 00:00:59.320
+we can tag locations,
+different things like that.
+
+00:00:59.321 --> 00:01:04.920
+So we'll actually create our own tag
+by clicking add tag under that dropdown.
+
+00:01:04.921 --> 00:01:08.120
+And you'll see that there's a
+tag here that says list is empty.
+
+00:01:08.121 --> 00:01:12.280
+So this is our list of tags that
+we can use that we created.
+
+00:01:12.281 --> 00:01:13.280
+We haven't made any yet.
+
+00:01:13.281 --> 00:01:19.360
+So we'll actually go to this little plus
+sign on the bottom right of this bar.
+
+00:01:19.509 --> 00:01:25.000
+And we'll click that and we'll add our
+own tag, so we'll call this one ground.
+
+00:01:25.000 --> 00:01:28.080
+And then we can press enter to save.
+
+00:01:28.880 --> 00:01:36.880
+And now when we go back to
+our ground, oh, that's weird, huh.
+
+00:01:36.881 --> 00:01:42.200
+So what do you actually have to do is you
+go to the tags in your inspector, you click
+
+00:01:42.201 --> 00:01:44.378
+the dropdown and it brings
+up all the different tags
+
+00:01:44.379 --> 00:01:46.921
+and then you select the
+tag that you want to use.
+
+00:01:47.319 --> 00:01:51.880
+So it doesn't unfortunately automatically
+tag something when you create the tag.
+
+00:01:51.881 --> 00:01:53.506
+So you just have to
+make sure you go back into
+
+00:01:53.507 --> 00:01:57.200
+whatever you want to tag
+and apply the appropriate one.
+
+00:01:57.201 --> 00:01:59.520
+We're going to do the
+same thing to our obstacles.
+
+00:01:59.521 --> 00:02:01.904
+But in this case, since
+we have prefabs, we
+
+00:02:01.916 --> 00:02:04.480
+need to double click
+on our obstacles or click
+
+00:02:04.481 --> 00:02:08.560
+on the obstacle and
+click on the open button.
+
+00:02:08.561 --> 00:02:11.039
+And then you can see
+we have another tag here.
+
+00:02:11.040 --> 00:02:18.240
+So we'll go to click it and it's on
+tag right now as we'll add a tag.
+
+00:02:18.241 --> 00:02:20.920
+And we already have our
+ground tag, but we want a new tag.
+
+00:02:20.921 --> 00:02:22.920
+So we'll create another one.
+
+00:02:22.921 --> 00:02:27.960
+And we'll call this one obstacle.
+
+00:02:27.961 --> 00:02:31.235
+Now if we go back to
+our hierarchy that shows
+
+00:02:31.247 --> 00:02:35.681
+us our prefab preview, you
+can see the obstacle here.
+
+00:02:36.680 --> 00:02:39.316
+So if we click that and
+then under tags, just
+
+00:02:39.328 --> 00:02:41.800
+make sure that you
+go and tag an obstacle.
+
+00:02:41.801 --> 00:02:44.578
+And then when we
+leave our prefab editor by
+
+00:02:44.590 --> 00:02:50.600
+using the arrow next to the
+obstacle underneath our hierarchy.
+
+00:02:50.601 --> 00:02:53.269
+And whenever we
+create obstacles, it'll have
+
+00:02:53.281 --> 00:02:55.840
+this tag applied to
+it that says obstacle.
+
+00:02:55.841 --> 00:03:00.040
+So now we need an actual way
+to interact with these obstacles.
+
+00:03:00.041 --> 00:03:03.760
+So we're actually just going to
+use our player controller script.
+
+00:03:03.761 --> 00:03:06.570
+And then in our player
+controller script, you can see
+
+00:03:06.571 --> 00:03:10.600
+that we actually already
+have a way to detect collisions.
+
+00:03:10.601 --> 00:03:14.360
+In this case, we're detecting
+a collision on the ground.
+
+00:03:14.361 --> 00:03:16.888
+So in our player controller
+class, this is actually
+
+00:03:16.889 --> 00:03:19.600
+where we'll just store
+the state of our game over.
+
+00:03:19.601 --> 00:03:23.560
+So we'll just make a
+public Boolean for now.
+
+00:03:23.561 --> 00:03:28.360
+So that way we can see when
+our Boolean is true or false.
+
+00:03:28.361 --> 00:03:33.840
+And we'll name this game over.
+
+00:03:33.841 --> 00:03:36.880
+So now we have our game over state saved.
+
+00:03:36.881 --> 00:03:38.400
+And we're actually going down.
+
+00:03:38.401 --> 00:03:40.428
+And you can see that
+we conveniently already
+
+00:03:40.440 --> 00:03:42.480
+have a way to track
+collisions against other
+
+00:03:42.481 --> 00:03:46.840
+things using our on
+collision enter method.
+
+00:03:46.841 --> 00:03:49.243
+So this is actually the place
+where we can compare the
+
+00:03:49.244 --> 00:03:53.320
+different tags whenever we
+run into those objects specifically.
+
+00:03:53.321 --> 00:03:57.600
+So we'll start actually with the ground
+since we already have this variable here.
+
+00:04:00.795 --> 00:04:04.873
+So if and then our
+condition, we're going to use
+
+00:04:04.885 --> 00:04:08.720
+collision because in
+this case, the collision
+
+00:04:08.721 --> 00:04:11.720
+is actually the object
+that we're colliding with.
+
+00:04:11.721 --> 00:04:17.920
+And then we're going to call
+that collisions game object.
+
+00:04:18.045 --> 00:04:22.640
+And on that game object, we can
+compare the current tag that it has.
+
+00:04:22.641 --> 00:04:24.920
+And we can actually
+use a string for that tag.
+
+00:04:24.921 --> 00:04:29.640
+So we named our ground ground.
+
+00:04:29.641 --> 00:04:33.137
+Now in our statement,
+we can specifically check
+
+00:04:33.149 --> 00:04:36.360
+when we collide with
+a certain game object.
+
+00:04:36.361 --> 00:04:40.360
+We can check that game
+objects tag and see if it's ground.
+
+00:04:40.361 --> 00:04:44.440
+So now we'll take our
+is on ground variable.
+
+00:04:44.441 --> 00:04:47.240
+And this is where we set it to true.
+
+00:04:47.241 --> 00:04:49.423
+And now after we've
+compared for the collision
+
+00:04:49.435 --> 00:04:53.960
+of the ground, we can actually
+compare for the collision of our obstacle.
+
+00:04:53.961 --> 00:04:59.040
+So we'll actually use an L statement.
+
+00:05:13.380 --> 00:05:21.280
+So else, if what we're colliding with
+is an obstacle, then we'll do this thing.
+
+00:05:21.281 --> 00:05:23.601
+So we'll check first
+if we're colliding with
+
+00:05:23.613 --> 00:05:29.080
+the ground, otherwise if what we're
+colliding with is an obstacle, we'll do this.
+
+00:05:29.081 --> 00:05:31.262
+So we can use a debug.log
+statement so that we can
+
+00:05:31.263 --> 00:05:39.800
+see in the editor in Unity
+when our game is over.
+
+00:05:39.801 --> 00:05:44.840
+And then we have that handy
+game over Boolean at the top.
+
+00:05:46.640 --> 00:05:54.640
+So since its default value is
+false, now we set game over to true.
+
+00:05:54.641 --> 00:06:01.440
+So when we go back into Unity, when we play
+our game, you should see on the bottom left
+
+00:06:01.640 --> 00:06:08.400
+that game over pops up and
+tells us that we ran into an obstacle.
+
+00:06:08.401 --> 00:06:10.480
+So we'll just wait for one
+of these fun obstacles.
+
+00:06:10.481 --> 00:06:11.481
+And there's one.
+
+00:06:11.680 --> 00:06:12.680
+Ooh, missed it.
+
+00:06:12.780 --> 00:06:14.360
+My farmer's just so excited.
+
+00:06:14.361 --> 00:06:21.280
+And then we'll hit this one and boom, you
+can see there's a game over at the bottom.
+
+00:06:21.281 --> 00:06:25.480
+So now what you're going to do is you're
+going to make sure on your ground that you
+
+00:06:25.481 --> 00:06:30.040
+add a ground tag by using
+the dropdown, adding a tag.
+
+00:06:30.041 --> 00:06:32.440
+And then in this list, creating a new tag.
+
+00:06:32.441 --> 00:06:37.840
+And then what you're going to do is you're
+going to go into your obstacle prefab.
+
+00:06:37.841 --> 00:06:44.640
+And then you're going to apply a
+tag to this as well called obstacle.
+
+00:06:44.641 --> 00:06:51.080
+And then just make sure that you apply
+the tag before you leave the prefab editor.
+
+00:06:51.081 --> 00:06:56.800
+And then in your player controller script,
+you're going to create a game over variable
+
+00:06:56.801 --> 00:07:01.840
+so that we know when the
+game is over or when it is not.
+
+00:07:01.841 --> 00:07:04.242
+And then we're going
+to change some of our
+
+00:07:04.254 --> 00:07:06.840
+code in our on collision
+enter method so that
+
+00:07:06.841 --> 00:07:14.160
+we have an if statement to see if the object
+that we collide with is tagged as ground,
+
+00:07:15.055 --> 00:07:22.880
+then we can set is on ground to true.
+
+00:07:22.881 --> 00:07:23.992
+Otherwise, if the object
+we collide with is an
+
+00:07:24.004 --> 00:07:25.080
+obstacle, then we set
+our game over to true.
+
+00:07:25.081 --> 00:07:30.280
+And we tell our editor in unity
+that the game is now over.
+
+00:07:30.630 --> 00:07:31.630
+Now it's your turn.

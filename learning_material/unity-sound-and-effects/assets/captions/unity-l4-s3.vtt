@@ -1,0 +1,458 @@
+WEBVTT
+
+1
+00:00:00.966 --> 00:00:03.800
+[music]
+
+2
+00:00:05.533 --> 00:00:08.366
+[Instructor] All right
+so our Particles are
+
+3
+00:00:08.366 --> 00:00:10.800
+getting pretty good right now.
+
+4
+00:00:11.300 --> 00:00:14.466
+When we run into one of these Obstacles
+we get that big puff of smoke.
+
+5
+00:00:15.866 --> 00:00:20.466
+So we're going to add a little
+bit more to our character.
+
+6
+00:00:20.966 --> 00:00:23.433
+So we have this cool
+"FX_DirtSplatter" Effect.
+
+7
+00:00:23.933 --> 00:00:27.233
+So we're actually just going
+to drag this onto our Player.
+
+8
+00:00:28.466 --> 00:00:30.966
+And now we have that dirt
+Particle Effect.
+
+9
+00:00:30.966 --> 00:00:33.500
+Now it does look a little weird.
+You can see it's like spitting
+
+10
+00:00:33.500 --> 00:00:36.000
+out in front,
+and in this case to the side.
+
+11
+00:00:36.500 --> 00:00:41.633
+That's not really how running works,
+so we're going to make it so
+
+12
+00:00:41.633 --> 00:00:46.500
+that we can face this dirtParticle
+to the back. So what we'll actually do,
+
+13
+00:00:46.500 --> 00:00:49.600
+we're just going to use our
+"Rotate Tool" in the top-left,
+
+14
+00:00:50.666 --> 00:00:55.166
+and we're just going to Rotate
+this I think on our Z-Axis.
+
+15
+00:00:55.166 --> 00:00:58.333
+There you go.
+Looks pretty good now.
+
+16
+00:00:58.900 --> 00:01:00.733
+Probably like directly to the back.
+
+17
+00:01:04.166 --> 00:01:07.766
+Cool, looks good. If you want to,
+I'm just going to clean
+
+18
+00:01:07.766 --> 00:01:11.000
+up this value in our Rotation,
+so I'll set it to -90
+
+19
+00:01:11.000 --> 00:01:13.166
+that way it's definitely facing 
+backwards.
+
+20
+00:01:13.900 --> 00:01:17.766
+Then if you want you can even mess
+with the Y-Rotation
+
+21
+00:01:17.766 --> 00:01:20.666
+and make it face a bit more upwards
+
+22
+00:01:20.666 --> 00:01:22.700
+or downwards if you want to.
+
+23
+00:01:23.533 --> 00:01:25.900
+Up to you.
+Really whatever you want to do.
+
+24
+00:01:25.900 --> 00:01:27.900
+I think that angle
+is pretty fine for me.
+
+25
+00:01:29.433 --> 00:01:30.433
+And then we're going to go
+
+26
+00:01:30.433 --> 00:01:33.633
+into our PlayerController
+Script, once again.
+
+27
+00:01:34.666 --> 00:01:37.200
+And then,
+in our PlayerController Script
+
+28
+00:01:37.200 --> 00:01:39.566
+just like we did
+with our explosionParticle,
+
+29
+00:01:40.200 --> 00:01:42.500
+we're going to make
+a public ParticleSystem,
+
+30
+00:01:42.500 --> 00:01:44.533
+so that way we can attach it.
+
+31
+00:01:47.366 --> 00:01:50.966
+And then this will just be we'll call
+it "dirtParticle," very simple.
+
+32
+00:01:53.566 --> 00:01:56.533
+And then what we actually
+want to happen is
+
+33
+00:01:56.700 --> 00:02:00.300
+when we're jumping,
+we actually don't want
+
+34
+00:02:00.300 --> 00:02:03.633
+to Play our dirtParticle anymore,
+so it's always Playing already.
+
+35
+00:02:04.000 --> 00:02:07.400
+So we'll actually set our dirtParticle.
+
+36
+00:02:08.033 --> 00:02:10.033
+See dirtParticle,
+
+37
+00:02:10.700 --> 00:02:12.500
+so we can Play,
+
+38
+00:02:12.500 --> 00:02:17.133
+so I wonder if we go
+to the options is there,
+
+39
+00:02:17.566 --> 00:02:20.500
+so we can "Stop()" 
+so that seems pretty helpful.
+
+40
+00:02:20.500 --> 00:02:23.300
+So let's Stop()
+our Particle from Playing,
+
+41
+00:02:24.066 --> 00:02:26.600
+and then when the Player
+lands back on the Ground
+
+42
+00:02:26.600 --> 00:02:28.600
+that's when we want
+it to start again.
+
+43
+00:02:31.800 --> 00:02:33.800
+So we'll "Play()"
+when we touch the Ground.
+
+44
+00:02:36.633 --> 00:02:38.866
+And then it would look pretty weird
+
+45
+00:02:38.866 --> 00:02:41.933
+if dirt was still coming
+out from behind the Player
+
+46
+00:02:41.933 --> 00:02:44.166
+if the game was over,
+and they died,
+
+47
+00:02:44.166 --> 00:02:46.266
+so we're just going to
+Stop() that Particle
+
+48
+00:02:46.266 --> 00:02:49.200
+from Playing when they
+run into an Obstacle.
+
+49
+00:02:58.200 --> 00:03:02.533
+Now when we save, so you can see
+when we go back into Unity, in fact,
+
+50
+00:03:02.533 --> 00:03:05.066
+the Play on Awake* is
+actually set to on
+
+51
+00:03:05.066 --> 00:03:07.033
+for our DirtSplatter which is fine,
+
+52
+00:03:07.033 --> 00:03:09.866
+so that you can see it when
+the game actually starts,
+
+53
+00:03:10.533 --> 00:03:12.533
+and then when we press Play,
+
+54
+00:03:15.133 --> 00:03:17.566
+you can see we're running,
+we're running, we're making dirt,
+
+55
+00:03:17.566 --> 00:03:23.800
+and then we jump, and we're
+still making dirt somehow.
+
+56
+00:03:23.800 --> 00:03:26.466
+Maybe it's stuck to
+the Player's shoes.
+
+57
+00:03:26.466 --> 00:03:29.133
+That probably doesn't
+make any sense.
+
+58
+00:03:29.133 --> 00:03:31.666
+Well, the explosion still
+works so that's cool.
+
+59
+00:03:31.666 --> 00:03:33.966
+Now you can see that there's just
+magical dirt
+
+60
+00:03:33.966 --> 00:03:36.633
+being thrown out into the sky.
+Maybe there's like an
+
+61
+00:03:37.400 --> 00:03:40.500
+animal underneath the Player that's
+actually creating the dirt, who knows?
+
+62
+00:03:41.733 --> 00:03:45.166
+I think we actually, we might
+of skipped a step as you can see.
+
+63
+00:03:45.166 --> 00:03:48.166
+Oh so,
+in the bottom we have an error,
+
+64
+00:03:48.166 --> 00:03:51.966
+so dirtParticle
+has not been assigned.
+
+65
+00:03:51.966 --> 00:03:56.133
+So I believe, in Player, ah see,
+
+66
+00:03:56.133 --> 00:03:58.266
+so under our
+PlayerController Script
+
+67
+00:03:58.266 --> 00:04:00.166
+we didn't actually give
+it a Dirt Particle,
+
+68
+00:04:01.333 --> 00:04:04.566
+so we'll just take the
+DirtSplatter, drag it, drop it.
+
+69
+00:04:05.100 --> 00:04:08.233
+Now, when we press Play.
+
+70
+00:04:11.066 --> 00:04:13.033
+The dirt starts which is great
+
+71
+00:04:13.033 --> 00:04:14.966
+and then we jump, and no dirt
+
+72
+00:04:14.966 --> 00:04:18.333
+and then there's dirt, and
+then no dirt, no dirt.
+
+73
+00:04:18.333 --> 00:04:20.333
+There's dirt, and then
+we run in and explosion.
+
+74
+00:04:21.000 --> 00:04:23.000
+And no dirt, perfect.
+
+75
+00:04:24.633 --> 00:04:27.566
+Cool, so we're really running now.
+
+76
+00:04:28.433 --> 00:04:30.600
+So what you're going to do
+is you're going to take
+
+77
+00:04:30.600 --> 00:04:32.800
+one of the DirtSplatter Particles,
+
+78
+00:04:33.366 --> 00:04:35.400
+drag and drop it onto the Player.
+
+79
+00:04:35.700 --> 00:04:38.700
+And then you can just set
+it's "Position" and Rotation
+
+80
+00:04:38.700 --> 00:04:41.400
+to make sure that it looks like
+it's actually coming out from behind
+
+81
+00:04:41.400 --> 00:04:45.533
+the Player.
+So in our PlayerController class,
+
+82
+00:04:45.533 --> 00:04:47.566
+we're going to make sure
+that we create
+
+83
+00:04:47.566 --> 00:04:51.066
+another ParticleSystem
+variable for our dirtParticle.
+
+84
+00:04:52.766 --> 00:04:55.366
+In our Update() method,
+whenever we're jumping
+
+85
+00:04:55.366 --> 00:04:58.000
+we want to make sure we Stop()
+Playing that dirtParticle;
+
+86
+00:04:58.300 --> 00:05:01.300
+otherwise, it would look very strange
+that there's just magical dirt
+
+87
+00:05:01.300 --> 00:05:03.300
+flying in the sky.
+
+88
+00:05:04.333 --> 00:05:06.700
+When we hit the Ground,
+we're going to Play()
+
+89
+00:05:07.366 --> 00:05:09.400
+that dirtParticle again.
+
+90
+00:05:10.233 --> 00:05:13.266
+And then when we hit an Obstacle,
+since we're no longer running
+
+91
+00:05:13.800 --> 00:05:15.833
+we Stop() Playing it once again.
+
+92
+00:05:16.766 --> 00:05:19.700
+And then in Unity,
+just make sure
+
+93
+00:05:19.700 --> 00:05:21.866
+that on your Player Object
+
+94
+00:05:22.266 --> 00:05:24.800
+you drag and drop the DirtSplatter,
+
+95
+00:05:24.800 --> 00:05:26.666
+and add it to the Dirt Particle
+
+96
+00:05:26.666 --> 00:05:29.500
+in our PlayerController Script.
+Now it's your turn
+
+97
+00:05:30.500 --> 00:05:34.100
+[music]

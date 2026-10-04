@@ -1,0 +1,350 @@
+WEBVTT
+
+1
+00:00:00.433 --> 00:00:03.433
+[music]
+
+2
+00:00:05.600 --> 00:00:07.700
+[Instructor] Cool, so
+we've taken our first steps
+
+3
+00:00:07.700 --> 00:00:10.200
+in fixing this problem
+that we created for ourselves
+
+4
+00:00:10.200 --> 00:00:13.266
+by making this Background move
+to the left until it disappears.
+
+5
+00:00:15.400 --> 00:00:17.500
+So we have
+our RepeatBackground Script.
+
+6
+00:00:17.500 --> 00:00:20.400
+So we're going to go
+into that Script by double-clicking.
+
+7
+00:00:21.433 --> 00:00:24.966
+Now in our RepeatBackground Script,
+we're going to create
+
+8
+00:00:24.966 --> 00:00:27.766
+a variable for ourselves to make
+things a bit easier.
+
+9
+00:00:28.166 --> 00:00:30.466
+This will be a private variable,
+so we can change
+
+10
+00:00:30.466 --> 00:00:32.500
+it in our code if we need to later.
+
+11
+00:00:32.733 --> 00:00:35.866
+It'll be a Vector3, 
+because we actually want the position.
+
+12
+00:00:37.033 --> 00:00:39.166
+And in this case, 
+we're actually going to be getting
+
+13
+00:00:39.166 --> 00:00:42.300
+the position that our Object starts at.
+
+14
+00:00:45.533 --> 00:00:47.300
+Now, this will be very helpful,
+
+15
+00:00:47.300 --> 00:00:51.866
+so that we know where we
+should reset our Background
+
+16
+00:00:52.533 --> 00:00:54.966
+when it reaches the point
+that we need to put it back,
+
+17
+00:00:54.966 --> 00:00:56.966
+and make it look
+like it's repeating.
+
+18
+00:00:57.266 --> 00:01:00.566
+Now what we're going to do is
+actually in our Start() method,
+
+19
+00:01:01.000 --> 00:01:03.766
+we're going to set our "startPos,"
+
+20
+00:01:07.200 --> 00:01:10.366
+and we're actually just going to get
+all of the coordinates
+
+21
+00:01:10.533 --> 00:01:12.533
+of our transform.position.
+
+22
+00:01:19.033 --> 00:01:21.066
+And now we need to check
+to make sure
+
+23
+00:01:21.666 --> 00:01:24.133
+that whenever we get
+to a certain position,
+
+24
+00:01:25.133 --> 00:01:27.633
+we can reset our Background
+
+25
+00:01:27.633 --> 00:01:29.633
+to go back to our start position.
+
+26
+00:01:29.800 --> 00:01:32.166
+So, we're going to use
+an if() statement to do that check.
+
+27
+00:01:35.333 --> 00:01:38.533
+We're going to want to find
+the current position of our Background,
+
+28
+00:01:38.533 --> 00:01:42.000
+so we're going to use
+our transform.position.
+
+29
+00:01:43.100 --> 00:01:46.133
+And since our Background is
+only moving on the x-axis,
+
+30
+00:01:46.133 --> 00:01:48.400
+that's the only position
+we need to check against.
+
+31
+00:01:50.800 --> 00:01:53.233
+Now we want to see
+whenever our current position,
+
+32
+00:01:53.733 --> 00:01:56.466
+becomes less than our starting position.
+
+33
+00:02:06.100 --> 00:02:09.000
+But specifically, we want to make
+sure that our Background
+
+34
+00:02:09.000 --> 00:02:11.466
+is farther down the line
+
+35
+00:02:11.466 --> 00:02:15.033
+on our X-Axis before 
+we reset the position
+
+36
+00:02:15.533 --> 00:02:18.100
+of our Background to be
+the starting position again.
+
+37
+00:02:18.500 --> 00:02:21.100
+So we'll just use an offset for now,
+
+38
+00:02:21.100 --> 00:02:23.300
+and we're just going to use 40...
+
+39
+00:02:23.700 --> 00:02:25.700
+I think. We'll see how that works.
+
+40
+00:02:27.166 --> 00:02:31.166
+And then if we create a new line,
+and then we use the curly braces,
+
+41
+00:02:33.066 --> 00:02:36.066
+in our if() statement,
+we're going to...
+
+42
+00:02:36.500 --> 00:02:38.533
+set our transform.position
+
+43
+00:02:39.500 --> 00:02:41.500
+that it's currently at,
+
+44
+00:02:41.600 --> 00:02:44.666
+and we're just going to reset
+it back to the position
+
+45
+00:02:45.566 --> 00:02:47.566
+of our variable.
+
+46
+00:02:52.200 --> 00:02:56.366
+Now in Unity, we'll see how this works,
+and how this looks. So,
+
+47
+00:02:59.200 --> 00:03:03.266
+whenever our current position hits
+a certain point past the start position,
+
+48
+00:03:03.266 --> 00:03:05.666
+it'll reset itself.
+That looks...
+
+49
+00:03:06.666 --> 00:03:09.233
+kind of okay.
+It looks a little weird.
+
+50
+00:03:09.233 --> 00:03:11.900
+It kinda looks like the Background
+is stuttering in some ways.
+
+51
+00:03:14.033 --> 00:03:16.700
+Let's see if we can fiddle
+with that number just a little bit more,
+
+52
+00:03:16.700 --> 00:03:20.266
+maybe we'll set it to 50
+so it's farther down the line.
+
+53
+00:03:20.866 --> 00:03:23.300
+So we'll change the variable to 50.
+
+54
+00:03:27.066 --> 00:03:29.333
+And we'll save that, 
+and then we'll see how that looks.
+
+55
+00:03:29.900 --> 00:03:31.866
+So now, hopefully our Background can go
+
+56
+00:03:31.866 --> 00:03:34.733
+a little bit farther down
+before it resets itself.
+
+57
+00:03:40.166 --> 00:03:44.333
+It looks a little bit better.
+It's getting almost there, but...
+
+58
+00:03:46.466 --> 00:03:48.400
+I think that's good
+enough for now.
+
+59
+00:03:48.400 --> 00:03:50.900
+So what we'll do is
+
+60
+00:03:51.400 --> 00:03:53.400
+in your RepeatBackground Script,
+
+61
+00:03:54.000 --> 00:03:56.033
+you're going to create 
+your own variable
+
+62
+00:03:56.733 --> 00:03:59.666
+for a coordinate,
+so you're going to use a Vector3.
+
+63
+00:04:00.166 --> 00:04:03.433
+And that coordinate's going to be
+your start position of your Object.
+
+64
+00:04:03.733 --> 00:04:05.566
+In the Start() method,
+
+65
+00:04:05.566 --> 00:04:07.500
+we're going to set
+the startPos
+
+66
+00:04:07.500 --> 00:04:09.533
+equal to the transform.position,
+
+67
+00:04:09.533 --> 00:04:11.533
+the current position of our Object,
+
+68
+00:04:11.800 --> 00:04:14.166
+just so that we always know exactly
+
+69
+00:04:14.566 --> 00:04:16.733
+where our Object started
+at when it was in the scene,
+
+70
+00:04:17.333 --> 00:04:19.966
+and then we're going to check
+in our Update() function
+
+71
+00:04:20.866 --> 00:04:22.700
+to see when our current position
+
+72
+00:04:22.700 --> 00:04:26.700
+is less than our start position,
+and a little offset,
+
+73
+00:04:27.533 --> 00:04:30.666
+then we'll reset the entire
+position of our Object
+
+74
+00:04:30.666 --> 00:04:32.700
+back to our startPos.
+Now it's your turn.
+
+75
+00:04:33.666 --> 00:04:35.666
+[music]

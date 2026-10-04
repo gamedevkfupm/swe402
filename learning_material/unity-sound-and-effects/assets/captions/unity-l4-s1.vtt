@@ -1,0 +1,442 @@
+WEBVTT
+
+1
+00:00:01.233 --> 00:00:03.233
+[music]
+
+2
+00:00:05.433 --> 00:00:08.566
+[Instructor] All right, so we have
+a really good-looking game now,
+
+3
+00:00:09.000 --> 00:00:12.433
+with all the cool mechanics,
+and animation set up properly,
+
+4
+00:00:13.066 --> 00:00:14.966
+and now we're going to add
+the finishing touches
+
+5
+00:00:14.966 --> 00:00:17.233
+when we Collide with that Obstacle,
+
+6
+00:00:17.866 --> 00:00:20.066
+to create a really cool
+smoke effect.
+
+7
+00:00:20.733 --> 00:00:23.100
+So, to do that,
+we're actually going to learn
+
+8
+00:00:23.100 --> 00:00:25.000
+how to use Particle effects.
+
+9
+00:00:25.533 --> 00:00:27.900
+Now, if you go into your Assets,
+
+10
+00:00:28.233 --> 00:00:30.033
+under the Course Library,
+
+11
+00:00:30.033 --> 00:00:32.066
+there's actually a Particles Folder.
+
+12
+00:00:32.633 --> 00:00:35.100
+And if you expand
+the "Particles" Folder,
+
+13
+00:00:35.100 --> 00:00:37.100
+you can see there's "FX_DirtSplatter,"
+
+14
+00:00:37.700 --> 00:00:39.600
+and Smoke Explosion.
+
+15
+00:00:39.600 --> 00:00:42.566
+So, we're going to take
+this "FX_Explosion_Smoke,"
+
+16
+00:00:42.700 --> 00:00:44.700
+and drag it into our Hierarchy,
+
+17
+00:00:47.700 --> 00:00:50.133
+and then you can see
+it creates this really cool puff
+
+18
+00:00:50.133 --> 00:00:54.600
+when we place it, and you can see
+there's actually a little section
+
+19
+00:00:54.600 --> 00:00:56.500
+down in the bottom right
+of our Scene,
+
+20
+00:00:56.500 --> 00:00:58.500
+we'll make that a little bigger,
+
+21
+00:00:59.766 --> 00:01:03.400
+and in this Menu you can
+actually Play, Restart, or Stop
+
+22
+00:01:03.400 --> 00:01:05.766
+the animation of our Particle effect.
+
+23
+00:01:05.766 --> 00:01:08.433
+So if we Play, and we can Restart,
+
+24
+00:01:08.433 --> 00:01:10.433
+and we can Restart as much as we want,
+
+25
+00:01:10.733 --> 00:01:12.566
+and we can Stop it,
+and we can Play,
+
+26
+00:01:13.133 --> 00:01:15.800
+so this is just a kind of cool way
+to see the Effects,
+
+27
+00:01:15.800 --> 00:01:19.200
+and how they work. Now, another cool
+thing about our Particle System
+
+28
+00:01:19.200 --> 00:01:21.800
+is that there's a whole bunch
+of options
+
+29
+00:01:21.800 --> 00:01:24.366
+that you can actually change
+on the Particle System,
+
+30
+00:01:24.733 --> 00:01:27.066
+to be able to make it
+do different things,
+
+31
+00:01:27.866 --> 00:01:30.166
+so you can actually go,
+and change how fast
+
+32
+00:01:30.166 --> 00:01:33.766
+the actual Particles
+move over their lifetime,
+
+33
+00:01:33.766 --> 00:01:36.566
+so if we set the Speed
+to be ten times as fast,
+
+34
+00:01:37.000 --> 00:01:39.033
+should move even faster than
+before.
+
+35
+00:01:40.133 --> 00:01:42.533
+Yeah, so it's like a big phh!
+That's actually kind of cool,
+
+36
+00:01:42.533 --> 00:01:44.533
+I'm going to leave that.
+
+37
+00:01:46.100 --> 00:01:49.733
+So we'll Stop that. So it's pretty cool,
+we can set different options, too,
+
+38
+00:01:49.733 --> 00:01:53.000
+that we want, so we can change
+the colors if we wanted to,
+
+39
+00:01:53.000 --> 00:01:55.400
+we could change how they
+actually expand,
+
+40
+00:01:56.100 --> 00:01:58.700
+all these other different options.
+Actually, you know what?
+
+41
+00:01:58.700 --> 00:02:00.966
+I'm going to set the Speed back
+to be 2.
+
+42
+00:02:01.400 --> 00:02:03.766
+So, there's all these different
+ways you can Play around
+
+43
+00:02:03.766 --> 00:02:06.233
+with Particle Effects, honestly,
+you could do 100
+
+44
+00:02:06.233 --> 00:02:08.866
+different things with them.
+I'm not going to go too crazy,
+
+45
+00:02:08.866 --> 00:02:11.866
+just because the base effect
+is really good for now,
+
+46
+00:02:11.866 --> 00:02:13.900
+so we're just going to use it.
+
+47
+00:02:14.333 --> 00:02:16.900
+One thing that you want
+to be really careful of though,
+
+48
+00:02:16.900 --> 00:02:18.933
+with your Particle Effects, 
+is if you open
+
+49
+00:02:18.933 --> 00:02:21.466
+up the Particle System Menu,
+
+50
+00:02:22.100 --> 00:02:24.000
+you can actually see
+there's a "Play On Awake*,"
+
+51
+00:02:24.000 --> 00:02:28.333
+and if we set that to true, that would
+immediately create a huge puff of smoke
+
+52
+00:02:28.333 --> 00:02:31.166
+when the game starts. That's not
+exactly what we want to happen,
+
+53
+00:02:31.166 --> 00:02:33.466
+that's not the kind of effect
+that we're trying to create,
+
+54
+00:02:33.533 --> 00:02:36.766
+unless this character were a magician,
+then that would make a lot more sense.
+
+55
+00:02:36.766 --> 00:02:39.000
+So we'll uncheck
+the Play On Awake*.
+
+56
+00:02:39.000 --> 00:02:41.133
+So now,
+one thing that we're going to do
+
+57
+00:02:41.133 --> 00:02:43.466
+is actually put
+
+58
+00:02:43.466 --> 00:02:46.666
+this FX_Explosion_Smoke
+underneath our Player,
+
+59
+00:02:47.733 --> 00:02:50.800
+as a "Nested" or a "Child" Object.
+
+60
+00:02:50.800 --> 00:02:53.966
+So that means that it's
+an Object that is attached
+
+61
+00:02:54.233 --> 00:02:58.400
+to another Object, so it
+belongs as part of that Object.
+
+62
+00:02:58.600 --> 00:03:02.100
+So you can actually see Player,
+you can see the character,
+
+63
+00:03:02.100 --> 00:03:05.000
+and you can see the actual
+legs that control it.
+
+64
+00:03:06.333 --> 00:03:09.366
+If we drag
+in our FX_Explosion_Smoke on Player,
+
+65
+00:03:09.366 --> 00:03:11.533
+you can see now, that Player
+
+66
+00:03:11.533 --> 00:03:15.000
+has a smoke explosion
+effect attached to it.
+
+67
+00:03:16.566 --> 00:03:19.666
+And now, what we can
+actually do is when we Play,
+
+68
+00:03:19.666 --> 00:03:23.066
+we can actually move
+our Particle effect around, so,
+
+69
+00:03:23.566 --> 00:03:26.966
+if we Restart,
+see it starts kind of high...
+
+70
+00:03:31.000 --> 00:03:33.000
+so we can actually...
+
+71
+00:03:33.466 --> 00:03:36.466
+go, and maybe,
+let's just the Y down to 0,
+
+72
+00:03:36.466 --> 00:03:38.366
+so it's at the bottom
+of the Player's feet.
+
+73
+00:03:39.600 --> 00:03:42.566
+And then we Restart, and there you go,
+and now it's closer to the Ground,
+
+74
+00:03:42.566 --> 00:03:44.566
+maybe we'll make it
+a little bit higher.
+
+75
+00:03:46.100 --> 00:03:49.533
+Something like, not too high, 0.5,
+I think is good.
+
+76
+00:03:50.466 --> 00:03:53.100
+And then Play, cool, 
+so that's a pretty good position.
+
+77
+00:03:53.100 --> 00:03:55.000
+So, if you watch at the bottom,
+
+78
+00:03:55.000 --> 00:03:57.000
+it's like a puff of smoke,
+
+79
+00:03:58.033 --> 00:04:01.300
+and it creates a really cool effect.
+So, now what you're going to do
+
+80
+00:04:01.300 --> 00:04:03.933
+is you're going to go
+into your Assets Folder,
+
+81
+00:04:04.233 --> 00:04:07.200
+in your Course Library,
+go to the Particles Folder,
+
+82
+00:04:07.666 --> 00:04:09.766
+take the FX_Explosion_Smoke,
+
+83
+00:04:09.766 --> 00:04:11.633
+and you're actually
+going to drag
+
+84
+00:04:11.633 --> 00:04:14.066
+it directly onto the Player,
+
+85
+00:04:14.066 --> 00:04:16.200
+so that then it becomes
+a Child Object
+
+86
+00:04:16.200 --> 00:04:18.200
+of that Player.
+
+87
+00:04:18.433 --> 00:04:20.500
+And then you can go,
+and fiddle around
+
+88
+00:04:20.500 --> 00:04:22.333
+with the FX_Explosion_Smoke
+
+89
+00:04:22.866 --> 00:04:24.733
+setting its position,
+
+90
+00:04:24.733 --> 00:04:27.100
+maybe you want to make
+it on the head for some reason,
+
+91
+00:04:27.500 --> 00:04:29.600
+you can go, and mess around
+with some of the settings,
+
+92
+00:04:29.600 --> 00:04:32.433
+but just don't go too wild with it.
+
+93
+00:04:33.900 --> 00:04:36.466
+And then you're good to go.
+Now, it's your turn.
+
+94
+00:04:38.266 --> 00:04:40.100
+[music]

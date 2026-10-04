@@ -1,0 +1,653 @@
+WEBVTT
+
+1
+00:00:05.500 --> 00:00:07.566
+- [Instructor] So we've
+added these physics materials
+
+2
+00:00:07.566 --> 00:00:09.200
+to our player and our enemies
+
+3
+00:00:09.200 --> 00:00:12.800
+so that way when they collide
+it creates this bouncy bump.
+
+4
+00:00:15.200 --> 00:00:17.966
+Now we need to make it so that the enemy
+
+5
+00:00:17.966 --> 00:00:20.500
+can actually chase the
+player around the scene.
+
+6
+00:00:20.500 --> 00:00:24.333
+So we're going to use a script to do that.
+
+7
+00:00:26.000 --> 00:00:28.000
+In our project window,
+
+8
+00:00:28.000 --> 00:00:31.133
+we're going to go into our scripts folder,
+
+9
+00:00:32.666 --> 00:00:33.500
+we're going to right-click
+
+10
+00:00:33.500 --> 00:00:35.766
+and create a new C sharp script.
+
+11
+00:00:35.766 --> 00:00:37.933
+And for this we'll just call it enemy.
+
+12
+00:00:37.933 --> 00:00:39.933
+So this will hold all the behaviors
+
+13
+00:00:39.933 --> 00:00:41.500
+that the enemy should manage.
+
+14
+00:00:43.000 --> 00:00:45.733
+And we're going to make
+sure we click and drag
+
+15
+00:00:47.033 --> 00:00:49.333
+the enemy script onto the enemy.
+
+16
+00:00:50.833 --> 00:00:52.533
+And you can see it's been applied.
+
+17
+00:00:54.100 --> 00:00:57.733
+So now we're going to
+go into our enemy script
+
+18
+00:00:57.733 --> 00:00:59.066
+by opening it up.
+
+19
+00:00:59.066 --> 00:01:01.133
+Now in our enemy script,
+
+20
+00:01:01.133 --> 00:01:03.566
+let's think about some of
+the things that we wanna do.
+
+21
+00:01:03.566 --> 00:01:06.833
+So we're going to need a speed
+
+22
+00:01:06.833 --> 00:01:08.233
+to be able to make the enemy move.
+
+23
+00:01:08.233 --> 00:01:10.966
+So we'll make this another public
+
+24
+00:01:10.966 --> 00:01:13.566
+so we can fix it in the editor.
+
+25
+00:01:13.566 --> 00:01:16.700
+Float speed and we'll set this to,
+
+26
+00:01:17.533 --> 00:01:20.333
+we'll set it a little slower,
+so make it three for now.
+
+27
+00:01:22.433 --> 00:01:23.366
+Another thing we need to do
+
+28
+00:01:23.366 --> 00:01:25.933
+is because we're going to
+try and move this object
+
+29
+00:01:25.933 --> 00:01:27.700
+we need the rigid body component.
+
+30
+00:01:27.700 --> 00:01:32.433
+So we need a private rigid body.
+
+31
+00:01:34.366 --> 00:01:37.066
+And we'll just call this enemy RB.
+
+32
+00:01:40.400 --> 00:01:42.700
+And now we need to
+actually get the reference
+
+33
+00:01:42.700 --> 00:01:45.466
+of that rigid body on the object.
+
+34
+00:01:45.466 --> 00:01:48.666
+So we use our enemy RB variable
+
+35
+00:01:50.166 --> 00:01:53.733
+and we set that to the component
+
+36
+00:01:55.466 --> 00:01:59.100
+of our rigid body on our enemy.
+
+37
+00:01:59.933 --> 00:02:02.400
+Now we need to move this enemy.
+
+38
+00:02:02.400 --> 00:02:05.633
+To actually visualize what
+we're trying to do here,
+
+39
+00:02:05.633 --> 00:02:09.600
+we're trying to move the
+enemy from their position
+
+40
+00:02:09.600 --> 00:02:11.433
+to our player's position.
+
+41
+00:02:12.700 --> 00:02:14.500
+Now if we think about it in terms
+
+42
+00:02:14.500 --> 00:02:16.533
+of how we apply the force,
+
+43
+00:02:16.533 --> 00:02:18.866
+since we're trying to move our enemy
+
+44
+00:02:18.866 --> 00:02:21.833
+towards the player, we
+should take our player's
+
+45
+00:02:21.833 --> 00:02:25.800
+current position and then
+we need to subtract it
+
+46
+00:02:25.800 --> 00:02:28.766
+from our enemy's position.
+
+47
+00:02:28.766 --> 00:02:32.733
+So in fact, we actually need
+a reference to our player.
+
+48
+00:02:32.733 --> 00:02:34.266
+Since we don't have to find our player,
+
+49
+00:02:34.266 --> 00:02:36.400
+we'll make this a private variable
+
+50
+00:02:36.400 --> 00:02:39.000
+and this will just be the game object.
+
+51
+00:02:39.000 --> 00:02:40.733
+And we'll just call it the player.
+
+52
+00:02:42.300 --> 00:02:45.033
+In our start method, we need
+to find that actual player.
+
+53
+00:02:45.033 --> 00:02:47.600
+So we'll use our player variable.
+
+54
+00:02:47.600 --> 00:02:51.566
+And we set that to the
+game object in our scene,
+
+55
+00:02:52.466 --> 00:02:56.133
+we find it by it's name,
+
+56
+00:02:56.133 --> 00:02:58.400
+which in this case we named it player.
+
+57
+00:02:58.400 --> 00:03:00.500
+So now we have the reference to our player
+
+58
+00:03:01.966 --> 00:03:04.866
+and so now we need to apply a force
+
+59
+00:03:04.866 --> 00:03:06.566
+in the direction of our player.
+
+60
+00:03:06.566 --> 00:03:08.900
+So we need our rigid body again
+
+61
+00:03:12.700 --> 00:03:14.266
+and we add a force
+
+62
+00:03:16.866 --> 00:03:18.666
+and how we're going to add this force
+
+63
+00:03:18.666 --> 00:03:23.333
+is we're going to take
+our player's position.
+
+64
+00:03:23.333 --> 00:03:27.800
+So we need to use player
+and we get the transform
+
+65
+00:03:27.800 --> 00:03:29.300
+to get their current position.
+
+66
+00:03:31.000 --> 00:03:36.000
+And we're going to subtract by
+our enemy's current position,
+
+67
+00:03:36.000 --> 00:03:38.333
+so we need our transform here.
+
+68
+00:03:39.666 --> 00:03:41.066
+And we need the position.
+
+69
+00:03:42.233 --> 00:03:45.033
+So now we know the direction
+that we're trying to go
+
+70
+00:03:46.066 --> 00:03:48.300
+by subtracting our player's position
+
+71
+00:03:48.300 --> 00:03:50.866
+from the current enemy position.
+
+72
+00:03:50.866 --> 00:03:54.700
+So that will give us the
+vector three coordinates
+
+73
+00:03:54.700 --> 00:03:57.400
+that we need to go towards at all times.
+
+74
+00:03:58.666 --> 00:04:01.566
+In this case, we're
+going to apply our speed
+
+75
+00:04:04.233 --> 00:04:07.133
+so that way we know how fast
+the enemy should be moving.
+
+76
+00:04:07.133 --> 00:04:09.033
+One thing to consider is
+
+77
+00:04:09.033 --> 00:04:12.633
+because this is actually a math equation,
+
+78
+00:04:12.633 --> 00:04:15.700
+so our computer will read
+this as a math equation.
+
+79
+00:04:15.700 --> 00:04:19.166
+It will actually follow standard rules.
+
+80
+00:04:19.166 --> 00:04:23.066
+So because transform.position
+is being multiplied
+
+81
+00:04:23.066 --> 00:04:27.133
+by speed, it'll actually do that first
+
+82
+00:04:27.133 --> 00:04:30.766
+before it subtracts from the position.
+
+83
+00:04:30.766 --> 00:04:32.266
+So that's not what we want to happen.
+
+84
+00:04:32.266 --> 00:04:35.433
+We want to get the direction
+that we're trying to go to
+
+85
+00:04:35.433 --> 00:04:37.666
+before we apply the speed.
+
+86
+00:04:37.666 --> 00:04:40.166
+So we use parentheses so
+then that way make sure
+
+87
+00:04:40.166 --> 00:04:43.733
+that first we're going to
+subtract the player's position
+
+88
+00:04:43.733 --> 00:04:45.933
+and our current position and then
+
+89
+00:04:45.933 --> 00:04:47.800
+we're going to multiply that vector three
+
+90
+00:04:47.800 --> 00:04:49.766
+by a certain speed.
+
+91
+00:04:49.766 --> 00:04:51.766
+Now let's make sure we save.
+
+92
+00:04:51.766 --> 00:04:54.833
+And then in unity, if we play our game,
+
+93
+00:04:56.300 --> 00:04:59.333
+we should see the enemy is very,
+
+94
+00:04:59.333 --> 00:05:01.433
+very aggressively rolling towards us.
+
+95
+00:05:01.433 --> 00:05:02.500
+So that's good.
+
+96
+00:05:03.566 --> 00:05:05.266
+Now one of the things that you might see
+
+97
+00:05:05.266 --> 00:05:07.733
+is it was going very fast.
+
+98
+00:05:07.733 --> 00:05:09.566
+Now the reason that happens is because
+
+99
+00:05:09.566 --> 00:05:13.333
+as the player gets farther
+away from the enemy,
+
+100
+00:05:13.333 --> 00:05:16.800
+the length of that actual vector,
+
+101
+00:05:16.800 --> 00:05:19.800
+the distance between those
+two positions becomes larger
+
+102
+00:05:19.800 --> 00:05:21.800
+and so what it actually does, is it tries
+
+103
+00:05:21.800 --> 00:05:26.300
+to multiply it over a very
+large amount of distance.
+
+104
+00:05:26.300 --> 00:05:29.700
+So it actually increases
+in force over time.
+
+105
+00:05:29.700 --> 00:05:32.066
+We can actually use some code
+
+106
+00:05:32.066 --> 00:05:33.666
+to prevent that from happening.
+
+107
+00:05:33.666 --> 00:05:37.666
+So what we're gonna do is
+we're going to actually
+
+108
+00:05:37.666 --> 00:05:40.300
+create a standard strength
+
+109
+00:05:40.300 --> 00:05:42.800
+so that way even if the enemy is
+
+110
+00:05:42.800 --> 00:05:45.566
+really far away from the player,
+
+111
+00:05:45.566 --> 00:05:48.566
+it doesn't actually get
+an increased magnitude,
+
+112
+00:05:48.566 --> 00:05:51.100
+an increased strength
+of it's force over time
+
+113
+00:05:51.100 --> 00:05:53.400
+because the distance is larger.
+
+114
+00:05:53.400 --> 00:05:58.100
+We can use a .normalized
+after this vector three,
+
+115
+00:05:58.100 --> 00:05:59.166
+so this will actually
+
+116
+00:05:59.166 --> 00:06:03.233
+normalize the magnitude of this vector,
+
+117
+00:06:03.233 --> 00:06:04.533
+so it doesn't matter how close
+
+118
+00:06:04.533 --> 00:06:06.666
+or how far the enemy is from the player,
+
+119
+00:06:06.666 --> 00:06:09.333
+it will always be coming
+at the same speed.
+
+120
+00:06:09.333 --> 00:06:10.733
+So if we save.
+
+121
+00:06:10.733 --> 00:06:14.300
+So now in unity when we press play,
+
+122
+00:06:14.300 --> 00:06:18.100
+we should see that the
+enemy doesn't move at a
+
+123
+00:06:18.100 --> 00:06:23.100
+very fast speed, it doesn't
+accelerate really quickly
+
+124
+00:06:23.166 --> 00:06:25.466
+when it runs into the player.
+
+125
+00:06:25.466 --> 00:06:26.966
+Which is exactly what we want.
+
+126
+00:06:27.966 --> 00:06:29.366
+So now it's your turn.
+
+127
+00:06:29.366 --> 00:06:31.666
+You're going to go into your assets folder
+
+128
+00:06:31.666 --> 00:06:34.700
+in your scripts and make an enemy script.
+
+129
+00:06:34.700 --> 00:06:36.766
+Make sure you apply that enemy script
+
+130
+00:06:36.766 --> 00:06:38.900
+to your enemy as a component.
+
+131
+00:06:38.900 --> 00:06:43.100
+In your editor, you're going
+to create three new variables,
+
+132
+00:06:43.100 --> 00:06:45.700
+so we're gonna get a speed variable,
+
+133
+00:06:45.700 --> 00:06:48.500
+we're going to get the rigid body,
+
+134
+00:06:48.500 --> 00:06:50.766
+we're going to get a
+reference to the player.
+
+135
+00:06:51.933 --> 00:06:54.100
+In our start method, make sure that you
+
+136
+00:06:54.100 --> 00:06:56.700
+get the component for that rigid body
+
+137
+00:06:56.700 --> 00:06:58.600
+and make sure that you find that player
+
+138
+00:06:58.600 --> 00:06:59.766
+in the game hierarchy.
+
+139
+00:07:01.033 --> 00:07:03.200
+And then in our update method,
+
+140
+00:07:03.200 --> 00:07:06.866
+you're going to add a force
+to the enemy's rigid body.
+
+141
+00:07:06.866 --> 00:07:10.800
+And you're going to get
+the player's position,
+
+142
+00:07:10.800 --> 00:07:12.933
+subtract our current position,
+
+143
+00:07:12.933 --> 00:07:15.433
+so that we get a direction
+we're trying to go to.
+
+144
+00:07:15.433 --> 00:07:18.100
+Make sure that you put both
+of those in parentheses.
+
+145
+00:07:18.100 --> 00:07:20.433
+So that way it does that operation first.
+
+146
+00:07:20.433 --> 00:07:22.400
+You're going to .normalized
+
+147
+00:07:22.400 --> 00:07:24.900
+so that way we can actually
+normalize that vector
+
+148
+00:07:24.900 --> 00:07:27.666
+so it doesn't accelerate
+at a very fast speed
+
+149
+00:07:27.666 --> 00:07:29.800
+the farther the two objects are away.
+
+150
+00:07:29.800 --> 00:07:32.933
+And then we're gonna multiply
+it by the speed that we set.
+
+151
+00:07:32.933 --> 00:07:33.866
+Now it's your turn.

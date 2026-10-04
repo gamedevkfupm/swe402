@@ -1,0 +1,426 @@
+WEBVTT
+
+1
+00:00:00.466 --> 00:00:03.800
+[music]
+
+2
+00:00:05.500 --> 00:00:07.533
+[Instructor] So, we're using loops
+to control
+
+3
+00:00:07.533 --> 00:00:09.533
+all of the spawning of our enemies,
+
+4
+00:00:09.900 --> 00:00:12.200
+but 1 of the things that we have to do,
+is we need to make
+
+5
+00:00:12.200 --> 00:00:15.300
+it so when all of these enemies
+fall off, you can see they still exist
+
+6
+00:00:15.833 --> 00:00:18.300
+in our scene. So we actually,
+need to remove them,
+
+7
+00:00:18.866 --> 00:00:22.333
+and then we'll add in some functionality
+to spawn new waves.
+
+8
+00:00:23.566 --> 00:00:25.833
+First what we're going to do
+is in our Enemy Script,
+
+9
+00:00:25.833 --> 00:00:28.266
+we're going to remove the enemies
+
+10
+00:00:28.266 --> 00:00:30.266
+when they fall off the scene.
+
+11
+00:00:30.700 --> 00:00:33.966
+So we'll do that in our Update() method
+so we can always check their position.
+
+12
+00:00:34.866 --> 00:00:38.333
+So, if the enemy's current position,
+
+13
+00:00:38.666 --> 00:00:42.333
+on the y < -10,
+
+14
+00:00:42.333 --> 00:00:45.733
+so if it falls below
+Plane of our platform,
+
+15
+00:00:46.033 --> 00:00:50.266
+then we'll "Destroy()"
+the current gameObject, cool.
+
+16
+00:00:50.633 --> 00:00:53.400
+So now, in our SpawnManager,
+
+17
+00:00:53.400 --> 00:00:56.833
+since we know that our
+enemies will be destroyed
+
+18
+00:00:56.833 --> 00:00:58.833
+when they leave the platform,
+
+19
+00:01:00.000 --> 00:01:03.000
+we actually want to keep track
+of the number of enemies that we have.
+
+20
+00:01:03.000 --> 00:01:05.600
+So, we're going to make
+a public variable for now
+
+21
+00:01:05.600 --> 00:01:08.800
+so we can see the numbers of enemies
+that are the screen.
+
+22
+00:01:09.366 --> 00:01:11.933
+We'll make it an int,
+and then we'll just call it enemyCount
+
+23
+00:01:11.933 --> 00:01:14.800
+so we can keep track.
+In our Update() method,
+
+24
+00:01:14.866 --> 00:01:16.866
+is actually where we're going to be
+
+25
+00:01:17.033 --> 00:01:19.133
+keeping the count of all of our enemies.
+
+26
+00:01:19.166 --> 00:01:22.400
+They will be deleted
+at different points in time,
+
+27
+00:01:23.000 --> 00:01:25.033
+so we use enemyCount,
+
+28
+00:01:25.666 --> 00:01:28.933
+and we'll set this using a new method
+
+29
+00:01:28.933 --> 00:01:31.466
+to find all of the enemies
+in the scene.
+
+30
+00:01:33.500 --> 00:01:35.366
+We use the 
+FindObjectsByType<>() method
+
+31
+00:01:35.366 --> 00:01:37.000
+to locate all objects in our scene 
+
+32
+00:01:37.000 --> 00:01:39.933
+that have a specific script attached 
+to them as a component.
+
+33
+00:01:40.033 --> 00:01:42.700
+In this example, 
+we'll use the Enemy script
+
+34
+00:01:42.700 --> 00:01:45.733
+as all of our enemies will have 
+that script attached to them.
+
+35
+00:01:46.633 --> 00:01:48.633
+This is similar to using “GetComponent<T>()”
+
+36
+00:01:48.633 --> 00:01:53.300
+where you specify the component name 
+inside the <> to identify those objects.
+
+37
+00:01:54.666 --> 00:01:58.966
+The “FindObjectsByType” method also 
+requires a parameter inside the parentheses,
+
+38
+00:01:58.966 --> 00:02:03.066
+which specifies the order in which the elements 
+should be stored after being found.
+
+39
+00:02:03.766 --> 00:02:06.133
+For our purposes, 
+the order is not relevant;
+
+40
+00:02:06.400 --> 00:02:08.666
+we only care about 
+how many objects are found.
+
+41
+00:02:08.666 --> 00:02:12.500
+Therefore, we can pass 
+“FindObjectsSortMode.None”
+
+42
+00:02:12.500 --> 00:02:13.700
+as the argument,
+
+43
+00:02:13.733 --> 00:02:16.933
+which ensures that the elements 
+won't be sorted after they are found.
+
+44
+00:02:17.733 --> 00:02:21.433
+And now, you can see
+we have a problem here.
+
+45
+00:02:21.833 --> 00:02:24.666
+So, this is actually
+a really useful part
+
+46
+00:02:24.666 --> 00:02:28.433
+of knowing the difference
+between return and void now.
+
+47
+00:02:29.966 --> 00:02:32.133
+So actually, if we hover over,
+
+48
+00:02:32.800 --> 00:02:36.066
+you can see that first
+word says it returns
+
+49
+00:02:36.633 --> 00:02:39.233
+an array of enemies,
+and the problem
+
+50
+00:02:39.233 --> 00:02:41.233
+here is that it can't actually
+
+51
+00:02:41.300 --> 00:02:43.600
+set an array of enemies
+to an integer.
+
+52
+00:02:44.033 --> 00:02:46.533
+You need an integer
+to set an integer.
+
+53
+00:02:46.900 --> 00:02:48.800
+So actually, because this is an array,
+
+54
+00:02:49.300 --> 00:02:51.900
+we can actually use
+the ".Length" method.
+
+55
+00:02:52.833 --> 00:02:56.500
+And so now .Length will
+actually return the number
+
+56
+00:02:57.066 --> 00:02:59.066
+of enemy Objects in our scene.
+
+57
+00:02:59.700 --> 00:03:02.700
+So now that we can keep track
+of all the different enemies,
+
+58
+00:03:02.966 --> 00:03:05.266
+we'll need to know when we should
+spawn more enemies.
+
+59
+00:03:05.266 --> 00:03:07.266
+So, we'll use an if() statement
+
+60
+00:03:07.733 --> 00:03:10.800
+to track that condition,
+so if the enemyCount()
+
+61
+00:03:12.233 --> 00:03:14.233
+ever becomes or,
+
+62
+00:03:14.433 --> 00:03:18.666
+using our comparison operator
+here with the 2 equal signs, 0,
+
+63
+00:03:19.300 --> 00:03:21.433
+then we should spawn more enemies.
+
+64
+00:03:22.466 --> 00:03:26.033
+And just to see, and make sure it works,
+I'll set this to 1 for now.
+
+65
+00:03:26.266 --> 00:03:29.100
+After all 3 of our enemies
+fall off the scene,
+
+66
+00:03:29.300 --> 00:03:32.566
+our Enemy Count should hit 0,
+and then it will spawn 1 more enemy.
+
+67
+00:03:33.466 --> 00:03:36.900
+So now in Unity,
+if I select our Spawn Manager
+
+68
+00:03:36.900 --> 00:03:40.166
+in our Project Hierarchy you can see
+that the current Enemy Count is 0.
+
+69
+00:03:41.433 --> 00:03:43.433
+When I Play our game,
+
+70
+00:03:44.000 --> 00:03:46.366
+you can see 3 enemies spawn,
+I pick up the Powerup,
+
+71
+00:03:46.900 --> 00:03:49.466
+3 enemies fall off,
+get set to 0,
+
+72
+00:03:49.466 --> 00:03:52.433
+and then it sets it back to 1
+because it spawns a new enemy.
+
+73
+00:03:52.800 --> 00:03:57.066
+So, what you're going to do
+is in your Enemy Script,
+
+74
+00:03:57.633 --> 00:04:00.466
+you're going to add
+some lines of code
+
+75
+00:04:00.466 --> 00:04:03.600
+just to detect when an enemy
+falls off the scene
+
+76
+00:04:04.000 --> 00:04:06.266
+to be destroyed,
+in our Update() method.
+
+77
+00:04:08.433 --> 00:04:10.433
+In our SpawnManager Script,
+
+78
+00:04:10.500 --> 00:04:12.833
+you're going to create
+a new variable.
+
+79
+00:04:12.833 --> 00:04:15.133
+We'll make it public
+for now so we can see it change.
+
+80
+00:04:15.400 --> 00:04:17.400
+We'll make it an integer
+called enemyCount.
+
+81
+00:04:17.566 --> 00:04:20.766
+In our Update() method,
+we're going to set enemyCount
+
+82
+00:04:21.366 --> 00:04:23.366
+by finding objects of type,
+
+83
+00:04:24.000 --> 00:04:27.033
+and the type we're going to use is
+actually the Enemy Script.
+
+84
+00:04:27.200 --> 00:04:29.200
+And then we need to get the Length
+
+85
+00:04:30.033 --> 00:04:32.500
+of what that returns
+because it actually gives us
+
+86
+00:04:32.500 --> 00:04:34.500
+an array, and we just need a number.
+
+87
+00:04:35.066 --> 00:04:38.666
+Then we're going to create a new
+if() statement, using the enemyCount.
+
+88
+00:04:38.866 --> 00:04:41.333
+And when enemyCount becomes 0,
+
+89
+00:04:41.500 --> 00:04:44.066
+then we'll spawn a new enemy wave...
+
+90
+00:04:44.566 --> 00:04:47.300
+with 1 enemy.
+So, now it's your turn.
+
+91
+00:04:48.366 --> 00:04:50.433
+[music]

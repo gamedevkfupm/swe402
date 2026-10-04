@@ -1,0 +1,391 @@
+WEBVTT
+
+1
+00:00:00.462 --> 00:00:03.379
+[music]
+
+2
+00:00:05.560 --> 00:00:08.320
+[Instructor] Cool, so we have
+our player set up
+
+3
+00:00:08.570 --> 00:00:11.320
+as much as possible
+for now,
+
+4
+00:00:11.320 --> 00:00:15.403
+so in the past we've commonly
+gotten just the gameObject
+
+5
+00:00:15.920 --> 00:00:18.160
+or the Transform Component,
+whatever we wanted
+
+6
+00:00:18.160 --> 00:00:20.170
+to call any methods.
+
+7
+00:00:20.540 --> 00:00:23.030
+But if we want to actually
+control the movement
+
+8
+00:00:23.030 --> 00:00:25.545
+and the Gravity of the player,
+and all of that,
+
+9
+00:00:26.090 --> 00:00:29.380
+we actually need to use
+a new way to get a Component
+
+10
+00:00:29.380 --> 00:00:32.210
+for our "Rigidbody,"
+because Rigidbodies aren't
+
+11
+00:00:32.210 --> 00:00:35.690
+something that are automatically
+on other gameObjects
+
+12
+00:00:35.690 --> 00:00:38.856
+versus something like a Transform,
+which is always on gameObjects.
+
+13
+00:00:39.060 --> 00:00:41.745
+So we'll do that using
+our PlayerController Script.
+
+14
+00:00:42.170 --> 00:00:44.200
+So in our PlayerController Script,
+
+15
+00:00:44.200 --> 00:00:46.080
+we're going to create
+a new variable.
+
+16
+00:00:46.080 --> 00:00:48.240
+I already know that I don't need
+this to be seen
+
+17
+00:00:48.240 --> 00:00:50.575
+by anything outside of this class,
+
+18
+00:00:50.910 --> 00:00:52.920
+so I'm going to name
+this private for now.
+
+19
+00:00:53.900 --> 00:00:56.562
+And then, it's actually
+going to be our Rigidbody.
+
+20
+00:00:58.515 --> 00:01:01.203
+So this will be the Rigidbody
+Component on our Player
+
+21
+00:01:01.760 --> 00:01:04.880
+similar to how we had
+attached gameObjects before
+
+22
+00:01:04.880 --> 00:01:06.890
+but in this case,
+this is a Rigidbody.
+
+23
+00:01:07.410 --> 00:01:10.990
+And we're going to just
+name this "playerRb,"
+
+24
+00:01:10.990 --> 00:01:13.000
+for Player Rigidbody.
+
+25
+00:01:13.000 --> 00:01:15.162
+Now versus something
+like transform
+
+26
+00:01:15.850 --> 00:01:18.585
+where we can already get access
+to our transform Component,
+
+27
+00:01:19.120 --> 00:01:22.110
+we don't automatically get access
+to our Rigidbody Component
+
+28
+00:01:22.110 --> 00:01:24.636
+because that's not something
+on every single gameObject.
+
+29
+00:01:25.550 --> 00:01:29.192
+So in order to do that,
+we actually need to use
+
+30
+00:01:29.802 --> 00:01:31.940
+something called
+"GetComponent<>()".
+
+31
+00:01:31.940 --> 00:01:37.491
+So if we take our playerRb
+variable for our Rigidbody,
+
+32
+00:01:39.081 --> 00:01:45.559
+and now if we assign that or set
+that to the Component of our Rigidbody,
+
+33
+00:01:46.040 --> 00:01:48.719
+so we use a method
+called GetComponent<>().
+
+34
+00:01:52.090 --> 00:01:56.458
+Now we have to use these left
+and right carets here,
+
+35
+00:01:57.504 --> 00:02:01.310
+which is different than using
+parentheses to pass in parameters.
+
+36
+00:02:01.820 --> 00:02:03.870
+Specifically, the right and left carets
+
+37
+00:02:03.870 --> 00:02:06.322
+actually get you
+a type of something,
+
+38
+00:02:06.730 --> 00:02:10.185
+so for example,
+in this case we're getting a Rigidbody,
+
+39
+00:02:11.545 --> 00:02:15.770
+but you could use these carets
+to find the type of anything,
+
+40
+00:02:15.770 --> 00:02:18.350
+so if we actually want
+to get a Collider, for example,
+
+41
+00:02:18.350 --> 00:02:21.090
+that was on our Player,
+we could do that too.
+
+42
+00:02:21.590 --> 00:02:25.120
+So the carets are specifically
+for finding different things like...
+
+43
+00:02:26.000 --> 00:02:28.766
+our components that are
+on our different objects.
+
+44
+00:02:30.216 --> 00:02:32.520
+Now we do need to close
+this with a parentheses
+
+45
+00:02:32.520 --> 00:02:35.773
+because it is actually a call
+that we're making as a method.
+
+46
+00:02:36.690 --> 00:02:39.683
+And we'll close that statement.
+And then, just to test and see
+
+47
+00:02:39.683 --> 00:02:42.245
+if this works if we actually
+got that Rigidbody,
+
+48
+00:02:43.050 --> 00:02:46.577
+we're going to apply
+a force to our Rigidbody.
+
+49
+00:02:52.127 --> 00:02:54.570
+Now because we're using
+a Rigidbody Component,
+
+50
+00:02:54.570 --> 00:02:57.311
+it already has a method
+called "AddForce()."...
+
+51
+00:03:03.030 --> 00:03:06.670
+And you can think of this
+similar as "Transform.Translate(),"
+
+52
+00:03:06.670 --> 00:03:09.830
+but instead of moving
+something physically
+
+53
+00:03:09.830 --> 00:03:13.080
+just using positions,
+we can apply forces to things
+
+54
+00:03:13.080 --> 00:03:16.370
+just like we would in the real world
+using physics to make something move.
+
+55
+00:03:16.710 --> 00:03:19.130
+So in this case, we're going
+to make our Player move up
+
+56
+00:03:19.130 --> 00:03:24.237
+just to see what happens,
+so we're going to use "Vector3.up,"...
+
+57
+00:03:26.157 --> 00:03:28.150
+and we're going to amplify
+this by a lot,
+
+58
+00:03:28.150 --> 00:03:30.100
+so we'll just multiply
+this by 100.
+
+59
+00:03:33.250 --> 00:03:37.812
+And then we'll save,
+and now in Unity
+
+60
+00:03:38.260 --> 00:03:42.174
+if you will look at our Game view,
+when I press Play
+
+61
+00:03:46.490 --> 00:03:48.477
+the character jumped very slightly.
+
+62
+00:03:50.640 --> 00:03:53.091
+Let's see if we can make
+that a little bit more powerful.
+
+63
+00:03:53.650 --> 00:03:56.422
+Let's set this to something like 1000.
+
+64
+00:03:57.810 --> 00:04:02.515
+And we'll save, and now back
+in Unity we'll press Play.
+
+65
+00:04:05.210 --> 00:04:07.810
+There you go.
+That's a lot of force.
+
+66
+00:04:08.250 --> 00:04:10.250
+And then because he has Gravity
+
+67
+00:04:10.250 --> 00:04:12.550
+the character falls all the
+way back down to the ground.
+
+68
+00:04:12.550 --> 00:04:14.580
+We'll do that one more time.
+
+69
+00:04:16.610 --> 00:04:18.730
+Whoo! It's like he's so excited.
+
+70
+00:04:20.370 --> 00:04:22.415
+Cool.
+
+71
+00:04:23.070 --> 00:04:27.220
+So what you're going to do is going
+into your PlayerController Script.
+
+72
+00:04:27.710 --> 00:04:29.800
+In your PlayerController
+Script you're going to make
+
+73
+00:04:29.800 --> 00:04:33.820
+a private Rigidbody
+variable called playerRb
+
+74
+00:04:33.820 --> 00:04:38.078
+for the player Rigidbody,
+and then in your Start() method
+
+75
+00:04:38.518 --> 00:04:40.775
+you're going to assign that Rigidbody
+
+76
+00:04:42.390 --> 00:04:45.570
+to our Rigidbody Component using
+
+77
+00:04:45.570 --> 00:04:48.560
+the GetComponent<>() method,
+so that it can find
+
+78
+00:04:48.560 --> 00:04:51.960
+the Rigidbody on the player,
+and then we're going
+
+79
+00:04:51.960 --> 00:04:54.450
+to apply a force
+to that Player so that we can
+
+80
+00:04:54.450 --> 00:04:58.140
+see that they're actually
+jumping in the air using forces.
+
+81
+00:04:58.140 --> 00:05:02.669
+Now it's your turn. [music]

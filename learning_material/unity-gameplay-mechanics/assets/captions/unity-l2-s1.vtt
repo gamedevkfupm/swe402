@@ -1,0 +1,481 @@
+WEBVTT
+
+1
+00:00:05.433 --> 00:00:08.000
+- [Instructor] Great,
+so we have our player
+
+2
+00:00:08.000 --> 00:00:09.766
+movement set up pretty well.
+
+3
+00:00:11.066 --> 00:00:13.133
+And you can see when we
+move the player around,
+
+4
+00:00:13.133 --> 00:00:16.366
+we can move it all around this platform.
+
+5
+00:00:20.100 --> 00:00:22.866
+So now what we're gonna do,
+is we're going to introduce
+
+6
+00:00:22.866 --> 00:00:27.533
+more difficulty into this little
+game by adding in enemies.
+
+7
+00:00:27.533 --> 00:00:32.533
+If we right click on the
+hierarchy, create a 3D object.
+
+8
+00:00:34.700 --> 00:00:36.200
+And we'll make another sphere.
+
+9
+00:00:37.900 --> 00:00:41.933
+So you can see here our
+sphere has actually gone
+
+10
+00:00:41.933 --> 00:00:43.533
+underneath the platform, so we'll bring
+
+11
+00:00:43.533 --> 00:00:46.166
+that up just a little bit,
+and to make things easier,
+
+12
+00:00:46.166 --> 00:00:48.500
+we'll bring it up in front of the player.
+
+13
+00:00:54.066 --> 00:00:56.000
+And then we're going to just make
+
+14
+00:00:56.000 --> 00:00:58.666
+this as large as the player.
+
+15
+00:01:00.900 --> 00:01:04.100
+Just so we can differentiate,
+we're going to just take one
+
+16
+00:01:04.100 --> 00:01:07.666
+of our other textures and
+apply it onto the enemy sphere.
+
+17
+00:01:09.700 --> 00:01:11.200
+That looks pretty good.
+
+18
+00:01:11.200 --> 00:01:13.933
+We'll rename this to be an Enemy.
+
+19
+00:01:17.600 --> 00:01:19.400
+And then, we're just
+going to bring this closer
+
+20
+00:01:19.400 --> 00:01:22.500
+to the ground, so let's
+make this just at zero.
+
+21
+00:01:25.500 --> 00:01:29.500
+And then, we'll bring
+this down to maybe .15.
+
+22
+00:01:30.400 --> 00:01:33.233
+And then, we'll just
+make this an even six.
+
+23
+00:01:35.300 --> 00:01:38.933
+Now, we're going to add a
+rigid body to this enemy,
+
+24
+00:01:38.933 --> 00:01:40.933
+so then that way both the player
+
+25
+00:01:40.933 --> 00:01:43.233
+and the enemy can
+interact through physics.
+
+26
+00:01:44.966 --> 00:01:49.500
+So if we go to Add Component, type rigid.
+
+27
+00:01:49.500 --> 00:01:50.900
+We have a rigid body.
+
+28
+00:01:52.333 --> 00:01:53.166
+Cool.
+
+29
+00:01:55.233 --> 00:01:57.200
+So now, when we press
+play, you should be able
+
+30
+00:01:57.200 --> 00:02:01.633
+to see the player runs into the enemy ball
+
+31
+00:02:01.633 --> 00:02:04.900
+and creates this little,
+bumps it off a little bit.
+
+32
+00:02:04.900 --> 00:02:06.266
+So, what we're actually gonna do
+
+33
+00:02:06.266 --> 00:02:10.733
+is we're going to augment
+the physics in small ways.
+
+34
+00:02:10.733 --> 00:02:15.266
+So, we're actually going to
+go into our Assets folder.
+
+35
+00:02:15.266 --> 00:02:16.866
+Right click on Assets.
+
+36
+00:02:16.866 --> 00:02:18.900
+We're going to create a new folder
+
+37
+00:02:19.733 --> 00:02:21.933
+and we're gonna call
+this Physics Materials.
+
+38
+00:02:23.600 --> 00:02:27.100
+Now, in our Physics Materials
+folder is where we're actually
+
+39
+00:02:27.100 --> 00:02:30.266
+going to keep all the
+different physics materials
+
+40
+00:02:30.266 --> 00:02:31.966
+that we might be creating
+
+41
+00:02:31.966 --> 00:02:34.200
+for our different objects in our scene.
+
+42
+00:02:35.866 --> 00:02:37.900
+If we right click on Physics Materials.
+
+43
+00:02:38.833 --> 00:02:43.833
+We're going to create a physics material
+
+44
+00:02:44.433 --> 00:02:48.633
+at the bottom and we're gonna
+name this material Bouncy.
+
+45
+00:02:51.066 --> 00:02:55.000
+So if we left click and
+drag bouncy onto our player,
+
+46
+00:02:56.300 --> 00:02:59.266
+and we left click and drag
+bouncy onto our enemy,
+
+47
+00:03:00.666 --> 00:03:02.666
+we'll see if any effect happens.
+
+48
+00:03:07.300 --> 00:03:09.100
+So, you notice several things.
+
+49
+00:03:09.100 --> 00:03:13.733
+One, the friction is actually
+making a huge difference now.
+
+50
+00:03:13.733 --> 00:03:15.333
+So, on our physics material,
+
+51
+00:03:15.333 --> 00:03:18.533
+we can actually apply even
+more physics properties.
+
+52
+00:03:18.533 --> 00:03:21.000
+On our player, rigid
+bodies can store things
+
+53
+00:03:21.000 --> 00:03:24.000
+like mass and drag and gravity.
+
+54
+00:03:24.000 --> 00:03:26.200
+But on physics materials,
+we can actually change
+
+55
+00:03:26.200 --> 00:03:30.200
+the friction of how much
+friction there is when something
+
+56
+00:03:30.200 --> 00:03:33.200
+is standing still versus
+dynamic friction which is,
+
+57
+00:03:33.200 --> 00:03:36.366
+when it's moving, how
+much friction is applied.
+
+58
+00:03:36.366 --> 00:03:37.966
+Or we can change the bounciness.
+
+59
+00:03:37.966 --> 00:03:40.200
+So how bouncy something will be
+
+60
+00:03:40.200 --> 00:03:42.600
+when it runs into something else.
+
+61
+00:03:42.600 --> 00:03:44.100
+So, since this is zero, there's not gonna
+
+62
+00:03:44.100 --> 00:03:47.366
+be a very large bounce effect,
+so we'll set this to one.
+
+63
+00:03:47.366 --> 00:03:49.233
+And then, one of the other
+things that we're gonna do
+
+64
+00:03:49.233 --> 00:03:52.433
+is under this Bounce Combine option,
+
+65
+00:03:52.433 --> 00:03:54.433
+there are different options
+that you can select.
+
+66
+00:03:54.433 --> 00:03:58.333
+So, we can select the
+minimum amount of bounce
+
+67
+00:03:58.333 --> 00:04:00.600
+that would happen when two things collide.
+
+68
+00:04:00.600 --> 00:04:03.633
+We can create the maximum amount
+of bounce that would happen
+
+69
+00:04:03.633 --> 00:04:05.466
+when those two things collide,
+
+70
+00:04:05.466 --> 00:04:09.066
+taking the larger value
+of that one or that one.
+
+71
+00:04:09.066 --> 00:04:11.000
+We can average it so
+then it would actually
+
+72
+00:04:11.000 --> 00:04:13.300
+cut those values in half.
+
+73
+00:04:13.300 --> 00:04:17.266
+Or we can multiply it so
+it'll increase the value.
+
+74
+00:04:17.266 --> 00:04:20.433
+So the bounciness of this
+material and the bounciness
+
+75
+00:04:20.433 --> 00:04:22.766
+of this material will
+actually be amplified.
+
+76
+00:04:24.533 --> 00:04:27.166
+So we'll make it multiply for now.
+
+77
+00:04:27.166 --> 00:04:31.033
+And then, we'll press
+play and we'll see ...
+
+78
+00:04:32.100 --> 00:04:33.533
+... still have a bit of friction,
+
+79
+00:04:33.533 --> 00:04:35.666
+but the bounce is definitely a lot more
+
+80
+00:04:35.666 --> 00:04:37.800
+significant now which is really good.
+
+81
+00:04:40.800 --> 00:04:43.466
+Now, in order to check just
+to make sure that you have
+
+82
+00:04:43.466 --> 00:04:48.266
+your bouncy physics materials
+on each of your objects.
+
+83
+00:04:48.266 --> 00:04:50.966
+If you've got a player
+under the Colliders,
+
+84
+00:04:50.966 --> 00:04:54.833
+there's actually a spot for the material
+
+85
+00:04:54.833 --> 00:04:56.500
+and that's where the
+materials are applied.
+
+86
+00:04:56.500 --> 00:04:58.900
+So, if we do the same thing for the enemy,
+
+87
+00:04:58.900 --> 00:05:01.300
+you check their Sphere
+Collider, and you can see under
+
+88
+00:05:01.300 --> 00:05:04.900
+material there's a bouncy
+physics material applied.
+
+89
+00:05:04.900 --> 00:05:06.400
+So, now it's your turn.
+
+90
+00:05:06.400 --> 00:05:09.300
+You're going to create your own enemy.
+
+91
+00:05:09.300 --> 00:05:11.933
+Make sure you apply a new texture to it.
+
+92
+00:05:11.933 --> 00:05:12.833
+Scale it up.
+
+93
+00:05:12.833 --> 00:05:14.666
+Position it in your scene.
+
+94
+00:05:14.666 --> 00:05:18.500
+Make sure you rename it as
+Enemy in your hierarchy.
+
+95
+00:05:18.500 --> 00:05:20.633
+Then you're going to go
+into your Assets folder,
+
+96
+00:05:20.633 --> 00:05:23.333
+create a new Physics Material folder.
+
+97
+00:05:23.333 --> 00:05:25.066
+In that folder, you're going to create
+
+98
+00:05:25.066 --> 00:05:27.933
+a physics material called Bouncy.
+
+99
+00:05:27.933 --> 00:05:30.900
+On Bouncy, you're going to
+change the bounciness value
+
+100
+00:05:30.900 --> 00:05:35.766
+to one and change Bouncy
+Combine to Multiply.
+
+101
+00:05:35.766 --> 00:05:38.000
+And then you're going
+to click and drag Bouncy
+
+102
+00:05:38.000 --> 00:05:40.700
+onto your player and your
+enemy so they both have
+
+103
+00:05:40.700 --> 00:05:42.766
+that physics material applied.
+
+104
+00:05:42.766 --> 00:05:45.033
+And then you can test and see how bouncy
+
+105
+00:05:45.033 --> 00:05:48.633
+it is when your player
+runs into another object.
+
+106
+00:05:48.633 --> 00:05:49.600
+Now it's your turn.
