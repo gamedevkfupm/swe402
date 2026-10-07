@@ -1,0 +1,11 @@
+.video-reference-row { display: flex; gap: 1rem; overflow-x: auto; padding: .25rem .25rem .8rem; scroll-snap-type: x proximity; }
+.video-reference-card { flex: 0 0 220px; padding: 0; border: 2px solid var(--line); background: var(--surface); color: var(--ink); text-align: left; cursor: pointer; scroll-snap-align: start; font: inherit; }
+.video-reference-card:hover, .video-reference-card[aria-expanded="true"] { border-color: var(--purple); }
+.video-reference-card:focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; }
+.video-thumbnail { display: block; position: relative; aspect-ratio: 16/9; background: var(--paper-deep); overflow: hidden; }
+.video-thumbnail video { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.video-open-icon { position: absolute; left: .6rem; bottom: .6rem; background: #251a32; color: #fff; padding: .15rem .5rem; font-size: .9rem; }
+.video-card-title { display: block; padding: .7rem; font-weight: 650; font-size: .9rem; line-height: 1.45; }
+.video-reference-players .step-video[hidden] { display: none !important; }
+.step-videos { min-width: 0; max-width: 100%; }
+@media(max-width:680px) { .video-reference-card { flex-basis: 200px; } }

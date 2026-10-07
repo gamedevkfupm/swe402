@@ -4,14 +4,14 @@
   const sheets = [
     ['unity-editor-first-contact', 'Unity Editor first contact'],
     ['unity-3d-essentials', 'Unity 3D Essentials'],
-    ['unity-2d-essentials', 'Unity 2D Essentials'],
     ['unity-audio-essentials', 'Unity Audio Essentials'],
     ['unity-programming-essentials', 'Unity Programming Essentials'],
+    ['unity-2d-essentials', 'Unity 2D Essentials'],
+    ['unity-publishing-essentials', 'Unity Publishing Essentials'],
     ['unity-player-control', 'Unity Player Control'],
     ['unity-basic-gameplay', 'Unity Basic Gameplay'],
     ['unity-sound-and-effects', 'Unity Sound and Effects'],
     ['unity-gameplay-mechanics', 'Unity Gameplay Mechanics'],
-    ['unity-publishing-essentials', 'Unity Publishing Essentials'],
   ];
   const header = document.querySelector('.site-header');
   const mark = header?.querySelector('.site-mark');
