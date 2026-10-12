@@ -1,0 +1,169 @@
+WEBVTT
+
+00:00:02.560 --> 00:00:06.636
+So in the last video we
+looked at adding force
+
+00:00:06.648 --> 00:00:10.560
+and being able to tidy
+up our script to make
+
+00:00:10.561 --> 00:00:13.246
+sure that we can return
+the specific values of
+
+00:00:13.247 --> 00:00:17.080
+random torque, random
+spawn, and random force.
+
+00:00:17.081 --> 00:00:21.520
+Now what we're going to do is test a mouse
+press so we can detect a mouse click with
+
+00:00:21.521 --> 00:00:26.920
+UNC's newer input system so we can directly
+access something without actually defining
+
+00:00:26.921 --> 00:00:29.887
+an input action. So we
+want to make sure that
+
+00:00:29.899 --> 00:00:34.959
+our target script is open. I've just added
+the update method in between start and the
+
+00:00:34.971 --> 00:00:37.480
+helper methods just so
+that we can start using
+
+00:00:37.520 --> 00:00:41.645
+it in a better place.
+So to do this is we can
+
+00:00:41.657 --> 00:00:45.520
+do if and then we'll
+say mouse dot current
+
+00:00:45.521 --> 00:00:52.380
+dot left button was pressed this frame and
+then make sure to end that add two curly
+
+00:00:53.894 --> 00:01:01.263
+braces and we can write debug dot log
+in brackets and clause mouse was clicked.
+
+00:01:01.264 --> 00:01:03.937
+So in the update method
+here you can see that
+
+00:01:03.949 --> 00:01:06.520
+we're using a more
+shorter line to access the
+
+00:01:06.521 --> 00:01:09.157
+functionality of a mouse
+click. So while we're
+
+00:01:09.169 --> 00:01:11.760
+writing it like this is
+great for prototyping
+
+00:01:11.760 --> 00:01:14.606
+or testing things out
+without setting up a
+
+00:01:14.618 --> 00:01:17.680
+full input actions map
+or anything like that.
+
+00:01:17.681 --> 00:01:20.060
+So with the mouse you
+can set that to anything
+
+00:01:20.072 --> 00:01:22.360
+else you can set that
+to something like game
+
+00:01:22.361 --> 00:01:26.070
+pad as in there or you
+can set it to something
+
+00:01:26.082 --> 00:01:29.480
+like a keyboard but
+we'll keep it on mouse
+
+00:01:29.481 --> 00:01:33.480
+and then dot current is just the current
+mouse that you'll be using. The left button
+
+00:01:33.480 --> 00:01:36.577
+is a button which is
+in the control map by
+
+00:01:36.589 --> 00:01:39.920
+default and was pressed
+this frame just means
+
+00:01:40.019 --> 00:01:45.400
+that it will return true. If in this frame
+it was pressed down and it's perfect for
+
+00:01:45.599 --> 00:01:51.085
+a click detection and then we just have
+a debug log inside that if you need it.
+
+00:01:51.086 --> 00:01:54.087
+Do be aware that if a
+mouse doesn't exist or isn't
+
+00:01:54.099 --> 00:01:56.480
+being used and you
+use mouse dot current
+
+00:01:56.481 --> 00:01:59.135
+it will throw an error.
+So be sure to be aware
+
+00:01:59.147 --> 00:02:01.640
+of that and if you do
+need multiple devices
+
+00:02:01.641 --> 00:02:06.520
+rebinding or any of the other things you
+can use the input actions like we've looked
+
+00:02:06.819 --> 00:02:12.040
+at in other parts of this series. So now if
+we test this out and I left click you can
+
+00:02:12.041 --> 00:02:18.320
+see that we do get the debug log at the top
+which his mouse was clicked. So I want you
+
+00:02:18.321 --> 00:02:21.488
+to go into your target
+script and go to your
+
+00:02:21.500 --> 00:02:24.680
+update method and
+make sure you write if and
+
+00:02:24.681 --> 00:02:27.358
+then in brackets a
+mouse dot current dot left
+
+00:02:27.370 --> 00:02:30.886
+button dot was pressed this
+frame and then when inside the
+
+00:02:30.898 --> 00:02:34.529
+curly braces you can put
+input dot log mouse was clicked.
+
+00:02:34.530 --> 00:02:37.960
+And so this is just a nice
+way to make sure that you can
+
+00:02:37.972 --> 00:02:46.240
+check your input in a
+nice simple line of code.

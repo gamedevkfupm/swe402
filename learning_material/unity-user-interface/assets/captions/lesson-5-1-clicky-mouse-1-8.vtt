@@ -1,0 +1,217 @@
+WEBVTT
+
+00:00:03.560 --> 00:00:07.689
+So in the previous
+video we were in a target
+
+00:00:07.701 --> 00:00:12.610
+script and we were creating
+an input line called mouse.
+
+00:00:12.611 --> 00:00:16.720
+current so we could just create a nice
+debug, so find whether we've clicked
+
+00:00:16.721 --> 00:00:19.617
+the mouse or not. No
+one to be able to create
+
+00:00:19.629 --> 00:00:22.280
+a raycast from the
+mouse's position so we
+
+00:00:22.281 --> 00:00:27.120
+can visualize in the scene view of a game
+view of where the actual clicks are aiming.
+
+00:00:27.670 --> 00:00:29.776
+So this is a great way
+to do lots of different
+
+00:00:29.788 --> 00:00:32.611
+detections and you can use
+raycasts for a number of things.
+
+00:00:32.612 --> 00:00:37.240
+So underneath our debug line for the
+mouse that was clicked, so we're going
+
+00:00:37.241 --> 00:00:39.764
+to create a ray that
+goes from the camera
+
+00:00:39.776 --> 00:00:42.560
+through to the mouse's
+screen position. So we
+
+00:00:42.561 --> 00:00:48.240
+can start this by having a local variable
+and that'll be time a ray with a capital,
+
+00:00:48.241 --> 00:00:54.040
+we can give a lowercase ray as the variable
+name, we'll set the equal to camera dot
+
+00:00:54.041 --> 00:00:56.892
+main because as long
+as our main camera is
+
+00:00:56.904 --> 00:01:00.040
+tagged main, we can
+use it, then we'll say dot
+
+00:01:00.089 --> 00:01:03.334
+screen point to ray
+and what that does is
+
+00:01:03.346 --> 00:01:08.002
+converts the pixel position
+on the screen into world space.
+
+00:01:08.003 --> 00:01:13.600
+So it starts at the camera and goes
+through at that pixel. Then in brackets,
+
+00:01:14.000 --> 00:01:17.758
+we're going to do a
+mouse dot current dot
+
+00:01:17.770 --> 00:01:22.000
+position dot read value
+and open and close the
+
+00:01:22.049 --> 00:01:24.436
+parentheses, close
+the parentheses at the
+
+00:01:24.448 --> 00:01:27.080
+end and add a semicolon.
+And what that's then
+
+00:01:27.081 --> 00:01:33.760
+doing is returning the current mouse position
+in screen pixels as a vector to and the
+
+00:01:33.761 --> 00:01:36.413
+read value gets the
+current value from the
+
+00:01:36.425 --> 00:01:39.280
+input system so we
+can actually use it. So we
+
+00:01:39.281 --> 00:01:43.560
+want to debug this by drawing the ray on
+screen because we wouldn't normally be able
+
+00:01:43.561 --> 00:01:48.200
+to see it otherwise. So we can write debug
+just like with the log book. In this case,
+
+00:01:48.201 --> 00:01:52.052
+we can say draw ray.
+So we're going to open up
+
+00:01:52.064 --> 00:01:55.760
+the parentheses and
+say ray dot origin comma
+
+00:01:58.279 --> 00:02:01.882
+ray dot direction
+times by 100 F comma
+
+00:02:01.894 --> 00:02:07.050
+color with a capital dot red
+comma to F with a semicolon.
+
+00:02:07.051 --> 00:02:11.600
+So what we take is the star or the
+red origin. Then we're going to do the
+
+00:02:11.601 --> 00:02:14.020
+raise direction vector
+three dot direction.
+
+00:02:14.032 --> 00:02:16.520
+And then we take that
+direction and scale it
+
+00:02:16.521 --> 00:02:22.607
+by a hundred units and then make
+that in red and for two seconds to appear.
+
+00:02:22.608 --> 00:02:25.467
+So make sure that you save
+that out. So when the game's
+
+00:02:25.479 --> 00:02:27.760
+playing to see this, you
+might need to take off
+
+00:02:27.810 --> 00:02:30.444
+the 2D mode by clicking
+the button at the top.
+
+00:02:30.456 --> 00:02:36.108
+And if we just go to the 3D, you can see
+that we can press the left click and you can
+
+00:02:36.120 --> 00:02:39.480
+see the actual lines
+that are created on the
+
+00:02:39.481 --> 00:02:42.941
+ray cast to where we
+suspect that we're clicking.
+
+00:02:42.953 --> 00:02:46.588
+As a recap, I want you
+to go to your target script.
+
+00:02:46.589 --> 00:02:52.800
+And in the update method, within the input
+line or the if statement for the input,
+
+00:02:52.801 --> 00:02:56.920
+we're just going to go below the debug log.
+And we're going to say that the ray that
+
+00:02:56.921 --> 00:02:59.531
+we're going to create
+is equal to main camera
+
+00:02:59.543 --> 00:03:02.400
+dot screen point to ray.
+You can have in brackets
+
+00:03:02.401 --> 00:03:05.236
+mouse at dot current dot
+position dot read value.
+
+00:03:05.248 --> 00:03:07.400
+And then we're
+going to debug the ray
+
+00:03:07.680 --> 00:03:11.579
+by saying debug dot
+draw ray in brackets red
+
+00:03:11.591 --> 00:03:15.680
+origin comma ray dot
+direction times 100 comma
+
+00:03:15.730 --> 00:03:23.440
+color dot red with comma to f. And just one
+thing I want to mention is that make sure
+
+00:03:23.441 --> 00:03:26.235
+that your main camera
+is tagged main camera
+
+00:03:26.247 --> 00:03:29.120
+because camera dot
+main in the code requires
+
+00:03:29.121 --> 00:03:31.560
+this tag to happen, but
+that's a work efficiently.

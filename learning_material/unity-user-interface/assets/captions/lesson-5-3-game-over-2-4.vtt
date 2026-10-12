@@ -1,0 +1,454 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:02.900
+[music]
+
+2
+00:00:05.800 --> 00:00:10.233
+[Instructor] So, we have our game set up
+so whenever one of the boxes
+
+3
+00:00:10.233 --> 00:00:12.966
+falls to our Sensor, the game is over.
+
+4
+00:00:14.900 --> 00:00:17.400
+And, game over. Cool.
+
+5
+00:00:17.900 --> 00:00:22.133
+But we do have this problem still,
+where we can in fact still spawn Objects
+
+6
+00:00:22.700 --> 00:00:25.166
+and we can actually keep
+gaining and losing score
+
+7
+00:00:25.800 --> 00:00:28.000
+which is definitely not
+something we want to happen.
+
+8
+00:00:28.900 --> 00:00:31.966
+Kind of defeats the point of high scores
+if you can keep gaining a score
+
+9
+00:00:31.966 --> 00:00:35.933
+after your game is over.
+So, we're going to fix that.
+
+10
+00:00:36.533 --> 00:00:39.900
+So, we're actually going to go
+into our GameManager class
+
+11
+00:00:39.900 --> 00:00:41.933
+and we'll create another public variable
+
+12
+00:00:41.933 --> 00:00:44.733
+so we can actually use
+this outside of this class.
+
+13
+00:00:45.000 --> 00:00:47.300
+We'll make it a boolean,
+so that we can set it
+
+14
+00:00:47.300 --> 00:00:50.233
+to be true or false,
+and we'll call it "isGameActive;"
+
+15
+00:00:50.233 --> 00:00:53.966
+and so this boolean will tell us,
+when the game is or is not active.
+
+16
+00:00:54.666 --> 00:00:56.800
+Now, we need to set this boolean,
+so we'll set
+
+17
+00:00:56.800 --> 00:01:00.966
+this in our Start() method,
+so "isGameActive = true;"
+
+18
+00:01:01.666 --> 00:01:05.000
+and now that we know when the game
+has started, our game is active.
+
+19
+00:01:05.433 --> 00:01:08.800
+On the other side, we should also see
+when the game is over,
+
+20
+00:01:09.000 --> 00:01:11.066
+the game is no longer active.
+
+21
+00:01:14.300 --> 00:01:17.100
+Now, the first problem that we have,
+now that we know the state of when
+
+22
+00:01:17.100 --> 00:01:20.933
+our game is playing or not playing,
+is we keep spawning enemies,
+
+23
+00:01:21.066 --> 00:01:23.333
+and in fact we have the "SpawnTarget()"
+method here.
+
+24
+00:01:23.966 --> 00:01:27.266
+Now we put this "while() loop"
+in here to have a condition
+
+25
+00:01:27.266 --> 00:01:30.466
+for when it's true, it'll run
+this bit of code.
+
+26
+00:01:31.100 --> 00:01:33.200
+However, we just made
+a variable to see
+
+27
+00:01:33.200 --> 00:01:36.700
+when the game is actually running,
+so in fact we can remove this true
+
+28
+00:01:39.333 --> 00:01:41.266
+and just use isGameActive.
+
+29
+00:01:42.866 --> 00:01:45.800
+So now, when the game is active,
+it'll run this line of code,
+
+30
+00:01:45.800 --> 00:01:48.333
+and then when the game is over,
+it'll stop.
+
+31
+00:01:48.333 --> 00:01:50.133
+So we make sure we save that.
+
+32
+00:01:50.133 --> 00:01:53.600
+Now in our Target Script,
+we want to actually
+
+33
+00:01:53.600 --> 00:01:56.166
+stop getting points
+whenever the game is over,
+
+34
+00:01:56.166 --> 00:01:58.366
+so we should also check
+for that as well.
+
+35
+00:01:58.366 --> 00:02:01.366
+So, in "OnMouseDown()",
+if we add another if statement,
+
+36
+00:02:03.300 --> 00:02:06.500
+and we check whenever
+the gameManager tells us
+
+37
+00:02:06.500 --> 00:02:10.300
+that the game is active,
+so since we used a public variable,
+
+38
+00:02:10.733 --> 00:02:13.600
+we can now use that, and check whenever
+the game is active.
+
+39
+00:02:15.133 --> 00:02:17.266
+Then we'll do the line of code
+
+40
+00:02:19.266 --> 00:02:21.800
+to be able to get points
+and destroy Objects.
+
+41
+00:02:21.800 --> 00:02:24.766
+And then when the game is over,
+it won't run this code anymore.
+
+42
+00:02:25.333 --> 00:02:28.300
+So, if we save our game,
+and then if we just do
+
+43
+00:02:28.300 --> 00:02:31.700
+a quick test in Unity we should
+see our Objects spawning.
+
+44
+00:02:32.800 --> 00:02:35.600
+We should see our Objects spawning,
+
+45
+00:02:35.600 --> 00:02:37.533
+I don't see any Objects spawning here.
+
+46
+00:02:38.400 --> 00:02:42.533
+Okay? I think we broke something.
+
+47
+00:02:43.966 --> 00:02:47.166
+Let's see, so we spawn our Objects
+in our GameManager
+
+48
+00:02:47.166 --> 00:02:51.733
+and we use our SpawnTarget(),
+so our game is active.
+
+49
+00:02:51.733 --> 00:02:56.333
+Well, the game is active.
+So, I think what the problem is,
+
+50
+00:02:56.700 --> 00:02:59.333
+so because we set
+GameActive after we start
+
+51
+00:02:59.333 --> 00:03:03.433
+this "Coroutine(),"
+the Coroutine() actually never knows
+
+52
+00:03:03.733 --> 00:03:05.600
+that game is ever set to active,
+
+53
+00:03:05.600 --> 00:03:09.033
+and so then it actually
+just breaks entirely.
+
+54
+00:03:09.533 --> 00:03:13.233
+So, in fact, I think if we just cut,
+isGameActive
+
+55
+00:03:13.233 --> 00:03:16.433
+and we paste it above the Coroutine().
+
+56
+00:03:16.800 --> 00:03:21.000
+So now, when our game starts,
+it'll actually set the game to true,
+
+57
+00:03:21.066 --> 00:03:23.066
+and then it goes into the Coroutine(),
+
+58
+00:03:23.533 --> 00:03:27.466
+and then it'll start
+spawning enemies afterwards.
+
+59
+00:03:29.100 --> 00:03:32.400
+Let's see, let's check it real quick.
+Save.
+
+60
+00:03:32.400 --> 00:03:34.400
+So let's see if we did everything right,
+
+61
+00:03:34.400 --> 00:03:37.166
+hopefully we didn't break
+our game again.
+
+62
+00:03:38.000 --> 00:03:41.633
+There you go, cool. Okay, nice.
+
+63
+00:03:41.633 --> 00:03:45.100
+And now we have the Objects spawn again,
+so let's just see really quick,
+
+64
+00:03:45.100 --> 00:03:47.866
+so Object falls, Object stops spawning,
+
+65
+00:03:48.366 --> 00:03:51.200
+couldn't click on any of the Objects.
+Okay.
+
+66
+00:03:52.366 --> 00:03:54.833
+So, as you can see,
+in this case the order
+
+67
+00:03:54.833 --> 00:03:58.300
+of our code matters a lot,
+because what happens
+
+68
+00:03:58.300 --> 00:04:01.533
+with "StartCoroutine()" is it creates
+another thread,
+
+69
+00:04:01.533 --> 00:04:04.233
+or another loop, 
+where it then starts creating
+
+70
+00:04:04.233 --> 00:04:07.333
+all of these enemies on it's own outside
+
+71
+00:04:07.333 --> 00:04:12.200
+of our actual game updating, and so,
+because the game is never actually
+
+72
+00:04:12.200 --> 00:04:14.966
+ever set to active
+according to this Coroutine(),
+
+73
+00:04:15.733 --> 00:04:17.933
+then it actually just doesn't
+even spawn any enemies.
+
+74
+00:04:17.933 --> 00:04:22.800
+So, always make sure especially
+to update your variables
+
+75
+00:04:22.800 --> 00:04:25.133
+and set them before you
+ever have to use them.
+
+76
+00:04:25.133 --> 00:04:27.233
+That way you don't run
+into a problem like that
+
+77
+00:04:27.400 --> 00:04:29.500
+and then you can't figure
+out why you can't solve it.
+
+78
+00:04:30.366 --> 00:04:32.533
+So, if we wanted to,
+we could take our score,
+
+79
+00:04:33.133 --> 00:04:35.833
+cut it, and then we also set it
+
+80
+00:04:35.833 --> 00:04:38.300
+when we set our isGameActive,
+and then there you go,
+
+81
+00:04:38.300 --> 00:04:42.833
+so now all of our variables
+are being initialized
+
+82
+00:04:42.833 --> 00:04:44.900
+before we actually use them.
+
+83
+00:04:44.900 --> 00:04:47.800
+So, what you're going to do
+is you're going to create
+
+84
+00:04:47.800 --> 00:04:51.633
+your own isGameActive boolean variable,
+make sure it's public.
+
+85
+00:04:52.133 --> 00:04:55.033
+In your Start() method,
+make sure you the set
+
+86
+00:04:55.033 --> 00:04:58.866
+the isGameActive variable before
+you use the Coroutine().
+
+87
+00:05:01.766 --> 00:05:04.966
+In SpawnTarget(), you can now
+change the true variable
+
+88
+00:05:04.966 --> 00:05:08.466
+from the while() statement
+to isGameActive,
+
+89
+00:05:10.100 --> 00:05:14.666
+and then in our GameOver() method,
+you can set isGameActive to false,
+
+90
+00:05:15.200 --> 00:05:18.900
+and then in our Target Script,
+you can add this if() statement
+
+91
+00:05:18.900 --> 00:05:20.733
+to our OnMouseDown() method.
+
+92
+00:05:20.733 --> 00:05:23.533
+That way it can check
+when the game is active
+
+93
+00:05:24.100 --> 00:05:25.966
+before it starts doing
+all of these things
+
+94
+00:05:25.966 --> 00:05:29.600
+to explode all of the different Objects.
+Now it's your turn.
+
+95
+00:05:30.533 --> 00:05:33.033
+[music]

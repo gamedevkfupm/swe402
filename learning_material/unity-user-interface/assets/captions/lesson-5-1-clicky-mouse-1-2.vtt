@@ -1,0 +1,354 @@
+WEBVTT
+
+1
+00:00:00.866 --> 00:00:03.766
+[music]
+
+2
+00:00:05.600 --> 00:00:08.033
+[Instructor] Now, the first thing
+that we'll need for this little game
+
+3
+00:00:08.033 --> 00:00:12.200
+is 3 Objects that we're gonna collect,
+and then a bad Object to avoid.
+
+4
+00:00:12.700 --> 00:00:16.066
+So we're going to go
+into our Project window.
+
+5
+00:00:17.266 --> 00:00:19.566
+We're going to,
+under our "Assets" Folder,
+
+6
+00:00:19.566 --> 00:00:21.566
+expand our "Course Library"
+
+7
+00:00:21.900 --> 00:00:24.933
+and then in our Course Library,
+we're going to expand our props.
+
+8
+00:00:25.200 --> 00:00:27.733
+Now you can see we have a bunch
+of different options here
+
+9
+00:00:27.733 --> 00:00:30.333
+from "Bad" things we don't
+wanna Collide with.
+
+10
+00:00:31.166 --> 00:00:33.100
+We have different "Balls" we can use.
+
+11
+00:00:33.100 --> 00:00:36.700
+We have "Food."
+There's other types of things.
+
+12
+00:00:37.400 --> 00:00:41.633
+So I think I'm just going to use
+some of these "Other" Objects here.
+
+13
+00:00:44.700 --> 00:00:47.466
+So I like the look of all
+of these different crates
+
+14
+00:00:47.466 --> 00:00:50.933
+so I'm gonna go and drag
+them into my Hierarchy.
+
+15
+00:00:53.300 --> 00:00:55.500
+And you can kinda see they're
+stacking on top of each other
+
+16
+00:00:55.500 --> 00:00:57.833
+so we'll just go
+and we'll use our Move tool
+
+17
+00:00:58.500 --> 00:01:01.133
+and we'll just drag them onto our Scene
+so we can see them.
+
+18
+00:01:10.666 --> 00:01:13.633
+And then we need a bad prop to use
+
+19
+00:01:13.633 --> 00:01:16.666
+so we'll go into props,
+Bad and we'll just click and drag.
+
+20
+00:01:17.766 --> 00:01:19.833
+I'll use a skull as one of my bad props.
+
+21
+00:01:19.833 --> 00:01:22.033
+That way it's very clear
+which ones are good.
+
+22
+00:01:22.033 --> 00:01:24.200
+All of these different crates over here
+
+23
+00:01:24.800 --> 00:01:27.533
+and then we have our skull,
+which we definitely don't wanna press.
+
+24
+00:01:28.500 --> 00:01:30.566
+Now, we're going to
+rename all of our props
+
+25
+00:01:30.566 --> 00:01:32.566
+so that way it's easier to manage them.
+
+26
+00:01:32.566 --> 00:01:35.600
+So we'll name the skull
+and we'll just make this very simple
+
+27
+00:01:35.600 --> 00:01:38.533
+so we'll call this Bad 1
+for the first bad prop.
+
+28
+00:01:40.600 --> 00:01:45.033
+And our crate, we'll name this Good 1,
+so this is the first one.
+
+29
+00:01:46.133 --> 00:01:48.166
+We have Good 2,
+
+30
+00:01:49.733 --> 00:01:56.000
+and then our last Cube will be Good 3.
+Now on all of our props,
+
+31
+00:01:56.000 --> 00:01:59.166
+we actually need Rigidbodies
+and Box Colliders
+
+32
+00:01:59.600 --> 00:02:02.433
+because this game is gonna
+be a bunch of Objects being thrown up
+
+33
+00:02:02.433 --> 00:02:04.933
+in the air and then falling
+and we need the Physics for that.
+
+34
+00:02:04.966 --> 00:02:07.333
+And then we need Colliders
+because we're actually going to
+
+35
+00:02:07.333 --> 00:02:09.466
+add triggers to each
+of these boxes as well.
+
+36
+00:02:10.166 --> 00:02:12.000
+So I'm going to select the first box
+
+37
+00:02:12.000 --> 00:02:14.333
+and then I'll select
+the last item on the list
+
+38
+00:02:15.000 --> 00:02:18.133
+and I'm just going to add Components
+so I'll add a Box Collider
+
+39
+00:02:18.133 --> 00:02:20.000
+so hopefully it works
+on all of them properly
+
+40
+00:02:21.400 --> 00:02:25.266
+and then I'll add a Rigidbody.
+
+41
+00:02:28.000 --> 00:02:30.966
+So now we have Box Colliders 
+and Rigidbodies applied to all of them.
+
+42
+00:02:32.333 --> 00:02:34.533
+Now, what we're gonna do
+is in our assets Folder,
+
+43
+00:02:34.533 --> 00:02:37.400
+we're going to right-click
+on it and Create a new Folder
+
+44
+00:02:38.433 --> 00:02:43.233
+and this will be for our Scripts.
+And then in our Scripts Folder,
+
+45
+00:02:43.233 --> 00:02:47.333
+we're just going to make
+a Script called "Target."
+
+46
+00:02:49.433 --> 00:02:53.500
+And then we're going to select
+all of our different Objects as well
+
+47
+00:02:53.500 --> 00:02:56.600
+and they'll all use the same
+"Target (Script)" in general
+
+48
+00:02:56.633 --> 00:02:59.300
+so we don't need to get
+very fancy with this.
+
+49
+00:03:02.900 --> 00:03:05.466
+So now you can see they all
+have the Target (Script) applied.
+
+50
+00:03:05.933 --> 00:03:10.066
+Now, in our Assets Folder, we'll create
+a new Folder for our Prefabs.
+
+51
+00:03:11.000 --> 00:03:12.966
+Now we're gonna take each
+of our different Objects
+
+52
+00:03:12.966 --> 00:03:15.333
+and we'll drag
+them into our Prefabs Folder.
+
+53
+00:03:17.533 --> 00:03:19.666
+Make sure you create "Original Prefabs."
+
+54
+00:03:33.733 --> 00:03:36.500
+And now, since we have
+all of our Prefabs,
+
+55
+00:03:37.133 --> 00:03:40.066
+I'll just go and delete
+all of these Objects in our Scene now
+
+56
+00:03:40.433 --> 00:03:43.033
+because I don't think we'll need
+to edit them much later so
+
+57
+00:03:43.233 --> 00:03:45.133
+delete and now we're good to go.
+
+58
+00:03:45.433 --> 00:03:49.400
+So what you're gonna do is you're going
+to go into your Course Library Folder,
+
+59
+00:03:49.500 --> 00:03:52.233
+underneath Props,
+you can pick a Bad Prop
+
+60
+00:03:52.233 --> 00:03:56.066
+that you're gonna use for your game
+and then choose 3 other props.
+
+61
+00:03:56.066 --> 00:03:57.933
+They can be balls. They can be food.
+
+62
+00:03:57.933 --> 00:04:00.400
+They can be any other kind
+of prop that you wanna use.
+
+63
+00:04:01.833 --> 00:04:03.733
+Make sure on all of the props
+
+64
+00:04:03.733 --> 00:04:08.500
+you add a Rigidbody and a Collider
+
+65
+00:04:08.766 --> 00:04:13.100
+In our Project window, Create a new
+Folder for your Scripts
+
+66
+00:04:13.500 --> 00:04:16.500
+and create a Target Script
+that you'll then apply
+
+67
+00:04:16.500 --> 00:04:18.466
+to each of your different
+Objects on your Scene.
+
+68
+00:04:19.600 --> 00:04:23.000
+Once you have the Box Collider,
+the Rigidbody and your Script applied,
+
+69
+00:04:23.566 --> 00:04:25.866
+create your Prefabs Folder,
+drag and drop
+
+70
+00:04:26.000 --> 00:04:29.500
+all of your different Objects
+into your Prefabs Folder.
+
+71
+00:04:29.500 --> 00:04:31.500
+Create Original Prefabs
+
+72
+00:04:31.533 --> 00:04:33.933
+and then you can see 
+all of the different Prefabs here
+
+73
+00:04:33.933 --> 00:04:37.666
+with all of the Components applied.
+So, now it's your turn.
+
+74
+00:04:38.566 --> 00:04:41.500
+[music]

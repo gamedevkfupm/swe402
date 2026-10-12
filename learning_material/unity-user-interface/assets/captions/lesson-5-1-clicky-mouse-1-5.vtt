@@ -1,0 +1,361 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:03.333
+[music]
+
+2
+00:00:05.633 --> 00:00:07.900
+[Instructor] We have
+all of our Prefab set up so they're
+
+3
+00:00:07.900 --> 00:00:09.966
+randomly spawned in different positions.
+
+4
+00:00:09.966 --> 00:00:13.200
+They have different forces applied
+to them so that they fly up the screen.
+
+5
+00:00:15.366 --> 00:00:17.833
+Now we're going to use
+a "List<>" to keep track
+
+6
+00:00:17.833 --> 00:00:22.300
+of all of these Objects to Spawn them.
+But instead of using a Spawn Manager,
+
+7
+00:00:22.300 --> 00:00:24.433
+we're actually going
+to create a GameManager,
+
+8
+00:00:24.866 --> 00:00:27.600
+since we're also going
+to use the GameManager
+
+9
+00:00:27.600 --> 00:00:29.500
+to control the states of our game later.
+
+10
+00:00:30.300 --> 00:00:35.400
+In your project Hierarchy,
+if you click the create button
+
+11
+00:00:36.066 --> 00:00:40.300
+and create an Empty for
+creating an Empty GameObject,
+
+12
+00:00:40.300 --> 00:00:43.533
+we'll rename the scheme
+Object as GameManager.
+
+13
+00:00:45.166 --> 00:00:47.233
+And then we need a GameManager Script
+
+14
+00:00:47.800 --> 00:00:49.800
+to be able to actually use it.
+
+15
+00:00:49.800 --> 00:00:52.333
+So in our Scripts Folder,
+if we right-click,
+
+16
+00:00:52.333 --> 00:00:55.933
+create a C# Script
+and call it GameManager.
+
+17
+00:00:57.266 --> 00:00:59.800
+We'll now apply our GameManager Script
+
+18
+00:00:59.800 --> 00:01:01.600
+to our GameManager Object,
+
+19
+00:01:02.733 --> 00:01:04.733
+and you can see that it's applied.
+
+20
+00:01:05.066 --> 00:01:07.800
+If we open up the GameManager Script,
+
+21
+00:01:08.200 --> 00:01:11.500
+now we're going to do something similar
+in our GameManager Script
+
+22
+00:01:11.700 --> 00:01:15.200
+to get the List<> of all the Objects
+we're gonna use.
+
+23
+00:01:15.333 --> 00:01:18.366
+So we're going to public so
+we can apply the references.
+
+24
+00:01:19.066 --> 00:01:21.266
+But instead of using an array,
+
+25
+00:01:21.933 --> 00:01:25.933
+we can use a very similar
+data structure called a List<>.
+
+26
+00:01:26.433 --> 00:01:28.766
+And then with a List<>, we actually need
+
+27
+00:01:28.766 --> 00:01:30.766
+to give it the type of something,
+
+28
+00:01:31.000 --> 00:01:35.066
+so we'll create GameObject
+and we'll call this targets.
+
+29
+00:01:35.966 --> 00:01:38.466
+When you first add a list variable,
+your code
+
+30
+00:01:38.466 --> 00:01:41.466
+editor will likely show
+a red squiggly error line.
+
+31
+00:01:41.500 --> 00:01:44.633
+Looking at Unity's console,
+you'll see an error message that says
+
+32
+00:01:44.800 --> 00:01:47.900
+the type or namespace name
+List cannot be found.
+
+33
+00:01:48.300 --> 00:01:51.300
+Are you missing a using directive
+or an assembly reference?
+
+34
+00:01:51.433 --> 00:01:52.933
+That may sound familiar to you.
+
+35
+00:01:54.700 --> 00:01:57.066
+Similar
+to what we saw with coroutines earlier,
+
+36
+00:01:57.066 --> 00:02:00.000
+we just need to include
+another using directive.
+
+37
+00:02:00.000 --> 00:02:04.066
+Most code editors will show you a quick
+fix option when you hover over the error.
+
+38
+00:02:04.666 --> 00:02:07.466
+In this case,
+it will suggest that you add using
+
+39
+00:02:07.466 --> 00:02:10.466
+System.Collections.Generic;
+
+40
+00:02:10.766 --> 00:02:14.566
+Just add that line at the top of your code
+along with your other using statements.
+
+41
+00:02:14.966 --> 00:02:17.633
+And this will let you work
+with the List type.
+
+42
+00:02:17.633 --> 00:02:21.600
+After adding it, you should see the error
+disappear in your IDE and when you save,
+
+43
+00:02:21.733 --> 00:02:24.733
+The Unity console
+error will clear up as well.
+
+44
+00:02:24.766 --> 00:02:28.366
+Now that we've taken care of that, let's
+continue exploring how to use this list.
+
+45
+00:02:29.400 --> 00:02:31.600
+Now a List<> is extremely similar
+
+46
+00:02:31.600 --> 00:02:36.000
+to an array, so if we were
+to create our own array,
+
+47
+00:02:36.000 --> 00:02:42.100
+we could call it GameObject
+and then targets2.
+
+48
+00:02:44.466 --> 00:02:47.933
+And you can see I actually
+misspelled GameObject.
+
+49
+00:02:49.066 --> 00:02:53.466
+So the notation is very similar,
+but with the List<> itself,
+
+50
+00:02:53.566 --> 00:02:56.833
+we can actually pass
+it in the type of thing that we want,
+
+51
+00:02:57.633 --> 00:03:01.200
+versus with an array,
+we have to tell the array
+
+52
+00:03:01.566 --> 00:03:04.300
+what that thing is before
+we make the array itself.
+
+53
+00:03:05.100 --> 00:03:08.400
+Overall, Lists and Arrays have
+
+54
+00:03:08.400 --> 00:03:12.066
+slightly different
+functionality, so there are times
+
+55
+00:03:12.066 --> 00:03:14.466
+where a List<> is more useful
+than an array,
+
+56
+00:03:15.000 --> 00:03:18.533
+but for the purpose of this project,
+we'll just use a List<> for now
+
+57
+00:03:18.533 --> 00:03:20.766
+so that we can kind of get used to it,
+and see how it works,
+
+58
+00:03:20.766 --> 00:03:23.366
+and how similar it is.
+Now when we save,
+
+59
+00:03:24.000 --> 00:03:26.066
+when we go into Unity,
+
+60
+00:03:26.233 --> 00:03:28.566
+you can see our GameManager Script.
+
+61
+00:03:28.966 --> 00:03:31.033
+It has the name of the Targets.
+
+62
+00:03:31.033 --> 00:03:35.866
+We can create a Size, very similar
+to how made a Size for our array.
+
+63
+00:03:35.866 --> 00:03:37.266
+So we'll set this to 4.
+
+64
+00:03:37.500 --> 00:03:39.566
+And we have four elements
+that we can give it
+
+65
+00:03:39.566 --> 00:03:41.933
+So we’ll give it the bad object,
+
+66
+00:03:42.933 --> 00:03:44.766
+the good object,
+
+67
+00:03:45.866 --> 00:03:47.033
+the second one,
+
+68
+00:03:47.433 --> 00:03:48.900
+and the third one.
+
+69
+00:03:49.600 --> 00:03:53.700
+So what you're gonna do,
+is in your project Hierarchy,
+
+70
+00:03:54.166 --> 00:03:58.600
+you're going to create a new
+Empty Object, call it Game Manager.
+
+71
+00:03:59.000 --> 00:04:02.066
+You're going to create a new
+Script called GameManager,
+
+72
+00:04:02.566 --> 00:04:05.400
+apply that Script
+to the GameManager Object.
+
+73
+00:04:06.166 --> 00:04:10.400
+In your GameManager Script,
+create a new public List<>
+
+74
+00:04:10.600 --> 00:04:13.900
+of GameObjects,
+and then in your GameManager,
+
+75
+00:04:13.900 --> 00:04:16.066
+just make sure that you apply
+the Prefabs
+
+76
+00:04:16.433 --> 00:04:21.000
+onto each of the different Elements.
+Now it's your turn.
+
+77
+00:04:22.166 --> 00:04:25.000
+[music]

@@ -1,0 +1,307 @@
+WEBVTT
+
+1
+00:00:01.300 --> 00:00:03.400
+[music]
+
+2
+00:00:05.833 --> 00:00:08.800
+[Instructor] Our title screen
+is now looking amazing,
+
+3
+00:00:09.766 --> 00:00:13.200
+but we do have this problem where 
+we're not actually starting the game.
+
+4
+00:00:13.200 --> 00:00:17.333
+The game has already started. And we can
+actually click all of these boxes,
+
+5
+00:00:17.333 --> 00:00:19.366
+but, in fact, we can
+also click these buttons,
+
+6
+00:00:19.933 --> 00:00:23.100
+which is helpful.
+And down in the bottom you can see
+
+7
+00:00:23.100 --> 00:00:25.033
+we know which Button was clicked.
+
+8
+00:00:25.033 --> 00:00:26.833
+In fact, if I squeeze
+between this Button
+
+9
+00:00:26.833 --> 00:00:28.733
+I can restart the game, so that's fun.
+
+10
+00:00:28.733 --> 00:00:32.433
+So I actually need to fix that,
+and actually start our game.
+
+11
+00:00:34.300 --> 00:00:37.600
+Now, in our GameManager Script,
+since this is the Script
+
+12
+00:00:37.600 --> 00:00:40.533
+that's managing all the different states
+that our game is going through.
+
+13
+00:00:41.066 --> 00:00:43.733
+Like restarting, and game over,
+
+14
+00:00:43.733 --> 00:00:47.333
+we'll add a "StartGame()"
+method into this,
+
+15
+00:00:47.566 --> 00:00:50.866
+so we don't have to keep immediately
+starting the game on start.
+
+16
+00:00:53.666 --> 00:00:56.133
+So, we'll add a new method,
+we'll make it public,
+
+17
+00:00:56.133 --> 00:00:58.066
+so we can use it outside of this class.
+
+18
+00:00:58.733 --> 00:01:01.000
+It'll be void, and it'll
+be called StartGame().
+
+19
+00:01:02.666 --> 00:01:05.200
+Luckily, we've already written
+code to start our game.
+
+20
+00:01:05.200 --> 00:01:07.300
+So, we're just gonna use that.
+
+21
+00:01:08.300 --> 00:01:10.100
+In our Start() method here,
+
+22
+00:01:10.100 --> 00:01:12.933
+you can see that we have
+our different settings.
+
+23
+00:01:13.433 --> 00:01:15.866
+So we'll take all of these,
+
+24
+00:01:15.866 --> 00:01:19.100
+and we'll cut them out
+of our Start() method,
+
+25
+00:01:20.233 --> 00:01:23.333
+and we'll paste all of that code
+into our StartGame().
+
+26
+00:01:23.966 --> 00:01:25.866
+So now when the game is started,
+
+27
+00:01:26.300 --> 00:01:28.333
+we know that the game is set to active.
+
+28
+00:01:28.433 --> 00:01:31.233
+Our score is reset, and then we can
+start spawning all of our enemies.
+
+29
+00:01:31.666 --> 00:01:35.866
+Make sure we save, and then,
+in our difficulty Button Script,
+
+30
+00:01:36.266 --> 00:01:39.066
+we're actually going to need a reference
+to the GameManager,
+
+31
+00:01:39.066 --> 00:01:41.100
+just like we did in our Target Script.
+
+32
+00:01:41.100 --> 00:01:42.933
+So this will be private,
+
+33
+00:01:42.933 --> 00:01:46.566
+and we just need to get our GameManager,
+and we'll call it the gameManager,
+
+34
+00:01:46.566 --> 00:01:50.400
+because that's what it is.
+Now, in our Start() method,
+
+35
+00:01:50.400 --> 00:01:54.000
+we also need to get a reference
+to that gameManager.
+
+36
+00:01:54.433 --> 00:01:56.733
+So we'll get our gameManager variable,
+
+37
+00:01:57.333 --> 00:02:02.666
+and we'll set it or assign
+it to the gameManager = GameObject.
+
+38
+00:02:03.200 --> 00:02:08.400
+So, if we use GameObject
+in our Hierarchy,
+
+39
+00:02:08.500 --> 00:02:13.500
+we will Find("") the Object
+that's called "Game Manager."
+
+40
+00:02:15.500 --> 00:02:19.700
+And then once we've found that Object,
+we'll need to get its Component,
+
+41
+00:02:21.000 --> 00:02:23.966
+which is handily also
+called the GameManager.
+
+42
+00:02:27.066 --> 00:02:30.900
+And then in our SetDifficulty() method,
+we can now use our gameManager.
+
+43
+00:02:32.900 --> 00:02:36.900
+And we can use the StartGame() method,
+that we wrote before.
+
+44
+00:02:38.066 --> 00:02:40.633
+So, if we test our game now,
+
+45
+00:02:40.766 --> 00:02:43.000
+nothing should happen,
+when we press Play.
+
+46
+00:02:44.700 --> 00:02:46.700
+None of those crates are spawning,
+
+47
+00:02:47.200 --> 00:02:50.600
+but then, if we press one
+of our buttons, let's go for easy mode,
+
+48
+00:02:52.400 --> 00:02:54.366
+there you go you've got
+some crate spawning.
+
+49
+00:02:54.500 --> 00:02:58.300
+And then our game should go over,
+get the Game Over, cool.
+
+50
+00:03:00.700 --> 00:03:04.100
+So we're almost there,
+but at least now we can start the game
+
+51
+00:03:04.100 --> 00:03:06.066
+when we press one of the buttons.
+
+52
+00:03:06.066 --> 00:03:09.533
+So, what you're gonna do,
+in your GameManager Script,
+
+53
+00:03:10.500 --> 00:03:12.900
+you're going to create a new
+method called StartGame().
+
+54
+00:03:14.066 --> 00:03:16.800
+And then we can just grab
+all of the code
+
+55
+00:03:17.200 --> 00:03:19.200
+from our Start() method at the top,
+
+56
+00:03:20.500 --> 00:03:22.666
+and paste it down into StartGame().
+
+57
+00:03:23.733 --> 00:03:26.000
+In our DifficultyButton Script,
+
+58
+00:03:26.866 --> 00:03:28.966
+create a variable for the GameManager.
+
+59
+00:03:29.566 --> 00:03:32.633
+Make sure to Find("")
+that gameManager in the scene,
+
+60
+00:03:33.066 --> 00:03:35.866
+and then get the Component
+of its GameManager Script,
+
+61
+00:03:36.100 --> 00:03:38.100
+so we can get the variables.
+
+62
+00:03:38.400 --> 00:03:40.400
+And then, in SetDifficulty(),
+
+63
+00:03:41.033 --> 00:03:43.333
+you can then call 
+gameManager.StartGame();
+
+64
+00:03:44.000 --> 00:03:45.900
+so, when we click one of the buttons,
+
+65
+00:03:46.366 --> 00:03:50.600
+it'll then run this line of code,
+and start our game. Now it's your turn.
+
+66
+00:03:52.533 --> 00:03:54.633
+[music]

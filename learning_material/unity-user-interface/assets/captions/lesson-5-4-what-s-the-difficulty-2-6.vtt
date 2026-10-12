@@ -1,0 +1,385 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:03.066
+[music]
+
+2
+00:00:05.700 --> 00:00:09.633
+[Instructor] So, our game is
+just about there.
+
+3
+00:00:10.266 --> 00:00:13.700
+We have our title screen.
+We can click on one of the Buttons.
+
+4
+00:00:14.433 --> 00:00:19.066
+We have all of these Objects that spawn.
+We lose the game.
+
+5
+00:00:19.066 --> 00:00:22.600
+We can restart, reload our scene.
+We've got our Title Screen again.
+
+6
+00:00:23.566 --> 00:00:25.533
+The last thing we need to do
+
+7
+00:00:25.533 --> 00:00:27.866
+is actually make these
+difficulty Buttons work.
+
+8
+00:00:29.000 --> 00:00:31.266
+So then our players can
+have a little bit of fun.
+
+9
+00:00:32.100 --> 00:00:34.900
+In our code,
+in our difficulty Button Script,
+
+10
+00:00:35.133 --> 00:00:40.133
+we're going to create a public variable,
+so we can assign them immunity.
+
+11
+00:00:40.366 --> 00:00:42.400
+This will be an integer,
+
+12
+00:00:42.766 --> 00:00:45.600
+if we're looking for just whole numbers,
+and we'll call it difficulty.
+
+13
+00:00:47.233 --> 00:00:49.200
+Now, in Unity,
+
+14
+00:00:49.200 --> 00:00:52.866
+if we go to each of our Buttons,
+and we scroll down,
+
+15
+00:00:52.866 --> 00:00:56.433
+you can see that the Difficulty
+variable can be set.
+
+16
+00:00:56.600 --> 00:00:59.800
+So, for Easy,
+we'll make the Difficulty 1.
+
+17
+00:01:01.500 --> 00:01:04.766
+For Medium, 
+we'll set the Difficulty to 2,
+
+18
+00:01:05.300 --> 00:01:07.600
+and for Hard,
+we'll set the Difficulty to 3.
+
+19
+00:01:08.600 --> 00:01:10.766
+Yeah, because each
+of these different Buttons
+
+20
+00:01:10.766 --> 00:01:12.766
+all control there own variables.
+
+21
+00:01:13.000 --> 00:01:15.000
+It will be really easy to use them.
+
+22
+00:01:17.400 --> 00:01:20.633
+In our GameManager Script,
+we should go down to StartGame(),
+
+23
+00:01:20.733 --> 00:01:23.200
+since that's what the difficulty
+Buttons are using,
+
+24
+00:01:23.900 --> 00:01:28.266
+and I'll actually pass
+in an "int difficulty" parameter,
+
+25
+00:01:28.633 --> 00:01:34.600
+so that it will use this integer,
+and then, lucky for us,
+
+26
+00:01:34.733 --> 00:01:38.700
+because we actually
+made a spawnRate before,
+
+27
+00:01:38.700 --> 00:01:42.033
+we can actually now use that variable
+
+28
+00:01:42.033 --> 00:01:48.166
+that we thought of before
+to control our difficulty.
+
+29
+00:01:49.066 --> 00:01:51.766
+So, if we set our spawnRate,
+
+30
+00:01:53.533 --> 00:01:56.900
+and in this case,
+we want our spawns to happen faster,
+
+31
+00:01:57.300 --> 00:02:01.666
+so we'll divide spawnRate
+by the difficulty
+
+32
+00:02:01.666 --> 00:02:03.500
+that's passed in from our Buttons.
+
+33
+00:02:03.500 --> 00:02:06.666
+So, when we pass in our difficulty
+from our Buttons,
+
+34
+00:02:07.100 --> 00:02:09.766
+for example, our Easy Button,
+our spawnRate here,
+
+35
+00:02:10.400 --> 00:02:12.466
+which is currently up to 1 second,
+
+36
+00:02:13.466 --> 00:02:16.000
+will be divided our Easy difficulty,
+which is 1.
+
+37
+00:02:16.000 --> 00:02:19.700
+So 1 divided by 1,
+means our spawnRate will stay at 1.
+
+38
+00:02:20.666 --> 00:02:26.000
+If we pass in our Medium Button,
+then our difficulty becomes 2.
+
+39
+00:02:26.400 --> 00:02:32.066
+So, it will be 1 divided by 2,
+which is 1/2, or 0.5 seconds,
+
+40
+00:02:32.666 --> 00:02:37.333
+and if we use our Hard difficulty,
+it will be divided by 3.
+
+41
+00:02:37.500 --> 00:02:42.766
+So, 1 divided by 3,
+is 1/3, or 0.33 seconds.
+
+42
+00:02:43.433 --> 00:02:47.800
+If you remember, there's one little bit
+of cleaner code that we can write.
+
+43
+00:02:48.033 --> 00:02:50.366
+So, this is pretty redundant,
+right here.
+
+44
+00:02:51.400 --> 00:02:54.566
+In fact, we can use
+the same style of operator
+
+45
+00:02:54.566 --> 00:02:57.533
+that we used for adding,
+and multiplying values
+
+46
+00:02:57.900 --> 00:03:01.766
+that we were trying to multiply
+themselves against other things.
+
+47
+00:03:02.066 --> 00:03:06.566
+So, if we do "spawnRate /= difficulty;"
+
+48
+00:03:06.866 --> 00:03:11.900
+this means spawnRate is set to,
+spawnRate divided by our difficulty.
+
+49
+00:03:12.200 --> 00:03:16.800
+Make sure we save that, and now,
+in our DifficultyButton Script,
+
+50
+00:03:16.800 --> 00:03:19.000
+StartGame() is a little annoyed with us,
+
+51
+00:03:19.000 --> 00:03:22.633
+so we'll pass in,
+our difficulty variable.
+
+52
+00:03:23.800 --> 00:03:26.166
+So, whenever one of the different
+Buttons is pressed,
+
+53
+00:03:26.466 --> 00:03:28.566
+it will send in that difficulty
+to StartGame(),
+
+54
+00:03:28.800 --> 00:03:30.766
+send that information
+to our GameManager,
+
+55
+00:03:31.133 --> 00:03:34.400
+which will then use
+that updated spawnRate,
+
+56
+00:03:34.733 --> 00:03:36.800
+to spawn enemies faster or slower.
+
+57
+00:03:37.066 --> 00:03:39.300
+So, now we're really communicating
+
+58
+00:03:39.800 --> 00:03:42.033
+between the different
+scripts that we've written.
+
+59
+00:03:42.700 --> 00:03:47.866
+Very similar to how we were learning
+how to use methods,
+
+60
+00:03:47.866 --> 00:03:49.833
+and parameters before.
+
+61
+00:03:49.833 --> 00:03:54.266
+If I save this, and now, in Unity,
+when I go to my game,
+
+62
+00:03:54.866 --> 00:03:59.833
+If I press one of the Buttons, so, Easy,
+we should see a fairly slow spawnRate.
+
+63
+00:04:02.733 --> 00:04:08.866
+If I restart, and I press Medium,
+it should be a little bit faster.
+
+64
+00:04:10.033 --> 00:04:16.266
+That's very fast, 
+and if I restart one last time,
+
+65
+00:04:17.066 --> 00:04:21.133
+Hard mode, should spawn
+a lot of boxes very fast.
+
+66
+00:04:21.133 --> 00:04:26.666
+I can't even click on all of them.
+So, what you're going to do,
+
+67
+00:04:26.666 --> 00:04:29.766
+in your DifficultyButton Script,
+add a public variable
+
+68
+00:04:30.000 --> 00:04:31.900
+that's an integer for your difficulty.
+
+69
+00:04:32.800 --> 00:04:35.400
+In Unity, select each of your Buttons,
+
+70
+00:04:36.066 --> 00:04:38.200
+and now that you have
+that difficulty variable,
+
+71
+00:04:38.800 --> 00:04:43.700
+you can set each one to be 1, 2, 3,
+however difficult you want it to be.
+
+72
+00:04:43.700 --> 00:04:48.166
+In our GameManager Script,
+if you go to your StartGame(),
+
+73
+00:04:48.600 --> 00:04:51.533
+pass a parameter
+into it using int difficulty,
+
+74
+00:04:52.133 --> 00:04:55.266
+add a parameter
+with our spawnRate variable.
+
+75
+00:04:55.633 --> 00:04:58.866
+We're going to divide
+that by the difficulty.
+
+76
+00:04:59.366 --> 00:05:01.300
+So, that way our Objects spawn faster,
+
+77
+00:05:02.100 --> 00:05:06.300
+and then finally in difficulty Button,
+under SetDifficulty(),
+
+78
+00:05:06.300 --> 00:05:08.800
+make sure you pass
+the difficulty variable
+
+79
+00:05:09.466 --> 00:05:11.166
+into your StartGame() method.
+
+80
+00:05:12.133 --> 00:05:14.166
+Now, it's your turn.
+
+81
+00:05:14.766 --> 00:05:16.833
+[music]

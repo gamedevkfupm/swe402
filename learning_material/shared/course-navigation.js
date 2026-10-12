@@ -12,6 +12,7 @@
     ['unity-basic-gameplay', 'Unity Basic Gameplay'],
     ['unity-sound-and-effects', 'Unity Sound and Effects'],
     ['unity-gameplay-mechanics', 'Unity Gameplay Mechanics'],
+    ['unity-user-interface', 'Unity User Interface'],
   ];
   const header = document.querySelector('.site-header');
   const mark = header?.querySelector('.site-mark');

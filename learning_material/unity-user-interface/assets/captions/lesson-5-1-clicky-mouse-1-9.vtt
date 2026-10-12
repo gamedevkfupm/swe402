@@ -1,0 +1,221 @@
+WEBVTT
+
+00:00:02.600 --> 00:00:06.401
+In our previous video
+we added a ray from
+
+00:00:06.413 --> 00:00:10.600
+the main camera through
+to our mouse position
+
+00:00:10.601 --> 00:00:14.160
+so we could actually find
+where the clicks were happening.
+
+00:00:14.161 --> 00:00:17.129
+So to do this to detect
+objects we need a physics.
+
+00:00:17.141 --> 00:00:19.300
+raycast so you can
+send that out into
+
+00:00:19.450 --> 00:00:24.200
+the physics world and return true if you
+hit a collider and that's any game object
+
+00:00:24.201 --> 00:00:26.520
+which would have a
+collider within the game.
+
+00:00:26.521 --> 00:00:32.520
+So what we can do below our debug dot draw
+ray is we can create a new if statement
+
+00:00:32.521 --> 00:00:35.600
+because we're going to need to
+be able to check if this is happening.
+
+00:00:35.601 --> 00:00:38.280
+So we'll often up brackets and we'll say
+physics because we're going to use the
+
+00:00:38.281 --> 00:00:41.828
+physics system dot
+raycast and raycast it
+
+00:00:41.840 --> 00:00:45.920
+casts a ray from an
+origin point in a direction
+
+00:00:45.921 --> 00:00:48.372
+similar when we wanted
+to draw the ray along
+
+00:00:48.384 --> 00:00:51.680
+a distance and it checks
+colliders within the scene.
+
+00:00:51.681 --> 00:00:56.400
+So it's raycast with a capital R but we can
+open up the brackets and because we already
+
+00:00:56.524 --> 00:01:02.120
+found the position of the ray because we
+had that local variable we'll write ray and
+
+00:01:02.121 --> 00:01:09.480
+then we'll write comma out raycast hit
+and then we'll just give this a short hand
+
+00:01:09.654 --> 00:01:13.425
+of hit and what out means
+it just returns a value to the
+
+00:01:13.426 --> 00:01:17.120
+variable that we want so
+that we can begin to use it.
+
+00:01:17.121 --> 00:01:20.640
+So instead the if statement for the physics
+dot raycast then we want to have another
+
+00:01:22.109 --> 00:01:29.960
+if statement and say if hit dot transform
+is equal to the transform of the object that
+
+00:01:29.961 --> 00:01:35.120
+this is then in curly braces
+will say destroy game object.
+
+00:01:35.121 --> 00:01:37.824
+So again if the
+raycast hits a transform
+
+00:01:37.836 --> 00:01:40.960
+we're checking if it is
+this one where we have
+
+00:01:40.961 --> 00:01:43.381
+this script currently
+on and then if it is
+
+00:01:43.393 --> 00:01:46.000
+we'll destroy that game
+object and with a hit
+
+00:01:46.001 --> 00:01:48.651
+dot transform you
+can have things like hit
+
+00:01:48.663 --> 00:01:51.580
+dot collider hit dot
+point or hit dot distance
+
+00:01:51.580 --> 00:01:57.200
+problem is without this check here the hit
+dot transform is equal to transform if with
+
+00:01:57.201 --> 00:02:02.220
+any script with target we'll run and it will
+destroy whenever the raycast is hit even
+
+00:02:02.221 --> 00:02:04.243
+if it's a different target
+so that can make it more
+
+00:02:04.244 --> 00:02:07.760
+difficult and you get
+outcomes that you don't expect.
+
+00:02:07.761 --> 00:02:12.440
+So make sure you save this script now we're
+going to hit play now you can see wherever
+
+00:02:12.441 --> 00:02:15.295
+there's an object and
+we actually managed to
+
+00:02:15.307 --> 00:02:18.240
+click where removing
+that object that appears
+
+00:02:18.241 --> 00:02:21.840
+so we're just destroying that
+when we see it in the game.
+
+00:02:21.841 --> 00:02:24.476
+Now as an example if we
+remove that if statement
+
+00:02:24.488 --> 00:02:26.640
+which check to see
+if the hit transform
+
+00:02:26.641 --> 00:02:32.200
+was the same and we just put destroy in the
+original if statement we've got our game
+
+00:02:32.201 --> 00:02:36.480
+playing and if I click it will remove all
+of the different objects within the scene
+
+00:02:36.481 --> 00:02:39.239
+because it hits any of
+them with this particular
+
+00:02:39.251 --> 00:02:43.760
+script on it and that's not good for
+the core concept of our gameplay.
+
+00:02:43.761 --> 00:02:47.680
+So you always want to make sure that you're
+checking to see if the hit transform is the
+
+00:02:47.681 --> 00:02:51.520
+same as the one that we're using
+in any particular object at that time.
+
+00:02:51.521 --> 00:02:54.392
+Just as a recap I want
+you to be in your target
+
+00:02:54.404 --> 00:02:59.289
+script and then within your update method
+within the lines that we created for the
+
+00:02:59.301 --> 00:03:04.335
+debug and drawing the ray we need to make
+sure that we have a new line which is an if
+
+00:03:04.347 --> 00:03:07.200
+statement of if physics
+dot raycast in brackets
+
+00:03:07.201 --> 00:03:10.649
+a ray comma out
+raycast hit and then the
+
+00:03:10.661 --> 00:03:14.640
+variable name of hit
+and then within the curly
+
+00:03:14.641 --> 00:03:19.360
+braces we'll have another if statement that
+hit dot transform is equal to the transform
+
+00:03:19.560 --> 00:03:22.101
+of this particular
+script or object that this
+
+00:03:22.113 --> 00:03:24.440
+script is on will
+destroy that particular
+
+00:03:24.441 --> 00:03:24.972
+object because we know
+we're only clicking on
+
+00:03:24.973 --> 00:03:35.280
+that one that's in the
+mouse position is on.

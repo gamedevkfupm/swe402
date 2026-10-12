@@ -1,0 +1,233 @@
+WEBVTT
+
+1
+00:00:01.200 --> 00:00:04.100
+[music]
+
+2
+00:00:05.866 --> 00:00:09.733
+[Instructor] Our score is now perfect
+and ready to go
+
+3
+00:00:09.733 --> 00:00:12.566
+so each time we click one
+of the different objects
+
+4
+00:00:12.566 --> 00:00:14.600
+that spawn,
+it gives us a different number.
+
+5
+00:00:15.500 --> 00:00:18.233
+Which is a lot of fun,
+you can see the score updates.
+
+6
+00:00:18.900 --> 00:00:22.000
+But it definitely doesn't
+look or feel that cool
+
+7
+00:00:22.000 --> 00:00:24.000
+when you click on the different ones.
+
+8
+00:00:24.000 --> 00:00:31.100
+So we're going to up the coolness factor
+by a lot by using some particle effects.
+
+9
+00:00:32.800 --> 00:00:38.000
+In our Target Script we're
+going to create a new
+
+10
+00:00:38.800 --> 00:00:41.466
+public variable, so we can
+assign it in our editor.
+
+11
+00:00:41.833 --> 00:00:43.900
+It'll be a "ParticleSystem."
+
+12
+00:00:46.000 --> 00:00:50.366
+We'll call this the "explosionParticle."
+
+13
+00:00:52.433 --> 00:00:55.833
+Now we want to make sure
+whenever we Destroy() one
+
+14
+00:00:55.833 --> 00:00:58.000
+of our objects,
+we use our explosionParticle.
+
+15
+00:00:59.466 --> 00:01:03.300
+In our "OnMouseDown()" method,
+we're going to create
+
+16
+00:01:03.300 --> 00:01:07.066
+a new explosion every time
+we Destroy(gameObject).
+
+17
+00:01:07.466 --> 00:01:11.766
+We can actually Instantiate()
+our explosionParticle.
+
+18
+00:01:12.933 --> 00:01:16.500
+We'll set the position
+to be the position
+
+19
+00:01:16.500 --> 00:01:18.333
+that our current game object is at.
+
+20
+00:01:23.833 --> 00:01:27.633
+And we'll just set the particle
+to be at the same rotation
+
+21
+00:01:27.633 --> 00:01:29.733
+that it was at before.
+
+22
+00:01:34.266 --> 00:01:38.766
+Now in Unity, just make sure
+that on each of the different Prefabs,
+
+23
+00:01:40.800 --> 00:01:44.600
+you open them up and we need to assign
+them each "Explosion Particles."
+
+24
+00:01:45.066 --> 00:01:47.666
+If we open up our Course Library,
+
+25
+00:01:47.666 --> 00:01:50.766
+we actually have some particle effects
+that we can already use.
+
+26
+00:01:52.766 --> 00:01:58.233
+I think for the case of our Skull,
+we'll make it like a green color.
+
+27
+00:01:58.400 --> 00:02:00.500
+See what that looks like.
+
+28
+00:02:00.800 --> 00:02:06.533
+For our first good crate,
+we'll make this something like yellow.
+
+29
+00:02:08.233 --> 00:02:14.800
+For our second good crate,
+we'll make this something like purple.
+
+30
+00:02:17.466 --> 00:02:19.500
+And then for our third good crate,
+
+31
+00:02:20.733 --> 00:02:24.533
+we'll make this something like,
+let's make it blue.
+
+32
+00:02:26.966 --> 00:02:30.166
+Now if we try our game again,
+
+33
+00:02:33.033 --> 00:02:39.600
+we click on one box, there's purple,
+yellow, this one should be green.
+
+34
+00:02:40.800 --> 00:02:45.766
+Cool. Now we have these really
+cool eye catching effects
+
+35
+00:02:45.766 --> 00:02:48.200
+whenever we click on one
+of the different Objects
+
+36
+00:02:49.066 --> 00:02:52.333
+and just makes our game
+feel a little bit cooler.
+
+37
+00:02:55.833 --> 00:02:58.533
+So what you're gonna do,
+is in your Target Script,
+
+38
+00:02:58.533 --> 00:03:02.233
+you're going to create your own
+"public ParticleSystem" variable.
+
+39
+00:03:04.900 --> 00:03:09.066
+In your OnMouseDown() method,
+where we Destroy() our Object,
+
+40
+00:03:09.633 --> 00:03:13.133
+we are then going to create
+a new explosion particle
+
+41
+00:03:13.600 --> 00:03:16.300
+and we'll make sure to set
+it to the current position
+
+42
+00:03:16.300 --> 00:03:18.300
+of what our gameObject is at
+
+43
+00:03:18.666 --> 00:03:22.533
+and make sure the rotation is the same
+as the actual explosionParticle.
+
+44
+00:03:23.333 --> 00:03:26.400
+And then in Unity,
+just make sure you go to each
+
+45
+00:03:26.400 --> 00:03:29.566
+of your different Prefabs and assign
+
+46
+00:03:29.666 --> 00:03:33.800
+an Explosion Particle from
+the Course Library folder
+
+47
+00:03:34.000 --> 00:03:36.600
+in our particles folder,
+where there are a variety
+
+48
+00:03:36.600 --> 00:03:40.466
+of different explosions
+that you can use. Now it's your turn.
+
+49
+00:03:42.366 --> 00:03:44.566
+[music]

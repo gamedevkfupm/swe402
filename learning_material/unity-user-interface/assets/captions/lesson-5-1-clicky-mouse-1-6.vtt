@@ -1,0 +1,442 @@
+WEBVTT
+
+1
+00:00:00.733 --> 00:00:04.733
+(futuristic instrumental music)
+
+2
+00:00:05.900 --> 00:00:08.500
+- [Instructor] We've created
+a game manager object
+
+3
+00:00:08.500 --> 00:00:10.300
+that has our game manager script,
+
+4
+00:00:10.300 --> 00:00:13.133
+that now can control all
+the different prefabs
+
+5
+00:00:13.133 --> 00:00:14.433
+that we have.
+
+6
+00:00:14.433 --> 00:00:15.600
+Now what we'll need to do
+
+7
+00:00:15.600 --> 00:00:18.133
+is we want to instantiate them over time,
+
+8
+00:00:18.133 --> 00:00:20.133
+so I'll use a coroutine again,
+
+9
+00:00:20.133 --> 00:00:23.266
+and we'll learn about a
+new loop that we can use
+
+10
+00:00:23.266 --> 00:00:24.466
+to do that.
+
+11
+00:00:24.466 --> 00:00:26.600
+In our game manager script,
+
+12
+00:00:26.600 --> 00:00:29.500
+we're actually going to
+create a new method first.
+
+13
+00:00:29.500 --> 00:00:33.533
+Now, we're going to create
+another Ienumerator method,
+
+14
+00:00:34.400 --> 00:00:35.333
+called SpawnTarget.
+
+15
+00:00:38.800 --> 00:00:42.266
+That way, we can actually use
+the wait for seconds method
+
+16
+00:00:42.266 --> 00:00:45.433
+to control the length of
+time between each spawn.
+
+17
+00:00:45.433 --> 00:00:48.033
+We need to use the yield keyword again.
+
+18
+00:00:49.833 --> 00:00:53.066
+And we need to return
+a new WaitForSeconds,
+
+19
+00:00:57.233 --> 00:00:59.433
+and it needs a float of seconds.
+
+20
+00:00:59.433 --> 00:01:01.600
+For now, we'll just use spawnRate
+
+21
+00:01:01.600 --> 00:01:04.600
+because we'll create the variable later.
+
+22
+00:01:04.600 --> 00:01:07.300
+Now we need to actually
+get a random object
+
+23
+00:01:07.300 --> 00:01:10.000
+from our list to use,
+so we'll use our index,
+
+24
+00:01:10.000 --> 00:01:12.766
+so we can select that object in the list
+
+25
+00:01:12.766 --> 00:01:14.333
+using its position.
+
+26
+00:01:14.333 --> 00:01:18.800
+We'll get a random number
+between the first object
+
+27
+00:01:19.633 --> 00:01:20.700
+and the last object,
+
+28
+00:01:20.700 --> 00:01:24.433
+so similar to how in
+arrays we got the length.
+
+29
+00:01:24.433 --> 00:01:26.200
+We can use targets, but in this case,
+
+30
+00:01:26.200 --> 00:01:27.933
+we actually got the count,
+
+31
+00:01:27.933 --> 00:01:29.566
+and so this will actually
+give us the count
+
+32
+00:01:29.566 --> 00:01:32.600
+of how many objects are in that list.
+
+33
+00:01:32.600 --> 00:01:34.000
+In this case, it's four,
+
+34
+00:01:34.000 --> 00:01:37.266
+so it'll be a random number
+between zero and four,
+
+35
+00:01:37.266 --> 00:01:40.933
+and then we need to actually
+instantiate that object.
+
+36
+00:01:40.933 --> 00:01:43.633
+So using our targets, we select the one
+
+37
+00:01:43.633 --> 00:01:45.300
+at the index that we're gonna use,
+
+38
+00:01:45.300 --> 00:01:48.100
+so that way we either get our bad object
+
+39
+00:01:48.100 --> 00:01:50.333
+or one of our three good objects.
+
+40
+00:01:50.333 --> 00:01:53.100
+Now, the loop that we're
+gonna use to control this
+
+41
+00:01:53.100 --> 00:01:54.666
+is called a while loop.
+
+42
+00:01:56.133 --> 00:01:59.133
+And a while loop is a fusion
+
+43
+00:01:59.133 --> 00:02:02.000
+between a for loop and an if statement.
+
+44
+00:02:02.000 --> 00:02:04.133
+So an if statement requires a condition
+
+45
+00:02:04.133 --> 00:02:05.566
+to tell it when to stop.
+
+46
+00:02:05.566 --> 00:02:08.666
+A for loop will iterate over
+something a certain number
+
+47
+00:02:08.666 --> 00:02:11.300
+of times to execute your code.
+
+48
+00:02:11.300 --> 00:02:14.900
+So while loop will execute
+your code continuously,
+
+49
+00:02:14.900 --> 00:02:19.600
+but instead of giving it a
+defined number of times to run,
+
+50
+00:02:19.600 --> 00:02:22.100
+we can actually use a condition
+
+51
+00:02:22.100 --> 00:02:24.566
+to tell it when it should
+actually stop running.
+
+52
+00:02:24.566 --> 00:02:27.233
+We don't actually have a condition
+we're gonna use just yet.
+
+53
+00:02:27.233 --> 00:02:29.000
+So we'll just set this to be true.
+
+54
+00:02:29.000 --> 00:02:32.033
+So while this is true,
+which will always be,
+
+55
+00:02:32.033 --> 00:02:37.033
+we can do our line of code
+here to spawn our object.
+
+56
+00:02:37.700 --> 00:02:39.300
+Our spawnRate is still mad at us,
+
+57
+00:02:39.300 --> 00:02:41.300
+because it hasn't been initialized yet,
+
+58
+00:02:41.300 --> 00:02:44.933
+so we'll create a
+private float, spawnRate,
+
+59
+00:02:45.900 --> 00:02:48.166
+and we'll set that to one for now,
+
+60
+00:02:48.166 --> 00:02:51.600
+so it'll spawn every one second.
+
+61
+00:02:51.600 --> 00:02:55.600
+Now, in our start method,
+we'll use a coroutine
+
+62
+00:02:55.600 --> 00:02:58.400
+to actually start that spawn timer,
+
+63
+00:02:58.400 --> 00:03:03.133
+so if we StartCoroutine, SpawnTarget,
+
+64
+00:03:03.666 --> 00:03:07.700
+And then there should be one last error
+coming up under IEnumerator.
+
+65
+00:03:07.766 --> 00:03:11.466
+And this should be somewhat familiar to you now
+because if you hover over the error,
+
+66
+00:03:11.633 --> 00:03:13.300
+and look at the quick fixes,
+
+67
+00:03:13.400 --> 00:03:16.333
+once again, it looks like we’re missing
+a Using directive.
+
+68
+00:03:16.766 --> 00:03:19.366
+If you select that quick fix option, 
+it will add
+
+69
+00:03:19.366 --> 00:03:23.933
+using System.Collections to the top of our code
+with the other namespaces.
+
+70
+00:03:23.933 --> 00:03:26.833
+giving us access to the IEnumerator functionality 
+
+71
+00:03:26.833 --> 00:03:30.033
+getting rid of that error, 
+and allowing us to proceed.
+
+72
+00:03:31.266 --> 00:03:35.400
+now, after we've saved,
+if we go to play our game,
+
+73
+00:03:37.533 --> 00:03:42.000
+you should see through the
+magic of our programming
+
+74
+00:03:42.000 --> 00:03:44.033
+that we have all of these
+different obstacles,
+
+75
+00:03:44.033 --> 00:03:45.466
+even though they're
+running into each other,
+
+76
+00:03:45.466 --> 00:03:46.933
+that's totally fine.
+
+77
+00:03:46.933 --> 00:03:49.466
+You can see it's randomly
+creating different obstacles
+
+78
+00:03:49.466 --> 00:03:50.300
+over time.
+
+79
+00:03:55.033 --> 00:03:57.866
+What you're gonna do in
+your game manager class,
+
+80
+00:03:57.866 --> 00:03:59.966
+make sure you create a spawnRate
+
+81
+00:04:00.800 --> 00:04:02.433
+to keep track of the number of seconds
+
+82
+00:04:02.433 --> 00:04:04.333
+that you want something to spawn.
+
+83
+00:04:04.333 --> 00:04:07.533
+You're going to create
+another IEnumerator method
+
+84
+00:04:07.533 --> 00:04:11.633
+for our SpawnTarget, we're
+going to use a while loop,
+
+85
+00:04:11.633 --> 00:04:13.433
+and for now our condition will just be
+
+86
+00:04:13.433 --> 00:04:15.266
+that it's always true.
+
+87
+00:04:15.266 --> 00:04:18.333
+In our while loop, we will yield return,
+
+88
+00:04:18.333 --> 00:04:20.833
+the WaitForSeconds using the spawnRate
+
+89
+00:04:20.833 --> 00:04:22.233
+that we actually want to spawn at,
+
+90
+00:04:22.233 --> 00:04:24.366
+so one every second.
+
+91
+00:04:24.366 --> 00:04:25.966
+You're going to get the index
+
+92
+00:04:27.800 --> 00:04:30.933
+of an object to choose from our list,
+
+93
+00:04:30.933 --> 00:04:33.233
+and then you're actually
+going to instantiate
+
+94
+00:04:33.233 --> 00:04:36.266
+that object using the index to grab it
+
+95
+00:04:36.266 --> 00:04:37.733
+from our targets list.
+
+96
+00:04:37.733 --> 00:04:38.966
+And then in our start method,
+
+97
+00:04:38.966 --> 00:04:41.300
+just create a coroutine
+using StartCoroutine,
+
+98
+00:04:42.433 --> 00:04:44.700
+and then call our SpawnTarget method.
+
+99
+00:04:44.700 --> 00:04:45.633
+Now it's your turn.
+
+100
+00:04:46.700 --> 00:04:50.700
+(futuristic instrumental music)

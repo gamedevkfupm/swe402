@@ -1,0 +1,305 @@
+WEBVTT
+
+1
+00:00:00.866 --> 00:00:03.300
+[music]
+
+2
+00:00:05.833 --> 00:00:08.566
+[Instructor] Our game is so close
+to being done.
+
+3
+00:00:09.833 --> 00:00:11.933
+If we Play our game,
+
+4
+00:00:11.933 --> 00:00:15.300
+You see now, none of these boxes
+spawn anymore.
+
+5
+00:00:15.833 --> 00:00:17.766
+But then when we click
+one of the difficulties,
+
+6
+00:00:18.866 --> 00:00:20.866
+then our boxes start spawning.
+
+7
+00:00:21.366 --> 00:00:24.500
+The problem is, they don't
+go away when the game's over,
+
+8
+00:00:24.500 --> 00:00:27.633
+or even when the game starts.
+So we're going to have to fix that.
+
+9
+00:00:28.133 --> 00:00:31.133
+Now we can do something similar to how
+we handled our "Game Over"
+
+10
+00:00:31.133 --> 00:00:32.866
+text, and our "Restart Button,"
+
+11
+00:00:32.866 --> 00:00:37.600
+but honestly I'm pretty lazy,
+and I don't want to just turn all
+
+12
+00:00:37.600 --> 00:00:40.166
+of these Buttons,
+and texts off individually.
+
+13
+00:00:40.600 --> 00:00:43.000
+And then I have to turn
+them on again, and it's just a;
+
+14
+00:00:43.000 --> 00:00:46.966
+it's a whole it's a whole thing.
+So, we can actually cheat a little bit,
+
+15
+00:00:46.966 --> 00:00:49.033
+and we can use a really nice little tip.
+
+16
+00:00:49.500 --> 00:00:54.300
+So, if we right click on Canvas, we're
+going to create a new Empty Object.
+
+17
+00:00:54.600 --> 00:00:57.300
+And I'm going to rename
+our GameObject "Title Screen,"
+
+18
+00:00:57.300 --> 00:00:59.166
+because this will be where we store
+
+19
+00:00:59.400 --> 00:01:02.966
+all of the different Objects related
+to the Title Screen.
+
+20
+00:01:03.466 --> 00:01:08.166
+And in fact,
+if I select all of the different text,
+
+21
+00:01:08.166 --> 00:01:11.000
+and Buttons for the title.
+So I can select my Title Text,
+
+22
+00:01:11.000 --> 00:01:13.033
+shift-click down to the Hard Button.
+
+23
+00:01:13.766 --> 00:01:15.933
+Left-click, and drag
+into the Title Screen,
+
+24
+00:01:15.933 --> 00:01:18.200
+now they're all nested
+underneath the Title Screen.
+
+25
+00:01:18.700 --> 00:01:23.166
+In fact, I can do something
+super useful, and easy.
+
+26
+00:01:23.933 --> 00:01:26.633
+If I disable
+the Title Screen GameObject,
+
+27
+00:01:27.900 --> 00:01:31.433
+all of the Objects underneath
+it actually disable too.
+
+28
+00:01:31.933 --> 00:01:36.133
+So, with this handy little trick,
+I can turn off,
+
+29
+00:01:36.133 --> 00:01:38.600
+and on our Title Screen
+whenever I need to.
+
+30
+00:01:39.466 --> 00:01:42.866
+In our GameManager Script,
+I'm going to need a reference
+
+31
+00:01:42.866 --> 00:01:45.366
+to that Object, so make it public.
+
+32
+00:01:45.600 --> 00:01:48.533
+We'll call it a GameObject
+since it's just a GameObject.
+
+33
+00:01:49.433 --> 00:01:52.233
+And then it'll be
+the titleScreen GameObject.
+
+34
+00:01:53.566 --> 00:01:56.433
+Now I'm going to make
+sure in my Game Manager,
+
+35
+00:01:56.433 --> 00:01:59.400
+that I assigned the Title Screen
+so I'm going to left-click,
+
+36
+00:01:59.400 --> 00:02:03.666
+and drag the Title Screen Object
+into the little slot.
+
+37
+00:02:05.933 --> 00:02:07.800
+And then I'll save that.
+
+38
+00:02:07.800 --> 00:02:11.900
+And then I'm going to add
+in one last little bit of code,
+
+39
+00:02:12.366 --> 00:02:14.366
+in our "StartGame()."
+
+40
+00:02:14.566 --> 00:02:17.066
+So, when our game has started,
+I'm actually going
+
+41
+00:02:17.066 --> 00:02:19.066
+to get the "titleScreen.gameObject,"
+
+42
+00:02:21.900 --> 00:02:26.566
+and we're going to disable it,
+so we'll SetActive(false).
+
+43
+00:02:27.200 --> 00:02:30.566
+So now, this should turn off
+our Title Screen.
+
+44
+00:02:31.400 --> 00:02:37.400
+If we do a quick test, we should now,
+when I click one of these Buttons,
+
+45
+00:02:38.133 --> 00:02:41.600
+have our Title Screen disappear.
+
+46
+00:02:41.600 --> 00:02:43.600
+There you go, awesome!
+
+47
+00:02:44.033 --> 00:02:46.666
+So now we can get back
+to playing our game,
+
+48
+00:02:47.700 --> 00:02:49.900
+and then when we lose the game,
+
+49
+00:02:50.900 --> 00:02:55.200
+we can restart, and play all over again.
+
+50
+00:02:59.633 --> 00:03:03.333
+So what you're going to do is
+in your Canvas make sure to right-click,
+
+51
+00:03:03.433 --> 00:03:05.500
+and create an Empty Object.
+
+52
+00:03:05.500 --> 00:03:08.100
+You're going to rename
+that Empty Object the Title Screen
+
+53
+00:03:08.100 --> 00:03:11.300
+because that's what will be holding
+all of our Title Screen Elements.
+
+54
+00:03:12.266 --> 00:03:15.066
+We're going to take our Title Text,
+our Easy, our Medium,
+
+55
+00:03:15.066 --> 00:03:18.633
+and our Hard Button,
+and drag them into our Title Screen,
+
+56
+00:03:18.633 --> 00:03:20.900
+so that they're nested as child Objects.
+
+57
+00:03:21.633 --> 00:03:24.300
+In our GameManager Script,
+you're going to make sure
+
+58
+00:03:24.300 --> 00:03:27.400
+to create a variable
+for that titleScreen GameObject.
+
+59
+00:03:27.766 --> 00:03:30.200
+Make sure you assign it,
+in Unity as well.
+
+60
+00:03:31.733 --> 00:03:33.800
+And then in your StartGame(),
+
+61
+00:03:34.000 --> 00:03:37.633
+you're going to set 
+the titleScreen.gameObject
+
+62
+00:03:38.300 --> 00:03:40.900
+to inactive. You're going to disable it
+
+63
+00:03:40.900 --> 00:03:44.300
+when we use the StartGame()
+method when we click a Button.
+
+64
+00:03:44.966 --> 00:03:46.966
+So now it's your turn.
+
+65
+00:03:47.633 --> 00:03:50.066
+[music]

@@ -1,0 +1,229 @@
+WEBVTT
+
+00:00:01.940 --> 00:00:06.291
+So in the previous video
+we looked at destroying
+
+00:00:06.303 --> 00:00:11.678
+the objects when we clinked at them, but in
+this case we wanted to be able to destroy
+
+00:00:11.690 --> 00:00:13.400
+the targets if they
+collide with a specific
+
+00:00:13.401 --> 00:00:19.480
+sensor and we're going to have a trigger
+at the very bottom of this play area.
+
+00:00:19.481 --> 00:00:23.293
+I'm going to right-click
+my hierarchy, choose
+
+00:00:23.305 --> 00:00:26.960
+3D object and just
+choose A, choose a cube.
+
+00:00:26.961 --> 00:00:33.200
+Now once I've got that I'm just going to
+move it down here and I'm just going to scale
+
+00:00:33.201 --> 00:00:38.520
+it out across this portion so you know
+you can see our cube in the scene view.
+
+00:00:38.521 --> 00:00:42.200
+We want to make sure that it's got a box
+collider and it's set to its trigger and then
+
+00:00:42.201 --> 00:00:44.560
+we're going to need to
+make sure that it has a tag.
+
+00:00:44.561 --> 00:00:48.560
+We'll add a brand new tag, so once we're
+there in the tags we'll add the little plus
+
+00:00:48.561 --> 00:00:51.208
+box, we'll just call
+this tag it destroys on
+
+00:00:51.220 --> 00:00:53.760
+but leave it together
+without a space just
+
+00:00:53.761 --> 00:00:59.080
+so that it can reference nicely in code,
+we'll click Save, we'll go back to our cube
+
+00:00:59.081 --> 00:01:05.000
+and I'm going to set that cube and set that
+to the name of destroys on and then we'll
+
+00:01:05.001 --> 00:01:10.360
+go up to the inspector, go to the
+tag and set that to destroys on too.
+
+00:01:10.361 --> 00:01:17.200
+If we go into our target script we're
+going to create ourselves a new method.
+
+00:01:17.201 --> 00:01:20.773
+This can be below our
+helper methods here
+
+00:01:20.785 --> 00:01:24.720
+and it's going to be a
+void on trigger, enter
+
+00:01:24.769 --> 00:01:26.893
+so that when one of
+our objects collides with
+
+00:01:26.905 --> 00:01:29.040
+that danger zone it's
+going to destroy itself
+
+00:01:29.040 --> 00:01:32.331
+so we need an if
+statement again, if other
+
+00:01:32.343 --> 00:01:35.960
+dot compare tag in
+brackets and then in quotes
+
+00:01:37.160 --> 00:01:40.897
+is destroy zone then
+what we'll do is we'll say
+
+00:01:40.898 --> 00:01:47.480
+destroy with a capital
+in brackets in object.
+
+00:01:47.481 --> 00:01:53.280
+Now when we're back into unity what we can
+do is we can test this out and each of our
+
+00:01:53.329 --> 00:01:55.912
+prefabs already has
+the target script, want
+
+00:01:55.924 --> 00:01:58.640
+to make sure that at
+least one of the objects
+
+00:01:58.664 --> 00:02:01.081
+that collides with a
+trigger has a rigid body
+
+00:02:01.093 --> 00:02:03.360
+and all of our targets
+do, we need to make
+
+00:02:03.361 --> 00:02:06.084
+sure that our destroys
+on is set to its trigger
+
+00:02:06.096 --> 00:02:08.600
+so that when we enter
+these it will destroy
+
+00:02:09.260 --> 00:02:12.782
+them so now if I hit
+play you can see the
+
+00:02:12.794 --> 00:02:16.760
+when our objects spawn
+they do spawn quite low
+
+00:02:16.761 --> 00:02:20.010
+and they do hit our
+destroys on which it shows
+
+00:02:20.022 --> 00:02:23.000
+that it's working but
+for the sake of this
+
+00:02:25.080 --> 00:02:28.977
+instance we can either
+pull the destroys on
+
+00:02:28.989 --> 00:02:33.080
+down so that they will
+still spawn over that.
+
+00:02:33.081 --> 00:02:35.443
+Now if we just go into
+the 3D mode because
+
+00:02:35.455 --> 00:02:40.617
+some of the items do interact with each
+other we can just make this in scale our our
+
+00:02:40.629 --> 00:02:43.880
+destroys on much much
+bigger so no matter where
+
+00:02:43.881 --> 00:02:46.801
+any of these objects
+it do actually fall they
+
+00:02:46.813 --> 00:02:49.680
+will always be destroyed
+and when we go back
+
+00:02:49.730 --> 00:02:52.566
+into 2D mode you will
+never actually see it
+
+00:02:52.578 --> 00:02:55.560
+so what I want you to
+be able to do is create
+
+00:02:55.561 --> 00:02:57.749
+a brand new object
+by right clicking in the
+
+00:02:57.761 --> 00:03:00.320
+hierarchy choosing 3D and
+you can choose something
+
+00:03:00.570 --> 00:03:03.436
+like cube rename it to
+destroy zone make sure
+
+00:03:03.448 --> 00:03:06.200
+you give it a tag of
+destroy zone make sure
+
+00:03:06.201 --> 00:03:10.360
+it's got a box collider set to its trigger
+you can scale this out and make sure it's
+
+00:03:10.385 --> 00:03:14.207
+below our objects that
+spawn in the game world
+
+00:03:14.219 --> 00:03:20.190
+and in the 3D mode if you click the little
+2D button at the top you can make sure that
+
+00:03:20.202 --> 00:03:22.800
+it's big enough just if
+some of those objects
+
+00:03:22.801 --> 00:03:28.200
+escape or interact when you didn't expect
+go inside your target script and towards the
+
+00:03:28.201 --> 00:03:32.640
+bottom of the script below the helper methods
+will create a brand new void on trigger
+
+00:03:32.641 --> 00:03:35.800
+enter if this object
+interacts with the object
+
+00:03:35.812 --> 00:03:39.641
+destroy zone then we'll just
+destroy this particular game object

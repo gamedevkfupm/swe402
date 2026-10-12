@@ -1,0 +1,435 @@
+WEBVTT
+
+1
+00:00:01.266 --> 00:00:03.166
+[music]
+
+2
+00:00:05.733 --> 00:00:09.066
+[Instructor] Now, we have our button
+set up in our game.
+
+3
+00:00:09.900 --> 00:00:12.866
+We need to use
+this button to tell our game
+
+4
+00:00:13.000 --> 00:00:15.033
+to restart when we click on it.
+
+5
+00:00:16.266 --> 00:00:18.433
+In our GameManager is
+actually where we're going
+
+6
+00:00:18.433 --> 00:00:21.133
+to tell our game to restart our game.
+
+7
+00:00:21.500 --> 00:00:25.900
+The way we're going to do
+that is through, managing our scene.
+
+8
+00:00:26.533 --> 00:00:29.166
+We actually need to use another library,
+
+9
+00:00:29.800 --> 00:00:32.933
+very similar to how we use
+our TextMesh Pro library
+
+10
+00:00:32.933 --> 00:00:36.133
+to be able to interact
+with TextMesh Pro elements.
+
+11
+00:00:36.600 --> 00:00:40.866
+In this case we're "using UnityEngine"
+because our
+
+12
+00:00:40.866 --> 00:00:44.166
+Scene Management is under
+the UnityEngine library.
+
+13
+00:00:44.166 --> 00:00:50.500
+We're going to grab specifically,
+the "SceneManagement" library itself.
+
+14
+00:00:50.500 --> 00:00:54.466
+This will actually enable us
+to interact with, and mange
+
+15
+00:00:54.600 --> 00:00:56.600
+our scenes in our Scene folder.
+
+16
+00:00:57.400 --> 00:01:00.666
+Now, we're going to go to the bottom
+of our GameManager Script,
+
+17
+00:01:00.800 --> 00:01:04.733
+and we'll create this method underneath,
+GameOver().
+
+18
+00:01:04.733 --> 00:01:09.300
+We'll call it public so we can
+use it outside of the class
+
+19
+00:01:10.033 --> 00:01:12.533
+"void RestartGame()."
+
+20
+00:01:14.933 --> 00:01:19.633
+Then, this is where we're
+going to reload our scene.
+
+21
+00:01:20.300 --> 00:01:25.633
+We can use the SceneManager
+class, and we'll load a scene,
+
+22
+00:01:26.866 --> 00:01:29.500
+and in this case we can
+use the name of the scene which,
+
+23
+00:01:29.500 --> 00:01:31.566
+I think was Prototype5
+
+24
+00:01:31.566 --> 00:01:36.533
+or we can use code to just tell us,
+and make our lives a little bit easier.
+
+25
+00:01:36.533 --> 00:01:40.400
+So, "SceneManager.GetActiveScene().name"
+
+26
+00:01:40.966 --> 00:01:44.366
+This is the scene that is
+currently active for the player.
+
+27
+00:01:45.666 --> 00:01:48.266
+Then we need to get
+the name of that scene.
+
+28
+00:01:49.200 --> 00:01:54.500
+This handy little method over here,
+this line of code,
+
+29
+00:01:54.500 --> 00:01:57.700
+using our scene manager that
+we just imported from
+
+30
+00:01:57.700 --> 00:02:01.400
+the scene management library that
+enabled us to load a scene.
+
+31
+00:02:01.766 --> 00:02:05.133
+In this case we're just reloading
+the scene that we're currently using.
+
+32
+00:02:05.433 --> 00:02:08.400
+We got the name of our current
+active scene,
+
+33
+00:02:08.866 --> 00:02:12.966
+and our scene manager actually knows
+which one is the current scene.
+
+34
+00:02:12.966 --> 00:02:15.066
+We make sure we save this.
+
+35
+00:02:16.166 --> 00:02:19.266
+Our buttons work very
+similarly to how buttons would
+
+36
+00:02:19.266 --> 00:02:22.866
+work on your phone
+or on a website where you can
+
+37
+00:02:22.866 --> 00:02:24.900
+click on them in Unity,
+and they'll do something.
+
+38
+00:02:25.133 --> 00:02:28.300
+Fortunately, buttons are
+already configured to do that.
+
+39
+00:02:28.633 --> 00:02:31.000
+So they actually use this "On Click ()"
+method,
+
+40
+00:02:31.566 --> 00:02:35.300
+which is very similar
+to how on our different Prefabs,
+
+41
+00:02:35.633 --> 00:02:39.200
+whenever we do the OnMouseDown(),
+we can destroy the object.
+
+42
+00:02:40.100 --> 00:02:43.466
+Specifically our restart button knows
+when we've actually clicked it, itself.
+
+43
+00:02:44.633 --> 00:02:48.900
+You can see there that it has a list,
+and we can add to this list.
+
+44
+00:02:51.266 --> 00:02:54.500
+What we're going to add
+into our On Click () is,
+
+45
+00:02:54.500 --> 00:02:57.033
+we're actually going to take
+our Game Manager
+
+46
+00:02:57.033 --> 00:03:00.900
+in our Hierarchy, click, and drag
+it into this little box here.
+
+47
+00:03:02.566 --> 00:03:05.333
+Now, you can see here on the right side
+
+48
+00:03:05.333 --> 00:03:08.566
+there's this no function
+box, this dropdown.
+
+49
+00:03:09.133 --> 00:03:13.166
+If we click on that, this will actually
+give us all the different functions
+
+50
+00:03:13.166 --> 00:03:15.400
+that we can use,
+and all the different variables.
+
+51
+00:03:16.166 --> 00:03:19.466
+You can see Transform,
+you can see GameManager,
+
+52
+00:03:19.466 --> 00:03:22.000
+and in GameManager look,
+there's RestartGame().
+
+53
+00:03:23.266 --> 00:03:27.400
+Now, if we save, now that Restart Game
+has been added
+
+54
+00:03:27.400 --> 00:03:29.500
+to the restart button On Click,
+
+55
+00:03:33.600 --> 00:03:35.933
+the game will end when that box hits.
+
+56
+00:03:35.933 --> 00:03:40.333
+Game over, and then we restart.
+There you go.
+
+57
+00:03:42.300 --> 00:03:45.366
+Then, the game's over again. Now,
+we have a way of restarting our game.
+
+58
+00:03:46.500 --> 00:03:48.933
+We can just restart whenever we want
+if we really wanted to.
+
+59
+00:03:50.600 --> 00:03:54.366
+Now what you're going to do is
+in your GameManager Script,
+
+60
+00:03:54.766 --> 00:03:57.033
+you're going to add this line of code,
+
+61
+00:03:57.400 --> 00:04:00.033
+using "UnityEngine.SceneManagent."
+
+62
+00:04:00.766 --> 00:04:03.466
+That way, we can actually
+manage our scenes, and load them in.
+
+63
+00:04:04.166 --> 00:04:06.033
+Once you've added that library,
+
+64
+00:04:07.400 --> 00:04:09.500
+you can go, and add a new method.
+
+65
+00:04:09.500 --> 00:04:12.233
+Make sure it's public;
+so we can use it outside of this class.
+
+66
+00:04:13.433 --> 00:04:16.300
+It'll be void,
+and it'll be called RestartGame()
+
+67
+00:04:16.300 --> 00:04:18.233
+because it'll be restarting our game.
+
+68
+00:04:18.233 --> 00:04:21.766
+We're going to get the SceneManager
+class
+
+69
+00:04:21.766 --> 00:04:24.733
+now that we've used
+the scene management library.
+
+70
+00:04:25.200 --> 00:04:28.800
+That class will actually let
+us use the "LoadScene()" method
+
+71
+00:04:29.200 --> 00:04:31.733
+which in this case,
+we'll be taking in a string
+
+72
+00:04:32.133 --> 00:04:34.466
+the name of the scene
+that we want to load,
+
+73
+00:04:34.466 --> 00:04:37.666
+and in our case we're going to reload
+the current scene we're using.
+
+74
+00:04:39.200 --> 00:04:42.400
+Our scene manager knows
+which scene is currently
+
+75
+00:04:42.400 --> 00:04:44.233
+the active scene.
+
+76
+00:04:44.233 --> 00:04:46.933
+Then we can grab the name of that scene,
+
+77
+00:04:47.133 --> 00:04:49.100
+which will give us the string.
+
+78
+00:04:49.300 --> 00:04:53.766
+Then finally, on your restart button,
+in your Hierarchy
+
+79
+00:04:54.100 --> 00:04:57.100
+if you scroll down in the Inspector
+you'll see
+
+80
+00:04:57.100 --> 00:05:02.033
+that there's an On Click () list here.
+If you press the "+" button,
+
+81
+00:05:02.033 --> 00:05:06.333
+you can add a new event to happen.
+When the button is clicked,
+
+82
+00:05:06.700 --> 00:05:09.000
+there'll be an empty box
+here where you can actually
+
+83
+00:05:09.000 --> 00:05:12.733
+click, and drag the Game Manager
+into that box.
+
+84
+00:05:13.000 --> 00:05:15.933
+Then, it will actually
+populate over on the right
+
+85
+00:05:15.933 --> 00:05:18.300
+of On Click () where it says
+no function.
+
+86
+00:05:18.300 --> 00:05:21.300
+If you click the dropdown
+there will be a whole bunch
+
+87
+00:05:21.300 --> 00:05:24.633
+of different methods,
+and variables that you can use.
+
+88
+00:05:25.400 --> 00:05:27.866
+And in our case since we have
+the Restart Game method,
+
+89
+00:05:27.866 --> 00:05:30.933
+we'll use that to be able
+to restart the game
+
+90
+00:05:31.166 --> 00:05:33.466
+when this button's clicked.
+Now, it's your turn.
+
+91
+00:05:35.266 --> 00:05:37.400
+[music]

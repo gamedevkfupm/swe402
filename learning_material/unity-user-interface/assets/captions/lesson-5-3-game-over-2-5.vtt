@@ -1,0 +1,297 @@
+WEBVTT
+
+1
+00:00:01.300 --> 00:00:03.600
+[music]
+
+2
+00:00:05.600 --> 00:00:08.866
+[Instructor] We have our Game Over
+working perfectly now,
+
+3
+00:00:08.866 --> 00:00:11.066
+now that we fixed that bug,
+
+4
+00:00:11.066 --> 00:00:14.466
+so we can have one of our objects go
+
+5
+00:00:14.466 --> 00:00:16.966
+to the bottom, game over,
+objects stop spawning,
+
+6
+00:00:16.966 --> 00:00:19.533
+I can't click this box.
+Very frustrating.
+
+7
+00:00:19.933 --> 00:00:23.566
+Now we have no way of replaying
+this game now that it's over.
+
+8
+00:00:23.566 --> 00:00:26.200
+so I guess the game just ends.
+Well that's not a good thing to do.
+
+9
+00:00:26.366 --> 00:00:29.133
+So we'll actually add a way
+that we can restart our game.
+
+10
+00:00:29.133 --> 00:00:31.766
+So we're actually going
+to create a "Button,"
+
+11
+00:00:32.233 --> 00:00:35.633
+our very first Button,
+and we're gonna do that on our "Canvas."
+
+12
+00:00:35.633 --> 00:00:37.700
+So if we right-click on our Canvas,
+
+13
+00:00:37.700 --> 00:00:41.333
+go to UI and select the Button option,
+
+14
+00:00:41.333 --> 00:00:42.933
+this will now create a Button for us
+
+15
+00:00:42.933 --> 00:00:45.233
+and you can see the Button
+on the center of our screen.
+
+16
+00:00:45.700 --> 00:00:48.200
+We'll actually need to zoom out
+of our scene view.
+
+17
+00:00:50.766 --> 00:00:54.433
+Let's see, we can, there you go.
+
+18
+00:00:54.633 --> 00:00:57.200
+Let's get that canvas back. Cool.
+
+19
+00:00:57.200 --> 00:00:59.500
+So you can our Button here just exactly
+
+20
+00:00:59.500 --> 00:01:01.500
+in the middle of our scene.
+
+21
+00:01:01.800 --> 00:01:03.700
+Now I'm just gonna
+position this really quick
+
+22
+00:01:03.700 --> 00:01:07.000
+so I'm actually gonna turn
+back on the game over text.
+
+23
+00:01:07.700 --> 00:01:10.466
+And our Button we'll
+just put a little lower
+
+24
+00:01:10.466 --> 00:01:15.133
+on the y position,
+somewhere like there looks good.
+
+25
+00:01:16.166 --> 00:01:19.400
+Now we're going to hide
+our game over text once again.
+
+26
+00:01:20.300 --> 00:01:22.733
+We can't see it,
+but we can see our Button.
+
+27
+00:01:22.733 --> 00:01:25.800
+Now in our Button, we're
+going to rename it.
+
+28
+00:01:26.000 --> 00:01:28.533
+So we're gonna expand it,
+which is actually
+
+29
+00:01:28.533 --> 00:01:30.466
+where the text is stored under.
+
+30
+00:01:31.966 --> 00:01:33.933
+In our Inspector on the right,
+
+31
+00:01:35.033 --> 00:01:37.700
+you can see we have this
+Text (Script) Component.
+
+32
+00:01:37.700 --> 00:01:40.100
+So this is where we can
+change the text of our Button.
+
+33
+00:01:40.100 --> 00:01:43.600
+So we'll change it to restart,
+and you can see it's changed down here.
+
+34
+00:01:45.066 --> 00:01:48.600
+And we can do the same thing,
+we can select the radio Button,
+
+35
+00:01:48.800 --> 00:01:52.266
+this little circle on the right side
+of our Inspector.
+
+36
+00:01:53.200 --> 00:01:57.700
+And it gives us options of different
+kinds of fonts we can select.
+
+37
+00:01:58.500 --> 00:02:00.666
+You see it changes down at the bottom.
+There you go.
+
+38
+00:02:00.666 --> 00:02:02.900
+This is the same one that we were using
+before I think.
+
+39
+00:02:03.533 --> 00:02:06.466
+We'll use that one.
+The IndieFlower in my case.
+
+40
+00:02:08.233 --> 00:02:11.733
+Let's see if we can make
+the font size a bit bigger.
+
+41
+00:02:12.166 --> 00:02:14.233
+Let's see, it gets
+a little too large there.
+
+42
+00:02:14.700 --> 00:02:17.433
+ I'll make this bold so it's a little bit more visible.
+Restart.
+
+43
+00:02:18.000 --> 00:02:22.033
+So now we have our Button set up,
+and ready to go.
+
+44
+00:02:22.100 --> 00:02:24.000
+And then we need to do one more thing.
+
+45
+00:02:24.000 --> 00:02:26.966
+So we have our "Restart Button" set up.
+
+46
+00:02:29.033 --> 00:02:31.766
+And I'm going to rename
+this to the "Restart Button"
+
+47
+00:02:31.766 --> 00:02:36.500
+so that it's easier to see
+as soon as I try and find it.
+
+48
+00:02:37.600 --> 00:02:41.466
+So what you're gonna do is
+you're gonna right-click on your Canvas,
+
+49
+00:02:41.900 --> 00:02:46.533
+you're going to create a UI element,
+we're going to make a Button.
+
+50
+00:02:48.733 --> 00:02:51.300
+Make sure you rename your Button
+
+51
+00:02:51.300 --> 00:02:53.500
+to be the Restart Button,
+so we know where to find it.
+
+52
+00:02:53.800 --> 00:02:57.033
+You can change its position on the y
+so that way it's a little bit lower
+
+53
+00:02:57.033 --> 00:02:59.100
+than the Game Over Text
+that would pop up.
+
+54
+00:02:59.100 --> 00:03:01.433
+If you expand the Restart Button,
+you'll actually see
+
+55
+00:03:01.433 --> 00:03:03.433
+the text element underneath it.
+
+56
+00:03:04.066 --> 00:03:06.266
+And then in the Text Components
+
+57
+00:03:06.266 --> 00:03:09.133
+you're going to change the text
+
+58
+00:03:09.133 --> 00:03:11.966
+from Button to Restart,
+and then you're going
+
+59
+00:03:11.966 --> 00:03:14.300
+to change the fonts to whatever
+font you want it to be.
+
+60
+00:03:14.300 --> 00:03:16.566
+You can change the font style
+to make it bolder,
+
+61
+00:03:16.966 --> 00:03:19.100
+change the font size
+so it's a little bit larger
+
+62
+00:03:19.666 --> 00:03:22.200
+and then you've made your Button.
+Now it's your turn.
+
+63
+00:03:23.900 --> 00:03:27.400
+[music]

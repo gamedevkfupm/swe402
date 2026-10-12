@@ -1,0 +1,311 @@
+WEBVTT
+
+1
+00:00:01.266 --> 00:00:03.200
+[music]
+
+2
+00:00:05.433 --> 00:00:09.433
+[Instructor] So, in our project,
+we've set up "TextMesh Pro,"
+
+3
+00:00:09.433 --> 00:00:11.800
+and added a text element to our scene
+
+4
+00:00:11.800 --> 00:00:14.866
+so that way we can actually
+keep track of our score.
+
+5
+00:00:15.600 --> 00:00:18.000
+Now, what we're gonna do is,
+we actually need to use code,
+
+6
+00:00:18.066 --> 00:00:21.900
+and a variable to keep track of, 
+and update this Score Text
+
+7
+00:00:21.900 --> 00:00:24.166
+whenever we need it. To do that, 
+we're gonna go
+
+8
+00:00:24.166 --> 00:00:26.433
+into our "GameManager" Script.
+
+9
+00:00:26.433 --> 00:00:28.866
+Now, one of the first things
+that we actually need to do
+
+10
+00:00:29.033 --> 00:00:32.233
+in our Script is we need
+to take advantage
+
+11
+00:00:32.233 --> 00:00:35.233
+of these "using" keywords up here.
+
+12
+00:00:35.533 --> 00:00:38.266
+Now, this entire time,
+as we've been doing our project,
+
+13
+00:00:38.533 --> 00:00:41.400
+we've had these statements
+at the top of our program
+
+14
+00:00:41.400 --> 00:00:45.633
+the entire time.
+Using is a special keyword in C#
+
+15
+00:00:46.133 --> 00:00:49.900
+that enables you to import
+other libraries and packages
+
+16
+00:00:50.100 --> 00:00:52.666
+into the current Script
+that you're editing.
+
+17
+00:00:53.033 --> 00:00:55.166
+It's particularly useful in cases
+
+18
+00:00:55.166 --> 00:00:57.100
+where you import other libraries
+
+19
+00:00:57.100 --> 00:00:59.166
+that you weren't initially using before.
+
+20
+00:00:59.866 --> 00:01:01.666
+In our case,
+we've been using
+
+21
+00:01:01.666 --> 00:01:06.266
+some of the standard C# libraries
+that we've needed,
+
+22
+00:01:06.266 --> 00:01:08.600
+as well as we've actually been importing
+
+23
+00:01:09.200 --> 00:01:13.733
+all of the different Unity methods
+and classes that we were using before.
+
+24
+00:01:13.966 --> 00:01:16.733
+Different things like
+GameObjects or MonoBehaviour.
+
+25
+00:01:17.166 --> 00:01:19.133
+Since we're using TextMesh Pro,
+
+26
+00:01:19.133 --> 00:01:22.866
+we actually need to import
+another package to do so.
+
+27
+00:01:23.400 --> 00:01:26.966
+So, we're going to type in "using TMPro"
+
+28
+00:01:27.633 --> 00:01:29.766
+So now, our project will be using
+
+29
+00:01:29.766 --> 00:01:33.466
+all of the different classes
+and methods for TextMesh
+
+30
+00:01:33.466 --> 00:01:35.833
+so that we can actually interact
+with them, and control
+
+31
+00:01:36.033 --> 00:01:38.233
+our user interface.
+At the top of our class
+
+32
+00:01:38.233 --> 00:01:41.000
+we're going to declare a new variable,
+
+33
+00:01:41.566 --> 00:01:46.400
+so this will be public
+so we can assign it in the Inspector.
+
+34
+00:01:46.400 --> 00:01:54.866
+It'll be a "TextMeshProUGUI,"
+and we'll call it the "scoreText."
+
+35
+00:01:57.433 --> 00:01:59.600
+So, this'll be the text
+that we created before.
+
+36
+00:02:00.400 --> 00:02:03.666
+On top of that, 
+we'll need an actual variable
+
+37
+00:02:03.666 --> 00:02:07.133
+to store our score,
+so it'll be a private,
+
+38
+00:02:07.533 --> 00:02:09.766
+it'll be a whole number
+so we'll make it an integer,
+
+39
+00:02:09.933 --> 00:02:11.966
+and then we'll call it "score."
+
+40
+00:02:12.300 --> 00:02:15.733
+In our state method, we'll make
+sure that we set score to 0
+
+41
+00:02:17.033 --> 00:02:19.566
+so that TextMesh Pro 
+won't have any issues in using it.
+
+42
+00:02:20.600 --> 00:02:24.600
+And then, underneath that, we'll
+actually use our scoreText variable,
+
+43
+00:02:26.200 --> 00:02:29.933
+and in this case, we actually
+have to use the text itself.
+
+44
+00:02:29.933 --> 00:02:33.566
+So we actually have to use ".text"
+to be able to set the text.
+
+45
+00:02:33.833 --> 00:02:37.533
+And we'll set it to be
+"score: " as a string literal,
+
+46
+00:02:39.900 --> 00:02:41.933
+and then we're going to concatenate,
+
+47
+00:02:42.100 --> 00:02:44.133
+in this case, our "score" variable.
+
+48
+00:02:44.566 --> 00:02:47.766
+So, as we update the score
+variable it should change later.
+
+49
+00:02:48.466 --> 00:02:52.466
+Now, in Unity, make sure
+that in your project Hierarchy
+
+50
+00:02:52.466 --> 00:02:56.333
+in the GameManager, you assign
+the score text underneath the Canvas
+
+51
+00:02:56.833 --> 00:02:59.133
+into the Score Text
+in our GameManager Script.
+
+52
+00:02:59.800 --> 00:03:02.100
+And now, when we save,
+press Play,
+
+53
+00:03:04.266 --> 00:03:06.933
+you can see that our Score
+is immediately set to 0.
+
+54
+00:03:10.233 --> 00:03:14.233
+So, what you're gonna do is,
+in your GameManager Script,
+
+55
+00:03:14.366 --> 00:03:17.866
+at the top of the Script,
+add a "using TMPro;"
+
+56
+00:03:18.100 --> 00:03:20.266
+underneath all the other
+using statements.
+
+57
+00:03:20.966 --> 00:03:24.400
+For our variables in our Script,
+we're going to create
+
+58
+00:03:24.400 --> 00:03:27.800
+a "public TextMeshProUGUI,"
+
+59
+00:03:28.400 --> 00:03:32.200
+as well as a private integer
+for our score.
+
+60
+00:03:32.900 --> 00:03:36.233
+In our Start() method,
+we're going to set score to be 0,
+
+61
+00:03:36.666 --> 00:03:38.733
+and for our scoreText variable,
+
+62
+00:03:38.933 --> 00:03:41.166
+we're going to get the .text element
+
+63
+00:03:42.000 --> 00:03:45.300
+and we're going
+to set that to be "score: "
+
+64
+00:03:45.666 --> 00:03:48.533
+and then concatenate
+on our score variable.
+
+65
+00:03:49.033 --> 00:03:51.066
+Now, it's your turn.
+
+66
+00:03:51.566 --> 00:03:53.566
+[music]

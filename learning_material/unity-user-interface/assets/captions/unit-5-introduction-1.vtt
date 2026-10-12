@@ -1,0 +1,165 @@
+WEBVTT
+
+1
+00:00:03.800 --> 00:00:05.630
+[music]
+
+2
+00:00:05.630 --> 00:00:08.130
+[Instructor] Up to this point,
+with all of our Prototypes,
+
+3
+00:00:08.130 --> 00:00:10.166
+when you clicked run,
+you would just get thrown
+
+4
+00:00:10.166 --> 00:00:12.260
+right into the gameplay.
+
+5
+00:00:12.260 --> 00:00:16.090
+No hello, no how are you,
+just right to business.
+
+6
+00:00:16.090 --> 00:00:20.512
+Then during run time, we've never
+tracked score, lives, or progress,
+
+7
+00:00:21.012 --> 00:00:24.778
+so there was no real way for the Player
+to tell how they were doing.
+
+8
+00:00:25.970 --> 00:00:30.070
+And finally when the game was over,
+the only way to restart
+
+9
+00:00:30.070 --> 00:00:32.946
+the game was to stop
+the Project and rerun it.
+
+10
+00:00:34.000 --> 00:00:36.540
+Well in this Unit,
+things are going to be different,
+
+11
+00:00:37.400 --> 00:00:40.020
+because we are going to create
+a Prototype that opens
+
+12
+00:00:40.020 --> 00:00:43.200
+with a beautiful title screen
+where the Player can choose
+
+13
+00:00:43.200 --> 00:00:47.240
+the difficulty, then during
+the game, the Player's score
+
+14
+00:00:47.240 --> 00:00:50.400
+will be tracked and displayed,
+and at the end
+
+15
+00:00:50.400 --> 00:00:53.390
+there will be a Game Over
+screen where the Player will be
+
+16
+00:00:53.390 --> 00:00:56.300
+able to restart without
+rebooting the entire application.
+
+17
+00:00:57.120 --> 00:00:59.873
+That right there is
+a five star user experience.
+
+18
+00:01:01.340 --> 00:01:04.650
+All of those elements
+you just saw, the title screen,
+
+19
+00:01:04.650 --> 00:01:08.145
+menu buttons, score display,
+and game over screen,
+
+20
+00:01:08.710 --> 00:01:12.640
+fall into the all-important
+mission critical category
+
+21
+00:01:12.640 --> 00:01:15.821
+of User Interface, or UI for short.
+
+22
+00:01:17.470 --> 00:01:22.250
+The UI includes any Text,
+Buttons, or Display that the User
+
+23
+00:01:22.250 --> 00:01:25.051
+can read or interact
+with during their experience,
+
+24
+00:01:25.600 --> 00:01:28.035
+and that is going to be
+the focus of this unit.
+
+25
+00:01:28.780 --> 00:01:31.990
+As you saw, having a UI
+in your Project makes it look
+
+26
+00:01:31.990 --> 00:01:34.037
+a lot more Professional,
+
+27
+00:01:34.037 --> 00:01:36.686
+but it also allows your Project
+to be fully playable.
+
+28
+00:01:37.700 --> 00:01:41.030
+A fully playable game is one
+that the user can experience
+
+29
+00:01:41.030 --> 00:01:44.530
+seamlessly from end to end
+without any game-breaking bugs
+
+30
+00:01:44.530 --> 00:01:48.640
+or missing features.
+Having a UI will finally allow for that.
+
+31
+00:01:49.100 --> 00:01:52.070
+It is the missing piece
+that will tie together everything
+
+32
+00:01:52.070 --> 00:01:54.090
+you've learned up to this point.
+
+33
+00:01:54.210 --> 00:01:56.793
+So without further ado,
+let's start creating.
+
+34
+00:01:58.693 --> 00:02:00.861
+[music]

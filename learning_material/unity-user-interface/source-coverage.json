@@ -1,0 +1,210 @@
+{
+  "checked": "2026-10-10",
+  "unit": "https://learn.unity.com/pathway/junior-programmer/unit/user-interface?version=6.3",
+  "intro": {
+    "title": "Unit 5 - Introduction",
+    "video": "https://connect-mediagw.unity.com/h1/20241212/videos/8651cae7-0dda-4b65-88f3-afacd4b15154_CWC_U5_Intro_U6.mp4",
+    "source": "https://learn.unity.com/pathway/junior-programmer/unit/user-interface/tutorial/unit-5-introduction?language=en&version=6.3",
+    "caption": "https://connect-mediagw.unity.com/h1/20241212/fd7ae5c6-7722-46a5-bcd3-2520f2aec214_CWC_U5_Intro_U6.mp4.vtt"
+  },
+  "mapping": [
+    {
+      "lecture_group": "1.1",
+      "source_step": "lesson-5-1-clicky-mouse-1:1",
+      "coverage": "Import the official scene. Our coordinate and sensor adjustments are specified in steps 1.1.3\u20131.1.4."
+    },
+    {
+      "lecture_group": "1.2",
+      "source_step": "lesson-5-1-clicky-mouse-1:2",
+      "coverage": "Create good and bad targets. The chapter puts each model under a separate behavior root for later asset replacement."
+    },
+    {
+      "lecture_group": "2.1",
+      "source_step": "lesson-5-1-clicky-mouse-1:3",
+      "coverage": "Randomize speed, torque and horizontal position."
+    },
+    {
+      "lecture_group": "2.1",
+      "source_step": "lesson-5-1-clicky-mouse-1:4",
+      "coverage": "Extract repeated calculations into methods."
+    },
+    {
+      "lecture_group": "2.2",
+      "source_step": "lesson-5-1-clicky-mouse-1:5",
+      "coverage": "Create the manager and list of prefab references."
+    },
+    {
+      "lecture_group": "2.2",
+      "source_step": "lesson-5-1-clicky-mouse-1:6",
+      "coverage": "Use a coroutine for repeated spawning."
+    },
+    {
+      "lecture_group": "3.1",
+      "source_step": "lesson-5-1-clicky-mouse-1:7",
+      "coverage": "Detect a mouse press with the Input System."
+    },
+    {
+      "lecture_group": "3.1",
+      "source_step": "lesson-5-1-clicky-mouse-1:8",
+      "coverage": "Create and inspect a screen-to-world ray."
+    },
+    {
+      "lecture_group": "3.1",
+      "source_step": "lesson-5-1-clicky-mouse-1:9",
+      "coverage": "Compare the hit with this target before destruction."
+    },
+    {
+      "lecture_group": "3.2",
+      "source_step": "lesson-5-1-clicky-mouse-1:10",
+      "coverage": "Remove objects after they leave the playable region. The chapter uses the explicit DestroyZone tag."
+    },
+    {
+      "lecture_group": "4.1",
+      "source_step": "lesson-5-2-keeping-score:1",
+      "coverage": "Add a Canvas and TextMeshPro score."
+    },
+    {
+      "lecture_group": "4.1",
+      "source_step": "lesson-5-2-keeping-score:2",
+      "coverage": "Position and style text; our explicit scaling and aspect-ratio checks extend the source."
+    },
+    {
+      "lecture_group": "4.2",
+      "source_step": "lesson-5-2-keeping-score:3",
+      "coverage": "Declare the score and TMP reference."
+    },
+    {
+      "lecture_group": "4.2",
+      "source_step": "lesson-5-2-keeping-score:4",
+      "coverage": "Create a method that adds points and updates text."
+    },
+    {
+      "lecture_group": "4.2",
+      "source_step": "lesson-5-2-keeping-score:5",
+      "coverage": "Call the manager from a clicked target."
+    },
+    {
+      "lecture_group": "4.2",
+      "source_step": "lesson-5-2-keeping-score:6",
+      "coverage": "Give the different prefabs distinct positive or negative values."
+    },
+    {
+      "lecture_group": "5.1",
+      "source_step": "lesson-5-2-keeping-score:7",
+      "coverage": "Instantiate an assigned particle prefab when a target is clicked; this chapter also gives the effect an explicit cleanup delay."
+    },
+    {
+      "lecture_group": "6.1",
+      "source_step": "lesson-5-3-game-over-2:1",
+      "coverage": "Create a game-over text object and access it from code."
+    },
+    {
+      "lecture_group": "6.1",
+      "source_step": "lesson-5-3-game-over-2:2",
+      "coverage": "Reveal the message after a miss."
+    },
+    {
+      "lecture_group": "6.1",
+      "source_step": "lesson-5-3-game-over-2:3",
+      "coverage": "Create the shared GameOver method and state."
+    },
+    {
+      "lecture_group": "6.2",
+      "source_step": "lesson-5-3-game-over-2:4",
+      "coverage": "Prevent spawning, target destruction and scoring after game over."
+    },
+    {
+      "lecture_group": "7.1",
+      "source_step": "lesson-5-3-game-over-2:5",
+      "coverage": "Create and style a restart button."
+    },
+    {
+      "lecture_group": "7.1",
+      "source_step": "lesson-5-3-game-over-2:6",
+      "coverage": "Implement scene reload."
+    },
+    {
+      "lecture_group": "7.1",
+      "source_step": "lesson-5-3-game-over-2:7",
+      "coverage": "Connect the Inspector event and verify restart."
+    },
+    {
+      "lecture_group": "8.1",
+      "source_step": "lesson-5-4-what-s-the-difficulty-2:1",
+      "coverage": "Create title text and three menu choices."
+    },
+    {
+      "lecture_group": "8.3",
+      "source_step": "lesson-5-4-what-s-the-difficulty-2:2",
+      "coverage": "Add the reusable DifficultyButton component."
+    },
+    {
+      "lecture_group": "8.3",
+      "source_step": "lesson-5-4-what-s-the-difficulty-2:3",
+      "coverage": "Register SetDifficulty as a click listener."
+    },
+    {
+      "lecture_group": "8.3",
+      "source_step": "lesson-5-4-what-s-the-difficulty-2:4",
+      "coverage": "Invoke the manager to begin a round."
+    },
+    {
+      "lecture_group": "8.3",
+      "source_step": "lesson-5-4-what-s-the-difficulty-2:5",
+      "coverage": "Hide the parent title group when play begins."
+    },
+    {
+      "lecture_group": "8.3",
+      "source_step": "lesson-5-4-what-s-the-difficulty-2:6",
+      "coverage": "Pass a difficulty value and change the spawn interval."
+    },
+    {
+      "lecture_group": "9.1",
+      "source_step": "challenge-5-whack-a-food:1",
+      "coverage": "Official challenge briefing. Reproduce the five defects before reading the repair guide."
+    },
+    {
+      "lecture_group": "9.3",
+      "source_step": "challenge-5-whack-a-food:10",
+      "coverage": "Optional official bonus-feature demonstration. The written timer is a complete implementation; other extra features in the video remain optional."
+    },
+    {
+      "lecture_group": "10.1",
+      "source_step": "lab-5-swap-out-your-assets:1",
+      "coverage": "Browse and select from the course library."
+    },
+    {
+      "lecture_group": "10.1",
+      "source_step": "lab-5-swap-out-your-assets:4",
+      "coverage": "Replace non-player visuals while preserving behavior."
+    },
+    {
+      "lecture_group": "10.2",
+      "source_step": "lab-5-swap-out-your-assets:2",
+      "coverage": "Replace a player visual in a project with a player controller."
+    },
+    {
+      "lecture_group": "10.2",
+      "source_step": "lab-5-swap-out-your-assets:3",
+      "coverage": "Evaluate assets from the store; purchasing is not required."
+    },
+    {
+      "lecture_group": "10.3",
+      "source_step": "lab-5-swap-out-your-assets:5",
+      "coverage": "Replace a background texture and tune material appearance."
+    }
+  ],
+  "text_only": [
+    "Quiz 5 linked separately; ten original local quizzes",
+    "User feedback planning, tasks, observation, analysis and retest"
+  ],
+  "adaptations": [
+    "Recentering camera and supplied scenery together",
+    "New Input System throughout; challenge archive OnMouseEnter replaced explicitly",
+    "Root-owned physics with replaceable child visuals",
+    "Post-wait state guard and inactive score guard",
+    "Explicit scene manager references on difficulty buttons",
+    "Particle clone cleanup",
+    "Ceiling display for optional countdown"
+  ]
+}

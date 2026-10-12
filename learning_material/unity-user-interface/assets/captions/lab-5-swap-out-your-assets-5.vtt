@@ -1,0 +1,223 @@
+WEBVTT
+
+1
+00:00:01.200 --> 00:00:03.333
+[music]
+
+2
+00:00:05.600 --> 00:00:07.200
+[Instructor] So we've cleaned
+up our scene a lot
+
+3
+00:00:07.200 --> 00:00:10.100
+with all of these new Assets
+from our course library.
+
+4
+00:00:10.100 --> 00:00:12.100
+As well as ones that we downloaded from
+
+5
+00:00:12.100 --> 00:00:15.300
+the Asset store, now we have
+one last thing to do,
+
+6
+00:00:15.600 --> 00:00:18.400
+just to kind of make
+our game feel a little bit nicer,
+
+7
+00:00:18.400 --> 00:00:21.700
+we have this white backdrop, for Ground
+here which doesn't really look
+
+8
+00:00:21.700 --> 00:00:24.633
+really good, so I'm actually going
+to change that really quick.
+
+9
+00:00:24.633 --> 00:00:27.400
+So in my Project window,
+underneath Assets,
+
+10
+00:00:27.400 --> 00:00:31.433
+I'm actually gonna go into the "Course
+Library," select "Textures,"
+
+11
+00:00:31.800 --> 00:00:34.333
+I'm actually gonna select
+this "Grass" Texture,
+
+12
+00:00:34.333 --> 00:00:38.433
+and I can actually just click,
+and drag straight onto my scene.
+
+13
+00:00:38.433 --> 00:00:42.833
+And when I let go, it applies
+it onto that Ground plane that I had.
+
+14
+00:00:42.833 --> 00:00:45.800
+Now there's some issues,
+I could probably make
+
+15
+00:00:45.800 --> 00:00:48.533
+this a little bit more high resolution,
+
+16
+00:00:48.833 --> 00:00:53.100
+and I can actually remove
+this huge shiny bit right here,
+
+17
+00:00:53.100 --> 00:00:55.300
+that doesn't really,
+looks kind of unnatural.
+
+18
+00:00:55.500 --> 00:00:58.100
+So, actually in the Ground folder,
+
+19
+00:00:58.100 --> 00:01:01.100
+there's also a "Materials" folder,
+if I select the "Grass" one,
+
+20
+00:01:01.433 --> 00:01:03.433
+the grass material that was created,
+
+21
+00:01:03.833 --> 00:01:06.433
+I can actually change
+the tiling so if I want
+
+22
+00:01:06.433 --> 00:01:11.000
+to have it a bit higher,
+that's a little bit
+
+23
+00:01:11.000 --> 00:01:14.700
+too much actually.
+That's a lot of flowers.
+
+24
+00:01:14.900 --> 00:01:16.400
+Play around with the tiling,
+
+25
+00:01:16.700 --> 00:01:18.633
+to make it look however you want it to.
+
+26
+00:01:19.600 --> 00:01:23.100
+That looks pretty good.
+And then another thing that I'm gonna do
+
+27
+00:01:23.100 --> 00:01:27.633
+is I'm actually going to uncheck
+Specular Highlights, and Reflections.
+
+28
+00:01:29.133 --> 00:01:32.100
+Because grass is
+generally not reflective,
+
+29
+00:01:32.100 --> 00:01:35.900
+so you can see that actually changes,
+the way that that texture looks.
+
+30
+00:01:37.900 --> 00:01:41.200
+Just by unchecking those options.
+If you wanted to too,
+
+31
+00:01:41.200 --> 00:01:44.100
+you could play around more, you could
+change how metallic an object looks,
+
+32
+00:01:44.100 --> 00:01:46.500
+if you were going for a shiny effect
+or something like that.
+
+33
+00:01:47.100 --> 00:01:50.300
+I think that looks really cool,
+looks really good for now,
+
+34
+00:01:50.900 --> 00:01:53.000
+game generally works,
+which I'm happy with,
+
+35
+00:01:53.333 --> 00:01:55.133
+I can move around,
+
+36
+00:01:55.133 --> 00:01:57.333
+dodge all of these Obstacles
+
+37
+00:01:57.333 --> 00:01:59.233
+coming down my way.
+
+38
+00:01:59.233 --> 00:02:01.400
+Try and avoid the...
+
+39
+00:02:01.400 --> 00:02:04.933
+running Animals and Rocks as
+they come down the scene, so.
+
+40
+00:02:06.133 --> 00:02:08.200
+Overall very satisfied.
+
+41
+00:02:08.200 --> 00:02:12.200
+So what you're gonna do is,
+go into your Assets folder,
+
+42
+00:02:12.200 --> 00:02:15.700
+you can select different textures,
+for example if you're going for Ground,
+
+43
+00:02:15.700 --> 00:02:20.100
+or if you want to replace it with,
+any Backgrounds,
+
+44
+00:02:21.600 --> 00:02:25.400
+different options that you can
+use whatever fits for your game.
+
+45
+00:02:25.400 --> 00:02:28.300
+That way it looks
+a little bit more natural,
+
+46
+00:02:28.600 --> 00:02:30.833
+and game-like.
+Now it's your turn!
+
+47
+00:02:33.000 --> 00:02:35.000
+[music]

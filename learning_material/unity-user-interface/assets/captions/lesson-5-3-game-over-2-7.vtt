@@ -1,0 +1,320 @@
+WEBVTT
+
+1
+00:00:00.333 --> 00:00:03.433
+[music]
+
+2
+00:00:05.700 --> 00:00:08.133
+[Instructor] We can control
+the state of our game now,
+
+3
+00:00:08.366 --> 00:00:13.500
+so, we can Restart the game
+whenever we want,
+
+4
+00:00:14.000 --> 00:00:16.233
+but really, it's not actually
+exactly what we want but,
+
+5
+00:00:17.233 --> 00:00:19.900
+especially whenever the game 
+is over now, we can Restart the game,
+
+6
+00:00:19.900 --> 00:00:21.900
+so that's helpful.
+
+7
+00:00:23.966 --> 00:00:26.966
+Now we don't want this Button
+in our face the entire time,
+
+8
+00:00:26.966 --> 00:00:29.300
+so, we're going to turn it off similarly
+
+9
+00:00:29.300 --> 00:00:31.300
+to how we turn off our Game Over.
+
+10
+00:00:31.933 --> 00:00:34.733
+In our GameManager Script,
+we'll actually
+
+11
+00:00:34.733 --> 00:00:37.000
+need another using statement,
+
+12
+00:00:37.000 --> 00:00:43.800
+so this time,
+we're "using UnityEngine.UI."
+
+13
+00:00:44.266 --> 00:00:49.700
+So, this library will actually let us
+interact with our "Button" specifically.
+
+14
+00:00:50.766 --> 00:00:54.400
+In our variables,
+we're going to declare a new variable,
+
+15
+00:00:55.066 --> 00:00:57.066
+this one'll be public,
+so we can get a reference
+
+16
+00:00:57.066 --> 00:01:01.433
+to our Button that's on our scene,
+that's called "restartButton."
+
+17
+00:01:02.466 --> 00:01:04.800
+Now, because I know
+I'm going to do this later,
+
+18
+00:01:04.800 --> 00:01:07.400
+it's just easier to just
+do this while I'm here, so,
+
+19
+00:01:08.100 --> 00:01:11.466
+similarly to how in our GameOver,
+
+20
+00:01:12.166 --> 00:01:14.733
+we set our gameOverText to active,
+
+21
+00:01:14.933 --> 00:01:17.000
+we can do the same thing
+with our Button, in fact.
+
+22
+00:01:17.333 --> 00:01:20.966
+So, in RestartGame(),
+now we can do
+
+23
+00:01:20.966 --> 00:01:26.300
+"restartButton.gameObject,"
+and we'll set this one to active,
+
+24
+00:01:26.966 --> 00:01:29.466
+make sure you use that Boolean variable,
+
+25
+00:01:29.466 --> 00:01:32.600
+and then in Unity we need
+to do two things before we test.
+
+26
+00:01:32.600 --> 00:01:34.633
+So our Game Manager,
+
+27
+00:01:35.100 --> 00:01:38.766
+we drag our Restart Button
+onto the Restart Button field,
+
+28
+00:01:39.233 --> 00:01:41.266
+I've remembered this time,
+
+29
+00:01:41.266 --> 00:01:44.200
+and then, we want to just
+turn our Restart Button off,
+
+30
+00:01:44.800 --> 00:01:47.966
+disable it by clicking on it,
+going to the Inspector,
+
+31
+00:01:47.966 --> 00:01:50.133
+clicking on that little
+checkbox so it disappears.
+
+32
+00:01:50.966 --> 00:01:52.966
+Now, if we test our game out,
+
+33
+00:01:54.466 --> 00:01:56.333
+when our game is over,
+we should magically
+
+34
+00:01:56.333 --> 00:01:59.566
+see our text, and our Button
+reappear on the scene.
+
+35
+00:02:01.766 --> 00:02:04.833
+So our game is over,
+and there's no Button.
+
+36
+00:02:05.400 --> 00:02:07.366
+What did we do wrong?
+
+37
+00:02:07.366 --> 00:02:09.700
+In fact, what I really wanted to do
+
+38
+00:02:09.700 --> 00:02:12.700
+was set our Button active
+when the game is over,
+
+39
+00:02:13.700 --> 00:02:18.700
+because we can't Restart the game
+if there's no Button.
+
+40
+00:02:19.166 --> 00:02:21.900
+So what we're going to do, 
+is we're going to,
+
+41
+00:02:21.900 --> 00:02:23.733
+cut out the Restart Button,
+
+42
+00:02:23.733 --> 00:02:25.633
+and we'll add it to the Game Over,
+
+43
+00:02:25.633 --> 00:02:28.233
+and then now we save this.
+
+44
+00:02:28.233 --> 00:02:30.233
+So now, when the game is over,
+
+45
+00:02:30.233 --> 00:02:32.300
+now both our Button,
+and our text should show up.
+
+46
+00:02:33.233 --> 00:02:35.033
+So if we test one more time,
+
+47
+00:02:37.533 --> 00:02:40.166
+we have all of our different
+objects that'll pop up,
+
+48
+00:02:40.166 --> 00:02:42.100
+all of the little boxes, and skulls,
+
+49
+00:02:42.100 --> 00:02:44.833
+the game is over,
+now we have the Restart Button,
+
+50
+00:02:45.700 --> 00:02:49.400
+and then, when we press Restart, boom!
+
+51
+00:02:49.633 --> 00:02:52.833
+Magically, the words, and the Button,
+
+52
+00:02:52.833 --> 00:02:55.633
+disappear from the screen.
+And there they are again.
+
+53
+00:02:56.100 --> 00:02:58.733
+So now we have a way of ending our game,
+
+54
+00:02:58.733 --> 00:03:01.700
+and restarting,
+whenever the game is over.
+
+55
+00:03:02.800 --> 00:03:06.500
+So, what you're going to do is
+in your GameManager Script,
+
+56
+00:03:06.500 --> 00:03:10.933
+make sure you add this using
+statement for UnityEngine.UI,
+
+57
+00:03:11.166 --> 00:03:14.066
+so that we can actually
+interact with the buttons.
+
+58
+00:03:14.833 --> 00:03:17.066
+In our variables we're going to,
+
+59
+00:03:17.200 --> 00:03:19.633
+create a new variable
+for our restartButton,
+
+60
+00:03:20.133 --> 00:03:23.300
+and it'll be of type Button,
+make sure you make it public,
+
+61
+00:03:23.300 --> 00:03:25.233
+so we can interact with it,
+in the editor.
+
+62
+00:03:25.933 --> 00:03:30.433
+In your GameOver() method,
+and not your RestartGame() method,
+
+63
+00:03:30.700 --> 00:03:35.500
+you can get the restartButton,
+get that gameObject, and SetActive(true),
+
+64
+00:03:36.033 --> 00:03:38.600
+and then just make sure
+that your Restart Button
+
+65
+00:03:38.600 --> 00:03:40.766
+is disabled in the Inspector,
+
+66
+00:03:42.200 --> 00:03:44.700
+and in your Game Manager,
+you connect that reference,
+
+67
+00:03:44.700 --> 00:03:46.700
+of the Button in the scene,
+
+68
+00:03:46.933 --> 00:03:50.300
+to the Button variable that you created.
+Now it's your turn!
+
+69
+00:03:51.300 --> 00:03:54.300
+[music]

@@ -1,0 +1,258 @@
+WEBVTT
+
+1
+00:00:01.300 --> 00:00:03.300
+[music]
+
+2
+00:00:05.600 --> 00:00:08.133
+[Instructor] Great, so,
+now when we play our game,
+
+3
+00:00:08.133 --> 00:00:11.500
+every time we click on
+one of the different
+
+4
+00:00:11.500 --> 00:00:14.933
+Objects that spawn,
+it updates our score by 5.
+
+5
+00:00:16.633 --> 00:00:18.733
+Now the one problem is,
+we have these Skulls, right,
+
+6
+00:00:18.733 --> 00:00:20.733
+and they should be
+decreasing our points,
+
+7
+00:00:20.733 --> 00:00:23.300
+because they're Bad Objects, so,
+
+8
+00:00:24.400 --> 00:00:26.766
+we're going to set that up in our code.
+
+9
+00:00:28.466 --> 00:00:31.366
+In our "Target" Script,
+what we're going to do is,
+
+10
+00:00:31.366 --> 00:00:35.000
+we're actually going to
+create a new public variable,
+
+11
+00:00:35.000 --> 00:00:39.400
+so this will be a public,
+since we've passed an int to our method,
+
+12
+00:00:39.400 --> 00:00:42.400
+this will be an integer,
+and we'll call it "pointValue."
+
+13
+00:00:43.533 --> 00:00:47.233
+Now in Unity, if we actually
+go into each of our Prefabs,
+
+14
+00:00:48.200 --> 00:00:50.200
+you can see that on our Target (Script),
+
+15
+00:00:51.000 --> 00:00:53.100
+there is now a "Point Value"
+that we can apply,
+
+16
+00:00:53.100 --> 00:00:56.566
+so with our Skulls, 
+we'll make them -10.
+
+17
+00:01:01.400 --> 00:01:05.700
+With our first crate,
+we'll set this to be 5.
+
+18
+00:01:06.400 --> 00:01:09.866
+In our second crate,
+we'll set this to be 10,
+
+19
+00:01:10.866 --> 00:01:14.533
+and then in our third crate,
+we'll set this to be 15.
+
+20
+00:01:18.033 --> 00:01:23.133
+So now each of our Prefabs has
+a point value assigned to it.
+
+21
+00:01:24.633 --> 00:01:26.733
+Now, back in our Target Script,
+
+22
+00:01:26.733 --> 00:01:29.366
+we can change the 5 in our UpdateScore()
+
+23
+00:01:29.366 --> 00:01:33.300
+to be the pointValue,
+and now, when we test our game,
+
+24
+00:01:33.300 --> 00:01:35.866
+because each of these different Scripts
+
+25
+00:01:36.600 --> 00:01:38.566
+on all of the different Prefabs
+
+26
+00:01:38.566 --> 00:01:40.600
+are all unique in their own way,
+
+27
+00:01:40.600 --> 00:01:43.766
+applied onto each 
+of these different Objects,
+
+28
+00:01:44.400 --> 00:01:47.200
+now if we play our game,
+when we press Play,
+
+29
+00:01:47.200 --> 00:01:51.166
+we should see different
+point values.
+
+30
+00:01:51.166 --> 00:01:52.900
+that one goes up, 
+
+31
+00:01:52.900 --> 00:01:56.066
+that one is 5, I think
+this is 15, perfect.
+
+32
+00:01:56.066 --> 00:02:00.166
+So we have our score updating every time
+
+33
+00:02:00.166 --> 00:02:02.400
+we press one of these different boxes.
+
+34
+00:02:03.333 --> 00:02:06.633
+Now, the cool thing is,
+because of our Target Script,
+
+35
+00:02:06.633 --> 00:02:09.533
+each of the point values
+is assigned uniquely
+
+36
+00:02:09.533 --> 00:02:12.366
+onto each Prefab,
+so they each have their own value.
+
+37
+00:02:14.733 --> 00:02:16.666
+We could do this a different way,
+
+38
+00:02:16.666 --> 00:02:20.166
+where in our OnMouseDown(),
+we could check by name,
+
+39
+00:02:20.433 --> 00:02:23.833
+which Object we're actually
+assigned to right now,
+
+40
+00:02:23.833 --> 00:02:25.833
+so for example,
+if it's that first crate,
+
+41
+00:02:25.833 --> 00:02:28.266
+then we can update the score
+using an if() statement.
+
+42
+00:02:28.700 --> 00:02:31.533
+However, that's a bit more work,
+and a lot more coding,
+
+43
+00:02:31.533 --> 00:02:33.433
+which is something
+if you want to do, you can.
+
+44
+00:02:33.666 --> 00:02:35.800
+Otherwise, you can use this method,
+
+45
+00:02:35.800 --> 00:02:37.833
+where we make the point value public,
+
+46
+00:02:37.833 --> 00:02:41.533
+and then you can assign it differently
+onto each different Prefab.
+
+47
+00:02:42.166 --> 00:02:44.666
+So, what you're gonna do is you're going
+
+48
+00:02:44.666 --> 00:02:48.166
+to create a new "public int"
+for your pointValue,
+
+49
+00:02:49.000 --> 00:02:53.133
+In OnMouseDown(), you're going to change
+the 5 to be the pointValue.
+
+50
+00:02:53.533 --> 00:02:56.733
+In Unity, you're going to go
+into each of the Prefabs,
+
+51
+00:02:57.466 --> 00:03:00.200
+update the point value
+underneath the target Scripts,
+
+52
+00:03:00.933 --> 00:03:03.833
+and then when you test it out, 
+you should see that all the values
+
+53
+00:03:03.833 --> 00:03:07.100
+are different as you click
+each of the different Objects.
+
+54
+00:03:07.800 --> 00:03:09.600
+Now it's your turn.
+
+55
+00:03:10.200 --> 00:03:12.500
+[music]

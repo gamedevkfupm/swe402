@@ -1,0 +1,188 @@
+WEBVTT
+
+1
+00:00:00.333 --> 00:00:02.833
+[music]
+
+2
+00:00:05.566 --> 00:00:07.900
+[Instructor] Now we have
+our "Game Over Text"
+
+3
+00:00:08.533 --> 00:00:11.166
+for our player and we actually need
+
+4
+00:00:11.166 --> 00:00:13.300
+to be able to turn it off and on.
+
+5
+00:00:13.300 --> 00:00:16.633
+So what we'll do is 
+on our Game Over Text Element
+
+6
+00:00:16.800 --> 00:00:21.300
+in our Hierarchy,
+if we disable the GameObject
+
+7
+00:00:21.566 --> 00:00:23.833
+by clicking on the checkbox
+in our Inspector
+
+8
+00:00:23.833 --> 00:00:25.866
+next to the Game Over Text field,
+
+9
+00:00:25.966 --> 00:00:27.800
+you can see that now our text
+
+10
+00:00:27.800 --> 00:00:29.800
+has disappeared from the scene
+
+11
+00:00:29.800 --> 00:00:31.800
+which is good, 
+that's exactly what we wanted.
+
+12
+00:00:32.000 --> 00:00:34.466
+Now we'll write some codes
+so that we can turn this back on.
+
+13
+00:00:35.233 --> 00:00:37.033
+Now in our GameManager Script,
+
+14
+00:00:37.033 --> 00:00:40.633
+we'll add another reference
+to our Game Over Text,
+
+15
+00:00:40.633 --> 00:00:42.433
+similar to what we did
+with our score text.
+
+16
+00:00:43.166 --> 00:00:45.533
+We'll make it public
+so we can assign that reference,
+
+17
+00:00:45.533 --> 00:00:53.000
+that'll be a "TextMeshProUGUI,"
+we'll call it gameOverText,
+
+18
+00:00:54.100 --> 00:00:57.233
+and then in Start() we're just
+going to test and see.
+
+19
+00:00:57.866 --> 00:01:04.933
+So if we use gameOverText
+and then we use the actual gameObject,
+
+20
+00:01:05.166 --> 00:01:07.333
+we'll set that gameObject
+back to active.
+
+21
+00:01:07.800 --> 00:01:11.566
+Now make sure that you use Boolean,
+so we use true so that we can set
+
+22
+00:01:12.033 --> 00:01:14.900
+our gameObject back to active
+since we disabled it.
+
+23
+00:01:15.966 --> 00:01:19.766
+Then as a quick test we're going
+to play our game
+
+24
+00:01:21.433 --> 00:01:26.300
+and we should have seen
+the text pop up right here.
+
+25
+00:01:28.200 --> 00:01:33.100
+Lets see, so it didn't actually set
+the reference to our Game Over Text
+
+26
+00:01:33.100 --> 00:01:36.266
+in our Game Manager,
+so I should do that first.
+
+27
+00:01:36.266 --> 00:01:38.766
+So now lets just see, make sure.
+
+28
+00:01:39.600 --> 00:01:44.366
+Press play, and then Game Over should
+pop up right there, perfect, cool.
+
+29
+00:01:45.633 --> 00:01:47.500
+So what you're gonna do is
+
+30
+00:01:47.500 --> 00:01:51.566
+you're going to go to your
+Game Over Text in your Hierarchy,
+
+31
+00:01:51.566 --> 00:01:53.800
+uncheck the checkbox on the top right
+
+32
+00:01:54.200 --> 00:01:57.400
+at the top of your Inspector
+so that way we disable the GameObject.
+
+33
+00:01:57.866 --> 00:02:01.833
+In your GameManager Script
+make sure that you create a variable
+
+34
+00:02:01.833 --> 00:02:04.400
+for the gameOverText
+and make it public so that way
+
+35
+00:02:04.400 --> 00:02:06.366
+we can set it inside of Unity
+
+36
+00:02:06.366 --> 00:02:09.300
+and then in your Start() method
+just to test it out we're going
+
+37
+00:02:09.300 --> 00:02:11.733
+to set that gameObject
+to be active again
+
+38
+00:02:11.733 --> 00:02:15.000
+so that way when we play our game,
+it should just pop up on the screen.
+
+39
+00:02:15.300 --> 00:02:17.433
+Now it's your turn.
+
+40
+00:02:17.433 --> 00:02:19.666
+[music]

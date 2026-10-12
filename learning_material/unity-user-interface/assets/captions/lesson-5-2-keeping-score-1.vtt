@@ -1,0 +1,446 @@
+WEBVTT
+
+1
+00:00:00.166 --> 00:00:02.733
+[music]
+
+2
+00:00:05.700 --> 00:00:08.900
+[Instructor] We have the core mechanics
+of our game down. So when we press Play.
+
+3
+00:00:10.500 --> 00:00:12.633
+Whenever we click on one of the Objects
+
+4
+00:00:12.633 --> 00:00:14.500
+they disappear from the scene.
+
+5
+00:00:14.866 --> 00:00:17.233
+And then if we let our Objects
+fall off they start getting
+
+6
+00:00:17.233 --> 00:00:19.500
+removed from the scene
+because of our "Sensor."
+
+7
+00:00:21.233 --> 00:00:23.333
+Now to make this game
+even more interactive,
+
+8
+00:00:23.333 --> 00:00:26.133
+we're actually going to create
+our first User Interface
+
+9
+00:00:26.466 --> 00:00:28.833
+to be able to actually
+get the score of our game.
+
+10
+00:00:30.900 --> 00:00:34.266
+In order to do that we're gonna to go
+to our project Hierarchy.
+
+11
+00:00:34.600 --> 00:00:36.966
+We're going to click on
+the Create button.
+
+12
+00:00:37.600 --> 00:00:41.166
+We're going to go to the
+UI and we're gonna select
+
+13
+00:00:41.166 --> 00:00:43.333
+Text - TextMeshPro.
+
+14
+00:00:43.333 --> 00:00:45.566
+Now the first time you
+do this it might ask you
+
+15
+00:00:45.566 --> 00:00:48.533
+to import the TextMeshPro Essentials.
+
+16
+00:00:48.966 --> 00:00:50.766
+So just make sure
+you do that by clicking
+
+17
+00:00:50.766 --> 00:00:53.200
+on the Import TMP Essentials button.
+
+18
+00:00:55.100 --> 00:00:58.866
+Now TextMeshPro has been
+added to our project.
+
+19
+00:00:59.300 --> 00:01:02.133
+Now TextMeshPro is
+a really cool feature in Unity
+
+20
+00:01:02.133 --> 00:01:04.933
+to be able to add
+different User Interface
+
+21
+00:01:04.933 --> 00:01:08.200
+or UI Elements adding text to our games.
+
+22
+00:01:08.566 --> 00:01:10.766
+So it makes it helpful
+and easy to manage.
+
+23
+00:01:11.000 --> 00:01:13.266
+One of the things you might
+notice you can kind off see,
+
+24
+00:01:13.266 --> 00:01:14.500
+it is very difficult to see,
+
+25
+00:01:14.966 --> 00:01:18.866
+In fact Unity has in our scene added
+
+26
+00:01:19.000 --> 00:01:22.400
+an entirely new Element to our game.
+
+27
+00:01:24.366 --> 00:01:28.066
+So you can see here.
+Down in the lower left that tiny
+
+28
+00:01:28.066 --> 00:01:30.500
+little box is actually our game scene.
+
+29
+00:01:31.133 --> 00:01:34.500
+And this massive
+rectangle here is actually
+
+30
+00:01:34.500 --> 00:01:36.333
+where all of our different text
+
+31
+00:01:36.333 --> 00:01:40.166
+and UI Elements are gonna be.
+In fact if we actually drag
+
+32
+00:01:40.166 --> 00:01:42.766
+this and will make sure
+we have our move tool selected.
+
+33
+00:01:42.766 --> 00:01:46.600
+We can actually move this over
+to different parts of our screen.
+
+34
+00:01:47.966 --> 00:01:49.966
+We'll just undo that for now.
+
+35
+00:01:50.066 --> 00:01:53.966
+Now all of our text and our UI Elements
+
+36
+00:01:54.033 --> 00:01:57.366
+are going to be rendered
+on this thing called a "Canvas."
+
+37
+00:01:57.633 --> 00:01:58.933
+Now this Canvas is actually
+
+38
+00:01:58.933 --> 00:02:01.466
+where all of our different
+Elements are going to go.
+
+39
+00:02:01.466 --> 00:02:03.866
+So if we add in buttons
+or if we add in other text
+
+40
+00:02:03.866 --> 00:02:06.933
+it'll all be held on our Canvas
+
+41
+00:02:06.933 --> 00:02:11.033
+which is the place where it manages
+all of our different UI Elements.
+
+42
+00:02:12.000 --> 00:02:15.333
+Now with our TextMeshPro Text underneath
+
+43
+00:02:15.566 --> 00:02:18.966
+the Canvas we're actually
+going to rename this.
+
+44
+00:02:19.333 --> 00:02:21.533
+So we'll rename it to "Score Text."
+
+45
+00:02:23.066 --> 00:02:26.733
+And you can see here that this has
+a pretty strange position on our scene.
+
+46
+00:02:27.166 --> 00:02:29.400
+And we can move it around
+using our move tool.
+
+47
+00:02:30.033 --> 00:02:34.366
+Or we can do other things
+with our Canvas here to be able
+
+48
+00:02:34.366 --> 00:02:37.600
+to place our text in certain
+locations to make it easier.
+
+49
+00:02:38.133 --> 00:02:39.600
+In our Inspector
+
+50
+00:02:39.600 --> 00:02:41.433
+for our Score Text
+there's this little box
+
+51
+00:02:41.433 --> 00:02:44.633
+on the left hand side for our "Anchor"s.
+
+52
+00:02:45.033 --> 00:02:47.900
+Now with the Canvas
+we can actually Anchor
+
+53
+00:02:47.900 --> 00:02:50.600
+our text in certain
+positions on the screen
+
+54
+00:02:50.900 --> 00:02:53.266
+and base them off of those
+position's values.
+
+55
+00:02:54.000 --> 00:02:57.433
+It's particularly useful if you're doing
+something with different screen sizes.
+
+56
+00:02:57.433 --> 00:03:01.633
+So for example somebody might play this
+game a phone which is very small screen
+
+57
+00:03:02.066 --> 00:03:04.600
+and it can either be
+horizontal or vertical.
+
+58
+00:03:04.600 --> 00:03:07.100
+So it'll have different space
+on the side of your game.
+
+59
+00:03:07.400 --> 00:03:09.400
+Verus in our current game scene
+
+60
+00:03:09.666 --> 00:03:11.966
+we can see the size
+of the box pretty easily.
+
+61
+00:03:12.600 --> 00:03:16.133
+But if we always want to make sure
+that our text is always in the top left.
+
+62
+00:03:16.300 --> 00:03:19.566
+We can Anchor our text
+using this Anchors box.
+
+63
+00:03:19.566 --> 00:03:21.666
+And it'll have you select
+different options.
+
+64
+00:03:21.666 --> 00:03:24.700
+So in fact you can immediately select.
+
+65
+00:03:24.700 --> 00:03:27.866
+For example, I want my text to always
+be Anchored to the top left
+
+66
+00:03:27.866 --> 00:03:32.366
+of our scene. Instead of in the middle.
+And now you can see that the X and the Y
+
+67
+00:03:32.366 --> 00:03:34.400
+positions have actually changed.
+
+68
+00:03:34.400 --> 00:03:36.766
+If I go back to what it was
+by default it was 0 0.
+
+69
+00:03:36.933 --> 00:03:39.566
+If I view the top left,
+you can see that it
+
+70
+00:03:39.566 --> 00:03:41.400
+changes the X and the Y.
+
+71
+00:03:41.633 --> 00:03:46.900
+If I move the text over
+to make it fit the scene.
+
+72
+00:03:49.066 --> 00:03:51.200
+Now you can see it pretty nicely.
+
+73
+00:03:52.700 --> 00:03:54.800
+Make sure we align that properly.
+
+74
+00:03:54.800 --> 00:03:59.000
+So what'll happen is if
+I ever resize my screen
+
+75
+00:04:00.000 --> 00:04:03.233
+our text will always try
+to go to that position.
+
+76
+00:04:06.966 --> 00:04:10.666
+Where we set it in our Canvas.
+
+77
+00:04:11.133 --> 00:04:14.200
+So very helpful.
+So what you're going to do now,
+
+78
+00:04:14.400 --> 00:04:18.166
+is you're going to go
+into your Hierarchy right click.
+
+79
+00:04:18.966 --> 00:04:22.033
+You're going to go down to UI
+
+80
+00:04:23.033 --> 00:04:26.466
+select TextMeshPro - Text.
+
+81
+00:04:26.466 --> 00:04:28.800
+Once you've selected
+that it will probably
+
+82
+00:04:28.800 --> 00:04:31.100
+prompt you to install TextMeshPro.
+
+83
+00:04:31.100 --> 00:04:33.333
+So make sure you do
+that if you haven't done it before.
+
+84
+00:04:33.666 --> 00:04:37.066
+Once it does that you'll
+then have a Canvas Object.
+
+85
+00:04:37.066 --> 00:04:39.100
+And underneath the Canvas Object
+
+86
+00:04:39.100 --> 00:04:42.466
+if you expand it you'll see Score Text.
+
+87
+00:04:43.166 --> 00:04:46.600
+Just make sure that you rename
+the text Element to be Score Text.
+
+88
+00:04:47.033 --> 00:04:49.400
+And then go
+into the "Rect Transform" Component.
+
+89
+00:04:50.066 --> 00:04:52.066
+Select the Anchors
+
+90
+00:04:52.333 --> 00:04:55.666
+and you're going to select
+the top left Anchor preset
+
+91
+00:04:57.600 --> 00:05:00.333
+and then just make sure 
+that you reposition your new
+
+92
+00:05:00.333 --> 00:05:03.533
+text to the top left corner using
+the move tool.
+
+93
+00:05:04.066 --> 00:05:06.500
+So that way it's always
+bound to the top left corner.
+
+94
+00:05:07.033 --> 00:05:09.600
+And it's not just awkwardly sitting
+in the middle of your screen.
+
+95
+00:05:09.833 --> 00:05:11.833
+Now it's your turn.
+
+96
+00:05:12.266 --> 00:05:14.100
+[music]

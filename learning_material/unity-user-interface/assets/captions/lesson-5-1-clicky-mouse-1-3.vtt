@@ -1,0 +1,402 @@
+WEBVTT
+
+1
+00:00:00.433 --> 00:00:02.933
+[music]
+
+2
+00:00:05.533 --> 00:00:09.233
+[Instructor] We have each of our
+different Prefabs created
+
+3
+00:00:09.600 --> 00:00:11.633
+and we've applied
+our Components to them.
+
+4
+00:00:12.900 --> 00:00:16.166
+So now we're actually going to use
+our "Target" Script to control
+
+5
+00:00:16.633 --> 00:00:18.966
+the force that they move in the air,
+
+6
+00:00:19.066 --> 00:00:21.866
+the Random position that they start
+off at the bottom of the scene,
+
+7
+00:00:22.400 --> 00:00:24.700
+and then "Torque()" to be
+able to rotate the Object.
+
+8
+00:00:25.600 --> 00:00:27.666
+If you double-click
+on your Target Script
+
+9
+00:00:29.000 --> 00:00:33.600
+now with our Target Script open
+we're going to create some variables.
+
+10
+00:00:34.066 --> 00:00:37.966
+So we're going to create
+a private variable for our Rigidbody
+
+11
+00:00:38.833 --> 00:00:40.966
+so that we can just find
+it using "getComponent<>()".
+
+12
+00:00:42.733 --> 00:00:46.700
+And we'll call this "targetRb" since
+each one of our different Objects
+
+13
+00:00:46.700 --> 00:00:48.766
+are the different Targets
+we're trying to hit.
+
+14
+00:00:49.566 --> 00:00:52.833
+And our Start() method
+we're going to take targetRb
+
+15
+00:00:53.900 --> 00:00:56.733
+and we'll set it to be the Component
+
+16
+00:00:57.766 --> 00:01:00.000
+on our Object which is our Rigidbody.
+
+17
+00:01:02.100 --> 00:01:04.200
+Now that we have
+our Rigidbody Component,
+
+18
+00:01:04.200 --> 00:01:06.500
+we need to apply a force on our Object
+
+19
+00:01:06.500 --> 00:01:08.533
+so that when it Spawns it moves up
+
+20
+00:01:08.533 --> 00:01:10.533
+in our scene so that it can fall down.
+
+21
+00:01:11.666 --> 00:01:13.700
+So using our target Rigidbody
+
+22
+00:01:14.600 --> 00:01:16.866
+we're going to add a force
+
+23
+00:01:17.700 --> 00:01:21.833
+in this case our force is going
+to be in the up direction
+
+24
+00:01:23.466 --> 00:01:26.200
+and we'll multiply
+this by a Random value for now
+
+25
+00:01:26.200 --> 00:01:30.133
+so we're actually going to use
+our "Random.Range()" method
+
+26
+00:01:31.233 --> 00:01:33.666
+and we'll set it just to test,
+
+27
+00:01:33.666 --> 00:01:36.866
+we'll use 12 as the lowest
+value that it could be
+
+28
+00:01:36.866 --> 00:01:38.733
+and 16 as the highest.
+
+29
+00:01:39.600 --> 00:01:42.033
+We actually want this force
+applied instantly
+
+30
+00:01:42.033 --> 00:01:47.900
+so we'll use a "ForceMode"
+and we'll use our "Impulse."
+
+31
+00:01:49.800 --> 00:01:52.366
+Another thing that we wanna do 
+is we actually want this Object
+
+32
+00:01:52.366 --> 00:01:56.200
+to rotate and move
+as it gets through our scene.
+
+33
+00:01:56.666 --> 00:01:58.500
+So we're gonna use our Rigidbody again,
+
+34
+00:01:59.766 --> 00:02:02.066
+this time we're actually
+going to use Torque().
+
+35
+00:02:03.266 --> 00:02:06.900
+So "AddTorque()" and so Torque()
+will actually
+
+36
+00:02:06.900 --> 00:02:09.466
+apply the force for our Objects
+to rotate.
+
+37
+00:02:10.100 --> 00:02:12.733
+In this case we just need the directions
+
+38
+00:02:12.833 --> 00:02:16.366
+that the Torque() will be applied
+in so we'll use Random Ranges
+
+39
+00:02:16.366 --> 00:02:24.100
+for our X, our Y, and our Z.
+So we're randomly generate a value
+
+40
+00:02:24.100 --> 00:02:30.200
+that it will rotate
+in say -10 and 10, so that's on the X.
+
+41
+00:02:30.200 --> 00:02:32.633
+We need to generate another Random value
+
+42
+00:02:32.866 --> 00:02:34.700
+I'm just going to actually reuse
+this bit
+
+43
+00:02:34.700 --> 00:02:36.900
+of code so I'm actually
+just gonna copy this.
+
+44
+00:02:38.866 --> 00:02:41.266
+I'll paste it into our Y-Value
+
+45
+00:02:41.266 --> 00:02:45.533
+and then I'll paste it into our Z-Value
+so our X, our Y, and our Z
+
+46
+00:02:45.533 --> 00:02:47.833
+are all calculating
+different Random values
+
+47
+00:02:47.833 --> 00:02:49.866
+between -10 and 10.
+
+48
+00:02:49.866 --> 00:02:52.000
+Again, we want this force applied
+instantly
+
+49
+00:02:52.000 --> 00:02:53.933
+so I'll actually use another ForceMode.
+
+50
+00:02:56.766 --> 00:02:59.100
+And then we want to set the position
+
+51
+00:02:59.100 --> 00:03:02.466
+of our Object randomly on our X.
+
+52
+00:03:04.166 --> 00:03:07.600
+Finally, what we're gonna do is
+we're going to create a Random
+
+53
+00:03:07.600 --> 00:03:10.733
+place for our different Object to Spawn.
+
+54
+00:03:11.033 --> 00:03:13.100
+So we're going to get the position
+
+55
+00:03:14.733 --> 00:03:19.733
+of our current Object and we'll
+set this to be a "new Vector3"
+
+56
+00:03:20.466 --> 00:03:22.833
+and for the X it'll be a Random.Range()
+
+57
+00:03:26.833 --> 00:03:31.300
+so I'll try and keep it between
+-4 and 4.
+
+58
+00:03:34.033 --> 00:03:37.200
+This way it stays between
+the left and right side of our screen
+
+59
+00:03:37.566 --> 00:03:41.633
+for our Y-Value, we'll set
+it to something like -6
+
+60
+00:03:41.633 --> 00:03:43.833
+that way it Spawns underneath the scene
+
+61
+00:03:43.833 --> 00:03:46.366
+and then for our Z-Value
+we can set it to 0.
+
+62
+00:03:47.466 --> 00:03:50.733
+Now if we wanna test
+and see how this looks,
+
+63
+00:03:53.000 --> 00:03:56.500
+we can actually drag our Prefabs
+into our Hierarchy and it'll randomly
+
+64
+00:03:56.500 --> 00:03:58.666
+create those effects.
+
+65
+00:04:00.400 --> 00:04:03.633
+So it has a Random position,
+it's got the Random force applied.
+
+66
+00:04:08.100 --> 00:04:12.000
+Now one little bit of clarity
+that we can actually add,
+
+67
+00:04:12.000 --> 00:04:15.633
+so since we're not actually
+using the Z-Value here,
+
+68
+00:04:15.633 --> 00:04:20.566
+we can actually remove
+this and since we're not really moving
+
+69
+00:04:20.566 --> 00:04:23.466
+anything on the Z in general,
+
+70
+00:04:24.033 --> 00:04:27.533
+in this case it'll set the X
+to be a Random.Range(),
+
+71
+00:04:27.533 --> 00:04:31.166
+the Y will be -6 underneath
+what our Player can see
+
+72
+00:04:31.566 --> 00:04:35.166
+and our Z is always just gonna be 0.
+So what you're gonna do is
+
+73
+00:04:35.266 --> 00:04:39.100
+in your Target Script you're going to
+
+74
+00:04:39.100 --> 00:04:41.000
+create a Rigidbody variable,
+
+75
+00:04:41.833 --> 00:04:44.600
+you're gonna get the reference
+for that Rigidbody Component,
+
+76
+00:04:45.300 --> 00:04:47.233
+now that you have your Rigidbody
+Component
+
+77
+00:04:47.233 --> 00:04:49.633
+Add a Force in the up direction
+
+78
+00:04:49.866 --> 00:04:53.566
+using a Random strength between 12 an 16
+
+79
+00:04:54.566 --> 00:04:56.766
+and make sure that you apply
+the force with an impulse.
+
+80
+00:04:57.633 --> 00:04:59.633
+In our next line of code
+
+81
+00:04:59.633 --> 00:05:01.466
+we're going to add Torque() to apply
+
+82
+00:05:01.466 --> 00:05:04.233
+rotation to our Object
+and we're just going to use
+
+83
+00:05:04.900 --> 00:05:08.533
+randomly generated values for all
+the different X, Y, and Z.
+
+84
+00:05:09.566 --> 00:05:12.633
+Then we're going to set the position
+
+85
+00:05:12.633 --> 00:05:16.700
+of our Object to be a Random.Range()
+
+86
+00:05:16.900 --> 00:05:21.166
+on our X and just below what our Player
+can see on the Y. Now it's your turn.
+
+87
+00:05:22.100 --> 00:05:24.600
+[music]

@@ -1,0 +1,178 @@
+WEBVTT
+
+1
+00:00:01.266 --> 00:00:03.300
+[music]
+
+2
+00:00:05.733 --> 00:00:08.466
+[Instructor] So now we've
+Imported even more Assets
+
+3
+00:00:08.466 --> 00:00:10.700
+that we can use,
+we've set up our Player.
+
+4
+00:00:10.700 --> 00:00:14.800
+Now we should set up all of the other
+placeholders that we have,
+
+5
+00:00:14.900 --> 00:00:20.000
+so things like our walls here,
+and some of our other Prefabs,
+
+6
+00:00:20.000 --> 00:00:24.200
+so now I'm going to go,
+and replace and add in Assets to use
+
+7
+00:00:24.200 --> 00:00:26.700
+in place of these cubes in our Powerup.
+
+8
+00:00:27.500 --> 00:00:32.266
+All right, cool, so I did a little bit
+of messing around with all
+
+9
+00:00:32.266 --> 00:00:35.800
+the different Prefabs, and I just kind 
+of cleaned up my scene a lot more,
+
+10
+00:00:35.800 --> 00:00:37.666
+so you can kind of see,
+right off the bat,
+
+11
+00:00:37.666 --> 00:00:40.933
+I removed those walls I had,
+and I changed them into these rocks.
+
+12
+00:00:41.433 --> 00:00:45.600
+That way I have a good sense of where
+
+13
+00:00:45.600 --> 00:00:49.000
+that wall was supposed to be,
+and then when I press Play,
+
+14
+00:00:49.000 --> 00:00:53.400
+we can move around, you'll see
+that I can run into the rock walls here,
+
+15
+00:00:54.033 --> 00:00:56.166
+we have those little
+hearts that I can pick up,
+
+16
+00:00:56.166 --> 00:00:58.966
+you can see all of the different
+animals and objects,
+
+17
+00:00:58.966 --> 00:01:02.833
+we've got these rocks that spawn,
+they tumble kind of down the scene here,
+
+18
+00:01:02.833 --> 00:01:05.166
+kind of like they're going
+downhill or something like that.
+
+19
+00:01:05.266 --> 00:01:09.133
+I also kind of changed the rotations
+on some of the different animals,
+
+20
+00:01:09.133 --> 00:01:11.133
+so now when I get bumped by, like,
+
+21
+00:01:11.133 --> 00:01:15.000
+a moose or something like that,
+we don't just magically rotate.
+
+22
+00:01:15.300 --> 00:01:17.400
+So definitely a lot of fixing
+we need to do.
+
+23
+00:01:17.400 --> 00:01:19.066
+Weird stuff definitely
+still happening.
+
+24
+00:01:19.066 --> 00:01:21.100
+I think I need to change
+some of the spawn areas now
+
+25
+00:01:21.100 --> 00:01:25.666
+because of those rocks, 
+but, we'll fix that in a bit.
+
+26
+00:01:26.466 --> 00:01:28.833
+So what you're going to do is
+just clean up your scene a little bit.
+
+27
+00:01:28.833 --> 00:01:30.866
+If you have any walls that you're using,
+
+28
+00:01:30.866 --> 00:01:32.900
+you can replace those walls,
+
+29
+00:01:32.900 --> 00:01:35.733
+and then I went in, and replaced
+all of the different Assets,
+
+30
+00:01:35.733 --> 00:01:39.733
+in each of my Prefabs,
+so I added in some other
+
+31
+00:01:40.166 --> 00:01:44.833
+Prefabs that I had already had,
+like the animal doe, I have a moose,
+
+32
+00:01:44.833 --> 00:01:50.500
+I have a fox, I changed one
+into a rock, that sphere I had,
+
+33
+00:01:51.000 --> 00:01:53.733
+and the Powerup I changed
+to that cool little heart
+
+34
+00:01:54.566 --> 00:01:56.566
+that I picked up from the Asset Store.
+
+35
+00:01:56.800 --> 00:02:00.633
+So, go in,
+rearrange things in your scene,
+
+36
+00:02:00.633 --> 00:02:03.900
+go replace all of the different Prefabs
+that you have for whatever you need.
+
+37
+00:02:05.833 --> 00:02:09.266
+[music]

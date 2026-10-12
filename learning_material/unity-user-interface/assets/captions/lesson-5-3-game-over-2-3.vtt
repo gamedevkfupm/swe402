@@ -1,0 +1,501 @@
+WEBVTT
+
+1
+00:00:01.166 --> 00:00:04.000
+[music]
+
+2
+00:00:06.000 --> 00:00:09.633
+[Instructor] When we play our game,
+you can see that the Game Over Text
+
+3
+00:00:09.633 --> 00:00:11.766
+just pops up,
+which is definitely no Good,
+
+4
+00:00:11.766 --> 00:00:13.766
+because we immediately lost the game.
+
+5
+00:00:14.566 --> 00:00:18.166
+So we're going to set
+it so it only pops up
+
+6
+00:00:18.166 --> 00:00:21.866
+when one of our Good Objects
+hits our Sensor at the bottom.
+
+7
+00:00:23.166 --> 00:00:27.200
+So in our GameManager Script,
+we're going to create a method
+
+8
+00:00:27.200 --> 00:00:30.700
+to be able to call "SetActive()"
+whenever we need it to.
+
+9
+00:00:31.433 --> 00:00:33.900
+So underneath where we UpdateScore(),
+
+10
+00:00:33.900 --> 00:00:35.833
+so we'll create another public method,
+
+11
+00:00:35.833 --> 00:00:38.533
+because we'll actually need
+to use this outside of this class.
+
+12
+00:00:38.533 --> 00:00:40.900
+Make it a void so it
+doesn't return anything.
+
+13
+00:00:41.300 --> 00:00:46.266
+And it'll just be GameOver().
+We don't need to pass it any values,
+
+14
+00:00:46.266 --> 00:00:49.666
+so it'll just set the game to
+be over when we need it to.
+
+15
+00:00:50.000 --> 00:00:52.233
+And now that that text
+we have in the start,
+
+16
+00:00:52.233 --> 00:00:56.533
+this line of code, we can cut
+this with control or command X.
+
+17
+00:00:59.266 --> 00:01:02.566
+In GameOver(), we'll just paste that back
+
+18
+00:01:02.566 --> 00:01:04.300
+with control or command V.
+
+19
+00:01:04.300 --> 00:01:07.233
+And then let's just clean
+up this empty space here,
+
+20
+00:01:08.100 --> 00:01:13.000
+so our code is a little bit
+more readable. Perfect.
+
+21
+00:01:13.000 --> 00:01:15.000
+So now we can call GameOver()
+
+22
+00:01:15.000 --> 00:01:17.133
+whenever we use the GameManager,
+
+23
+00:01:17.133 --> 00:01:19.933
+so that way it can pop
+up to Game Over Text.
+
+24
+00:01:19.933 --> 00:01:24.000
+In fact, we already have a place
+where we use the GameManager.
+
+25
+00:01:24.766 --> 00:01:28.166
+In our Target Script, we actually 
+had the gameManager already set up
+
+26
+00:01:28.566 --> 00:01:30.833
+to be able to update 
+the score when we need it to.
+
+27
+00:01:31.500 --> 00:01:34.966
+So what we're gonna do
+is we're actually going
+
+28
+00:01:34.966 --> 00:01:38.333
+to find the bit of code where we collide
+
+29
+00:01:38.333 --> 00:01:41.200
+with our Sensor bar,
+at the bottom of the scene.
+
+30
+00:01:42.233 --> 00:01:45.533
+And this is actually where
+we'll call the GameOver().
+
+31
+00:01:48.900 --> 00:01:51.666
+And we'll just use that gameManager
+variable that we had before,
+
+32
+00:01:52.266 --> 00:01:55.533
+and we can just call GameOver() now,
+because it's the public method.
+
+33
+00:01:57.866 --> 00:01:59.933
+So now when we test our game,
+
+34
+00:02:00.733 --> 00:02:03.966
+whenever one of our Objects here runs
+
+35
+00:02:03.966 --> 00:02:05.233
+into the Sensor at the bottom.
+
+36
+00:02:05.233 --> 00:02:07.500
+And we'll just let it go, so
+that way it hits the Sensor.
+
+37
+00:02:08.300 --> 00:02:10.233
+Now we have a GameOver().
+
+38
+00:02:10.233 --> 00:02:12.066
+Which is Good, but in this case,
+
+39
+00:02:12.066 --> 00:02:13.700
+we only want our GameOver() to pop up
+
+40
+00:02:13.700 --> 00:02:18.133
+whenever one of these
+Good items hits the bottom of the scene.
+
+41
+00:02:19.366 --> 00:02:21.800
+In fact, if we select our Sensor here,
+
+42
+00:02:23.100 --> 00:02:26.966
+and then we zoom in on it
+using our focus, our F key,
+
+43
+00:02:26.966 --> 00:02:29.266
+while our mouse is in the scene.
+Zoom back in
+
+44
+00:02:29.266 --> 00:02:33.566
+so we can see the actual game.
+So we want to be able to know
+
+45
+00:02:33.566 --> 00:02:36.600
+when one of the Objects
+that runs into it is one
+
+46
+00:02:36.600 --> 00:02:38.800
+that we want to trigger a GameOver().
+
+47
+00:02:38.800 --> 00:02:42.300
+So what we'll do is we'll
+actually go into our Bad Prefab.
+
+48
+00:02:44.733 --> 00:02:47.866
+And then in our Prefab,
+we're going to add a Tag
+
+49
+00:02:47.866 --> 00:02:49.766
+in our Inspector on the right side,
+
+50
+00:02:49.766 --> 00:02:52.500
+click on "Untagged," we'll "Add Tag..."
+
+51
+00:02:53.600 --> 00:02:56.466
+Since there's not currently any
+in there, we'll click the "+" button.
+
+52
+00:02:56.833 --> 00:02:59.100
+We'll call this one just "Bad,"
+so it'll be a Tag
+
+53
+00:02:59.100 --> 00:03:01.200
+for any Bad items.
+
+54
+00:03:01.200 --> 00:03:04.433
+Save, now make sure you
+select the Prefab again,
+
+55
+00:03:04.433 --> 00:03:08.766
+and then just select Tag and
+change the Tag to be Bad.
+
+56
+00:03:09.066 --> 00:03:12.033
+So now we have a way of knowing
+if we run into a Bad Object.
+
+57
+00:03:13.600 --> 00:03:15.900
+So if we leave the Prefab preview.
+
+58
+00:03:16.533 --> 00:03:20.700
+So now that we have our Bad Tag, we can
+actually see which Objects we want
+
+59
+00:03:20.700 --> 00:03:22.900
+to collide with the trigger to be able
+
+60
+00:03:22.900 --> 00:03:26.433
+to make the GameOver() happen.
+So we'll use an if() statement
+
+61
+00:03:26.433 --> 00:03:28.633
+so that we can actually
+see when that happens.
+
+62
+00:03:29.266 --> 00:03:32.400
+And we're going to use a condition
+
+63
+00:03:32.400 --> 00:03:35.166
+where if the "gameObject,"
+
+64
+00:03:37.900 --> 00:03:41.400
+who has a Tag, and that's called Bad,
+
+65
+00:03:43.100 --> 00:03:46.400
+then we want the GameOver() to happen.
+
+66
+00:03:49.600 --> 00:03:53.200
+So in this case, if the gameObject
+that falls to the bottom,
+
+67
+00:03:53.200 --> 00:03:55.366
+if our Skull hits the Sensor,
+
+68
+00:03:55.866 --> 00:03:58.300
+then it will trigger our GameOver().
+
+69
+00:03:59.500 --> 00:04:01.700
+But we don't actually want that to happen.
+
+70
+00:04:01.700 --> 00:04:04.600
+What we want is whenever
+any of the Good Objects run
+
+71
+00:04:04.600 --> 00:04:05.900
+into that Sensor, so actually,
+
+72
+00:04:05.900 --> 00:04:10.100
+if we just put a not
+or a exclamation point
+
+73
+00:04:10.600 --> 00:04:12.100
+so it will negate the statement.
+
+74
+00:04:12.100 --> 00:04:14.666
+So if the gameObject that runs
+
+75
+00:04:14.666 --> 00:04:17.766
+into the Sensor is not Bad,
+
+76
+00:04:17.766 --> 00:04:19.766
+so if it's one of our Good ones,
+
+77
+00:04:19.766 --> 00:04:22.600
+then it should use the GameOver() method.
+
+78
+00:04:22.800 --> 00:04:24.766
+So let's see if that works.
+
+79
+00:04:24.766 --> 00:04:27.266
+So if we test it really quick.
+
+80
+00:04:28.666 --> 00:04:31.300
+Let's click on some of these boxes.
+
+81
+00:04:33.433 --> 00:04:36.000
+And then if we let the Skull actually go.
+
+82
+00:04:37.233 --> 00:04:41.900
+Huh, so the Skull still
+triggered our GameOver().
+
+83
+00:04:42.900 --> 00:04:43.866
+You know why that happened?
+
+84
+00:04:43.866 --> 00:04:46.033
+Because I forgot to save my Script.
+
+85
+00:04:46.300 --> 00:04:48.066
+Always make sure you save.
+
+86
+00:04:48.066 --> 00:04:51.966
+So now that we save,
+now if we test our game,
+
+87
+00:04:52.733 --> 00:04:54.900
+press Play, so let's get
+some of the boxes out
+
+88
+00:04:54.900 --> 00:04:58.466
+of the way first, just to make sure
+that one of the Skulls falls down.
+
+89
+00:04:59.966 --> 00:05:02.866
+So no GameOver().
+And now there's a GameOver()
+
+90
+00:05:02.866 --> 00:05:06.033
+when one of those black
+boxes hit the Sensor. Perfect.
+
+91
+00:05:07.333 --> 00:05:10.966
+So what you're gonna do,
+is in your GameManager Script,
+
+92
+00:05:12.866 --> 00:05:15.600
+you're going to create
+another public method
+
+93
+00:05:15.600 --> 00:05:18.733
+for GameOver(), and then
+we're actually just going
+
+94
+00:05:18.733 --> 00:05:20.566
+to take that line of code that we had,
+
+95
+00:05:20.566 --> 00:05:24.666
+and start to set our game
+over Object to active
+
+96
+00:05:25.866 --> 00:05:27.666
+when we call this method.
+
+97
+00:05:27.666 --> 00:05:29.633
+Now in our Target Script,
+
+98
+00:05:29.633 --> 00:05:32.433
+we're gonna go down to our
+OnTriggerEnter() method,
+
+99
+00:05:33.200 --> 00:05:35.133
+and we're gonna add in
+some more lines of code.
+
+100
+00:05:35.600 --> 00:05:40.600
+So if(!) exclamation point
+for the negation operator,
+
+101
+00:05:41.966 --> 00:05:44.666
+gameObject is a Bad Object.
+
+102
+00:05:45.200 --> 00:05:49.966
+So if the gameObject is not,
+because of the negation,
+
+103
+00:05:50.533 --> 00:05:55.266
+a Bad Object,
+then we start the GameOver() screen.
+
+104
+00:05:56.133 --> 00:05:58.600
+And then in Unity, just make sure
+
+105
+00:05:58.600 --> 00:06:02.366
+that you go to your Bad
+Prefab, apply the Bad Tag
+
+106
+00:06:02.366 --> 00:06:04.200
+to it, so that way we can check
+
+107
+00:06:04.200 --> 00:06:08.000
+when a Bad Object runs into the Sensor,
+then we don't do anything.
+
+108
+00:06:08.000 --> 00:06:10.266
+But if one of our Good ones does,
+then we do something.
+
+109
+00:06:10.533 --> 00:06:12.666
+Now it's your turn.
+
+110
+00:06:12.666 --> 00:06:14.866
+[music]

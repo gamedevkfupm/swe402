@@ -1,0 +1,524 @@
+WEBVTT
+
+1
+00:00:00.766 --> 00:00:03.766
+[music]
+
+2
+00:00:05.733 --> 00:00:09.433
+[Instructor] Now we have our Assets
+imported and ready to go.
+
+3
+00:00:09.433 --> 00:00:12.000
+The first thing we're going to do is
+we're actually going to replace
+
+4
+00:00:12.000 --> 00:00:16.100
+our "Player" Object
+with one of these Assets.
+
+5
+00:00:16.433 --> 00:00:18.300
+Now, in order to do
+that we're actually going to
+
+6
+00:00:18.300 --> 00:00:20.333
+turn the Player into a Prefab first.
+
+7
+00:00:21.166 --> 00:00:23.500
+So now you can see that
+Player Ball has been added
+
+8
+00:00:23.500 --> 00:00:25.766
+as a Prefab in the Prefabs Folder.
+
+9
+00:00:26.666 --> 00:00:31.266
+If I double-click on Player,
+it then opens up Prefab mode.
+
+10
+00:00:31.800 --> 00:00:34.400
+So now in our scene, we
+have that Prefab view,
+
+11
+00:00:34.400 --> 00:00:37.033
+and you can see our Ball here,
+our Sphere.
+
+12
+00:00:37.633 --> 00:00:40.633
+Now what I'm actually going to do is,
+
+13
+00:00:40.633 --> 00:00:44.966
+I'm going to select
+one of my "Animals" here,
+
+14
+00:00:44.966 --> 00:00:46.833
+and I'll pick a "Forest" Animal.
+
+15
+00:00:47.666 --> 00:00:50.200
+So in my Forest Animals,
+I have all of these different options.
+
+16
+00:00:50.200 --> 00:00:53.500
+I have Doe, Foxes, Moose, Stags,
+
+17
+00:00:53.500 --> 00:00:55.633
+so think I'm going to take
+one of these Stags.
+
+18
+00:00:55.633 --> 00:00:57.933
+Now, what I'm going to do
+is I'm going to left-click
+
+19
+00:00:57.933 --> 00:01:03.400
+on this Animal_Stag_01 Asset,
+and drop it into the Hierarchy,
+
+20
+00:01:03.666 --> 00:01:06.066
+where our Player Prefab is open.
+
+21
+00:01:08.100 --> 00:01:12.833
+Now, you can see that our Animal Stag
+
+22
+00:01:12.833 --> 00:01:16.866
+has now become a child
+of our original Player Object.
+
+23
+00:01:18.533 --> 00:01:21.200
+You can even see the Ball
+is still at the bottom,
+
+24
+00:01:22.200 --> 00:01:25.500
+and we have the Stag here.
+So what's happening here is actually
+
+25
+00:01:25.500 --> 00:01:27.900
+something called nesting Prefab.
+
+26
+00:01:27.900 --> 00:01:30.766
+So we have this Prefab
+here that's a child
+
+27
+00:01:31.300 --> 00:01:33.633
+of an original Object, and in fact,
+
+28
+00:01:33.633 --> 00:01:37.900
+because the Animal Stag is a Prefab,
+
+29
+00:01:38.266 --> 00:01:42.233
+if we ever were to make changes
+to our Animal Stag, for example,
+
+30
+00:01:42.233 --> 00:01:45.933
+it would actually add those
+changes into this Prefab here,
+
+31
+00:01:45.933 --> 00:01:51.033
+so it's kinda cool. You can use
+this to some really cool effects,
+
+32
+00:01:51.033 --> 00:01:55.133
+like if you want a tree that has some
+mushrooms around it,
+
+33
+00:01:55.133 --> 00:01:58.333
+or something like that, and you want to
+change some of the mushrooms themselves,
+
+34
+00:01:58.766 --> 00:02:01.333
+nested Prefabs can allow you
+to do some really cool things,
+
+35
+00:02:01.333 --> 00:02:04.966
+so you can kind of create
+these mass set pieces
+
+36
+00:02:04.966 --> 00:02:07.666
+using a lot of different Prefabs, 
+and then just have one Prefab
+
+37
+00:02:07.666 --> 00:02:10.166
+to hold it all.
+You'll notice in the game view
+
+38
+00:02:10.166 --> 00:02:13.233
+that our Stag here was added
+to our scene.
+
+39
+00:02:13.233 --> 00:02:15.633
+It's a little large, it's
+much larger than our Ball is,
+
+40
+00:02:15.633 --> 00:02:18.633
+so we're actually going
+to scale this down quite a bit,
+
+41
+00:02:18.633 --> 00:02:22.633
+maybe, let's do like,
+4 times as much on each.
+
+42
+00:02:23.400 --> 00:02:25.733
+That's very small, let's do 6 times.
+
+43
+00:02:28.066 --> 00:02:30.700
+Okay, cool, not too bad,
+looks pretty good.
+
+44
+00:02:31.700 --> 00:02:35.166
+Now, one of the issues
+with our Stag here
+
+45
+00:02:35.166 --> 00:02:37.600
+is that it actually does
+not have a Collider on it.
+
+46
+00:02:38.400 --> 00:02:40.900
+So in fact,
+we'll need to add a Collider.
+
+47
+00:02:41.600 --> 00:02:45.500
+So, with our Animal Stag selected,
+we add a Component,
+
+48
+00:02:46.600 --> 00:02:48.633
+and we'll add a "Box Collider."
+
+49
+00:02:49.366 --> 00:02:52.100
+Now you can see
+that the Box Collider size
+
+50
+00:02:52.100 --> 00:02:57.766
+is incredibly large so we're
+going to fix that really quick.
+
+51
+00:02:58.733 --> 00:03:01.100
+So I'm actually going to select
+the "Edit Collider" button
+
+52
+00:03:01.100 --> 00:03:03.600
+and now I can actually click
+on these little dots here,
+
+53
+00:03:07.000 --> 00:03:11.766
+and then, line it up appropriately.
+
+54
+00:03:19.333 --> 00:03:22.966
+Cool, and then we'll just do
+the same thing on the sides.
+
+55
+00:03:29.066 --> 00:03:31.166
+So now we have our "Box Collider" here,
+so that we can track
+
+56
+00:03:31.166 --> 00:03:34.866
+our Collisions again,
+and it's at a good size.
+
+57
+00:03:35.300 --> 00:03:37.666
+I'll uncheck the Edit Collider Box.
+
+58
+00:03:39.000 --> 00:03:41.566
+Now in order to make this
+Player Ball disappear,
+
+59
+00:03:41.566 --> 00:03:46.566
+we can actually just select
+the Player, the parent Object.
+
+60
+00:03:46.933 --> 00:03:50.233
+Under Player, we can uncheck
+the "Mesh Renderer,"
+
+61
+00:03:50.233 --> 00:03:54.766
+and actually, that will remove
+that Ball from our scene.
+
+62
+00:03:56.933 --> 00:03:59.833
+We don't actually need that
+Sphere Collider there anymore
+
+63
+00:03:59.833 --> 00:04:05.733
+because we have that Collider
+on our Stag Prefab, so remove that.
+
+64
+00:04:07.300 --> 00:04:09.800
+And then the one thing that
+we'll do is, on our Animal Stag,
+
+65
+00:04:09.800 --> 00:04:13.466
+I'm going to add this bouncy
+material that I created.
+
+66
+00:04:16.300 --> 00:04:19.000
+So now the bouncy material is
+applied to the Stag itself.
+
+67
+00:04:20.566 --> 00:04:25.533
+So now if I leave our Prefab
+mode by clicking on the arrow,
+
+68
+00:04:25.533 --> 00:04:29.100
+you'll see my Stag is now
+in the center of my scene,
+
+69
+00:04:30.400 --> 00:04:32.566
+and if I press Play,
+we'll see what happens.
+
+70
+00:04:33.033 --> 00:04:35.200
+You can see that it has
+this cool running animation.
+
+71
+00:04:40.900 --> 00:04:45.900
+Let's see what happens
+when we hit oh, oh, oh!
+
+72
+00:04:46.266 --> 00:04:48.266
+Cool, so the bounciness works.
+
+73
+00:04:48.633 --> 00:04:50.933
+Might need to play around
+with some of the movement.
+
+74
+00:04:51.466 --> 00:04:54.400
+Think I might have
+broken something might be a little
+
+75
+00:04:54.400 --> 00:04:56.266
+too far into the ground or something.
+
+76
+00:04:59.833 --> 00:05:01.733
+Then actually, I think I want to do is,
+
+77
+00:05:01.733 --> 00:05:08.533
+I might have to constrain
+the rotation of the Stag because,
+
+78
+00:05:09.966 --> 00:05:12.566
+if I run into something,
+I think it turns a little bit;
+
+79
+00:05:12.566 --> 00:05:14.600
+yep, and then it has a weird side angle
+
+80
+00:05:14.600 --> 00:05:17.566
+and that definitely looks
+a little strange at some point; oh.
+
+81
+00:05:19.100 --> 00:05:22.000
+Definitely kinda funny though,
+but it looks weird
+
+82
+00:05:22.000 --> 00:05:28.566
+on the game so I'll have to change that.
+Oh, and now I'm just sideways. Cool.
+
+83
+00:05:29.666 --> 00:05:32.066
+Okay, so, what you're going to do is,
+
+84
+00:05:32.066 --> 00:05:34.100
+you're going to take your Player Object
+
+85
+00:05:34.633 --> 00:05:37.966
+from your scene in your Hierarchy,
+drag it into the Prefabs Folder,
+
+86
+00:05:37.966 --> 00:05:42.200
+so you can make a Player Prefab.
+Double-click on the Player Prefab
+
+87
+00:05:42.200 --> 00:05:44.500
+so that it opens up the Prefab mode.
+
+88
+00:05:45.566 --> 00:05:47.800
+In Prefab mode, you're then going to go
+
+89
+00:05:47.800 --> 00:05:50.200
+into the Course Library Folder
+that we imported,
+
+90
+00:05:50.633 --> 00:05:53.200
+go under Animals, select
+something that you want to use
+
+91
+00:05:53.200 --> 00:05:55.800
+or you can even use a character,
+whichever one fits your game.
+
+92
+00:05:55.800 --> 00:05:57.633
+Vehicles, whatever it may be.
+
+93
+00:05:58.766 --> 00:06:00.800
+In my case, I chose Animals
+because this is like,
+
+94
+00:06:00.800 --> 00:06:02.800
+our deer here, running through a valley.
+
+95
+00:06:04.466 --> 00:06:07.633
+Drag whichever Asset you want
+to use into the Hierarchy.
+
+96
+00:06:08.066 --> 00:06:10.933
+It will actually nest
+underneath that Player Object.
+
+97
+00:06:11.200 --> 00:06:13.566
+So it's helpful because
+now we don't need to use
+
+98
+00:06:13.566 --> 00:06:17.466
+that Sphere anymore, we can
+just use our chosen Asset.
+
+99
+00:06:17.900 --> 00:06:22.466
+If you want to remove your
+original Sphere from the game,
+
+100
+00:06:22.666 --> 00:06:25.633
+just select the Player Object,
+uncheck the Sphere Collider
+
+101
+00:06:25.633 --> 00:06:27.966
+and the Mesh Renderer
+so that both disappear,
+
+102
+00:06:28.866 --> 00:06:31.733
+and then make sure,
+on the Asset you've imported,
+
+103
+00:06:31.733 --> 00:06:35.200
+that you apply a Box Collider,
+or a Capsule Collider,
+
+104
+00:06:35.200 --> 00:06:37.866
+or a Ball Collider, whichever one fits
+
+105
+00:06:37.866 --> 00:06:40.333
+with the shape of whatever
+you're working with.
+
+106
+00:06:40.333 --> 00:06:43.533
+When you exit your Prefab mode,
+you can see
+
+107
+00:06:43.533 --> 00:06:46.466
+that the Asset you've chosen
+is now in the scene,
+
+108
+00:06:46.900 --> 00:06:48.833
+and then when you press Play,
+you can test it out,
+
+109
+00:06:48.833 --> 00:06:52.933
+and see if you need to edit anything.
+Now it's your turn.
+
+110
+00:06:53.900 --> 00:06:56.900
+[music]
