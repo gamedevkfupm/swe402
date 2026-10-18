@@ -40,6 +40,28 @@ Total contact hours: 45
 - Production and Industry Practices
 - Game Development Project
 
+## Tentative Schedule
+
+The following 15-week plan is tentative and may change as the course progresses. It follows the `Calendar_v4` sheet in [the course schedule](swe402_course_schedule.xlsx). Week numbers indicate the planned teaching sequence. Book chapters refer to the main textbook listed under Learning Resources.
+
+| Week | Theme | Theory (Coursera & Unity Learn) | Practice (Unity Learn) | Worksheet | Quiz | Project milestone | Book chapters |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Unity Essentials | History of Game Development & Game Design Process | Editor Essentials, 3D Essentials | 1 | — | — | 1, 2 |
+| 2 | Unity Essentials | Technology & Asset Pipeline | Audio Essentials, Programming Essentials | 2 | — | — | 3, 4 |
+| 3 | Unity Essentials | Programming Best Practices & Documentation | 2D Essentials, Publishing Essentials | 3 | — | Proposal | 5 |
+| 4 | Unity Essentials | DevOps & GitHub | Game #1 | — | Quiz 1 | — | — |
+| 5 | Junior Programmer | Gameplay, Game World & Storytelling | Player Control, Basic Gameplay | 4 | — | — | 6, 7 |
+| 6 | Junior Programmer | Level Design & Audio | Mechanics, Sound & Effects | 5 | — | — | 8, 9, 14 |
+| 7 | Junior Programmer | Ideation & User Experience | User Interface | 6 | — | — | 15, 16 |
+| 8 | Junior Programmer | Game Balancing | Game #2 | — | Quiz 2 | — | — |
+| 9 | Creative Core | Game Graphics & HD Render Pipeline | Shaders, Lighting | 7 | — | — | 10, 12 |
+| 10 | Creative Core | VFX Fundamentals | Animation, VFX | 8 | — | — | 11, 17 |
+| 11 | Creative Core | Prototyping & Playtesting | Cameras, Post-processing | 9 | — | — | 13 |
+| 12 | Creative Core | Business & Social Issues | Game #3 | — | — | — | — |
+| 13 | Advanced Topics | Multiplayer | Quiz 3 | 10 | Quiz 3 | Advanced Mechanics | 18, 19, 21 |
+| 14 | Advanced Topics | Progress update | Performance & Optimization | 11 | — | Game #3 | 20 |
+| 15 | Advanced Topics | Project time | VR/AR (optional) | 12 | — | Advanced Graphics + Final Presentation | — |
+
 ## Assessment Criteria
 - Quizzes: 10%
 - Assignments: 30% (3 indie games, increasing in complexity)
