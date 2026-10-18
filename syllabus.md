@@ -44,25 +44,25 @@ Total contact hours: 45
 
 Weeks and dates follow the [official KFUPM Term 261 academic calendar](https://registrar.kfupm.edu.sa/academic-calendar/current-semester/). All dates are in 2026. Holiday dates within each range have no classes. Course activities are tentative and retain the current planned dates: the opening activities span weeks 1–2, and shaders/lighting spans weeks 10–11. These activity allocations are course planning choices, not assignments made by the university calendar. Week 14 has no activity assigned in the current plan. Book chapters refer to the main textbook listed under Learning Resources.
 
-| KFUPM week | Dates (2026) | Theme | Practice (Unity Learn) | Worksheet | Quiz | Project milestone | Book chapters |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Aug 19–20 | Unity Essentials | Editor Essentials, 3D Essentials | 1 | — | — | 1, 2 |
-| 2 | Aug 23–27 | Unity Essentials | Editor Essentials, 3D Essentials (continued) | — | — | — | 1, 2 |
-| 3 | Aug 30–Sep 3 | Unity Essentials | Audio Essentials, Programming Essentials | 2 | — | — | 3, 4 |
-| 4 | Sep 6–10 | Unity Essentials | 2D Essentials, Publishing Essentials | 3 | — | Proposal | 5 |
-| 5 | Sep 13–17 | Unity Essentials | Game #1 | — | Quiz 1 | — | — |
-| 6 | Sep 20–24 (holiday: Sep 23–24) | Junior Programmer | Player Control, Basic Gameplay | 4 | — | — | 6, 7 |
-| 7 | Sep 27–Oct 1 | Junior Programmer | Mechanics, Sound & Effects | 5 | — | — | 8, 9, 14 |
-| 8 | Oct 4–8 | Junior Programmer | User Interface | 6 | — | — | 15, 16 |
-| 9 | Oct 11–15 | Junior Programmer | Game #2 | — | Quiz 2 | — | — |
-| 10 | Oct 18–22 (break: Oct 20–22) | Creative Core | Shaders, Lighting | 7 | — | — | 10, 12 |
-| 11 | Oct 25–29 | Creative Core | Shaders, Lighting (continued) | — | — | — | 10, 12 |
-| 12 | Nov 1–5 | Creative Core | Animation, VFX | 8 | — | — | 11, 17 |
-| 13 | Nov 8–12 | Creative Core | Cameras, Post-processing | 9 | — | Advanced Mechanics | 13 |
-| 14 | Nov 15–19 | — | To be confirmed | — | — | — | — |
-| 15 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | Quiz 3 | 10 | Quiz 3 | — | 18, 19, 21 |
-| 16 | Nov 29–Dec 3 | Advanced Topics | Performance & Optimization | 11 | — | — | 20 |
-| 17 | Dec 6–10 | Advanced Topics | VR/AR (optional) | 12 | — | Advanced Graphics + Final Presentation | — |
+| KFUPM week | Dates (2026) | Theme | Practice (Unity Learn) | Quiz | Project milestone | Book chapters |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Aug 19–20 | Unity Essentials | Editor Essentials, 3D Essentials | — | — | 1, 2 |
+| 2 | Aug 23–27 | Unity Essentials | Editor Essentials, 3D Essentials (continued) | — | — | 1, 2 |
+| 3 | Aug 30–Sep 3 | Unity Essentials | Audio Essentials, Programming Essentials | — | — | 3, 4 |
+| 4 | Sep 6–10 | Unity Essentials | 2D Essentials, Publishing Essentials | — | Proposal | 5 |
+| 5 | Sep 13–17 | Unity Essentials | Game #1 | Quiz 1 | — | — |
+| 6 | Sep 20–24 (holiday: Sep 23–24) | Junior Programmer | Player Control, Basic Gameplay | — | — | 6, 7 |
+| 7 | Sep 27–Oct 1 | Junior Programmer | Mechanics, Sound & Effects | — | — | 8, 9, 14 |
+| 8 | Oct 4–8 | Junior Programmer | User Interface | — | — | 15, 16 |
+| 9 | Oct 11–15 | Junior Programmer | User Interface | _ | — | — |
+| 10 | Oct 18–22 (break: Oct 20–22) | Creative Core | Shaders, Lighting | — | — | 10, 12 |
+| 11 | Oct 25–29 | Creative Core | Shaders, Lighting (continued) | Quiz 2 | — | 10, 12 |
+| 12 | Nov 1–5 | Creative Core | Animation, VFX | — | — | 11, 17 |
+| 13 | Nov 8–12 | Creative Core | Cameras, Post-processing | — | Advanced Mechanics | 13 |
+| 14 | Nov 15–19 | — | To be confirmed | — | — | — |
+| 15 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | Quiz 3 | Quiz 3 | — | 18, 19, 21 |
+| 16 | Nov 29–Dec 3 | Advanced Topics | Performance & Optimization | — | — | 20 |
+| 17 | Dec 6–10 | Advanced Topics | VR/AR (optional) | — | Advanced Graphics + Final Presentation | — |
 
 Classes end on **Dec 10**. Final examinations run **Dec 13–24**; the SWE 402 final exam date will follow the official exam schedule.
 
