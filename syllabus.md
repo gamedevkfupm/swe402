@@ -59,10 +59,10 @@ Weeks and dates follow the [official KFUPM Term 261 academic calendar](https://r
 | 11 | Oct 25–29 | Creative Core | Shaders, Lighting  | Quiz 2 | — | 10, 12 |
 | 12 | Nov 1–5 | Creative Core | Animation, VFX | — | — | 11, 17 |
 | 13 | Nov 8–12 | Creative Core | Cameras, Post-processing | — | Advanced Mechanics | 13, 17 (Cinemachine) |
-| 14 | Nov 15–19 | Creative Core | Game #3 | — | — | Review: 10–13, 17 |
-| 15 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | Engine Agnostic  | Quiz 3 | — | — (no dedicated chapter) |
-| 16 | Nov 29–Dec 3 | Advanced Topics | Multiplayer | — | — | — (no dedicated chapter) |
-| 17 | Dec 6–10 | Advanced Topics | Performance & Optimization     | — | Advanced Graphics + Final Presentation | 18, 19 |
+| 14 | Nov 15–19 | Creative Core | Game #3، Engine Agnostic  | — | — | Review: 10–13, 17; no dedicated chapter for engine-agnostic development |
+| 15 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | Multiplayer  | Quiz 3 | — | — (no dedicated chapter) |
+| 16 | Nov 29–Dec 3 | Advanced Topics | Performance & Optimization | — | — | 18, 19 |
+| 17 | Dec 6–10 | Advanced Topics | Presentations     | — | Advanced Graphics + Final Presentation | — |
 
 Classes end on **Dec 10**. Final examinations run **Dec 13–24**; the SWE 402 final exam date will follow the official exam schedule.
 
