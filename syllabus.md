@@ -42,27 +42,27 @@ Total contact hours: 45
 
 ## Tentative Schedule
 
-The following 15-week plan is tentative and may change as the course progresses. It follows the `Calendar_v4` sheet in [the course schedule](swe402_course_schedule.xlsx). Dates below use the official week numbering in the [KFUPM Term 261 academic calendar](https://registrar.kfupm.edu.sa/academic-calendar/current-semester/). All dates are in 2026. The 15 content weeks are mapped to calendar weeks 1–15; shortened weeks are marked below. Book chapters refer to the main textbook listed under Learning Resources.
+This tentative plan follows the 15 teaching blocks in the `Calendar_v4` sheet of [the course schedule](swe402_course_schedule.xlsx), distributed across the full semester using the [KFUPM Term 261 academic calendar](https://registrar.kfupm.edu.sa/academic-calendar/current-semester/). Teaching blocks are not official calendar week numbers: the short opening week is combined with the following week, and the midterm-break week is combined with the week after it. All dates are in 2026. Holiday dates within each range have no classes. Book chapters refer to the main textbook listed under Learning Resources.
 
-| Week | Dates (2026) | Theme | Practice (Unity Learn) | Worksheet | Quiz | Project milestone | Book chapters |
+| Teaching block | Dates (2026) | Theme | Practice (Unity Learn) | Worksheet | Quiz | Project milestone | Book chapters |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Aug 19–20 | Unity Essentials | Editor Essentials, 3D Essentials | 1 | — | — | 1, 2 |
-| 2 | Aug 23–27 | Unity Essentials | Audio Essentials, Programming Essentials | 2 | — | — | 3, 4 |
-| 3 | Aug 30–Sep 3 | Unity Essentials | 2D Essentials, Publishing Essentials | 3 | — | Proposal | 5 |
-| 4 | Sep 6–10 | Unity Essentials | Game #1 | — | Quiz 1 | — | — |
-| 5 | Sep 13–17 | Junior Programmer | Player Control, Basic Gameplay | 4 | — | — | 6, 7 |
-| 6 | Sep 20–24 (holiday: Sep 23–24) | Junior Programmer | Mechanics, Sound & Effects | 5 | — | — | 8, 9, 14 |
-| 7 | Sep 27–Oct 1 | Junior Programmer | User Interface | 6 | — | — | 15, 16 |
-| 8 | Oct 4–8 | Junior Programmer | Game #2 | — | Quiz 2 | — | — |
-| 9 | Oct 11–15 | Creative Core | Shaders, Lighting | 7 | — | — | 10, 12 |
-| 10 | Oct 18–22 (break: Oct 20–22) | Creative Core | Animation, VFX | 8 | — | — | 11, 17 |
-| 11 | Oct 25–29 | Creative Core | Cameras, Post-processing | 9 | — | — | 13 |
-| 12 | Nov 1–5 | Creative Core | Game #3 | — | — | — | — |
-| 13 | Nov 8–12 | Advanced Topics | Quiz 3 | 10 | Quiz 3 | Advanced Mechanics | 18, 19, 21 |
-| 14 | Nov 15–19 | Advanced Topics | Performance & Optimization | 11 | — | Game #3 | 20 |
-| 15 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | VR/AR (optional) | 12 | — | Advanced Graphics + Final Presentation | — |
+| 1 | Aug 19–27 | Unity Essentials | Editor Essentials, 3D Essentials | 1 | — | — | 1, 2 |
+| 2 | Aug 30–Sep 3 | Unity Essentials | Audio Essentials, Programming Essentials | 2 | — | — | 3, 4 |
+| 3 | Sep 6–10 | Unity Essentials | 2D Essentials, Publishing Essentials | 3 | — | Proposal | 5 |
+| 4 | Sep 13–17 | Unity Essentials | Game #1 | — | Quiz 1 | — | — |
+| 5 | Sep 20–24 (holiday: Sep 23–24) | Junior Programmer | Player Control, Basic Gameplay | 4 | — | — | 6, 7 |
+| 6 | Sep 27–Oct 1 | Junior Programmer | Mechanics, Sound & Effects | 5 | — | — | 8, 9, 14 |
+| 7 | Oct 4–8 | Junior Programmer | User Interface | 6 | — | — | 15, 16 |
+| 8 | Oct 11–15 | Junior Programmer | Game #2 | — | Quiz 2 | — | — |
+| 9 | Oct 18–29 (break: Oct 20–22) | Creative Core | Shaders, Lighting | 7 | — | — | 10, 12 |
+| 10 | Nov 1–5 | Creative Core | Animation, VFX | 8 | — | — | 11, 17 |
+| 11 | Nov 8–12 | Creative Core | Cameras, Post-processing | 9 | — | — | 13 |
+| 12 | Nov 15–19 | Creative Core | Game #3 | — | — | — | — |
+| 13 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | Quiz 3 | 10 | Quiz 3 | Advanced Mechanics | 18, 19, 21 |
+| 14 | Nov 29–Dec 3 | Advanced Topics | Performance & Optimization | 11 | — | Game #3 | 20 |
+| 15 | Dec 6–10 | Advanced Topics | VR/AR (optional) | 12 | — | Advanced Graphics + Final Presentation | — |
 
-The official calendar also includes week 16 (Nov 29–Dec 3) and week 17 (Dec 6–10). The spreadsheet does not assign topics to these weeks. Classes end on Dec 10, and final examinations run Dec 13–24; the SWE 402 final exam date will follow the official exam schedule.
+Classes end on **Dec 10**. Final examinations run **Dec 13–24**; the SWE 402 final exam date will follow the official exam schedule.
 
 ## Assessment Criteria
 - Quizzes: 10%
