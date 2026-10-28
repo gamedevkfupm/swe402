@@ -114,7 +114,7 @@ export const sheets = [
     "category": "Creative Core",
     "description": "Build a readable night-time amphitheater and compare light types, environmental fill and shadows.",
     "url": "/learning_material/unity-lighting/index.html",
-    "icon": "/powerups/shader-prism.svg",
-    "powerup": "Light prism"
+    "icon": "/powerups/lighting-bulb.svg",
+    "powerup": "Lighting bulb"
   }
 ];
