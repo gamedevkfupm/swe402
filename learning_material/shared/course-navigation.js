@@ -13,6 +13,8 @@
     ['unity-sound-and-effects', 'Unity Sound and Effects'],
     ['unity-gameplay-mechanics', 'Unity Gameplay Mechanics'],
     ['unity-user-interface', 'Unity User Interface'],
+    ['unity-shaders-and-materials', 'Creative Core: Shaders and materials'],
+    ['unity-lighting', 'Creative Core: Lighting'],
   ];
   const header = document.querySelector('.site-header');
   const mark = header?.querySelector('.site-mark');
