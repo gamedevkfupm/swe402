@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="SWE 402 Lecture 14: create Unity animation clips, shape curves, squash and stretch a bouncing ball, and relocate local animation. Includes visual comparisons, independent practice, Pro mode and ten quizzes."><title>Creative Core: Animation · SWE 402</title><link rel="icon" href="data:,"><style>
+      :root {
+        color-scheme: light;
+        --paper: #f0eaf7;
+        --paper-deep: #ded2ec;
+        --surface: #faf6ff;
+        --ink: #251a32;
+        --muted: #61516f;
+        --faint: #857391;
+        --line: #b3a0c3;
+        --purple: #713ca0;
+        --purple-soft: #e3d5f1;
+        --orange: #d95229;
+        --yellow: #efca4a;
+        --red: #ad342c;
+        --blue: #2c6091;
+        --warning-bg: #efd8c9;
+        --shadow: #9784a8;
+        --grid: rgba(55, 30, 77, 0.055);
+        --code-ink: #382f11;
+        --syntax-keyword: #70349b;
+        --syntax-type: #245f91;
+        --syntax-function: #9b461e;
+        --syntax-attribute: #8a3778;
+        --syntax-string: #246c46;
+        --syntax-number: #99501e;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --pixel: "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #15101d;
+        --paper-deep: #251b32;
+        --surface: #1d1527;
+        --ink: #eee3f8;
+        --muted: #c0accf;
+        --faint: #9580a5;
+        --line: #594268;
+        --purple: #c39aef;
+        --purple-soft: #352247;
+        --orange: #ff815b;
+        --yellow: #dec45a;
+        --red: #ff7e70;
+        --blue: #7eb3df;
+        --warning-bg: #351f1b;
+        --shadow: #09050e;
+        --grid: rgba(232, 213, 250, 0.04);
+        --code-ink: #201b08;
+        --syntax-keyword: #d5aff5;
+        --syntax-type: #97cbf2;
+        --syntax-function: #f5bc82;
+        --syntax-attribute: #e5a6d5;
+        --syntax-string: #9cdda9;
+        --syntax-number: #f3c88b;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 8px 8px;
+        font-family: var(--sans);
+        font-size: clamp(1rem, 0.94rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+      }
+
+      a {
+        color: var(--purple);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--orange);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .reading-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 5px;
+        background: var(--ink);
+      }
+
+      .reading-progress span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--orange) 0 20px,
+          var(--yellow) 20px 40px,
+          var(--purple) 40px 60px
+        );
+      }
+
+      .site-header {
+        position: sticky;
+        top: 5px;
+        z-index: 40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+        padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+        border-bottom: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 0 4px 0 var(--shadow);
+      }
+
+      .site-mark {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--ink);
+        font: 800 0.73rem/1.2 var(--pixel);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .site-mark::before {
+        content: "";
+        width: 0.85rem;
+        height: 0.85rem;
+        background: var(--orange);
+        box-shadow: 0.3rem 0.3rem 0 var(--purple);
+      }
+
+      .site-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .quiet-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        appearance: none;
+        padding: 0.5rem 0.65rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 700 0.68rem/1 var(--pixel);
+        box-shadow: 3px 3px 0 var(--shadow);
+        cursor: pointer;
+      }
+
+      .quiet-button:hover,
+      .quiet-button:focus-visible {
+        background: var(--ink);
+        color: var(--paper);
+        outline: none;
+        box-shadow: 3px 3px 0 var(--orange);
+        transform: translate(1px, 1px);
+      }
+
+      .theme-swatch {
+        width: 0.7rem;
+        height: 0.7rem;
+        border: 1px solid currentColor;
+        background: linear-gradient(90deg, var(--ink) 0 50%, var(--paper) 50%);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4.5rem, 9vw, 8rem) max(1rem, calc((100vw - 1040px) / 2)) clamp(4rem, 8vw, 7rem);
+        border-bottom: 4px solid var(--ink);
+        background:
+          linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--orange) 14%, transparent) 72% 74%, transparent 74%),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: auto, 8px 8px, 8px 8px, auto;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 3rem;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--ink);
+        background:
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%),
+          linear-gradient(45deg, var(--orange) 25%, transparent 25% 75%, var(--orange) 75%);
+        background-position: 0 0, 8px 8px;
+        background-size: 16px 16px;
+        box-shadow: 8px 8px 0 var(--purple);
+      }
+
+      .hero::after {
+        content: "14";
+        position: absolute;
+        right: max(1rem, calc((100vw - 1180px) / 2));
+        bottom: -0.12em;
+        color: var(--paper-deep);
+        font: 900 clamp(9rem, 24vw, 22rem)/0.75 var(--pixel);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 880px;
+      }
+
+      .kicker,
+      .section-kicker,
+      .eyebrow {
+        color: var(--orange);
+        font: 800 0.72rem/1.4 var(--pixel);
+        letter-spacing: 0.11em;
+        text-transform: none;
+      }
+
+      .hero h1 {
+        max-width: 13ch;
+        margin: 1rem 0 0;
+        font: 900 clamp(2.8rem, 8vw, 7.2rem)/0.94 var(--pixel);
+        letter-spacing: -0.08em;
+        text-transform: none;
+      }
+
+      .hero h1 em {
+        display: block;
+        color: var(--purple);
+        font-style: normal;
+      }
+
+      .dek {
+        max-width: 700px;
+        margin: 1.8rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 0.98rem + 0.65vw, 1.55rem);
+        line-height: 1.45;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.4rem;
+        margin-top: 2rem;
+        color: var(--muted);
+        font: 700 0.74rem/1.4 var(--sans);
+      }
+
+      .article-meta span::before {
+        content: "■";
+        margin-right: 0.45rem;
+        color: var(--purple);
+        font-size: 0.65em;
+      }
+
+      .page-grid {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 900px);
+        justify-content: center;
+        gap: clamp(2rem, 4vw, 4rem);
+      }
+
+      .toc {
+        position: sticky;
+        top: 6.7rem;
+        align-self: start;
+        padding-top: 5rem;
+        font-family: var(--sans);
+      }
+
+      .toc-title {
+        margin: 0 0 1rem;
+        color: var(--faint);
+        font: 800 0.66rem/1.3 var(--pixel);
+        letter-spacing: 0.1em;
+      }
+
+      .toc ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+      }
+
+      .toc li {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toc a {
+        display: grid;
+        grid-template-columns: 1.8rem 1fr;
+        gap: 0.45rem;
+        padding: 0.65rem 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.35;
+        text-decoration: none;
+      }
+
+      .toc a span {
+        color: var(--faint);
+        font-family: var(--pixel);
+        font-size: 0.68rem;
+      }
+
+      .toc a:hover,
+      .toc a.is-active {
+        color: var(--purple);
+        background: var(--purple-soft);
+      }
+
+      article {
+        min-width: 0;
+        padding-bottom: 7rem;
+      }
+
+      .lead-box {
+        margin: 0 0 5rem;
+        padding: 2.1rem 0 2.4rem;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .lead-box h2 {
+        margin: 0 0 1.1rem;
+        font: 900 clamp(1.55rem, 3.5vw, 2.65rem)/1.08 var(--pixel);
+        letter-spacing: -0.045em;
+        text-transform: none;
+      }
+
+      .outcomes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem 1.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--sans);
+      }
+
+      .outcomes li {
+        position: relative;
+        padding: 0.6rem 0 0.6rem 1.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .learning-outcomes {
+        margin: 0 0 1.4rem;
+        padding-left: 2rem;
+      }
+
+      .learning-outcomes li {
+        padding-left: .35rem;
+        margin: .35rem 0;
+      }
+
+      .learning-outcomes li::marker {
+        color: var(--purple);
+        font-weight: 800;
+      }
+
+      .outcomes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--purple);
+        font: 900 0.95rem/1.7 var(--pixel);
+      }
+
+      .article-section {
+        margin: 0 0 clamp(5rem, 10vw, 9rem);
+      }
+
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-kicker::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      .article-section > h2 {
+        margin: 0 0 1.6rem;
+        font: 900 clamp(1.85rem, 4.6vw, 3.7rem)/1.02 var(--pixel);
+        letter-spacing: -0.06em;
+        text-transform: none;
+      }
+
+      .article-section h3 {
+        margin: 3.2rem 0 0.8rem;
+        font: 900 clamp(1.15rem, 2.2vw, 1.55rem)/1.25 var(--pixel);
+        letter-spacing: -0.035em;
+        text-transform: none;
+      }
+
+      .article-section > p,
+      .article-section > ul,
+      .article-section > ol {
+        max-width: 680px;
+      }
+
+      .article-section p {
+        margin: 1rem 0;
+      }
+
+      .drop-cap::first-letter {
+        float: none;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
+        margin: 2.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .comparison > div {
+        padding: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .comparison > div:last-child {
+        border-color: var(--purple);
+      }
+
+      .comparison strong {
+        display: block;
+        font: 900 0.9rem/1.4 var(--pixel);
+        letter-spacing: 0.04em;
+      }
+
+      .comparison p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.55;
+      }
+
+      .steps {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .steps > li {
+        font-family: var(--sans);
+        font-size: 1rem;
+        line-height: 1.75;
+        position: relative;
+        min-height: 3.2rem;
+        padding: 0.55rem 0 1.2rem 4rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .steps > li::before {
+        content: attr(data-step);
+        position: absolute;
+        left: 0;
+        top: 0.55rem;
+        color: var(--orange);
+        font: 900 1.02rem/1.5 var(--pixel);
+      }
+
+      .steps .ui-action {
+        display: inline;
+        padding: 0.14em 0.4em;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font-family: var(--pixel);
+        font-size: 0.88em;
+        font-weight: 600;
+        line-height: 1.9;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        overflow-wrap: anywhere;
+      }
+
+      .steps li a {
+        font-family: var(--sans);
+      }
+
+      .steps > li > .step-goal {
+        margin: 0 0 0.8rem;
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 1.02rem;
+        font-weight: 650;
+        line-height: 1.5;
+      }
+
+      .substeps {
+        margin: 0 0 0 -4rem;
+        padding: 0;
+        list-style: none;
+      }
+
+      .substeps > li {
+        display: grid;
+        grid-template-columns: 4rem minmax(0, 1fr);
+        min-width: 0;
+        padding: 0.25rem 0 0.55rem;
+        border: 0;
+      }
+
+      .substeps > li::before {
+        content: attr(data-substep);
+        color: var(--purple);
+        font: 800 0.78rem/2.2 var(--pixel);
+      }
+
+      .substep-text {
+        min-width: 0;
+      }
+
+      .step-explanation {
+        margin: 1.35rem 0 0 -4rem;
+      }
+
+      .article-section .step-explanation-title {
+        margin: 0 0 0.45rem;
+        color: var(--ink);
+        font: 700 1rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .step-explanation > p {
+        margin: 0.55rem 0;
+      }
+
+      .step-explanation > :last-child {
+        margin-bottom: 0;
+      }
+
+      .source-figure {
+        width: min(100%, 920px);
+        margin: 2.8rem 0;
+      }
+
+      .source-figure.breakout {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .source-figure img {
+        height: auto;
+        display: block;
+        width: 100%;
+        max-height: 700px;
+        object-fit: contain;
+        border: 3px solid var(--ink);
+        background: #211928;
+        box-shadow: 8px 8px 0 var(--shadow);
+      }
+
+      .source-figure figcaption {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+      }
+
+      .source-figure figcaption strong {
+        color: var(--ink);
+      }
+
+      .pull-quote {
+        margin: 3rem 0;
+        padding: 1.6rem;
+        border: 3px solid var(--purple);
+        background: var(--surface);
+        box-shadow: 7px 7px 0 var(--shadow);
+        color: var(--purple);
+        font: 900 clamp(1.15rem, 2.8vw, 1.8rem)/1.35 var(--pixel);
+        letter-spacing: -0.04em;
+      }
+
+      .pull-quote small {
+        display: block;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        letter-spacing: 0;
+      }
+
+      .note,
+      .warning,
+      .practice {
+        margin: 2.4rem 0;
+        padding: 1.25rem 1.35rem;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.96rem;
+        line-height: 1.6;
+      }
+
+      .note-title,
+      .practice-title {
+        display: block;
+        margin-bottom: 0.55rem;
+        font: 900 0.72rem/1.3 var(--pixel);
+        letter-spacing: 0.08em;
+        text-transform: none;
+      }
+
+      .warning {
+        border-color: var(--red);
+        background: var(--warning-bg);
+      }
+
+      .warning .note-title {
+        color: var(--red);
+      }
+
+      .practice {
+        position: relative;
+        padding-top: 2.3rem;
+        border-color: var(--purple);
+        background: var(--purple-soft);
+      }
+
+      .practice::before {
+        content: "Mini quiz"; /* PRACTICE component */
+        position: absolute;
+        top: -0.8rem;
+        left: 1rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--purple);
+        color: var(--surface);
+        font: 900 0.68rem/1 var(--pixel);
+      }
+
+      .practice ol,
+      .practice ul {
+        margin: 0.7rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .practice li + li {
+        margin-top: 0.35rem;
+      }
+
+      .window-table,
+      .shortcut-table {
+        width: 100%;
+        margin: 2rem 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 5px 5px 0 var(--shadow);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+      }
+
+      .window-table th,
+      .window-table td,
+      .shortcut-table th,
+      .shortcut-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .window-table tr > *:last-child,
+      .shortcut-table tr > *:last-child {
+        border-right: 0;
+      }
+
+      .window-table tbody tr:last-child td,
+      .shortcut-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .window-table th,
+      .shortcut-table th {
+        color: var(--muted);
+        font: 800 0.67rem/1.3 var(--pixel);
+        letter-spacing: 0.05em;
+        text-transform: none;
+      }
+
+      .window-table td:first-child,
+      .shortcut-table td:first-child {
+        width: 28%;
+        color: var(--purple);
+        font-weight: 800;
+      }
+
+      kbd {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.13em 0.42em;
+        border: 1px solid var(--ink);
+        border-bottom-width: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 800 0.82em/1.45 var(--pixel);
+        text-align: center;
+      }
+
+      .axis-line {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin: 1.4rem 0;
+        font-family: var(--sans);
+      }
+
+      .axis-line span {
+        padding: 0.5rem 0.7rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        font-weight: 800;
+      }
+
+      .axis-line .x { color: var(--red); }
+      .axis-line .y { color: var(--purple); }
+      .axis-line .z { color: var(--blue); }
+
+      .video-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 2rem 0;
+        font-family: var(--sans);
+      }
+
+      .video-list a {
+        display: grid;
+        grid-template-columns: 2.2rem 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.85rem;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        box-shadow: 3px 3px 0 var(--shadow);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .video-list a::before {
+        content: "▶";
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--orange);
+        color: var(--paper);
+        font: 800 0.7rem/1 var(--pixel);
+      }
+
+      .video-list a:hover,
+      .video-list a:focus-visible {
+        border-color: var(--purple);
+        color: var(--purple);
+        outline: none;
+      }
+
+      .video-list strong,
+      .video-list small {
+        display: block;
+      }
+
+      .video-list strong {
+        font-size: 0.88rem;
+      }
+
+      .video-list small {
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .hunt {
+        margin: 2.5rem 0;
+        border: 3px solid var(--ink);
+        background: var(--surface);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .hunt-row {
+        display: grid;
+        grid-template-columns: auto 2.3rem minmax(8rem, 0.9fr) minmax(12rem, 1.5fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+
+      .hunt-row:has(input:checked) {
+        color: var(--purple);
+      }
+
+      .hunt-row input,
+      .checklist input {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--purple);
+      }
+
+      .hunt-index {
+        color: var(--orange);
+        font: 900 0.75rem/1 var(--pixel);
+      }
+
+      .hunt-row strong {
+        font-size: 0.84rem;
+      }
+
+      .hunt-row > span:nth-of-type(2) {
+        color: var(--muted);
+        font-size: 0.83rem;
+      }
+
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 1.3rem;
+        border: 3px solid var(--ink);
+        background: var(--yellow);
+        color: var(--code-ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        font-family: var(--sans);
+      }
+
+      .code-box strong,
+      .code-box small {
+        display: block;
+      }
+
+      .code-box strong {
+        font: 900 0.78rem/1.4 var(--pixel);
+      }
+
+      .code-box small {
+        margin-top: 0.25rem;
+        color: var(--code-ink);
+        font-size: 0.76rem;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .code-inputs input {
+        width: 2.7rem;
+        height: 3.3rem;
+        border: 2px solid var(--ink);
+        border-radius: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font: 900 1.3rem/1 var(--pixel);
+        text-align: center;
+      }
+
+      .checklist {
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .checklist label:has(input:checked) {
+        color: var(--purple);
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .source-list {
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 2px solid var(--ink);
+        font-family: var(--sans);
+      }
+
+      .source-list li {
+        display: grid;
+        grid-template-columns: 2.4rem 1fr;
+        gap: 0.8rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.9rem;
+      }
+
+      .source-list span {
+        color: var(--faint);
+        font: 800 0.7rem/1.8 var(--pixel);
+      }
+
+      .next-module {
+        margin-top: 5rem;
+        padding: 3rem 1rem;
+        border: 2px dashed var(--ink);
+        background: var(--surface);
+        color: var(--faint);
+        font: 800 0.75rem/1.6 var(--pixel);
+        text-align: center;
+        letter-spacing: 0.08em;
+      }
+
+      .page-footer {
+        padding: 2rem 1rem 4rem;
+        border-top: 2px solid var(--ink);
+        color: var(--muted);
+        font: 0.78rem/1.5 var(--sans);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .page-grid {
+          grid-template-columns: minmax(0, 760px);
+        }
+
+        .toc {
+          position: static;
+          padding: 2.5rem 0 0;
+        }
+
+        .toc ol {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .toc li:nth-child(odd) {
+          border-right: 1px solid var(--line);
+          padding-right: 1rem;
+        }
+
+        .toc li:nth-child(even) {
+          padding-left: 1rem;
+        }
+
+        .source-figure.breakout {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .lead-box {
+          margin-top: 3rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          font-size: 1.05rem;
+        }
+
+        .site-header {
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .site-mark {
+          max-width: 9.5rem;
+          font-size: 0.62rem;
+        }
+
+        .site-actions {
+          margin-left: auto;
+          gap: 0.35rem;
+        }
+
+        .quiet-button {
+          padding: 0.44rem 0.48rem;
+          font-size: 0.58rem;
+          box-shadow: 2px 2px 0 var(--shadow);
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        .hero::after {
+          opacity: 0.45;
+        }
+
+        .hero::before {
+          top: 0.8rem;
+          width: 40px;
+          height: 40px;
+          background-size: 12px 12px;
+          background-position: 0 0, 6px 6px;
+          box-shadow: 5px 5px 0 var(--purple);
+        }
+
+        .outcomes,
+        .comparison,
+        .video-list {
+          grid-template-columns: 1fr;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr;
+        }
+
+        .toc li:nth-child(odd),
+        .toc li:nth-child(even) {
+          padding-inline: 0;
+          border-right: 0;
+        }
+
+        .window-table,
+        .shortcut-table {
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .window-table thead,
+        .shortcut-table thead {
+          display: none;
+        }
+
+        .window-table tbody,
+        .shortcut-table tbody {
+          display: grid;
+          gap: 0.85rem;
+        }
+
+        .window-table tr,
+        .shortcut-table tr {
+          display: block;
+          border: 2px solid var(--ink);
+          background: var(--surface);
+          box-shadow: 4px 4px 0 var(--shadow);
+        }
+
+        .window-table td,
+        .shortcut-table td,
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          display: grid;
+          grid-template-columns: minmax(6.3rem, 34%) 1fr;
+          gap: 0.65rem;
+          width: auto;
+          padding: 0.65rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          font-weight: 400;
+        }
+
+        .window-table td:first-child,
+        .shortcut-table td:first-child {
+          color: var(--purple);
+          font-weight: 800;
+        }
+
+        .window-table td::before,
+        .shortcut-table td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font: 800 0.62rem/1.4 var(--pixel);
+          letter-spacing: 0.04em;
+          text-transform: none;
+        }
+
+        .hunt-row {
+          grid-template-columns: auto 2rem 1fr auto;
+        }
+
+        .hunt-row > span:nth-of-type(2) {
+          grid-column: 3 / -1;
+        }
+
+        .code-box {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .source-figure img {
+          box-shadow: 5px 5px 0 var(--shadow);
+        }
+      }
+
+      @media print {
+        @page {
+          margin: 1.5cm;
+        }
+
+        body {
+          background: white;
+          font-size: 10.5pt;
+        }
+
+        .reading-progress,
+        .site-header,
+        .toc,
+        .quiet-button,
+        .next-module {
+          display: none !important;
+        }
+
+        .hero {
+          padding: 1cm 0 1.4cm;
+          background: white;
+        }
+
+        .hero::after {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 46pt;
+        }
+
+        .page-grid {
+          display: block;
+          width: auto;
+        }
+
+        article {
+          padding: 0;
+        }
+
+        .article-section {
+          margin-bottom: 1.6cm;
+        }
+
+        .article-section > h2 {
+          font-size: 26pt;
+        }
+
+        .source-figure,
+        .source-figure.breakout {
+          width: 100%;
+          margin: 0.8cm 0;
+          break-inside: avoid;
+        }
+
+        .source-figure img {
+          max-height: 14cm;
+          box-shadow: none;
+        }
+
+        .practice,
+        .warning,
+        .note,
+        .comparison,
+        .code-box {
+          break-inside: avoid;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      article { overflow-wrap: anywhere; }
+      .code-sample { margin: 1.6rem 0; border: 2px solid var(--ink); background: var(--paper); min-width: 0; }
+      .code-sample figcaption { padding: .7rem 1rem; border-bottom: 2px solid var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+      .code-sample pre { margin: 0; padding: 1rem; overflow-x: auto; font-size: .86rem; line-height: 1.65; tab-size: 4; }
+      .code-sample code { padding: 0; border: 0; background: transparent; color: var(--ink); white-space: pre; }
+      .code-sample .k { color: var(--syntax-keyword); font-weight: 700; }
+      .code-sample .kt, .code-sample .nc, .code-sample .nn { color: var(--syntax-type); }
+      .code-sample .nf { color: var(--syntax-function); }
+      .code-sample .na { color: var(--syntax-attribute); }
+      .code-sample .s { color: var(--syntax-string); }
+      .code-sample .mi, .code-sample .mf { color: var(--syntax-number); }
+      details { margin: 1.5rem 0; border: 2px solid var(--line); padding: 1rem; }
+      summary { cursor: pointer; font-weight: 700; }
+      summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+      @media print { :root, :root[data-theme="dark"] { color-scheme: light; --paper: #fff; --surface: #fff; --paper-deep: #eee; --ink: #251a32; --muted: #61516f; --line: #b3a0c3; --purple: #713ca0; --purple-soft: #eee5f7; --orange: #aa3618; --warning-bg: #f5e8dd; --code-ink: #382f11; --yellow: #efca4a; --syntax-keyword: #70349b; --syntax-type: #245f91; --syntax-function: #9b461e; --syntax-attribute: #8a3778; --syntax-string: #246c46; --syntax-number: #99501e; } .code-sample { break-inside: auto; } .code-sample pre { white-space: pre-wrap; overflow: visible; font-size: 8pt; } .code-sample code { white-space: pre-wrap; } .hero h1 { font-size: 38pt; } }
+
+      [data-instructor] { display: none !important; }
+      body.instructor-mode [data-instructor] { display: revert !important; }
+
+      article :not(pre) > code {
+        font-family: var(--pixel);
+        font-size: .9em;
+        color: var(--purple);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: .08em .3em;
+        overflow-wrap: anywhere;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+      }
+      .code-example {
+        margin: .5rem 0;
+        padding: .8rem 1rem;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--purple);
+        background: var(--surface);
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font: .86rem/1.65 var(--pixel);
+      }
+      .code-example code { font: inherit; color: var(--ink); }
+      .concept-examples { margin: .8rem 0 1.5rem; }
+      .concept-examples > p { margin-bottom: .35rem; font-size: .9rem; }
+      .concept-examples li { margin-bottom: .6rem; }
+      .concept-summary { margin: 2rem 0; padding: 0; border: 0; }
+      .concept-summary > .new-concept-title { font-size: 1rem; }
+
+      .new-concept-title {
+        display: block;
+        margin: 1.4rem 0 .4rem;
+        padding-left: .7rem;
+        border-left: 3px solid var(--purple);
+        color: var(--purple);
+        font-family: var(--sans);
+        font-size: 1rem;
+        font-weight: 750;
+        line-height: 1.5;
+        text-transform: none;
+        letter-spacing: normal;
+      }
+      .new-concept-title span {
+        display: block;
+        margin-bottom: .25rem;
+        line-height: 1.4;
+        font-family: var(--pixel);
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: none;
+      }
+      .new-concept-title + p { margin-top: .4rem; }
+      #concepts > p { max-width: 680px; }
+      #concepts > h3 { margin: 2.5rem 0 .8rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-family: var(--sans); font-size: 1.35rem; line-height: 1.35; color: var(--ink); }
+      .concept-summary dt { margin-top: 1rem; font-weight: 750; color: var(--purple); }
+      .concept-summary dd { margin: .35rem 0 1rem; max-width: 680px; }
+      .quiz-answer { background: var(--surface); }
+      .section-faq > details { margin: .8rem 0; }
+    
+.hero::after { content: "14"; } .step-explanation { margin: 1.35rem 0; } .code-sample pre { overflow-x: auto; } .ui-action {font-family:var(--pixel);font-size:.88em;background:var(--surface);border:1px solid var(--line);padding:.1em .3em;overflow-wrap:anywhere;}
+article :not(pre) > code {border-radius:0;} .state-flow {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:2rem 0;} .state-flow>div {border:2px solid var(--purple);padding:1rem;background:var(--surface);} .state-flow strong {font-family:var(--pixel);} @media(max-width:680px){.state-flow{grid-template-columns:1fr;}} @media print{[data-instructor]{display:none!important;}}
+      .interactive-quiz { margin: 1.5rem 0 2.3rem; padding: 1.3rem; border: 2px solid var(--purple); background: var(--surface); box-shadow: 4px 4px 0 var(--shadow); }
+      .interactive-quiz fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+      .interactive-quiz legend { padding: 0; width: 100%; }
+      .quiz-eyebrow { display: block; margin-bottom: .45rem; color: var(--purple); font: 700 .75rem/1.5 var(--pixel); }
+      .quiz-question { display: block; font-weight: 650; line-height: 1.6; }
+      .quiz-options { display: grid; gap: .6rem; margin: 1rem 0; }
+      .quiz-option { display: grid; grid-template-columns: 1.2rem minmax(0,1fr); gap: .7rem; padding: .7rem .8rem; border: 1px solid var(--line); cursor: pointer; align-items: start; }
+      .quiz-option:has(input:checked) { border-color: var(--purple); background: var(--purple-soft); }
+      .quiz-option input { margin: .4rem 0 0; accent-color: var(--purple); }
+      .quiz-option:focus-within { outline: 2px solid var(--orange); outline-offset: 2px; }
+      .quiz-check:disabled { opacity: .6; cursor: default; }
+      .quiz-feedback { margin: .8rem 0 0; font-weight: 650; }
+      .quiz-reason { margin: .5rem 0 0; color: var(--muted); }
+      .student-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+      .student-fields label { display: grid; gap: .4rem; font-weight: 650; }
+      .student-fields input { min-width: 0; width: 100%; padding: .6rem; color: var(--ink); background: var(--surface); border: 2px solid var(--line); border-radius: 0; }
+      .quiz-summary { border-left: 3px solid var(--purple); padding-left: .8rem; }
+      .submission-note { font-size: .9rem; color: var(--muted); }
+      #navbarQuizCount { color: var(--purple); margin-left: .3rem; }
+      .submission-report { display: none; }
+      @media (max-width: 680px) { .student-fields { grid-template-columns: 1fr; } .interactive-quiz { padding: 1rem; } }
+      @media print {
+        body > :not(.submission-report) { display: none !important; }
+        .submission-report { display: block !important; color: #171717; font: 10pt/1.45 Arial, sans-serif; }
+        .submission-report h1 { margin: 0 0 .3cm; font-size: 20pt; }
+        .submission-report h2 { margin: .6cm 0 .2cm; font-size: 13pt; }
+        .report-identity { border-bottom: 1px solid #aaa; padding-bottom: .3cm; }
+        .report-question { break-inside: avoid; border-top: 1px solid #ccc; padding: .25cm 0; }
+        .report-question h3 { margin: 0 0 .1cm; font-size: 10.5pt; }
+        .report-question p { margin: .08cm 0; }
+        .report-question code { font: 9pt/1.4 monospace; }
+        .report-tasks li { margin-bottom: .1cm; }
+      }
+
+.step-explanation { margin:1.35rem 0; padding:0; border:0; } .code-sample .c1 { color:var(--muted); }
+
+      /* Official step demonstrations: visible between the goal and substeps. */
+      .step-videos { margin: 1rem 0 1.5rem; }
+      .steps > li > .step-videos { margin-left: -4rem; }
+      .video-context { color: var(--muted); font-size: .9rem; }
+      .step-video { border: 2px solid var(--line); background: var(--surface); margin: .75rem 0; }
+      .step-video .video-title { padding: .85rem 1rem; font-weight: 650; overflow-wrap: anywhere; font-size: 1rem; margin: 0; }
+      .video-mapping { display: block; margin: .3rem 0 0; color: var(--muted); font-size: .85rem; font-weight: 400; }
+      .video-content { padding: 0 1rem 1rem; }
+      .step-video video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #101010; border: 1px solid var(--line); }
+      .video-source { font-size: .82rem; margin: .7rem 0 0; color: var(--muted); }
+      .video-error { color: var(--red); font-size: .9rem; }
+      @media print { .step-videos { display: none !important; } }
+
+.hero::after { content: "14"; } .substep-text pre { margin-top:1rem; } .token-keyword{color:var(--purple)} .token-string{color:var(--orange)} .token-comment{color:var(--muted)} .token-number{color:var(--purple)}
+#finished-preview video{display:block;width:100%;max-width:100%;aspect-ratio:16/9;background:#111} .page-grid>article{min-width:0} pre{max-width:100%;overflow-x:auto} .substep-text{min-width:0} 
+.task-checklist{display:grid;gap:.8rem}.task-checklist label{display:flex;align-items:flex-start;gap:.65rem}.task-checklist input{margin-top:.4rem;flex-shrink:0}
+
+.article-section pre {max-width:100%;overflow-x:auto;white-space:pre;font-size:.87rem;line-height:1.65;padding:1.2rem;border-radius:8px;background:var(--code-bg,#f2eff6)}
+.article-section pre code {padding:0;border:0;background:none;color:var(--text)}
+.token-keyword {color:#7943ae}.token-string{color:#8b4b21}.token-number{color:#216687}.token-comment{color:var(--muted)}
+[data-theme="dark"] .token-keyword{color:#d3a4ff}[data-theme="dark"] .token-string{color:#f0bc8d}[data-theme="dark"] .token-number{color:#8dd5ef}
+.new-concept-title>span{display:block;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-family:var(--mono);margin-bottom:.45rem}
+.task-checklist>label{display:flex;gap:.8rem;align-items:flex-start;margin:.9rem 0}.task-checklist input{flex:0 0 auto;margin-top:.3rem}
+.step-explanation{margin-left:0!important;padding-left:0!important;border-left:0!important}.step-explanation .concept-summary{margin-left:0;padding-left:0;border:0}
+.article-section figure img{max-height:560px;width:auto;max-width:100%;margin:auto;display:block}
+.interactive-quiz fieldset{border:0;padding:0;margin:0;min-width:0}.interactive-quiz legend{padding:0;width:100%}.quiz-eyebrow{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:.6rem}.quiz-question{display:block;font-weight:600;font-size:1.08rem}
+.quiz-option{display:flex;gap:.7rem;align-items:flex-start;margin:.8rem 0}.quiz-option input{flex-shrink:0;margin-top:.35rem}
+.toc{max-height:calc(100vh - 100px);overflow:auto}.section-faq summary,.code-sample summary{cursor:pointer;font-weight:600;padding:.8rem 0}.student-fields{display:flex;gap:1.2rem;flex-wrap:wrap}.student-fields label{display:flex;flex-direction:column;gap:.5rem}.student-fields input{padding:.65rem;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--text)}
+@media(max-width:760px){.toc{max-height:none}.article-section pre{font-size:.77rem}.student-fields{display:block}.student-fields label{margin-bottom:1rem}}
+
+
+
+.hero{border-bottom-color:var(--tint)}.hero h1 em{color:var(--purple)}
+.new-concept-title>span,.quiz-eyebrow,.section-kicker,.kicker,.toc-title,.article-meta,.site-mark{text-transform:none!important}
+.steps .substep-text{overflow-wrap:anywhere}.ui-action{font-family:var(--pixel);font-size:.9em;background:var(--purple-soft);padding:.08em .25em;border:1px solid var(--line)}
+.concept-summary{margin:1.5rem 0}.article-section pre,.student-fields input{border-radius:0}.source-figure.small img{max-height:350px}.hero h1{max-width:100%;font-size:clamp(2.4rem,5.5vw,5rem)}
+@media (max-width:960px){.toc{position:static;max-height:none}}
+@media (max-width:680px){.hero h1{font-size:2.5rem}.site-header{gap:.7rem}.site-actions{gap:.4rem}.quiet-button{font-size:.73rem}.source-figure{margin-left:0;margin-right:0}}
+
+.prediction{font-size:.95em;color:var(--ink)}.observation-check{margin:1rem 0 1.75rem;padding:.8rem 1rem;border:1px solid var(--line);background:var(--surface)}.observation-check p{margin:.4rem 0 0}.uv-diagram img{width:100%!important}.reference-study video{display:block;width:100%;aspect-ratio:16/9}.reference-key{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;font-size:.85rem}.reference-key>div{padding:.6rem;border:1px solid var(--line)}@media(max-width:680px){.reference-key{grid-template-columns:repeat(2,1fr)}}
+
+.hero:after{content: "14"}.article-section{scroll-margin-top:110px}.step-explanation{margin-left:0!important;padding-left:0!important;border:0!important}.video-row{display:flex;gap:.8rem;overflow-x:auto;padding:0 0 .6rem}.video-thumb{flex:0 0 220px;background:var(--surface);color:var(--ink);border:2px solid var(--line);padding:0;text-align:left;cursor:pointer;font:inherit}.video-thumb img{width:100%;height:110px;object-fit:cover}.video-thumb span{display:block;padding:.6rem;font-size:.85rem}.video-thumb[aria-expanded="true"]{border-color:var(--purple)}.step-video video,#finished-preview video{width:100%;max-height:510px;background:#101014}.step-video[hidden]{display:none}.video-reference{margin:1rem 0 1.5rem}.video-reference p{font-size:.85rem}.source-figure img{width:100%;height:auto}.instructor-only{display:none}.instructor-mode .instructor-only{display:block}.outcome-note{border-left:3px solid var(--purple);padding-left:1rem}.course-heading{min-width:0}.article-section :is(h2,h3){overflow-wrap:break-word}
+@media (max-width: 960px){.toc{position:static}.pro-mode .pro-check-progress{display:flex!important;position:static!important;margin:1rem;max-width:100%;flex-wrap:wrap}.pro-check-progress[hidden]{display:none!important}}
+@media (max-width: 680px){.site-header{position:relative}.video-thumb{flex-basis:180px}.hero h1{font-size:2.7rem}.site-actions{flex-wrap:wrap}.article-section{scroll-margin-top:12px}}
+@media print{.theory-slides,.video-reference,.pro-check-progress{display:none!important}}
+#proToggle:hover #proToggleState,#proToggle:focus-visible #proToggleState{color:inherit}
+
+:root{--accent:var(--purple);--tint:var(--purple);--text:var(--ink);--mono:var(--pixel)}.hero h1{max-width:20ch}.source-figure video{display:block;width:100%;max-height:520px;background:#101014}.video-thumb-row{display:flex;gap:1rem;overflow-x:auto;padding:.5rem 0}.video-thumb{width:220px;flex:0 0 220px;background:var(--surface);color:var(--ink);border:2px solid var(--line);text-align:left;padding:0;cursor:pointer}.video-thumb img{width:100%;height:110px;object-fit:cover}.video-thumb span{display:block;padding:.7rem;font:700 .8rem var(--pixel)}.step-video video{width:100%;max-height:500px}.step-video p{font-size:.85rem}.step-video[hidden]{display:none!important}.task-checklist label{display:flex;gap:.7rem;margin:.8rem 0}.task-checklist input{flex:0 0 auto}.instructor-only{display:none}.instructor-mode .instructor-only{display:block}.step-explanation{padding:0;margin-left:0;border:0}.source-figure{max-width:100%}.quiz-question{display:block}.article-section{overflow-wrap:anywhere}#proToggle[aria-pressed="true"],#proToggle[aria-pressed="true"]:hover,#proToggle[aria-pressed="true"]:focus-visible{color:var(--ink)}.pro-mode button.hint-button:hover,.pro-mode button.hint-button:focus-visible{background:var(--purple);color:var(--paper)}
+:root{--paper:#eaf5f3;--paper-deep:#cce5e1;--surface:#f6fcfa;--ink:#152e2e;--muted:#466362;--faint:#607b79;--line:#9bbfba;--purple:#006b70;--purple-soft:#c5eeeb;--accent:#006b70;--shadow:#7faaa4;--grid:rgba(10,80,80,.045);--tint:#00e8e8;--text:var(--ink);--mono:var(--pixel)}
+:root[data-theme="dark"]{--paper:#101e20;--paper-deep:#172a2d;--surface:#18292c;--ink:#e1f6f3;--muted:#a9c9c5;--faint:#83a8a4;--line:#3f6667;--purple:#00e8e8;--purple-soft:#183f43;--accent:#00e8e8;--shadow:#060e10;--grid:rgba(150,240,230,.035)}
+</style><link rel="stylesheet" href="pro-mode.css"><link rel="stylesheet" href="slide-mode.css"><link rel="stylesheet" href="learning-tools.css"><link rel="stylesheet" href="../shared/course-navigation.css"></head><body><div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div><header class="site-header"><a class="site-mark" href="#top">SWE 402 // Creative Core</a><div class="site-actions"><button aria-describedby="proStatus" aria-pressed="false" class="quiet-button" id="proToggle" type="button">Pro <span id="proToggleState">Off</span></button><button aria-pressed="false" class="quiet-button" id="themeToggle" type="button"><span aria-hidden="true" class="theme-swatch"></span><span id="themeLabel">Light</span></button><button class="quiet-button" id="resetProgress" type="button">Reset progress</button><button class="quiet-button" id="exportResults" type="button">Export results <span id="navbarQuizCount"></span></button></div></header><header class="hero" id="top"><div class="hero-inner"><div class="kicker">SWE 402 · Creative Core · Unity 6.3</div><h1>Animation<br><em>from poses to motion</em></h1><p class="dek">Create a bouncing ball, shape its timing, and separate local motion from scene placement.</p><div class="article-meta"><span>Lecture 14</span><span>Editor animation lab</span><span>10 interactive quizzes</span></div><p id="proStatus" class="pro-mode-note" role="status" aria-live="polite">Guided: full instructions and explanations. Pro: goals with procedural hints; explanations stay visible.</p></div></header><main class="page-grid"><aside class="toc" aria-label="Table of contents"><p class="toc-title">In this lecture</p><ol><li><a href="#concepts"><span>00</span>Build the motion inside the clip</a></li><li><a href="#preparation"><span>01</span>Prepare the official project</a></li><li><a href="#keyframes"><span>02</span>Author a pulse from three poses</a></li><li><a href="#bounce"><span>03</span>Separate bounce motion from playback</a></li><li><a href="#curves"><span>04</span>Shape the speed between the poses</a></li><li><a href="#deformation"><span>05</span>Keep deformation close to impact</a></li><li><a href="#placement"><span>06</span>Move the bounce without rewriting it</a></li><li><a href="#application"><span>07</span>Adapt, construct and diagnose</a></li><li><a href="#review"><span>08</span>Diagnose the visible result</a></li><li><a href="#submission"><span>09</span>What to submit</a></li><li><a href="#sources"><span>10</span>Official sources</a></li></ol></aside><article><section class="article-section" id="concepts"><div class="section-kicker">00 · Animation</div><h2>Build the motion inside the clip</h2>
+<figure class="source-figure" id="finished-preview"><video controls playsinline preload="metadata" poster="assets/lab-bounce-reference.jpg" src="assets/lab-bounce-reference.mp4" aria-label="Unity-rendered reference for this lab's bounce"></video><figcaption>Unity-rendered reference using this lab’s higher-apex choice (Y = 5.5): one-second cycles, squash at frame 12, stretch at 13, and a one-unit parent shift after two seconds. The local motion stays the same after the shift. Generated by sampling an Animation Clip in Unity 6.3.2 on a simplified stage; this is not a manual Editor walkthrough or a Play-mode capture of the supplied scene. <a href="assets/lab-bounce-reference.mp4">Open reference video</a> · <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Official source technique</a>.</figcaption></figure>
+<h3>How was this made?</h3><ul><li>Why does the ball seem to hang near the top but hit the platform quickly?</li><li>Could the same start and end positions produce a very different feeling of weight?</li><li>How could we move the whole bounce to another part of the platform?</li></ul>
+<p>In <a href="../unity-sound-and-effects/index.html#animation">Lecture 9: Unity Sound and Effects</a>, you selected existing character animations through an Animator. Here you create the motion those clips contain. After <a href="../unity-lighting/index.html#concepts">Lecture 13: Creative Core: Lighting</a>, keep the supplied scene’s appearance fixed and concentrate on how an object moves through time.</p>
+<div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Animation Clips and keyframes</h3><p>An Animation Clip stores changes to chosen properties over time. A keyframe records a property value at a chosen moment: a ball can be high, touch the platform, then return high. Unity fills in the values between those moments. You author the important poses instead of writing a movement script.</p></div>
+<div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Timing and interpolation</h3><p>Timing determines when the poses happen. Interpolation determines the values between them. Two balls can touch the platform at the same moment yet feel different: one drifts evenly downward, while another gathers speed. An animation curve lets you shape that difference.</p></div>
+<div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Squash and stretch</h3><p>A brief change of shape can suggest a soft material. The ball flattens at contact and lengthens just after it leaves the platform. Keeping this deformation close to impact prevents the ball from looking as though it is slowly melting during its whole fall.</p></div>
+<div class="concept-summary"><h3 class="new-concept-title"><span>New concept</span>Local motion and placement</h3><p>A parent GameObject can place an animated child in the scene. Think of a bouncing display on a movable stand: the bounce remains the same relative to the stand, while the stand changes its location. We will reproduce the common snap-back problem, then separate these responsibilities.</p></div>
+<h3>Prior-knowledge recap</h3><p>In <a href="../unity-2d-essentials/index.html#animation">Lecture 5: Unity 2D Essentials</a>, you made a clip from sprite-sheet frames. Here you author numeric Transform values and the interpolation between them. A Transform describes position, rotation and scale. The Animator component uses a Controller to select clips; it is different from the Animation window used to edit their contents. Unlike <a href="../unity-3d-essentials/index.html">Unity 3D Essentials</a>, this bounce is authored motion. No Rigidbody or gravity simulation is needed.</p>
+<h3>Learning outcomes</h3><p>By the end of this lecture, you will be able to:</p><ol><li>Create and preview a looping clip with explicit keyframes.</li><li>Explain sample time, interpolation and the visible effect of curve tangents.</li><li>Coordinate position and scale so deformation happens at contact.</li><li>Diagnose animated Transform overrides and relocate a clip through a parent.</li><li>Use the Animator’s default state to play your clip, then adapt the motion for a new intention.</li><li>Create a new pulse from your own key choices and diagnose an unfamiliar scale curve.</li></ol>
+<p><a class="text-link" href="#preparation">Skip to practice →</a> · Use <strong>Slide mode</strong> for the theory sequence before opening Unity.</p>
+<p>Prepare the project before class. Allow about 70–75 minutes for the practical, independent exercises and ten quizzes, with 10–15 minutes of theory beforehand and about 10 minutes afterward for recording and export. These are planning estimates, not measured completion times.</p>
+<div class="instructor-only"><h3>Teaching plan</h3><p>Start with the preview and predictions. Practical estimate: pulse 10 min, bounce 10 min, curves 12 min, deformation 12 min, placement/runtime 8 min, adaptation 8 min, independent pulse and diagnosis 10–15 min. Downloads/import are pre-class. Defer door scripting, humanoid retargeting and the full unit challenge; they are not additional homework.</p></div></section><section class="article-section" id="preparation"><div class="section-kicker">01 · Animation</div><h2>Prepare the official project</h2><p>Use a fresh extracted project. Finish downloading and importing before class. All editing below is outside Play mode unless explicitly stated. The official archive records Unity 6000.3.0b9; open a fresh copy with your installed Unity 6.3 Editor and allow any upgrade to finish.</p><ol class="steps"><li data-step="1.1"><p class="step-goal">Open a clean animation study with the supplied Ball.</p><ol class="substeps"><li data-substep="1.1.1"><div class="substep-text">Download <a href="https://storage.googleapis.com/learn-platform-bucket-production/tutorial/c2eb3091-8660-4579-a9d5-d88b9f392e76/versions%5B_key==%22339c5698e0ba%22%5D.materials%5B_key==%2220e3c75cb1ba%22%5D.file/CreativeCore_Animation_U6.3_20251205_180708.zip" target="_blank" rel="noreferrer">CreativeCore_Animation_U6.3.zip</a> (about 99 MB) and extract it. In Unity Hub choose <span class="ui-action">Add → Add project from disk</span> and select the folder containing <span class="ui-action">Assets, Packages and ProjectSettings</span>. This is a full project, not an asset package to import into the Lighting project.</div></li><li data-substep="1.1.2"><div class="substep-text">Open <span class="ui-action">Assets → CreativeCore_Animation → Scenes → TutorialScene_Animation_Outdoor</span>. Create <span class="ui-action">Assets/Lecture14</span> in the Project window. Use <span class="ui-action">File → Save As</span> to save the scene there as <span class="ui-action">AnimationStudy.unity</span>; keep the official scene unchanged.</div></li><li data-substep="1.1.3"><div class="substep-text">Select <span class="ui-action">Ball</span> in the Hierarchy and press <span class="ui-action">F</span> in Scene view. Confirm its Transform has Position <span class="ui-action">(-3.87, 2.747, 2.21)</span> and Scale <span class="ui-action">(1, 1, 1)</span>. The supplied sphere has radius 0.5 and rests on a platform whose top is at world Y = 2.25. Set Position Y to <span class="ui-action">2.75</span> for exact contact. Leave its X/Z and the environment unchanged.</div></li><li data-substep="1.1.4"><div class="substep-text">Open <span class="ui-action">Window → Animation → Animation</span> and dock it next to Project. Also open <span class="ui-action">Window → Animation → Animator</span>. Leave Play mode off. Confirm the Animation window shows <span class="ui-action">Create</span> when Ball is selected; it initially has no Animator. Resolve Console errors before proceeding.</div></li></ol></li></ol><div class="step-explanation"><h3>Explanation</h3><p>Opening the complete project preserves its render pipeline and materials. A scene copy protects the starting layout; the clips created later are separate assets, so saving the scene alone is not a backup of their earlier versions.</p><p>The sphere’s center is halfway up its height. With radius 0.5 and scale 1, a platform at Y = 2.25 requires center Y = 2.75. A center at 2.25 would bury half the sphere. The supplied Sphere Collider is not what drives this exercise: clip data will set the Transform.</p><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Animation versus Animator</h3><p>Animation edits values within a clip. Animator selects the clip that runs on a GameObject. Keep these windows distinct.</p></div></div></section><section class="article-section" id="keyframes"><div class="section-kicker">02 · Animation</div><h2>Author a pulse from three poses</h2><p>Create a short scale-only clip first. Watch the difference between changing a scene value and recording a value into a clip.</p><ol class="steps"><li data-step="2.1"><p class="step-goal">Make a one-second pulse that returns to its starting scale.</p><ol class="substeps"><li data-substep="2.1.1"><div class="substep-text">With <span class="ui-action">Ball</span> selected, click <span class="ui-action">Create</span> in the Animation window. Save <span class="ui-action">Ball_Pulse.anim</span> under <span class="ui-action">Assets/Lecture14</span>. Unity also adds an Animator component and creates a Controller. Keep them on Ball.</div></li><li data-substep="2.1.2"><div class="substep-text">Open the Animation window timeline’s three-dot menu and choose <span class="ui-action">Set Sample Rate → 24</span>. Enable <span class="ui-action">Seconds</span> in that menu. Do this before placing keys. The numeric current-frame field beside playback accepts frame numbers; the ruler displays seconds:frames. Frame <span class="ui-action">24</span> is ruler time <span class="ui-action">1:00</span>.</div></li><li data-substep="2.1.3"><div class="substep-text">Use <span class="ui-action">Add Property → Transform → Scale → +</span>. Expand Scale. At frame <span class="ui-action">0</span>, enable the red <span class="ui-action">Record</span> button and set Inspector Scale to <span class="ui-action">(1, 1, 1)</span>. Select the Scale property row and use <span class="ui-action">Add keyframe</span> to ensure all three axes have a key even if the values did not change.</div></li><li data-substep="2.1.4"><div class="substep-text">Set the current-frame field to <span class="ui-action">12</span>; set Scale to <span class="ui-action">(1.3, 1.3, 1.3)</span>. Set the field to <span class="ui-action">24</span>; set Scale back to <span class="ui-action">(1, 1, 1)</span>. Check that Scale has keys only at frames 0, 12 and 24; remove any extra automatically generated end keys.</div></li><li data-substep="2.1.5"><div class="substep-text">Turn <span class="ui-action">Record</span> off. Use the Animation window’s <span class="ui-action">Play</span> button to preview the pulse, then stop it. Select <span class="ui-action">Ball_Pulse.anim</span> in Project and enable <span class="ui-action">Loop Time</span> in its Inspector. Turn Animation <span class="ui-action">Preview</span> off before the next setup change.</div></li></ol></li></ol><figure class="source-figure"><img src="assets/create-clip.png" alt="Unity Animation window showing Create for the selected unanimated Ball" loading="lazy"><figcaption>Locate Create with Ball selected. Unity Technologies · <a href="https://learn.unity.com/tutorial/create-your-first-3d-animations?version=6.3" target="_blank" rel="noreferrer">Original tutorial</a>.</figcaption></figure><figure class="source-figure"><img src="assets/add-property.png" alt="Transform properties expanded beneath Add Property in the Animation window" loading="lazy"><figcaption>Choose Scale for the first clip; Position comes later. Unity Technologies · <a href="https://learn.unity.com/tutorial/create-your-first-3d-animations?version=6.3" target="_blank" rel="noreferrer">Original tutorial</a>.</figcaption></figure><div class="step-videos"><div class="video-thumb-row"><button type="button" class="video-thumb" aria-expanded="false" aria-controls="reference-1"><img src="assets/add-property.png" alt="Reference thumbnail: Pulse result"><span>▶ Pulse result</span></button></div><div class="step-video" id="reference-1" hidden><video controls playsinline preload="metadata" src="https://connect-mediagw.unity.com/h1/20221101/videos/0362e370-bf05-4fb0-a660-3b3c663d4547_pulseAnim.mp4"></video><p class="video-error" hidden></p><p>Reference for 2.1.3–2.1.5: the visible scale change, not a click-by-click walkthrough. The source uses different sample/key positions. Optional reference; starts at 2×. <a href="https://learn.unity.com/tutorial/create-your-first-3d-animations?version=6.3#696f9d0f979730b7cec58d20" target="_blank" rel="noreferrer">Original tutorial step</a> · <a href="https://connect-mediagw.unity.com/h1/20221101/videos/0362e370-bf05-4fb0-a660-3b3c663d4547_pulseAnim.mp4" target="_blank" rel="noreferrer">Open video</a></p></div></div><div class="step-explanation"><h3>Explanation</h3><p>A key is a time–value pair on one property curve. Three Scale axes produce three curves. With Record active, an Inspector edit writes the value at the playhead; outside Record, a scene edit does not automatically become a new animation key. Turn Record off before unrelated work.</p><p>At 24 samples per second, frame 12 is 12 ÷ 24 = 0.5 seconds and frame 24 is 1 second. Ruler time 1:12 means one second plus twelve frames, or 1.5 seconds—not 1.12 seconds. Sample rate sets the authoring grid; it does not cap the game at 24 rendered frames per second. Runtime playback evaluates the curves over time.</p><p>Matching first and last values avoids a pose jump when the clip loops. A smooth join also needs compatible curve directions at the ends. Loop Time repeats the clip; deleting the last key is not a reliable way to request one-shot playback.</p><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Keyframes and interpolation</h3><p>The keys define poses at selected times. Unity supplies intermediate values; you do not need a key on every rendered frame.</p></div></div><form class="interactive-quiz quiz-card" data-answer="1" data-quiz="sample-time" data-quiz-step="2.1" id="quiz-sample-time"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 1 · Step 2.1</span><span class="quiz-question">At 24 samples per second, what elapsed time does the ruler label 1:12 represent?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="sample-time" value="0"><span>1.12 seconds.</span></label><label class="quiz-option"><input type="radio" name="sample-time" value="1"><span>1.5 seconds.</span></label><label class="quiz-option"><input type="radio" name="sample-time" value="2"><span>12 seconds after the first frame.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>The part after the colon counts frames: 1 + 12/24 = 1.5 seconds. It is not a decimal fraction.</p></form><form class="interactive-quiz quiz-card transfer-question" data-answer="2.25" data-quiz="sample-transfer" data-quiz-step="2.1" data-unlock-after="sample-time" id="quiz-sample-transfer" hidden novalidate><fieldset><legend><span class="quiz-eyebrow">Mini quiz 2 · Step 2.1</span><span class="quiz-question">Now calculate a different label: at 24 samples per second, how many seconds does 2:06 represent?</span></legend><p>Use the method from the feedback, then enter your own number without answer choices.</p><label for="sampleTransfer">Elapsed time in seconds <input class="numeric-answer" id="sampleTransfer" type="number" inputmode="decimal" step="any" data-numeric-answer></label></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>The six frames take 6 ÷ 24 = 0.25 seconds. Add the two whole seconds: 2 + 0.25 = 2.25 seconds.</p></form><form class="interactive-quiz quiz-card" data-answer="2" data-quiz="loop" data-quiz-step="2.1" id="quiz-loop"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 3 · Step 2.1</span><span class="quiz-question">A repeating pulse jumps in size at its boundary. Which edit directly addresses the pose discontinuity?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="loop" value="0"><span>Increase the game frame rate.</span></label><label class="quiz-option"><input type="radio" name="loop" value="1"><span>Move the middle key without inspecting the endpoints.</span></label><label class="quiz-option"><input type="radio" name="loop" value="2"><span>Make the last scale value match the first, then inspect endpoint tangents.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>Looping reconnects the end to the beginning. Different endpoint values cause a visible jump; tangent continuity determines how smoothly the speed joins.</p></form></section><section class="article-section" id="bounce"><div class="section-kicker">03 · Animation</div><h2>Separate bounce motion from playback</h2><p>Keep the pulse asset and create a second clip. This one moves the sphere up and down without changing its shape yet.</p><ol class="steps"><li data-step="3.1"><p class="step-goal">Create a one-second bounce with a controlled contact height.</p><ol class="substeps"><li data-substep="3.1.1"><div class="substep-text">Select Ball, confirm Record and Preview are off, and set its Scale to <span class="ui-action">(1, 1, 1)</span> and Position Y to <span class="ui-action">4.75</span>. In the Animation clip dropdown choose <span class="ui-action">Create New Clip</span>; save <span class="ui-action">Ball_Bounce.anim</span> under <span class="ui-action">Assets/Lecture14</span>. Set its sample rate to <span class="ui-action">24</span> before adding keys.</div></li><li data-substep="3.1.2"><div class="substep-text">Use <span class="ui-action">Add Property → Transform → Position → +</span>. At frame <span class="ui-action">0</span> enable Record and ensure Position is <span class="ui-action">(-3.87, 4.75, 2.21)</span>; select the Position row and add a key. At frame <span class="ui-action">12</span> set only Y to <span class="ui-action">2.75</span>. At frame <span class="ui-action">24</span> restore only Y to <span class="ui-action">4.75</span>. Remove any extra keys so Position contains exactly these three times.</div></li><li data-substep="3.1.3"><div class="substep-text">Turn Record off. Preview the clip and scrub—drag the playhead—through the three poses. The sphere must touch rather than sink into the platform at frame 12. Select the clip asset in Project and enable <span class="ui-action">Loop Time</span>. Do not add a Rigidbody.</div></li><li data-substep="3.1.4"><div class="substep-text">Turn Preview off. Select Ball and open the Animator window. Right-click the state whose Motion is <span class="ui-action">Ball_Bounce</span> and choose <span class="ui-action">Set as Layer Default State</span>. If that state is absent, drag the Ball_Bounce clip from Project into Animator first. Confirm the state is orange and its Inspector <span class="ui-action">Speed</span> is <span class="ui-action">1</span>. Enter Play mode and observe the bounce in Scene view, then exit Play mode.</div></li></ol></li></ol><div class="step-videos"><div class="video-thumb-row"><button type="button" class="video-thumb" aria-expanded="false" aria-controls="reference-2"><img src="assets/position-curve.png" alt="Reference thumbnail: Initial bounce result"><span>▶ Initial bounce result</span></button></div><div class="step-video" id="reference-2" hidden><video controls playsinline preload="metadata" src="https://connect-mediagw.unity.com/h1/20221102/videos/a8737f08-f38a-4ee8-b841-3aafe6b13fce_ballbounceanim.mp4"></video><p class="video-error" hidden></p><p>Reference for 3.1.2–3.1.3. The source’s longer clip shows the soft initial motion we will refine; our cycle and heights differ. Optional reference; starts at 2×. <a href="https://learn.unity.com/tutorial/create-your-first-3d-animations?version=6.3#696f9d0f979730b7cec58d23" target="_blank" rel="noreferrer">Original tutorial step</a> · <a href="https://connect-mediagw.unity.com/h1/20221102/videos/a8737f08-f38a-4ee8-b841-3aafe6b13fce_ballbounceanim.mp4" target="_blank" rel="noreferrer">Open video</a></p></div></div><div class="step-explanation"><h3>Explanation</h3><p>The Position property adds X, Y and Z curves. Constant X/Z keeps the ball above one point; Y changes its height. The authored center moves two units in half a second. The collider does not cause the rebound: the rising half is already written into the clip. If the platform were removed, the same motion would still play.</p><p>The Animation window can preview whichever clip you select without running the scene. In Play mode, the Animator Controller chooses a state; the orange default state is entered first. Choosing Ball_Bounce in the Animation dropdown alone does not change that runtime choice. A state references its Motion clip and can change playback speed independently of the clip’s keys.</p><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Clip versus state</h3><p>The clip contains the motion. A state selects that clip and its playback settings. Preview selection and the runtime default are separate choices.</p></div></div><form class="interactive-quiz quiz-card" data-answer="0" data-quiz="preview-runtime" data-quiz-step="3.1" id="quiz-preview-runtime"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 4 · Step 3.1</span><span class="quiz-question">Ball_Bounce previews correctly, but entering Play mode produces the pulse. What should you inspect first?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="preview-runtime" value="0"><span>The Controller’s default state and its Motion clip.</span></label><label class="quiz-option"><input type="radio" name="preview-runtime" value="1"><span>Whether Ball_Bounce has enough Position keys.</span></label><label class="quiz-option"><input type="radio" name="preview-runtime" value="2"><span>The Sphere Collider’s radius.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>The Animation preview selection does not choose the Controller’s initial runtime state. Check the orange default state and its Motion.</p></form></section><section class="article-section" id="curves"><div class="section-kicker">04 · Animation</div><h2>Shape the speed between the poses</h2><p>Keep all key times and heights fixed while changing interpolation. This controlled comparison isolates why the same poses can feel floaty, mechanical or bouncy.</p><ol class="steps"><li data-step="4.1"><p class="step-goal">Compare even-speed motion with a sharper contact.</p><ol class="substeps"><li data-substep="4.1.1"><div class="substep-text">Outside Play mode select Ball, choose Ball_Bounce in Animation, and click <span class="ui-action">Curves</span>. Expand Position and select only <span class="ui-action">Position.y</span>. Press <span class="ui-action">F</span> with the pointer over the graph to frame the selected curve. Locate the keys at frames 0, 12 and 24.</div></li><li data-substep="4.1.2"><div class="substep-text">Right-click the first key and choose <span class="ui-action">Right Tangent → Linear</span>. On the middle key choose <span class="ui-action">Left Tangent → Linear</span>. Preview. Compare the evenly paced descent against the still-smoothed ascent. Stop preview playback without changing the keys’ times or values.</div></li><li data-substep="4.1.3"><div class="substep-text">Right-click the first and last keys and set each to <span class="ui-action">Clamped Auto</span>. On the middle key set <span class="ui-action">Both Tangents → Linear</span>. Preview again: the curve should flatten near the high poses but form a corner at contact.</div></li><li data-substep="4.1.4"><div class="substep-text">For a stronger contact, right-click the middle key, choose <span class="ui-action">Broken</span>, then <span class="ui-action">Both Tangents → Free</span>. Adjust its left handle upward-left and its right handle upward-right to form a V. Keep the key at frame 12 and Y = 2.75; the curve must not dip below that height. Preview, then turn Record and Preview off. Retain the sharper version.</div></li></ol></li></ol><figure class="source-figure"><img src="assets/position-curve.png" alt="Animation Curves view showing a smooth Y position curve through three keyframes" loading="lazy"><figcaption>The vertical axis is position value, not speed; the horizontal axis is time. Unity Technologies · <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Original tutorial</a>.</figcaption></figure><figure class="source-figure"><img src="assets/linear-tangent.png" alt="Position curve with a straight descending segment and curved ascending segment" loading="lazy"><figcaption>After setting the descent to Linear, the falling segment is straight while the return remains curved. Unity Technologies · <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Original tutorial</a>.</figcaption></figure><div class="step-videos"><div class="video-thumb-row"><button type="button" class="video-thumb" aria-expanded="false" aria-controls="reference-3"><img src="assets/position-curve.png" alt="Reference thumbnail: Edit the contact curve"><span>▶ Edit the contact curve</span></button></div><div class="step-video" id="reference-3" hidden><video controls playsinline preload="metadata" src="https://connect-mediagw.unity.com/h1/20221103/videos/0e101cdb-8d6e-4ffe-90b0-05ee040f52cd_bouncecurve.mp4"></video><p class="video-error" hidden></p><p>Reference for 4.1.3–4.1.4: shaping tangents around contact. Our instructions explicitly break the middle tangents so the two sides can form a corner. Optional reference; starts at 2×. <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3#66fc6984edbc2a00e5012f89" target="_blank" rel="noreferrer">Original tutorial step</a> · <a href="https://connect-mediagw.unity.com/h1/20221103/videos/0e101cdb-8d6e-4ffe-90b0-05ee040f52cd_bouncecurve.mp4" target="_blank" rel="noreferrer">Open video</a></p></div></div><div class="step-explanation"><h3>Explanation</h3><p>A position curve plots height vertically and time horizontally. Its slope expresses how quickly height changes. A horizontal tangent means very small vertical speed near that instant; a steep descending segment means a fast fall. A lower point is not necessarily a faster point.</p><div class="learning-demo" data-learning-demo="curves"></div><p>For the linear descent, the center goes from Y = 4.75 to Y = 2.75 in 0.5 seconds. Its vertical speed is (2.75 − 4.75) ÷ 0.5 = −4 units/second. The negative sign means downward. At the halfway time, 0.25 seconds, linear interpolation gives Y = 3.75. A curved segment can have different intermediate heights while keeping both endpoints unchanged.</p><p>The default smooth contact slows before reversing, which can feel like floating. A V-shaped contact changes direction abruptly. Broken tangents let the incoming and outgoing directions differ; Free handles let you tune them. This is an authored approximation, not a gravity solver. The repeating bounce intentionally does not lose energy.</p><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Timing and interpolation</h3><p>Key times decide when contact occurs. Tangent shape decides how the sphere approaches and leaves it. Change one to study it without accidentally changing the other.</p></div></div><form class="interactive-quiz quiz-card" data-answer="1" data-quiz="linear-speed" data-quiz-step="4.1" id="quiz-linear-speed"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 5 · Step 4.1</span><span class="quiz-question">For the linear descent from Y = 4.75 to 2.75 over 0.5 s, what is the vertical velocity?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="linear-speed" value="0"><span>−2 units/s, because the height changed by two units.</span></label><label class="quiz-option"><input type="radio" name="linear-speed" value="1"><span>−4 units/s, because the two-unit drop takes half a second.</span></label><label class="quiz-option"><input type="radio" name="linear-speed" value="2"><span>+4 units/s, because speed is always positive.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>Velocity includes direction. ΔY/Δt = −2/0.5 = −4 units/s; speed is its positive magnitude.</p></form><form class="interactive-quiz quiz-card" data-answer="2" data-quiz="curve-shape" data-quiz-step="4.1" id="quiz-curve-shape"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 6 · Step 4.1</span><span class="quiz-question">Contact still happens at frame 12, but the ball slows gently before touching the platform. Which change targets that feeling?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="curve-shape" value="0"><span>Increase the sample rate without moving any keys in time.</span></label><label class="quiz-option"><input type="radio" name="curve-shape" value="1"><span>Lower the contact key below the platform.</span></label><label class="quiz-option"><input type="radio" name="curve-shape" value="2"><span>Make the incoming and outgoing slopes at contact steeper and independently directed.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>A flatter position curve means less vertical speed. Shape the slopes around contact while keeping its time and height fixed.</p></form><form class="interactive-quiz quiz-card" data-answer="1" data-quiz="unfamiliar-curve" data-quiz-step="4.1" id="quiz-unfamiliar-curve"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 7 · Step 4.1</span><span class="quiz-question">This unfamiliar height curve has straight segments. During which segment is the magnitude of vertical velocity greatest?</span></legend><svg viewBox="0 0 440 235" role="img" aria-label="Height versus time: A at 0 seconds and 5 units; B at 0.2 seconds and 4.6 units; C at 0.5 seconds and 2.75 units; D at 1 second and 4.75 units" style="width:100%;color:var(--purple)"><path d="M55 25V185H410" fill="none" stroke="currentColor"/><path d="M65 45L133 69L235 180L405 60" fill="none" stroke="currentColor" stroke-width="3"/><g fill="currentColor" font-size="15"><text x="55" y="18">Height (units)</text><text x="60" y="36">A</text><text x="136" y="62">B</text><text x="235" y="170">C</text><text x="390" y="46">D</text><text x="58" y="207">0</text><text x="120" y="207">0.2</text><text x="220" y="207">0.5</text><text x="390" y="207">1</text><text x="160" y="232">Time (seconds)</text></g></svg><p>A = (0 s, 5); B = (0.2 s, 4.6); C = (0.5 s, 2.75); D = (1 s, 4.75). Compare change in height divided by elapsed time, not just the lowest point.</p><div class="quiz-options"><label class="quiz-option"><input type="radio" name="unfamiliar-curve" value="0"><span>A → B</span></label><label class="quiz-option"><input type="radio" name="unfamiliar-curve" value="1"><span>B → C</span></label><label class="quiz-option"><input type="radio" name="unfamiliar-curve" value="2"><span>C → D</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>The velocity magnitudes are 0.4/0.2 = 2, 1.85/0.3 ≈ 6.17, and 2/0.5 = 4 units/s. B → C is fastest because it has the greatest height change per second. The sign tells direction, not how fast the ball moves.</p></form></section><section class="article-section" id="deformation"><div class="section-kicker">05 · Animation</div><h2>Keep deformation close to impact</h2><p>Add Scale to the same bounce clip. Coordinate the sphere’s center height with its changing size so that squash remains grounded.</p><ol class="steps"><li data-step="5.1"><p class="step-goal">Make contact look soft without deforming the entire fall.</p><ol class="substeps"><li data-substep="5.1.1"><div class="substep-text">Select Ball_Bounce in Animation and return to <span class="ui-action">Dopesheet</span>. At frame <span class="ui-action">0</span> turn Record on, use <span class="ui-action">Add Property → Transform → Scale → +</span>, and key Scale <span class="ui-action">(1, 1, 1)</span>. Ensure a unit-scale key also exists at frame <span class="ui-action">24</span>; remove any other automatically created Scale keys before adding the next poses.</div></li><li data-substep="5.1.2"><div class="substep-text">At frame <span class="ui-action">11</span> key Scale <span class="ui-action">(1, 1, 1)</span> using Add keyframe on the Scale row. At frame <span class="ui-action">12</span> set Scale to <span class="ui-action">(1.2, 0.7, 1.2)</span> and Position Y to <span class="ui-action">2.60</span>. Keep Position X/Z unchanged. This updates the existing contact Position key.</div></li><li data-substep="5.1.3"><div class="substep-text">At frame <span class="ui-action">13</span> set Scale to <span class="ui-action">(0.91, 1.2, 0.91)</span> and Position Y to <span class="ui-action">3.0</span>. At frame <span class="ui-action">16</span> key Scale <span class="ui-action">(1, 1, 1)</span>; leave Position alone there. Scale should now have keys at frames 0, 11, 12, 13, 16 and 24.</div></li><li data-substep="5.1.4"><div class="substep-text">Turn Record off. In Curves, select the Scale keys and choose <span class="ui-action">Both Tangents → Linear</span> to prevent scale overshoot between these poses. On Position.y select frame 12, keep its tangents broken, and set <span class="ui-action">Both Tangents → Linear</span>; set both tangents of the new frame-13 Position key to Linear too. Keep the frame-0 and frame-24 Position keys Clamped Auto.</div></li><li data-substep="5.1.5"><div class="substep-text">Scrub frames 10–16 slowly from a side view. Check the bottom of the mesh against the platform: normal before contact, flattened at 12, stretched and clear at 13, normal again at 16. If a curve pushes the mesh below the surface between keys, shorten the offending tangent handle; do not move the platform. Preview the full cycle, then switch Preview off.</div></li></ol></li></ol><figure class="source-figure"><img src="assets/squash.png" alt="Official Unity ball with scale editing active and Position and Scale rows in the timeline" loading="lazy"><figcaption>Source scale-editing view; the pictured pose still needs its center lowered for contact. Use this lecture’s coordinated Position and Scale values. Unity Technologies · <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Original tutorial</a>.</figcaption></figure><div class="step-explanation"><h3>Explanation</h3><p>Interpolation begins changing a property as soon as it leaves the previous key. If the only scale keys were normal at 0, flat at 12 and normal at 24, the ball would squash throughout its fall. A normal key at 11 confines the first change to one frame. The recovery key at 16 ends the stretch promptly; it does not wait for the top pose.</p><p>Scaling occurs around the sphere’s center. At Y scale 0.7 its half-height is 0.5 × 0.7 = 0.35, so contact needs center Y = 2.25 + 0.35 = 2.60. At scale 1.2 its half-height is 0.60; center Y = 3.0 leaves its bottom at 2.40, slightly above the platform. Check the mesh between keys as well as at the keys.</p><figure class="contact-figure"><div class="motion-pair"><div><h4>Normal: Y scale 1</h4><svg class="contact-diagram" viewBox="0 0 350 240" role="img" aria-label="Normal sphere: center 2.75, half-height 0.50, platform 2.25"><path d="M20 175H330" stroke="currentColor" stroke-width="3"/><ellipse cx="110" cy="110" rx="65" ry="65" fill="var(--purple-soft)" stroke="var(--purple)" stroke-width="2"/><circle cx="110" cy="110" r="4" fill="var(--purple)"/><path d="M110 110H235M215 110V175M208 110H222M208 175H222" stroke="currentColor" fill="none"/><text x="170" y="98">Center 2.75</text><text x="232" y="147.5">0.50</text><text x="20" y="202">Platform top: Y = 2.25</text><text x="20" y="226">2.25 + (0.5 × 1) = 2.75</text></svg></div><div><h4>Squashed: Y scale 0.7</h4><svg class="contact-diagram" viewBox="0 0 350 240" role="img" aria-label="Squashed sphere: center 2.60, half-height 0.35, platform 2.25"><path d="M20 175H330" stroke="currentColor" stroke-width="3"/><ellipse cx="110" cy="129.5" rx="78" ry="45.5" fill="var(--purple-soft)" stroke="var(--purple)" stroke-width="2"/><circle cx="110" cy="129.5" r="4" fill="var(--purple)"/><path d="M110 129.5H235M215 129.5V175M208 129.5H222M208 175H222" stroke="currentColor" fill="none"/><text x="170" y="117.5">Center 2.60</text><text x="232" y="157.25">0.35</text><text x="20" y="202">Platform top: Y = 2.25</text><text x="20" y="226">2.25 + (0.5 × 0.7) = 2.60</text></svg></div></div><figcaption>Conceptual cross-sections, not Unity screenshots. With a centered pivot and unscaled parent, center height = platform height + scaled half-height. Lower the center when the ball becomes shorter; otherwise a gap appears.</figcaption></figure><p>Increasing width while reducing height suggests a roughly constant volume. The squash scale product is 1.2 × 0.7 × 1.2 = 1.008; the stretch product is 0.91 × 1.2 × 0.91 ≈ 0.994. Both are near the original product of 1. This is a visual design choice, not a simulation of the material. A Sphere Collider is not a precise deformed-mesh collision model; this lab does not assess physical collisions.</p><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Squash and stretch</h3><p>Pose, timing and contact height must agree. Brief normal keys isolate deformation; width and height changes together can preserve the impression of volume.</p></div></div><form class="interactive-quiz quiz-card" data-answer="0" data-quiz="early-squash" data-quiz-step="5.1" id="quiz-early-squash"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 8 · Step 5.1</span><span class="quiz-question">The ball becomes gradually flatter during its entire descent. Which key most directly confines the squash to impact?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="early-squash" value="0"><span>A normal Scale key immediately before the contact key.</span></label><label class="quiz-option"><input type="radio" name="early-squash" value="1"><span>Another flat Scale key halfway through the fall.</span></label><label class="quiz-option"><input type="radio" name="early-squash" value="2"><span>A Position key at the same height as the platform surface.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>The last normal Scale key determines when interpolation toward the squash begins. A normal pose just before impact keeps the preceding fall undeformed.</p></form><form class="interactive-quiz quiz-card" data-answer="2" data-quiz="contact-height" data-quiz-step="5.1" id="quiz-contact-height"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 9 · Step 5.1</span><span class="quiz-question">A unit-diameter sphere is squashed to Y scale 0.6. The platform top remains Y = 2.25. Which center height puts its bottom on the platform?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="contact-height" value="0"><span>2.25, because the center should equal the surface height.</span></label><label class="quiz-option"><input type="radio" name="contact-height" value="1"><span>2.85, because the new full height is 0.6.</span></label><label class="quiz-option"><input type="radio" name="contact-height" value="2"><span>2.55, because half the new height is 0.3.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>The center must sit half the scaled height above the surface: 2.25 + 0.5 × 0.6 = 2.55.</p></form></section><section class="article-section" id="placement"><div class="section-kicker">06 · Animation</div><h2>Move the bounce without rewriting it</h2><p>First observe the overwrite, then give placement to an unanimated parent. Keep the final test on the same platform.</p><ol class="steps"><li data-step="6.1"><p class="step-goal">Relocate the complete bounce while preserving its local motion.</p><ol class="substeps"><li data-substep="6.1.1"><div class="substep-text">Outside Play mode, with Record and Preview off, note Ball’s current X. Change X by <span class="ui-action">+1</span>. Preview Ball_Bounce. Observe the snap back to the clip’s X = <span class="ui-action">−3.87</span>. Turn Preview off and restore the original X. Do not record this test into the clip.</div></li><li data-substep="6.1.2"><div class="substep-text">In the Hierarchy choose <span class="ui-action">Create Empty</span> and name it <span class="ui-action">Ball Parent</span>. Use the Transform component menu’s <span class="ui-action">Reset</span>. Confirm parent Position/Rotation are zero and Scale is <span class="ui-action">(1, 1, 1)</span>. Drag Ball onto Ball Parent in the Hierarchy. Keep the Animator on the child Ball; do not move its component.</div></li><li data-substep="6.1.3"><div class="substep-text">Select Ball Parent and set Position to <span class="ui-action">(1, 0, 0)</span>. Select child Ball and preview Ball_Bounce. Its local X remains <span class="ui-action">−3.87</span>, while the whole bounce is one world unit to the right. Stop Preview. Keep parent rotation zero, scale one and Y/Z zero.</div></li><li data-substep="6.1.4"><div class="substep-text">Enter Play mode and confirm Ball_Bounce runs at the new location. For a clear recording, remain in Scene view and frame Ball with <span class="ui-action">F</span>; Animation preview is off, so the moving sphere is now driven by the runtime Animator. Exit Play mode and save AnimationStudy with Ball Parent at <span class="ui-action">(1, 0, 0)</span>.</div></li></ol></li></ol><figure class="source-figure"><img src="assets/parent-hierarchy.png" alt="Hierarchy showing Ball nested under Ball Parent" loading="lazy"><figcaption>An unanimated parent separates scene placement from the child’s clip. Unity Technologies · <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Original tutorial</a>.</figcaption></figure><div class="step-explanation"><h3>Explanation</h3><p>The clip writes the child’s local Position values whenever it evaluates. An Inspector edit to the same animated property can therefore be overwritten. Transform values are relative to the parent; for a root object, the parent space effectively coincides with world space. Creating a parent does not convert stored keys into a different kind of coordinate.</p><p>Resetting the parent before reparenting preserves the original reference frame. With no rotation and unit scale, world position is parent position + child local position. Here world X = 1 + (−3.87) = −2.87. The parent changes placement; the clip still controls the child’s bounce. A rotated or scaled parent would also transform the motion, so simple addition would no longer describe every coordinate.</p><div class="concept-summary"><h3 class="new-concept-title"><span>Refresher (1)</span>Local motion and placement</h3><p>Keep animated local values on Ball and the scene offset on Ball Parent. The parent must not have another animation overwriting that offset.</p></div></div><form class="interactive-quiz quiz-card" data-answer="1" data-quiz="parent-space" data-quiz-step="6.1" id="quiz-parent-space"><fieldset><legend><span class="quiz-eyebrow">Mini quiz 10 · Step 6.1</span><span class="quiz-question">With parent X = 3, no rotation and unit scale, the clip evaluates child local X = −3.87. Where is the ball in world X?</span></legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="parent-space" value="0"><span>−3.87: animation ignores its parent.</span></label><label class="quiz-option"><input type="radio" name="parent-space" value="1"><span>−0.87: parent placement adds to the local value.</span></label><label class="quiz-option"><input type="radio" name="parent-space" value="2"><span>3: the parent completely replaces the child position.</span></label></div></fieldset><button type="submit" class="quiet-button quiz-check">Check answer</button><p class="quiz-feedback" hidden role="status" aria-live="polite"></p><p class="quiz-reason" hidden>Under these stated assumptions, world X = 3 − 3.87 = −0.87. The clip and parent contribute at different levels.</p></form></section><section class="article-section" id="application"><div class="section-kicker">07 · Animation</div><h2>Adapt, construct and diagnose</h2><p>Apply the same mechanisms with less guidance. Keep a baseline for comparison, build a new pulse using your own keys, then repair an unfamiliar curve. These short tasks are required; use the recording to explain your decisions.</p><ol class="steps"><li data-step="7.1"><p class="step-goal">Make and justify one controlled motion revision.</p><ol class="substeps"><li data-substep="7.1.1"><div class="substep-text">Outside Play mode, with Record and Preview off, capture a short baseline preview of your current bounce from a fixed Scene viewpoint. Keep this recording for the before/after comparison; editing the clip changes the same asset.</div></li><li data-substep="7.1.2"><div class="substep-text">Choose a lower apex at Y = <span class="ui-action">4.0</span> or a higher apex at Y = <span class="ui-action">5.5</span>. Predict aloud how the average downward speed must change if contact still occurs at frame 12. In Ball_Bounce, record your chosen Position Y at frames 0 and 24. Turn Record off. Preserve all other key values and times, the one-second duration, and the parent offset.</div></li><li data-substep="7.1.3"><div class="substep-text">Preview from the same viewpoint and compare with your baseline recording. Scrub contact and the intervals beside it. If there is a below-platform segment, adjust its tangent shape while preserving the stated key values and times. Keep the version that communicates your intended movement; turn Record and Preview off.</div></li><li data-substep="7.1.4"><div class="substep-text">Save AnimationStudy with Ball_Bounce as the Animator default and Ball Parent at <span class="ui-action">(1, 0, 0)</span>. Retain Ball_Pulse.</div></li></ol></li></ol><div class="step-explanation"><h3>Explanation</h3><p>Greater travel in the same time means greater average speed. The saved baseline lets you compare actual motion rather than rely on memory. A new apex also changes the interpolated heights, so check mesh clearance between keys before accepting the revision.</p></div><ol class="steps"><li data-step="7.2"><p class="step-goal">Create a two-second pulse using your own key choices.</p><ol class="substeps"><li data-substep="7.2.1"><div class="substep-text">Outside Play mode, create a new Cube named <span class="ui-action">PulseStudy</span>. Move it clear of Ball and frame it in Scene view with <kbd>F</kbd>. Create a new scale-only clip named <span class="ui-action">Pulse_Independent.anim</span> in Assets/Lecture14. Keep its own Animator and Controller separate from Ball.</div></li><li data-substep="7.2.2"><div class="substep-text">Use 24 samples per second. Before entering keys, choose the larger scale and when it will occur. Make the peak happen before the midpoint of a two-second cycle, and make the return to normal take longer than the expansion. Calculate the required frame numbers yourself; do not copy Ball_Pulse.</div></li><li data-substep="7.2.3"><div class="substep-text">Author your chosen keys, enable looping and preview two cycles. Check that Position stays unchanged and the loop has no size jump. Show your keys and explain how you know the duration is two seconds. Turn Record and Preview off and save.</div></li></ol></li></ol><div class="step-explanation"><h3>Explanation</h3><p>A duration determines the end time; sample rate converts your chosen times into frame numbers. Matching starting and ending scale avoids a size jump. Placing the peak before the midpoint gives less time to expand and more time to return. Many key choices can satisfy this task; justify yours through the observed motion.</p></div><ol class="steps"><li data-step="7.3"><p class="step-goal">Diagnose and repair the faulty scale curve below.</p><ol class="substeps"><li data-substep="7.3.1"><div class="substep-text">Scrub the browser exercise through the fall. Compare the changing shape with its stated target. Write your diagnosis before changing a key; identify the interval responsible for the symptom.</div></li><li data-substep="7.3.2"><div class="substep-text">Choose a key frame and Y scale, then apply your edit. Check the feedback and scrub again. Preserve the contact and end poses. Explain why the repaired interval behaves differently. This exercise saves its diagnosis and repair result in the quiz report; it does not change your Unity project.</div></li></ol></li></ol><div class="learning-demo" data-learning-demo="repair"></div><div class="step-explanation"><h3>Explanation</h3><p>For linear interpolation, equal values at the two ends of an interval keep the property constant throughout that interval. A targeted repair changes the interval causing the symptom while preserving the poses that already meet the specification. A successful browser check verifies the curve values; your explanation supplies the reasoning.</p></div><ol class="steps"><li data-step="7.4"><p class="step-goal">Record the results and explain your decisions.</p><ol class="substeps"><li data-substep="7.4.1"><div class="substep-text">Make an approximately 3-minute narrated recording. Briefly show Ball_Pulse, the revised Ball_Bounce running in Play mode, and your independent two-second pulse. Exit Play mode and show one curve-to-motion relationship and the independent pulse’s chosen keys.</div></li><li data-substep="7.4.2"><div class="substep-text">Show the repaired browser curve and explain its original fault and your change. Demonstrate the child-X snap-back and the parent-placement solution from step 6.1. Keep the recording focused on the evidence rather than repeating every editing step.</div></li><li data-substep="7.4.3"><div class="substep-text">Finish outside Play mode with Record and Preview off. Restore Ball Parent to <span class="ui-action">(1, 0, 0)</span>, keep Ball_Bounce as Ball’s default, retain PulseStudy and its clip, and save AnimationStudy. Submit only the two files listed below.</div></li></ol></li></ol><div class="step-explanation"><h3>Explanation</h3><p>A working result and a causal explanation provide different evidence. Showing both makes it possible to distinguish a copied configuration from a decision you can explain and reuse.</p></div><div class="task-checklist"><label><input type="checkbox" data-task="clips"><span>I retained the original clips and verified the bounce in Play mode.</span></label><label><input type="checkbox" data-task="adaptation"><span>I compared the apex revision with a saved baseline and checked between-key contact.</span></label><label><input type="checkbox" data-task="independent-pulse"><span>I created and explained a two-second pulse using my own key choices.</span></label><label><input type="checkbox" data-task="curve-repair"><span>I diagnosed the faulty curve, repaired it and explained the change.</span></label><label><input type="checkbox" data-task="evidence"><span>I recorded the demonstrations and saved the intended final state.</span></label></div><div class="instructor-only"><h3>Next-class recall</h3><p>Before reopening the instructions, ask students to explain an unfamiliar position curve and sketch the keys for a different-duration pulse. Compare the explanation with the current recording; do not infer retention from completion checkboxes.</p></div></section><section class="article-section" id="review"><div class="section-kicker">08 · Animation</div><h2>Diagnose the visible result</h2><p>Use the symptom to identify which part of the animation system owns the behavior.</p><table class="window-table"><thead><tr><th>Symptom</th><th>Likely cause</th><th>Focused check</th></tr></thead><tbody><tr><td data-label="Symptom">The pulse runs instead of the bounce.</td><td data-label="Likely cause">Runtime state selection differs from the preview.</td><td data-label="Focused check">Inspect the default state and its Motion in Ball’s Controller.</td></tr><tr><td data-label="Symptom">An edit disappears when the preview starts.</td><td data-label="Likely cause">The clip drives the same property.</td><td data-label="Focused check">Turn Record off; change placement through Ball Parent, or intentionally edit the relevant key.</td></tr><tr><td data-label="Symptom">The ball intersects the platform while flattened.</td><td data-label="Likely cause">Scale changed the half-height without a matching center height.</td><td data-label="Focused check">Scrub the contact and its adjacent frames; compare center minus half-height with Y = 2.25.</td></tr><tr><td data-label="Symptom">The ball changes shape throughout the fall.</td><td data-label="Likely cause">The previous normal Scale key is too far from impact.</td><td data-label="Focused check">Inspect the Scale keys at 11, 12, 13 and 16.</td></tr><tr><td data-label="Symptom">The motion is unexpectedly slow.</td><td data-label="Likely cause">The timeline or state speed differs.</td><td data-label="Focused check">Check 24 samples/s, end frame 24 and Animator state Speed = 1.</td></tr><tr><td data-label="Symptom">The parent relocation changes the bounce shape.</td><td data-label="Likely cause">Parent rotation or scale is not neutral.</td><td data-label="Focused check">Keep the parent rotation zero and scale one for this controlled comparison.</td></tr></tbody></table><p>The official reference clips below demonstrate the source sequence; they are comparison references, not extra tasks.</p><div class="final-references"><h3>Final references</h3><p><a href="https://connect-mediagw.unity.com/h1/20221103/videos/243c380a-89ee-4d04-b91d-9b2ece3b2a00_finalbounceanim.mp4" target="_blank" rel="noreferrer">Official refined-bounce result</a> · <a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Official curve, squash/stretch and parenting tutorial</a>. The lecture’s one-second timing, numeric contact model and applied exercises are course adaptations. The opening Unity-rendered reference demonstrates the higher-apex option on a simplified stage. No completed scripts are required for this Editor-only exercise.</p></div></section><section class="article-section" id="submission"><div class="section-kicker">09 · Animation</div><h2>What to submit</h2><p>Submit two files using the <a href="#application">required demonstration sequence</a>.</p><ol><li><strong>StudentID_L14.mp4</strong> — approximately 3 minutes of screen recording with your spoken explanation.</li><li><strong>StudentID_L14_quiz.pdf</strong> — check all ten quizzes (including the new numeric question after quiz 1), read feedback and retry mistakes. Enter your name and student ID, click <strong>Export results</strong>, then choose <strong>Save as PDF</strong>.</li></ol><p>Keep the Unity project locally. The report records checked answers and student-reported progress; the recording supplies evidence of the practical work.</p><div class="student-fields"><label for="studentName">Name<input id="studentName" autocomplete="name" maxlength="100"></label><label for="studentId">Student ID<input id="studentId" autocomplete="off" maxlength="40"></label></div><p id="quizSummary" role="status"></p><p id="proReportSummary"></p><button class="quiet-button" id="exportResultsBottom" type="button">Export quiz results</button><p id="exportStatus" role="status"></p></section><section class="article-section" id="sources"><div class="section-kicker">10 · Animation</div><h2>Official sources</h2><p>Based on the Unity 6.3 version of <a href="https://learn.unity.com/pathway/creative-core/unit/animation" target="_blank" rel="noreferrer">Creative Core: Animation</a>. Official screenshots and videos may show earlier Editor layouts; the supplied project is the Unity 6.3 archive.</p><ul><li><a href="https://learn.unity.com/tutorial/get-started-with-animation?version=6.3" target="_blank" rel="noreferrer">Get started with animation — full starter project</a></li><li><a href="https://learn.unity.com/tutorial/create-your-first-3d-animations?version=6.3" target="_blank" rel="noreferrer">Create your first 3D animations — clip and keyframe workflow</a></li><li><a href="https://learn.unity.com/tutorial/refine-your-animation?version=6.3" target="_blank" rel="noreferrer">Refine your animation — curves, deformation and parent placement</a></li><li><a href="https://learn.unity.com/tutorial/control-animation-with-an-animator?version=6.3" target="_blank" rel="noreferrer">Control animation with an Animator — component, clip and state relationships</a></li><li><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/animeditor-KeyManipulationInCurvesMode.html" target="_blank" rel="noreferrer">Unity Manual — tangent modes</a></li><li><a href="https://docs.unity3d.com/6000.3/Documentation/Manual/class-Transform.html" target="_blank" rel="noreferrer">Unity Manual — local Transform values and parenting</a></li></ul></section></article></main><footer class="site-footer">SWE 402 · Lecture 14 · Based on Unity Learn. Unity screenshots and video © Unity Technologies.</footer><section id="submissionReport" class="submission-report" aria-label="Printable quiz results"></section><script defer src="../shared/course-navigation.js"></script><script>(()=>{try{document.documentElement.dataset.theme=localStorage.getItem("unity-editor-reference-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{document.documentElement.dataset.theme="light"}})();
+
+
+      // Instructor notes are intentionally hidden on every fresh load.
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "`" || event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
+        if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+        document.body.classList.toggle("instructor-mode");
+      });
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
+      const themeStorageKey = "unity-editor-reference-theme";
+
+      function applyTheme(theme, persist = true) {
+        const normalizedTheme = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = normalizedTheme;
+        themeLabel.textContent = normalizedTheme[0].toUpperCase() + normalizedTheme.slice(1);
+        themeToggle.setAttribute("aria-pressed", String(normalizedTheme === "dark"));
+        themeToggle.setAttribute("aria-label", `Current theme: ${normalizedTheme}. Switch to ${normalizedTheme === "dark" ? "light" : "dark"} theme.`);
+
+        if (persist) {
+          try { window.localStorage.setItem(themeStorageKey, normalizedTheme); } catch {}
+        }
+      }
+
+      applyTheme(document.documentElement.dataset.theme, false);
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+
+      const progressBar = document.getElementById("readingProgress");
+      const taskInputs = [...document.querySelectorAll("[data-task]")];
+      const codeInputs = [...document.querySelectorAll("[data-code-digit]")];
+      const storageKey = "unity-animation-article-progress";
+
+      function updateReadingProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+
+      function readSavedProgress() {
+        try {
+          return JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      function saveProgress() {
+        const tasks = Object.fromEntries(
+          taskInputs.map((input) => [input.dataset.task, input.checked]),
+        );
+        const code = codeInputs.map((input) => input.value).join("");
+
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify({ tasks, code }));
+        } catch {
+          // The article remains usable if browser storage is unavailable.
+        }
+      }
+
+      const saved = readSavedProgress();
+      taskInputs.forEach((input) => {
+        input.checked = Boolean(saved.tasks?.[input.dataset.task]);
+        input.addEventListener("change", saveProgress);
+      });
+
+      codeInputs.forEach((input, index) => {
+        input.value = (saved.code || "")[index] || "";
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, "").slice(0, 1);
+          saveProgress();
+          if (input.value && codeInputs[index + 1]) codeInputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && codeInputs[index - 1]) {
+            codeInputs[index - 1].focus();
+          }
+        });
+      });
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        taskInputs.forEach((input) => { input.checked = false; });
+        codeInputs.forEach((input) => { input.value = ""; });
+        try { window.localStorage.removeItem(storageKey); } catch {}
+      });
+
+      const quizStorageKey = "unity-animation-quiz-progress";
+      const quizForms = [...document.querySelectorAll("[data-quiz]")];
+      const studentName = document.getElementById("studentName");
+      const studentId = document.getElementById("studentId");
+      let quizState = { quizzes: {}, student: { name: "", id: "" } };
+      try {
+        const stored = JSON.parse(localStorage.getItem(quizStorageKey) || "null");
+        if (stored && typeof stored === "object") {
+          quizState.quizzes = stored.quizzes && typeof stored.quizzes === "object" ? stored.quizzes : {};
+          quizState.student = stored.student && typeof stored.student === "object" ? stored.student : quizState.student;
+        }
+      } catch {}
+      studentName.value = String(quizState.student.name || "");
+      studentId.value = String(quizState.student.id || "");
+
+      function persistQuizzes() {
+        quizState.student = { name: studentName.value, id: studentId.value };
+        try { localStorage.setItem(quizStorageKey, JSON.stringify(quizState)); } catch {}
+      }
+
+      function quizStats() {
+        let answered = 0, firstCorrect = 0, latestCorrect = 0;
+        quizForms.forEach((form) => {
+          const record = quizState.quizzes[form.dataset.quiz];
+          if (!record || !Number.isFinite(record.latest)) return;
+          answered++;
+          const correct = Number(form.dataset.answer);
+          if (record.first === correct) firstCorrect++;
+          if (record.latest === correct) latestCorrect++;
+        });
+        return { total: quizForms.length, answered, firstCorrect, latestCorrect };
+      }
+
+      function updateQuizSummary() {
+        window.dispatchEvent(new Event("lesson-quiz-progress"));
+        const stats = quizStats();
+        document.getElementById("navbarQuizCount").textContent = `${stats.answered}/${stats.total}`;
+        document.getElementById("quizSummary").textContent =
+          `${stats.answered} of ${stats.total} quizzes checked. First checked answers: ${stats.firstCorrect} correct. Latest checked answers: ${stats.latestCorrect} correct.`;
+        document.getElementById("exportResults").setAttribute("aria-label",
+          `Export or print quiz results. ${stats.answered} of ${stats.total} quizzes checked.`);
+      }
+
+      function renderQuiz(form) {
+        const record = quizState.quizzes[form.dataset.quiz];
+        const choice = record && Object.hasOwn(record, 'draft') ? record.draft : record?.latest;
+        const numeric = form.querySelector('[data-numeric-answer]');
+        if (form.dataset.unlockAfter) form.hidden = !Number.isFinite(quizState.quizzes[form.dataset.unlockAfter]?.latest);
+        if (numeric && document.activeElement !== numeric) numeric.value = Number.isFinite(choice) ? String(choice) : '';
+        if (!numeric && Number.isInteger(choice)) {
+          const input = form.querySelector(`input[value="${choice}"]`);
+          if (input) input.checked = true;
+        }
+        const feedback = form.querySelector(".quiz-feedback");
+        feedback.hidden = !record || !Number.isFinite(record.latest);
+        const reason = form.querySelector(".quiz-reason");
+        const button = form.querySelector(".quiz-check");
+        if (!record || !Number.isFinite(record.latest)) {
+          feedback.textContent = "Choose an answer, then check it.";
+          reason.hidden = true;
+          button.disabled = false;
+        } else if (choice !== record.latest) {
+          feedback.textContent = "New choice selected. Check it to record your next attempt.";
+          reason.hidden = true;
+          button.disabled = false;
+        } else {
+          const correct = record.latest === Number(form.dataset.answer);
+          feedback.textContent = correct ? `Correct. ${record.attempts} checked attempt${record.attempts === 1 ? "" : "s"}.` :
+            `Not correct yet. Review the explanation and try another answer. ${record.attempts} checked attempt${record.attempts === 1 ? "" : "s"}.`;
+          reason.hidden = false;
+          button.disabled = true;
+        }
+      }
+
+      quizForms.forEach((form) => {
+        renderQuiz(form);
+        form.addEventListener("input", () => {
+          const numeric = form.querySelector('[data-numeric-answer]');
+          const selected = numeric || form.querySelector("input:checked");
+          if (!selected) return;
+          const record = quizState.quizzes[form.dataset.quiz] || {};
+          record.draft = selected.value.trim() === '' || !Number.isFinite(Number(selected.value)) ? null : Number(selected.value);
+          quizState.quizzes[form.dataset.quiz] = record;
+          persistQuizzes();
+          renderQuiz(form);
+        });
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const numeric = form.querySelector('[data-numeric-answer]');
+          const selected = numeric || form.querySelector("input:checked");
+          if (!selected || selected.value.trim() === '' || !Number.isFinite(Number(selected.value))) {
+            form.querySelector(".quiz-feedback").hidden = false;
+            form.querySelector(".quiz-feedback").textContent = numeric ? "Enter a number before checking." : "Select one answer before checking.";
+            form.querySelector("input").focus();
+            return;
+          }
+          const choice = Number(selected.value);
+          const record = quizState.quizzes[form.dataset.quiz] || {};
+          if (record.latest !== choice) {
+            if (!Number.isFinite(record.first)) record.first = choice;
+            record.latest = choice;
+            record.draft = choice;
+            record.attempts = (Number(record.attempts) || 0) + 1;
+            quizState.quizzes[form.dataset.quiz] = record;
+          }
+          persistQuizzes();
+          renderQuiz(form);
+          quizForms.filter(next => next.dataset.unlockAfter === form.dataset.quiz).forEach(renderQuiz);
+          updateQuizSummary();
+        });
+      });
+      studentName.addEventListener("input", persistQuizzes);
+      studentId.addEventListener("input", persistQuizzes);
+      updateQuizSummary();
+
+      document.getElementById("resetProgress").addEventListener("click", () => {
+        quizState.quizzes = {};
+        quizForms.forEach((form) => { form.reset(); renderQuiz(form); });
+        persistQuizzes();
+        updateQuizSummary();
+      });
+
+      function renderSubmissionReport() {
+        const report = document.getElementById("submissionReport");
+        report.replaceChildren();
+        const appendText = (parent, tag, text, className = "") => {
+          const node = document.createElement(tag);
+          if (className) node.className = className;
+          node.textContent = text;
+          parent.append(node);
+          return node;
+        };
+        appendText(report, "h1", "SWE 402 · Lecture 14 quiz results");
+        appendText(report, "p", "Creative Core: Animation");
+        const identity = document.createElement("div");
+        identity.className = "report-identity";
+        report.append(identity);
+        appendText(identity, "p", `Name: ${studentName.value.trim() || "Not entered"} · Student ID: ${studentId.value.trim() || "Not entered"}`);
+        const timestamp = new Intl.DateTimeFormat("en-GB", {
+          dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Riyadh"
+        }).format(new Date());
+        appendText(identity, "p", `Exported: ${timestamp} (Asia/Riyadh)`);
+        const stats = quizStats();
+        appendText(report, "p", `Checked: ${stats.answered}/${stats.total} · First-answer score: ${stats.firstCorrect}/${stats.total} · Latest-answer score: ${stats.latestCorrect}/${stats.total}`);
+        appendText(report, "p", stats.answered === stats.total ? "All quizzes have a checked answer." :
+          `Incomplete: ${stats.total - stats.answered} quiz${stats.total - stats.answered === 1 ? "" : "zes"} still need a checked answer.`);
+        appendText(report, "p", "Selected options count only after Check answer. First answers are retained when a student retries.");
+        appendText(report, "h2", "Quiz answers");
+        quizForms.forEach((form, index) => {
+          const block = document.createElement("div");
+          block.className = "report-question";
+          report.append(block);
+          appendText(block, "h3", `${index + 1}. ${form.querySelector(".quiz-question").textContent}`);
+          const record = quizState.quizzes[form.dataset.quiz];
+          if (!record || !Number.isFinite(record.latest)) {
+            appendText(block, "p", "Not answered · 0 checked attempts");
+            return;
+          }
+          const answerText = (choice) => {
+            if (form.querySelector('[data-numeric-answer]')) return `${choice} seconds`;
+            const input = form.querySelector(`input[value="${choice}"]`);
+            return input?.closest("label").querySelector("span").textContent || "Unknown option";
+          };
+          const status = (choice) => choice === Number(form.dataset.answer) ? "Correct" : "Incorrect";
+          appendText(block, "p", `First: ${answerText(record.first)} — ${status(record.first)}`);
+          appendText(block, "p", `Latest: ${answerText(record.latest)} — ${status(record.latest)}`);
+          appendText(block, "p", `Checked attempts: ${record.attempts}`);
+        });
+        appendText(report, "p", "Submit this PDF together with the approximately 3-minute screen recording with narration. The recording supplies evidence of the practical work.");
+        appendText(report, "h2", "Practical checklist (student-reported)");
+        taskInputs.forEach(input => appendText(report, "p", `${input.checked ? "Checked" : "Not checked"}: ${input.closest("label").querySelector("span").textContent}`));
+        const proChecks = [...document.querySelectorAll("[data-pro-check]")];
+        appendText(report, "p", `Pro checkpoints (student-reported): ${proChecks.filter(input => input.checked).length}/${proChecks.length} checked. These checks do not verify Unity execution.`);
+        window.lessonPro?.appendReport(report, appendText);
+        window.animationLearning?.appendReport(report, appendText);
+      }
+      document.getElementById("exportResults").addEventListener("click", () => {
+        persistQuizzes();
+        renderSubmissionReport();
+        window.print();
+      });
+      window.addEventListener("beforeprint", renderSubmissionReport);
+
+
+      const stepVideos = [...document.querySelectorAll('.step-video video')];
+      stepVideos.forEach(video => {
+        video.defaultPlaybackRate = 2;
+        video.playbackRate = 2;
+        video.addEventListener('play', () => {
+          document.querySelectorAll('article video').forEach(other => { if (other !== video) other.pause(); });
+        });
+        video.addEventListener('error', () => {
+          const error = video.parentElement.querySelector('.video-error');
+          error.textContent = 'The source video could not load. Use Open video or Original tutorial step below.';
+          error.hidden = false;
+        });
+      });
+
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      const sections = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+
+          tocLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-18% 0px -68%", threshold: [0, 0.2, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+      window.addEventListener("scroll", updateReadingProgress, { passive: true });
+      updateReadingProgress();
+    
+    const openingPreview = document.querySelector('#finished-preview video');
+    if (openingPreview) {
+      openingPreview.defaultPlaybackRate = 1;
+      openingPreview.playbackRate = 1;
+      openingPreview.addEventListener('play', () => {
+        document.querySelectorAll('article video').forEach(other => {
+          if (other !== openingPreview) other.pause();
+        });
+      });
+    }
+
+document.getElementById("exportResultsBottom").addEventListener("click",()=>document.getElementById("exportResults").click());
+
+
+
+document.querySelectorAll('.video-thumb').forEach(button=>button.addEventListener('click',()=>{const panel=document.getElementById(button.getAttribute('aria-controls'));const open=panel.hidden;panel.hidden=!open;button.setAttribute('aria-expanded',String(open));if(!open)panel.querySelector('video').pause()}));
+</script><script src="pro-mode.js"></script><script src="learning-tools.js"></script><script src="slide-mode.js"></script></body></html>

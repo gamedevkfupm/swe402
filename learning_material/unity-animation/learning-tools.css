@@ -1,0 +1,23 @@
+.learning-demo { margin: 1.5rem 0; padding: 1rem; border: 2px solid var(--line); background: var(--surface); }
+.learning-demo h3 { margin-top: 0; }
+.learning-demo p { max-width: 75ch; }
+.motion-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+.motion-panel { min-width: 0; }
+.motion-panel h4 { margin: .5rem 0; font: 600 .95rem var(--pixel); }
+.learning-demo svg, .contact-diagram { display: block; width: 100%; height: auto; color: var(--ink); }
+.learning-demo svg text, .contact-diagram text { fill: currentColor; font-family: var(--sans); font-size: 13px; }
+.demo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; margin: .8rem 0; }
+.learning-demo input, .learning-demo select, .learning-demo textarea, .numeric-answer { color: var(--ink); background: var(--paper); border: 1px solid var(--line); padding: .6rem; font: inherit; max-width: 100%; }
+.learning-demo textarea { display: block; width: 100%; min-height: 5rem; }
+.learning-demo input[type=number], .numeric-answer { width: 8rem; }
+.learning-demo input[type=range] { flex: 1; min-width: 6rem; accent-color: var(--purple); }
+.learning-demo output { font-variant-numeric: tabular-nums; }
+.demo-caption { font-size: .88rem; color: var(--muted); }
+.contact-figure { margin: 1.4rem 0; }
+.contact-figure figcaption { font-size: .88rem; color: var(--muted); }
+.transfer-question[hidden] { display: none !important; }
+.transfer-question label { display: block; margin: .7rem 0; }
+.learning-demo :focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; }
+.repair-keys { overflow-wrap: anywhere; }
+@media(max-width:680px) { .motion-pair { grid-template-columns: 1fr; } .learning-demo { padding: .7rem; } .demo-controls { align-items: flex-start; } }
+@media print { .learning-demo, .contact-figure { display: none !important; } }
