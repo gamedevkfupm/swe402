@@ -15,6 +15,8 @@
     ['unity-user-interface', 'Unity User Interface'],
     ['unity-shaders-and-materials', 'Creative Core: Shaders and materials'],
     ['unity-lighting', 'Creative Core: Lighting'],
+    ['unity-animation', 'Creative Core: Animation'],
+    ['unity-vfx', 'Creative Core: VFX'],
   ];
   const header = document.querySelector('.site-header');
   const mark = header?.querySelector('.site-mark');

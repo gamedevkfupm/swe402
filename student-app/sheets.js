@@ -116,5 +116,23 @@ export const sheets = [
     "url": "/learning_material/unity-lighting/index.html",
     "icon": "/powerups/lighting-bulb.svg",
     "powerup": "Lighting bulb"
+  },
+  {
+    "id": "unity-animation",
+    "title": "Creative Core: Animation",
+    "category": "Creative Core",
+    "description": "Create animation clips, shape motion curves, and practice timing, squash and stretch.",
+    "url": "/learning_material/unity-animation/index.html",
+    "icon": "/powerups/animation-motion.svg",
+    "powerup": "Animation motion"
+  },
+  {
+    "id": "unity-vfx",
+    "title": "Creative Core: VFX",
+    "category": "Creative Core",
+    "description": "Build snow and smoke effects, predict particle lifecycles, and interpret VFX Graph contexts.",
+    "url": "/learning_material/unity-vfx/index.html",
+    "icon": "/powerups/vfx-particles.svg",
+    "powerup": "Particle burst"
   }
 ];
