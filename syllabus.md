@@ -56,8 +56,8 @@ Weeks and dates follow the [official KFUPM Term 261 academic calendar](https://r
 | 8 | Oct 4–8 | Junior Programmer | User Interface | — | — | 15, 16 |
 | 9 | Oct 11–15 | Junior Programmer | User Interface | _ | — | 15, 16 |
 | 10 | Oct 18–22 (break: Oct 20–22) | Junior Programmer | Game #2   | — | — | Review: 6–9, 11, 14–16 |
-| 11 | Oct 25–29 | Creative Core | Shaders, Lighting  | Quiz 2 | — | 10, 12 |
-| 12 | Nov 1–5 | Creative Core | Animation, VFX | — | — | 11, 17 |
+| 11 | Oct 25–29 | Creative Core | Shaders, Lighting  | - | — | 10, 12 |
+| 12 | Nov 1–5 | Creative Core | Animation, VFX | Quiz 2 | — | 11, 17 |
 | 13 | Nov 8–12 | Creative Core | Cameras, Post-processing | — | Advanced Mechanics | 13, 17 (Cinemachine) |
 | 14 | Nov 15–19 | Creative Core | Game #3، Engine Agnostic  | — | — | Review: 10–13, 17; no dedicated chapter for engine-agnostic development |
 | 15 | Nov 22–26 (break: Nov 22–23) | Advanced Topics | Multiplayer  | Quiz 3 | — | — (no dedicated chapter) |
